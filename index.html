@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Turma A"/>
 <meta name="theme-color" content="#07090f"/>
 <title>Agenda Turma A</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='38' fill='%2307090f'/%3E%3C!-- chimney --%3E%3Crect x='80' y='18' width='20' height='30' rx='6' fill='%23555'/%3E%3Cellipse cx='90' cy='18' rx='14' ry='7' fill='%23444'/%3E%3C!-- smoke --%3E%3Ccircle cx='82' cy='10' r='7' fill='%23888' opacity='.5'/%3E%3Ccircle cx='96' cy='5' r='9' fill='%23999' opacity='.4'/%3E%3Ccircle cx='108' cy='8' r='6' fill='%23aaa' opacity='.3'/%3E%3C!-- boiler face --%3E%3Ccircle cx='96' cy='105' r='62' fill='%23c07800'/%3E%3Ccircle cx='96' cy='105' r='56' fill='%23e8a800'/%3E%3C!-- eyes --%3E%3Ccircle cx='74' cy='92' r='14' fill='white'/%3E%3Ccircle cx='118' cy='92' r='14' fill='white'/%3E%3Ccircle cx='78' cy='95' r='8' fill='%2307090f'/%3E%3Ccircle cx='122' cy='95' r='8' fill='%2307090f'/%3E%3Ccircle cx='81' cy='92' r='3' fill='white'/%3E%3Ccircle cx='125' cy='92' r='3' fill='white'/%3E%3C!-- smile --%3E%3Cpath d='M68 118 Q96 145 124 118' stroke='%2307090f' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3C!-- headlight --%3E%3Ccircle cx='96' cy='148' r='14' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='96' cy='148' r='9' fill='%23ffe566'/%3E%3C!-- buffer beam --%3E%3Crect x='40' y='162' width='112' height='14' rx='5' fill='%23c07800'/%3E%3Crect x='50' y='170' width='20' height='10' rx='3' fill='%23888'/%3E%3Crect x='122' y='170' width='20' height='10' rx='3' fill='%23888'/%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" sizes="512x512" href="https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png"/>
 <style>
 :root,[data-theme="dark"]{
   --bg:#07090f;--bg2:#0a0e1a;--hdr:#0d1120;--hdr2:#0a0d18;
@@ -99,7 +99,7 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 .mes-card{background:var(--mesgrad);border:1px solid var(--border);border-radius:15px;padding:12px 10px;box-shadow:var(--shadow);transition:all .2s}
 .mes-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px #00000055}
 [data-theme="light"] .mes-card:hover{box-shadow:0 8px 28px #0000001a}
-.mes-card.mes-atual{border-color:#e8a80044;box-shadow:0 4px 20px #e8a80022}
+.mes-card.mes-atual{border:2px solid #e8a800!important;box-shadow:0 0 20px #e8a80077,0 4px 20px #e8a80033;background:linear-gradient(135deg,rgba(232,168,0,0.07),rgba(232,168,0,0.02))!important}
 .mes-card.auditoria{border-color:#f8717166!important;box-shadow:0 4px 20px #f8717122!important}
 .mes-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .mes-nome{font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:2px}
@@ -282,6 +282,7 @@ function trainMsg(){
 let alarmCtx=null,alarmNodes=[],alarmInterval=null;
 function tocarAlarme(){stopAlarme();try{alarmCtx=new(window.AudioContext||window.webkitAudioContext)();function beep(t,f,d){const o=alarmCtx.createOscillator(),g=alarmCtx.createGain();o.connect(g);g.connect(alarmCtx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d+.05);alarmNodes.push(o);}const t=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t+i*.45,880,.35);beep(t+i*.45+.15,1100,.2);}alarmInterval=setInterval(()=>{if(!alarmCtx)return;const t2=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t2+i*.45,880,.35);beep(t2+i*.45+.15,1100,.2);}},4000);}catch(e){}}
 function stopAlarme(){if(alarmInterval){clearInterval(alarmInterval);alarmInterval=null;}alarmNodes.forEach(n=>{try{n.stop();}catch(e){}});alarmNodes=[];if(alarmCtx){try{alarmCtx.close();}catch(e){}alarmCtx=null;}}
+setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('🚂 Turma A',{body:'Não esqueça do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('🚂 Turma A',{body:'Não esqueça do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});});}}}},10000);
 setInterval(()=>{if(!S.alarmOn||S.alarmRinging)return;const now=new Date();const hm=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");const alvo=S.snoozeTime||S.alarmTime;if(hm===alvo&&!isFolga(now)){S.alarmRinging=true;S.snoozeTime=null;tocarAlarme();render();}},30000);
 
 /* STATE */
@@ -629,6 +630,7 @@ function renderChecklistModal(){
 /* TRENZINHO FAB */
 function renderTrainFab(){
   const fab=el("button",{class:"train-fab",title:"Mascote Turma A",onClick:()=>{
+    try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator();const g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sawtooth';o.frequency.setValueAtTime(200,ac.currentTime);o.frequency.exponentialRampToValueAtTime(80,ac.currentTime+0.4);g.gain.setValueAtTime(0.25,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ac.currentTime+0.6);o.start();o.stop(ac.currentTime+0.6);}catch(e){}
     if(S.trainTimer)clearTimeout(S.trainTimer);
     S.showTrain=!S.showTrain;
     if(S.showTrain){S.trainTimer=setTimeout(()=>{S.showTrain=false;render();},5000);}render();
@@ -675,6 +677,7 @@ function triggerUpload(key){
 
 /* INIT */
 loadS();render();
+if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
 
 if("serviceWorker" in navigator){
   const sw=`const CACHE="turmaA-v2";self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["/"]))));self.addEventListener("fetch",e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
