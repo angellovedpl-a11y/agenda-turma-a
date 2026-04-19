@@ -235,6 +235,15 @@ input[type="date"],input[type="time"]{color-scheme:dark}
 .viriato-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);}
 .viriato-dots{animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.viriato-typing{display:flex;align-items:center;gap:5px;padding:10px 14px !important;}
+.viriato-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:vdot 1.2s infinite;}
+.viriato-dot:nth-child(2){animation-delay:.2s;}
+.viriato-dot:nth-child(3){animation-delay:.4s;}
+@keyframes vdot{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
+.viriato-chat code,.viriato-bubble code{font-family:monospace;}
+.viriato-panel{max-height:75vh;}
+.viriato-chat{min-height:220px;max-height:calc(75vh - 130px);}
+
 .doc-viewer-box{background:var(--card);border-radius:16px;width:95vw;max-width:700px;height:85vh;display:flex;flex-direction:column;overflow:hidden;}
 .doc-viewer-header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--hdr);}
 </style>
@@ -299,7 +308,7 @@ function trainMsg(){
 let alarmCtx=null,alarmNodes=[],alarmInterval=null;
 function tocarAlarme(){stopAlarme();try{alarmCtx=new(window.AudioContext||window.webkitAudioContext)();function beep(t,f,d){const o=alarmCtx.createOscillator(),g=alarmCtx.createGain();o.connect(g);g.connect(alarmCtx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d+.05);alarmNodes.push(o);}const t=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t+i*.45,880,.35);beep(t+i*.45+.15,1100,.2);}alarmInterval=setInterval(()=>{if(!alarmCtx)return;const t2=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t2+i*.45,880,.35);beep(t2+i*.45+.15,1100,.2);}},4000);}catch(e){}}
 function stopAlarme(){if(alarmInterval){clearInterval(alarmInterval);alarmInterval=null;}alarmNodes.forEach(n=>{try{n.stop();}catch(e){}});alarmNodes=[];if(alarmCtx){try{alarmCtx.close();}catch(e){}alarmCtx=null;}}
-setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('ð Turma A',{body:'NÃ£o esqueÃ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('ð Turma A',{body:'NÃ£o esqueÃ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});});}}}},10000);
+setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('Ã°ÂÂÂ Turma A',{body:'NÃÂ£o esqueÃÂ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('Ã°ÂÂÂ Turma A',{body:'NÃÂ£o esqueÃÂ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});});}}}},10000);
 setInterval(()=>{if(!S.alarmOn||S.alarmRinging)return;const now=new Date();const hm=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");const alvo=S.snoozeTime||S.alarmTime;if(hm===alvo&&!isFolga(now)){S.alarmRinging=true;S.snoozeTime=null;tocarAlarme();render();}},30000);
 
 /* STATE */
@@ -315,7 +324,7 @@ const S={events:{},docs:{},auditorias:[],checklist:[...DOCS_OBRIGATORIOS_DEFAULT
   fileCallback:null,
   docViewer:null,
   viriatoOpen:false,
-  viriatoMsgs:[{role:"assistant",txt:"Olá! Meu nome é Viriato 🤖\nSou seu assistente ferroviário. Pode me perguntar qualquer coisa sobre sua escala, feriados ou agenda!"}],
+  viriatoMsgs:[{role:"assistant",txt:"OlÃ¡! Meu nome Ã© Viriato ð¤\nSou seu assistente ferroviÃ¡rio. Pode me perguntar qualquer coisa sobre sua escala, feriados ou agenda!"}],
   viriatoInput:"",
   viriatoLoading:false,
   viriatoApiKey:""
@@ -550,10 +559,10 @@ function renderModal(){
   const addBtn=el("button",{class:"add-btn",style:{background:TMAP[S.modalTipo]?TMAP[S.modalTipo].cor:"#e8a800"},onClick:confirmarEvento},S.modalEdit!==null?"ok":"+");
   const cancelEl=S.modalEdit!==null?el("button",{class:"cancel-edit",onClick:()=>{S.modalEdit=null;S.modalInput="";render();}},"cancelar edicao"):null;
 
-  /* SEÃÃO DOCUMENTOS */
+  /* SEÃÂÃÂO DOCUMENTOS */
   const docRows=mDocs.map((doc,i)=>el("div",{class:"doc-row"},[
     el("span",{class:"doc-icon"},docIcon(doc.type)),
-    el("div",{class:"doc-info"},[el("div",{class:"doc-name"},doc.name),el("div",{class:"doc-meta"},formatBytes(doc.size)+" Â· "+new Date(doc.date).toLocaleDateString("pt-BR"))]),
+    el("div",{class:"doc-info"},[el("div",{class:"doc-name"},doc.name),el("div",{class:"doc-meta"},formatBytes(doc.size)+" ÃÂ· "+new Date(doc.date).toLocaleDateString("pt-BR"))]),
     el("div",{class:"doc-actions"},[
       el("button",{class:"doc-btn",title:"Visualizar",onClick:()=>{const w=window.open();w.document.write('<iframe src="'+doc.data+'" width="100%" height="100%" style="border:none"/>');w.document.close();}},"\uD83D\uDC41"),
       el("button",{class:"doc-btn",title:"Remover",style:{color:"#f87171"},onClick:()=>removerDoc(mKey,i)},"\uD83D\uDDD1")
@@ -597,7 +606,7 @@ function renderAlarmModal(){
 function renderAuditoriaModal(){
   const periodos=S.auditorias.map((a,i)=>el("div",{class:"audit-period"},[
     el("div",null,[el("div",{class:"audit-name"},a.nome||"Periodo de Auditoria"),el("div",{class:"audit-dates"},a.inicio+" ate "+a.fim)]),
-    el("button",{class:"audit-del",onClick:()=>{S.auditorias.splice(i,1);saveS();render();}},"â")
+    el("button",{class:"audit-del",onClick:()=>{S.auditorias.splice(i,1);saveS();render();}},"Ã¢ÂÂ")
   ]));
   const form=el("div",{style:{background:"var(--card2)",border:"1px solid var(--border)",borderRadius:"12px",padding:"12px",marginTop:"10px"}},[
     el("div",{style:{fontSize:"11px",color:"var(--muted)",marginBottom:"8px",textTransform:"uppercase",letterSpacing:"1px"}},"Novo periodo"),
@@ -638,7 +647,7 @@ function renderChecklistModal(){
         el("div",{class:"check-val",style:{color:valColor}},valTxt),
         el("input",{type:"date",style:{marginTop:"4px",background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:"7px",padding:"3px 8px",fontSize:"11px",color:"var(--text)",width:"100%"},value:item.validade||"",onChange:e=>{S.checklist[i].validade=e.target.value;saveS();render();}})
       ]),
-      i>=DOCS_OBRIGATORIOS_DEFAULT.length?el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"â"):null
+      i>=DOCS_OBRIGATORIOS_DEFAULT.length?el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"Ã¢ÂÂ"):null
     ]);
   });
   const addForm=el("div",{style:{display:"flex",gap:"7px",marginTop:"12px"}},[
@@ -673,7 +682,7 @@ function renderToast(){
   return el("div",{class:"toast",style:{background:t.ok?(S.dark?"#05201099":"#d1fae5cc"):(S.dark?"#20050599":"#fee2e2cc"),border:"1px solid "+(t.ok?"#22d48a":"#f87171"),color:t.ok?"#6ee7b7":"#fca5a5"}},t.msg);
 }
 
-/* AÃÃES */
+/* AÃÂÃÂES */
 function abrirDia(date){S.modal={key:toKey(date),date};S.modalInput="";S.modalTipo="outro";S.modalEdit=null;render();setTimeout(()=>{const inp=document.getElementById("modal-inp");if(inp)inp.focus();},80);}
 
 function confirmarEvento(){const txt=(S.modalInput||"").trim();if(!txt||!S.modal)return;const k=S.modal.key;if(!S.events[k])S.events[k]=[];const item={txt,tipo:S.modalTipo};if(S.modalEdit!==null){S.events[k][S.modalEdit]=item;S.modalEdit=null;}else S.events[k].push(item);S.modalInput="";S.modalTipo="outro";saveS();showToast("\u2713 Evento salvo!");setTimeout(()=>{const inp=document.getElementById("modal-inp");if(inp)inp.focus();},60);}
@@ -703,10 +712,109 @@ function triggerUpload(key){
 
 /* ===== VIRIATO - AGENTE LLM ===== */
 function svgViriato(size=34){const s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 64 64");s.setAttribute("width",size);s.setAttribute("height",size);s.innerHTML=`<g><line x1="32" y1="2" x2="32" y2="10" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="2" r="3.5" fill="#4ade80"/><rect x="8" y="10" width="48" height="36" rx="12" fill="#1e293b" stroke="#4ade80" stroke-width="2"/><rect x="14" y="18" width="14" height="12" rx="4" fill="#0ea5e9"/><rect x="36" y="18" width="14" height="12" rx="4" fill="#0ea5e9"/><circle cx="21" cy="24" r="4" fill="white" opacity=".95"/><circle cx="43" cy="24" r="4" fill="white" opacity=".95"/><circle cx="23" cy="22" r="1.5" fill="#0f172a"/><circle cx="45" cy="22" r="1.5" fill="#0f172a"/><rect x="16" y="34" width="32" height="7" rx="3.5" fill="#0f172a"/><rect x="18" y="35.5" width="6" height="4" rx="1.5" fill="#4ade80"/><rect x="26" y="35.5" width="6" height="4" rx="1.5" fill="#4ade80"/><rect x="34" y="35.5" width="6" height="4" rx="1.5" fill="#4ade80"/><rect x="42" y="35.5" width="4" height="4" rx="1.5" fill="#22d3ee"/><rect x="26" y="46" width="12" height="6" rx="2.5" fill="#334155"/><rect x="10" y="52" width="44" height="12" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/><circle cx="32" cy="58" r="3.5" fill="#4ade80" opacity=".85"/></g>`;return s;}
-async function viriatoSend(){const txt=(S.viriatoInput||"").trim();if(!txt||S.viriatoLoading)return;S.viriatoMsgs.push({role:"user",txt});S.viriatoInput="";S.viriatoLoading=true;render();setTimeout(()=>{const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},30);const fol=isFolga(HOJE_DT);const diasF=diasParaFolga();const fer=FER[HOJE_KEY]||"";const contexto="Contexto: Hoje é "+HOJE_KEY+", "+(fol?"está de folga":"está de serviço")+", faltam "+diasF+" dia(s) para a próxima folga."+(fer?" Hoje é feriado: "+fer+".":" ")+"Escala 2x2 ferroviária (2026-2030). Usuário: Angelo (maquinista Turma A).";const apiKey=S.viriatoApiKey||"";if(!apiKey){S.viriatoMsgs.push({role:"assistant",txt:"⚠️ Para usar o Viriato, configure sua chave de API Gemini.\nToque no ⚙️ no canto superior do chat e cole sua chave.\nObtenha em: aistudio.google.com"});S.viriatoLoading=false;render();return;}const history=S.viriatoMsgs.slice(-10).map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]}));try{const body={system_instruction:{parts:[{text:"Você é Viriato, assistente ferroviário amigável e inteligente. Ajude o maquinista Angelo com sua escala 2x2, feriados, eventos, documentos e qualquer dúvida. Responda sempre em português BR, de forma simpática e objetiva. "+contexto}]},contents:history};const resp=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+apiKey,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const data=await resp.json();if(data.candidates&&data.candidates[0]&&data.candidates[0].content){S.viriatoMsgs.push({role:"assistant",txt:data.candidates[0].content.parts[0].text});}else{S.viriatoMsgs.push({role:"assistant",txt:"Desculpe, não consegui responder agora. "+(data.error?data.error.message:"Tente novamente.")});}}catch(e){S.viriatoMsgs.push({role:"assistant",txt:"Erro de conexão: "+e.message});}S.viriatoLoading=false;render();setTimeout(()=>{const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},80);}
+
+function mdToHtml(txt){
+  if(!txt)return"";
+  return txt
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g,"<em>$1</em>")
+    .replace(/`(.+?)`/g,"<code style='background:var(--card2);padding:1px 5px;border-radius:4px;font-size:11px;font-family:monospace'>$1</code>")
+    .replace(/^### (.+)$/gm,"<b style='color:var(--text2);font-size:13px;display:block;margin-top:8px'>$1</b>")
+    .replace(/^## (.+)$/gm,"<b style='color:#4ade80;font-size:14px;display:block;margin-top:8px'>$1</b>")
+    .replace(/^# (.+)$/gm,"<b style='color:#4ade80;font-size:16px;display:block;margin-top:6px'>$1</b>")
+    .replace(/^- (.+)$/gm,"<div style='margin-left:10px'>• $1</div>")
+    .replace(/\n/g,"<br>");
+}
+function viriatoContexto(){
+  const hoje=HOJE_KEY,fol=isFolga(HOJE_DT),diasF=diasParaFolga(),fer=FER[hoje]||"";
+  const ano=HOJE_DT.getFullYear(),mes=HOJE_DT.getMonth();
+  const maxD=new Date(ano,mes+1,0).getDate();
+  let diasMes="Escala "+MESES[mes]+"/"+ano+": ";
+  for(let d=1;d<=maxD;d++){const dt=new Date(ano,mes,d);diasMes+=(isFolga(dt)?"F":"S");}
+  const evHoje=(S.events[hoje]||[]).map(e=>getEvText(e)).join(", ");
+  const proxEvs=Object.keys(S.events).filter(k=>k>hoje&&k.startsWith(String(ano))).sort().slice(0,5).map(k=>{return k+": "+((S.events[k]||[]).map(e=>getEvText(e)).join(", "));}).join(" | ");
+  const docAlert=checklistAlert();
+  const auditAtiva=S.auditorias&&S.auditorias.find(a=>hoje>=a.inicio&&hoje<=a.fim);
+  return ["=== CONTEXTO DO USUÁRIO ===","Usuário: Angelo Silva, Maquinista Turma A, Escala Ferroviária 2x2 (2026-2030)","Data atual: "+hoje+" ("+DFULL[HOJE_DT.getDay()]+")","Status hoje: "+(fol?"FOLGA":"SERVIÇO")+(fer?" | Feriado: "+fer:""),"Dias para próxima folga: "+diasF,diasMes+" (F=Folga S=Serviço)",evHoje?"Eventos hoje: "+evHoje:"",proxEvs?"Próximos eventos: "+proxEvs:"",docAlert?"Doc próx. vencimento: "+docAlert.nome+" ("+docAlert.dias+" dias)":"",auditAtiva?"Auditoria ativa: "+auditAtiva.nome:"","==========================="].filter(Boolean).join("\n");
+}
+async function viriatoSend(){
+  const txt=(S.viriatoInput||"").trim();
+  if(!txt||S.viriatoLoading)return;
+  S.viriatoMsgs.push({role:"user",txt});
+  S.viriatoInput="";
+  S.viriatoLoading=true;
+  render();
+  setTimeout(()=>{const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},30);
+  const apiKey=S.viriatoApiKey||"";
+  if(!apiKey){
+    S.viriatoMsgs.push({role:"assistant",txt:"⚠️ Configure sua chave de API Gemini para usar o Viriato.\n\nToque no **⚙️** no topo do chat e cole sua chave.\n\nObtenha gratuitamente em: **aistudio.google.com**",html:true});
+    S.viriatoLoading=false;render();return;
+  }
+  const systemPrompt=[
+    "Você é **Viriato**, um assistente de inteligência artificial avançado e de propósito geral, integrado ao app Agenda Turma A.",
+    "Você é capaz de responder QUALQUER pergunta do usuário com profundidade: ciência, tecnologia, saúde, direito, história, matemática, programação, receitas, idiomas, esportes, cultura, filosofia, finanças, e tudo mais.",
+    "Além disso, você tem contexto completo da agenda do maquinista Angelo e responde dúvidas sobre escala, feriados, eventos e documentos com precisão.",
+    "REGRAS IMPORTANTES:",
+    "- Sempre responda em português brasileiro fluente",
+    "- Use markdown: **negrito**, *itálico*, listas com -, títulos com ##",
+    "- Seja completo e útil. Nunca recuse responder por achar que está fora do tema",
+    "- Para perguntas técnicas/científicas, dê explicações claras e detalhadas",
+    "- Para perguntas sobre a agenda, use o contexto abaixo",
+    "",
+    viriatoContexto()
+  ].join("\n");
+  const history=S.viriatoMsgs.slice(-20).map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]}));
+  try{
+    const body={
+      system_instruction:{parts:[{text:systemPrompt}]},
+      contents:history,
+      generationConfig:{temperature:0.85,topK:40,topP:0.95,maxOutputTokens:2048}
+    };
+    const resp=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+apiKey,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const data=await resp.json();
+    if(data.candidates&&data.candidates[0]&&data.candidates[0].content){
+      const respTxt=data.candidates[0].content.parts.map(p=>p.text||"").join("");
+      S.viriatoMsgs.push({role:"assistant",txt:respTxt,html:true});
+    } else {
+      S.viriatoMsgs.push({role:"assistant",txt:"Erro: "+(data.error?data.error.message:JSON.stringify(data).substring(0,150))});
+    }
+  }catch(e){
+    S.viriatoMsgs.push({role:"assistant",txt:"Erro de conexão: "+e.message});
+  }
+  S.viriatoLoading=false;render();
+  setTimeout(()=>{const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},80);
+}
 function renderViriatoFab(){const fab=el("button",{class:"train-fab",title:"Viriato - Assistente IA",onClick:()=>{S.viriatoOpen=!S.viriatoOpen;if(S.viriatoOpen){setTimeout(()=>{const inp=document.getElementById("viriato-inp");if(inp)inp.focus();const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},80);}render();}});fab.appendChild(svgViriato(34));return fab;}
-function renderViriatoModal(){const msgs=S.viriatoMsgs.map(m=>{const isBot=m.role==="assistant";return el("div",{class:"viriato-msg "+(isBot?"viriato-bot":"viriato-user")},[isBot?el("div",{class:"viriato-avatar"},svgViriato(22)):null,el("div",{class:"viriato-bubble",style:{background:isBot?"var(--card2)":"#0ea5e922",border:"1px solid "+(isBot?"var(--border)":"#0ea5e966"),color:"var(--text2)",whiteSpace:"pre-wrap"}},m.txt)]);});if(S.viriatoLoading)msgs.push(el("div",{class:"viriato-msg viriato-bot"},[el("div",{class:"viriato-avatar"},svgViriato(22)),el("div",{class:"viriato-bubble",style:{color:"var(--muted)"}},["Pensando",el("span",{class:"viriato-dots"},"...")])]));const inp=el("input",{id:"viriato-inp",class:"add-inp",style:{flex:1,fontSize:"13px"},placeholder:"Pergunte ao Viriato...",value:S.viriatoInput,onInput:e=>S.viriatoInput=e.target.value,onKeydown:e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();viriatoSend();}}});const sendBtn=el("button",{class:"add-btn",style:{background:"#4ade80",color:"#000",fontWeight:700,minWidth:"44px"},onClick:viriatoSend},S.viriatoLoading?"⏳":"▶");const configBtn=el("button",{class:"icon-btn",style:{fontSize:"13px",padding:"4px 8px"},title:"Configurar chave API Gemini",onClick:()=>{const k=prompt("Cole sua chave de API Gemini\n(Obtenha gratuitamente em: aistudio.google.com):",S.viriatoApiKey||"");if(k!==null){S.viriatoApiKey=k.trim();try{localStorage.setItem("viriatoKey",S.viriatoApiKey);}catch(e){}showToast(k.trim()?"🔑 Chave Gemini salva!":"🔑 Chave removida");render();}}},"⚙️");return el("div",{class:"viriato-panel"},[el("div",{class:"viriato-header"},[svgViriato(26),el("div",{style:{flex:1}},[el("div",{style:{fontWeight:700,color:"#4ade80",fontSize:"14px"}},"Viriato"),el("div",{style:{fontSize:"10px",color:"var(--muted)"}},"Assistente Ferroviário IA")]),configBtn,el("button",{class:"close-btn",onClick:()=>{S.viriatoOpen=false;render();}},"x")]),el("div",{id:"viriato-chat",class:"viriato-chat"},msgs),el("div",{class:"viriato-input-row"},[inp,sendBtn])]);}
-function renderDocViewer(){const dv=S.docViewer;return el("div",{class:"overlay",onClick:()=>{S.docViewer=null;render();}},[el("div",{class:"doc-viewer-box",onClick:e=>e.stopPropagation()},[el("div",{class:"doc-viewer-header"},[el("span",{style:{fontWeight:600,color:"var(--text2)",fontSize:"13px",flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},dv.name),el("button",{class:"close-btn",style:{background:"#22d48a22",color:"#22d48a",border:"1px solid #22d48a44",padding:"6px 14px",fontSize:"13px",borderRadius:"10px"},onClick:()=>{S.docViewer=null;render();}},"✕ Voltar ao App")]),el("iframe",{src:dv.data,style:{width:"100%",height:"calc(100% - 50px)",border:"none",borderRadius:"0 0 14px 14px"}})])]);}
+function renderViriatoModal(){
+  const msgs=S.viriatoMsgs.map(m=>{
+    const isBot=m.role==="assistant";
+    const bubble=el("div",{class:"viriato-bubble",style:{background:isBot?"var(--card2)":"#0ea5e922",border:"1px solid "+(isBot?"var(--border)":"#0ea5e966"),color:"var(--text2)",lineHeight:"1.55",fontSize:"13px"}});
+    if(m.html&&isBot){bubble.innerHTML=mdToHtml(m.txt);}
+    else{bubble.textContent=m.txt;}
+    return el("div",{class:"viriato-msg "+(isBot?"viriato-bot":"viriato-user")},[isBot?el("div",{class:"viriato-avatar"},svgViriato(22)):null,bubble]);
+  });
+  if(S.viriatoLoading)msgs.push(el("div",{class:"viriato-msg viriato-bot"},[el("div",{class:"viriato-avatar"},svgViriato(22)),el("div",{class:"viriato-bubble viriato-typing",style:{background:"var(--card2)",border:"1px solid var(--border)"}},[el("span",{class:"viriato-dot"}),el("span",{class:"viriato-dot"}),el("span",{class:"viriato-dot"})])]));
+  const inp=el("input",{id:"viriato-inp",class:"add-inp",style:{flex:1,fontSize:"13px"},placeholder:"Pergunte qualquer coisa...",value:S.viriatoInput||"",onInput:e=>{S.viriatoInput=e.target.value;},onKeydown:e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();viriatoSend();}}});
+  const sendBtn=el("button",{class:"add-btn",style:{background:S.viriatoLoading?"#334155":"#4ade80",color:"#000",fontWeight:700,minWidth:"44px"},onClick:viriatoSend},S.viriatoLoading?"⏳":"▶");
+  const clearBtn=el("button",{class:"icon-btn",style:{fontSize:"11px",padding:"4px 7px",color:"var(--muted)",marginRight:"2px"},title:"Limpar conversa",onClick:()=>{S.viriatoMsgs=[{role:"assistant",txt:"Conversa reiniciada! Como posso ajudar?",html:true}];render();}},"🗑");
+  const configBtn=el("button",{class:"icon-btn",style:{fontSize:"13px",padding:"4px 8px"},title:"Configurar chave API Gemini",onClick:()=>{const k=prompt("Cole sua chave de API Gemini\n(Obtenha gratuitamente em: aistudio.google.com):",S.viriatoApiKey||"");if(k!==null){S.viriatoApiKey=k.trim();try{localStorage.setItem("viriatoKey",S.viriatoApiKey);}catch(e){}showToast(k.trim()?"🔑 Chave Gemini salva!":"🔑 Chave removida");render();}}},"⚙️");
+  const msgInfo=S.viriatoMsgs.length>1?el("span",{style:{fontSize:"10px",color:"var(--muted)",marginLeft:"4px"}},"("+S.viriatoMsgs.length+" msgs)"):null;
+  return el("div",{class:"viriato-panel"},[
+    el("div",{class:"viriato-header"},[
+      svgViriato(26),
+      el("div",{style:{flex:1}},[
+        el("div",{style:{fontWeight:700,color:"#4ade80",fontSize:"14px",display:"flex",alignItems:"center",gap:"5px"}},["Viriato",msgInfo]),
+        el("div",{style:{fontSize:"10px",color:"var(--muted)"}},"Assistente IA · Gemini 2.0 Flash")
+      ]),
+      clearBtn,configBtn,
+      el("button",{class:"close-btn",onClick:()=>{S.viriatoOpen=false;render();}},"x")
+    ]),
+    el("div",{id:"viriato-chat",class:"viriato-chat"},msgs),
+    el("div",{class:"viriato-input-row"},[inp,sendBtn])
+  ]);
+}
+function renderDocViewer(){const dv=S.docViewer;return el("div",{class:"overlay",onClick:()=>{S.docViewer=null;render();}},[el("div",{class:"doc-viewer-box",onClick:e=>e.stopPropagation()},[el("div",{class:"doc-viewer-header"},[el("span",{style:{fontWeight:600,color:"var(--text2)",fontSize:"13px",flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},dv.name),el("button",{class:"close-btn",style:{background:"#22d48a22",color:"#22d48a",border:"1px solid #22d48a44",padding:"6px 14px",fontSize:"13px",borderRadius:"10px"},onClick:()=>{S.docViewer=null;render();}},"â Voltar ao App")]),el("iframe",{src:dv.data,style:{width:"100%",height:"calc(100% - 50px)",border:"none",borderRadius:"0 0 14px 14px"}})])]);}
 /* INIT */
 loadS();render();
 if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
