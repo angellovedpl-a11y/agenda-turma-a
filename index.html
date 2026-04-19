@@ -220,6 +220,23 @@ button,input,select,textarea{font-family:inherit;color:inherit}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 input[type="date"],input[type="time"]{color-scheme:dark}
 [data-theme="light"] input[type="date"],[data-theme="light"] input[type="time"]{color-scheme:light}
+
+/* VIRIATO */
+.train-fab{position:fixed;bottom:22px;right:16px;z-index:120;background:linear-gradient(135deg,#0f172a,#1e293b);border:2px solid #4ade80;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px #4ade8044;cursor:pointer;transition:transform .15s;}
+.train-fab:hover{transform:scale(1.08);}
+.viriato-panel{position:fixed;bottom:90px;right:12px;width:340px;max-width:calc(100vw - 24px);background:var(--card);border:1.5px solid #4ade8055;border-radius:18px;box-shadow:0 8px 40px #00000088;z-index:200;display:flex;flex-direction:column;max-height:70vh;}
+.viriato-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--hdr);border-radius:18px 18px 0 0;}
+.viriato-chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:200px;}
+.viriato-msg{display:flex;gap:8px;align-items:flex-start;}
+.viriato-bot{flex-direction:row;}
+.viriato-user{flex-direction:row-reverse;}
+.viriato-avatar{flex-shrink:0;}
+.viriato-bubble{padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.5;max-width:85%;word-break:break-word;}
+.viriato-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);}
+.viriato-dots{animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.doc-viewer-box{background:var(--card);border-radius:16px;width:95vw;max-width:700px;height:85vh;display:flex;flex-direction:column;overflow:hidden;}
+.doc-viewer-header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--hdr);}
 </style>
 </head>
 <body>
@@ -282,7 +299,7 @@ function trainMsg(){
 let alarmCtx=null,alarmNodes=[],alarmInterval=null;
 function tocarAlarme(){stopAlarme();try{alarmCtx=new(window.AudioContext||window.webkitAudioContext)();function beep(t,f,d){const o=alarmCtx.createOscillator(),g=alarmCtx.createGain();o.connect(g);g.connect(alarmCtx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d+.05);alarmNodes.push(o);}const t=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t+i*.45,880,.35);beep(t+i*.45+.15,1100,.2);}alarmInterval=setInterval(()=>{if(!alarmCtx)return;const t2=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t2+i*.45,880,.35);beep(t2+i*.45+.15,1100,.2);}},4000);}catch(e){}}
 function stopAlarme(){if(alarmInterval){clearInterval(alarmInterval);alarmInterval=null;}alarmNodes.forEach(n=>{try{n.stop();}catch(e){}});alarmNodes=[];if(alarmCtx){try{alarmCtx.close();}catch(e){}alarmCtx=null;}}
-setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('🚂 Turma A',{body:'Não esqueça do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('🚂 Turma A',{body:'Não esqueça do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});});}}}},10000);
+setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('ð Turma A',{body:'NÃ£o esqueÃ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('ð Turma A',{body:'NÃ£o esqueÃ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});});}}}},10000);
 setInterval(()=>{if(!S.alarmOn||S.alarmRinging)return;const now=new Date();const hm=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");const alvo=S.snoozeTime||S.alarmTime;if(hm===alvo&&!isFolga(now)){S.alarmRinging=true;S.snoozeTime=null;tocarAlarme();render();}},30000);
 
 /* STATE */
@@ -295,10 +312,17 @@ const S={events:{},docs:{},auditorias:[],checklist:[...DOCS_OBRIGATORIOS_DEFAULT
   trainTimer:null,
   newAuditNome:"",newAuditIni:"",newAuditFim:"",
   novoCheckNome:"",novoCheckVal:"",
-  fileCallback:null
+  fileCallback:null,
+  docViewer:null,
+  viriatoOpen:false,
+  viriatoMsgs:[{role:"assistant",txt:"Olá! Meu nome é Viriato 🤖\nSou seu assistente ferroviário. Pode me perguntar qualquer coisa sobre sua escala, feriados ou agenda!"}],
+  viriatoInput:"",
+  viriatoLoading:false,
+  viriatoApiKey:""
 };
 
 function loadS(){
+  try{const vk=localStorage.getItem("viriatoKey");if(vk)S.viriatoApiKey=vk;}catch(e){}
   try{const r=localStorage.getItem("turmaA_v10");if(r){const d=JSON.parse(r);
     S.events=d.events||{};S.docs=d.docs||{};
     S.auditorias=d.auditorias||[];
@@ -377,8 +401,9 @@ function render(){
   app.appendChild(renderFiltros());
   if(S.tela==="cal")app.appendChild(renderCalendario());
   else if(S.tela==="ev")app.appendChild(renderEventos());
-  app.appendChild(renderTrainFab());
-  if(S.showTrain)app.appendChild(renderTrainBubble());
+  app.appendChild(renderViriatoFab());
+  if(S.viriatoOpen)app.appendChild(renderViriatoModal());
+  if(S.docViewer)app.appendChild(renderDocViewer());
   if(S.modal)app.appendChild(renderModal());
   if(S.showAlarmModal)app.appendChild(renderAlarmModal());
   if(S.showAuditoriaModal)app.appendChild(renderAuditoriaModal());
@@ -525,10 +550,10 @@ function renderModal(){
   const addBtn=el("button",{class:"add-btn",style:{background:TMAP[S.modalTipo]?TMAP[S.modalTipo].cor:"#e8a800"},onClick:confirmarEvento},S.modalEdit!==null?"ok":"+");
   const cancelEl=S.modalEdit!==null?el("button",{class:"cancel-edit",onClick:()=>{S.modalEdit=null;S.modalInput="";render();}},"cancelar edicao"):null;
 
-  /* SEÇÃO DOCUMENTOS */
+  /* SEÃÃO DOCUMENTOS */
   const docRows=mDocs.map((doc,i)=>el("div",{class:"doc-row"},[
     el("span",{class:"doc-icon"},docIcon(doc.type)),
-    el("div",{class:"doc-info"},[el("div",{class:"doc-name"},doc.name),el("div",{class:"doc-meta"},formatBytes(doc.size)+" · "+new Date(doc.date).toLocaleDateString("pt-BR"))]),
+    el("div",{class:"doc-info"},[el("div",{class:"doc-name"},doc.name),el("div",{class:"doc-meta"},formatBytes(doc.size)+" Â· "+new Date(doc.date).toLocaleDateString("pt-BR"))]),
     el("div",{class:"doc-actions"},[
       el("button",{class:"doc-btn",title:"Visualizar",onClick:()=>{const w=window.open();w.document.write('<iframe src="'+doc.data+'" width="100%" height="100%" style="border:none"/>');w.document.close();}},"\uD83D\uDC41"),
       el("button",{class:"doc-btn",title:"Remover",style:{color:"#f87171"},onClick:()=>removerDoc(mKey,i)},"\uD83D\uDDD1")
@@ -572,7 +597,7 @@ function renderAlarmModal(){
 function renderAuditoriaModal(){
   const periodos=S.auditorias.map((a,i)=>el("div",{class:"audit-period"},[
     el("div",null,[el("div",{class:"audit-name"},a.nome||"Periodo de Auditoria"),el("div",{class:"audit-dates"},a.inicio+" ate "+a.fim)]),
-    el("button",{class:"audit-del",onClick:()=>{S.auditorias.splice(i,1);saveS();render();}},"✕")
+    el("button",{class:"audit-del",onClick:()=>{S.auditorias.splice(i,1);saveS();render();}},"â")
   ]));
   const form=el("div",{style:{background:"var(--card2)",border:"1px solid var(--border)",borderRadius:"12px",padding:"12px",marginTop:"10px"}},[
     el("div",{style:{fontSize:"11px",color:"var(--muted)",marginBottom:"8px",textTransform:"uppercase",letterSpacing:"1px"}},"Novo periodo"),
@@ -613,7 +638,7 @@ function renderChecklistModal(){
         el("div",{class:"check-val",style:{color:valColor}},valTxt),
         el("input",{type:"date",style:{marginTop:"4px",background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:"7px",padding:"3px 8px",fontSize:"11px",color:"var(--text)",width:"100%"},value:item.validade||"",onChange:e=>{S.checklist[i].validade=e.target.value;saveS();render();}})
       ]),
-      i>=DOCS_OBRIGATORIOS_DEFAULT.length?el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"✕"):null
+      i>=DOCS_OBRIGATORIOS_DEFAULT.length?el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"â"):null
     ]);
   });
   const addForm=el("div",{style:{display:"flex",gap:"7px",marginTop:"12px"}},[
@@ -630,7 +655,7 @@ function renderChecklistModal(){
 /* TRENZINHO FAB */
 function renderTrainFab(){
   const fab=el("button",{class:"train-fab",title:"Mascote Turma A",onClick:()=>{
-    try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator();const g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sawtooth';o.frequency.setValueAtTime(200,ac.currentTime);o.frequency.exponentialRampToValueAtTime(80,ac.currentTime+0.4);g.gain.setValueAtTime(0.25,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ac.currentTime+0.6);o.start();o.stop(ac.currentTime+0.6);}catch(e){}
+    try{const ac=new(window.AudioContext||window.webkitAudioContext)();function apito(t,f,d,v=0.4){const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='sawtooth';o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*0.97,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+0.06);g.gain.setValueAtTime(v,t+d-0.1);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d+0.05);}const t=ac.currentTime;apito(t,520,0.6,0.5);apito(t+0.7,520,0.4,0.4);apito(t+1.2,520,1.2,0.5);}catch(e){}
     if(S.trainTimer)clearTimeout(S.trainTimer);
     S.showTrain=!S.showTrain;
     if(S.showTrain){S.trainTimer=setTimeout(()=>{S.showTrain=false;render();},5000);}render();
@@ -648,7 +673,7 @@ function renderToast(){
   return el("div",{class:"toast",style:{background:t.ok?(S.dark?"#05201099":"#d1fae5cc"):(S.dark?"#20050599":"#fee2e2cc"),border:"1px solid "+(t.ok?"#22d48a":"#f87171"),color:t.ok?"#6ee7b7":"#fca5a5"}},t.msg);
 }
 
-/* AÇÕES */
+/* AÃÃES */
 function abrirDia(date){S.modal={key:toKey(date),date};S.modalInput="";S.modalTipo="outro";S.modalEdit=null;render();setTimeout(()=>{const inp=document.getElementById("modal-inp");if(inp)inp.focus();},80);}
 
 function confirmarEvento(){const txt=(S.modalInput||"").trim();if(!txt||!S.modal)return;const k=S.modal.key;if(!S.events[k])S.events[k]=[];const item={txt,tipo:S.modalTipo};if(S.modalEdit!==null){S.events[k][S.modalEdit]=item;S.modalEdit=null;}else S.events[k].push(item);S.modalInput="";S.modalTipo="outro";saveS();showToast("\u2713 Evento salvo!");setTimeout(()=>{const inp=document.getElementById("modal-inp");if(inp)inp.focus();},60);}
@@ -675,12 +700,19 @@ function triggerUpload(key){
   inp.click();
 }
 
+
+/* ===== VIRIATO - AGENTE LLM ===== */
+function svgViriato(size=34){const s=document.createElementNS("http://www.w3.org/2000/svg","svg");s.setAttribute("viewBox","0 0 64 64");s.setAttribute("width",size);s.setAttribute("height",size);s.innerHTML=`<g><line x1="32" y1="2" x2="32" y2="10" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="2" r="3.5" fill="#4ade80"/><rect x="8" y="10" width="48" height="36" rx="12" fill="#1e293b" stroke="#4ade80" stroke-width="2"/><rect x="14" y="18" width="14" height="12" rx="4" fill="#0ea5e9"/><rect x="36" y="18" width="14" height="12" rx="4" fill="#0ea5e9"/><circle cx="21" cy="24" r="4" fill="white" opacity=".95"/><circle cx="43" cy="24" r="4" fill="white" opacity=".95"/><circle cx="23" cy="22" r="1.5" fill="#0f172a"/><circle cx="45" cy="22" r="1.5" fill="#0f172a"/><rect x="16" y="34" width="32" height="7" rx="3.5" fill="#0f172a"/><rect x="18" y="35.5" width="6" height="4" rx="1.5" fill="#4ade80"/><rect x="26" y="35.5" width="6" height="4" rx="1.5" fill="#4ade80"/><rect x="34" y="35.5" width="6" height="4" rx="1.5" fill="#4ade80"/><rect x="42" y="35.5" width="4" height="4" rx="1.5" fill="#22d3ee"/><rect x="26" y="46" width="12" height="6" rx="2.5" fill="#334155"/><rect x="10" y="52" width="44" height="12" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="1.5"/><circle cx="32" cy="58" r="3.5" fill="#4ade80" opacity=".85"/></g>`;return s;}
+async function viriatoSend(){const txt=(S.viriatoInput||"").trim();if(!txt||S.viriatoLoading)return;S.viriatoMsgs.push({role:"user",txt});S.viriatoInput="";S.viriatoLoading=true;render();setTimeout(()=>{const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},30);const fol=isFolga(HOJE_DT);const diasF=diasParaFolga();const fer=FER[HOJE_KEY]||"";const contexto="Contexto: Hoje é "+HOJE_KEY+", "+(fol?"está de folga":"está de serviço")+", faltam "+diasF+" dia(s) para a próxima folga."+(fer?" Hoje é feriado: "+fer+".":" ")+"Escala 2x2 ferroviária (2026-2030). Usuário: Angelo (maquinista Turma A).";const apiKey=S.viriatoApiKey||"";if(!apiKey){S.viriatoMsgs.push({role:"assistant",txt:"⚠️ Para usar o Viriato, configure sua chave de API Gemini.\nToque no ⚙️ no canto superior do chat e cole sua chave.\nObtenha em: aistudio.google.com"});S.viriatoLoading=false;render();return;}const history=S.viriatoMsgs.slice(-10).map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]}));try{const body={system_instruction:{parts:[{text:"Você é Viriato, assistente ferroviário amigável e inteligente. Ajude o maquinista Angelo com sua escala 2x2, feriados, eventos, documentos e qualquer dúvida. Responda sempre em português BR, de forma simpática e objetiva. "+contexto}]},contents:history};const resp=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+apiKey,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const data=await resp.json();if(data.candidates&&data.candidates[0]&&data.candidates[0].content){S.viriatoMsgs.push({role:"assistant",txt:data.candidates[0].content.parts[0].text});}else{S.viriatoMsgs.push({role:"assistant",txt:"Desculpe, não consegui responder agora. "+(data.error?data.error.message:"Tente novamente.")});}}catch(e){S.viriatoMsgs.push({role:"assistant",txt:"Erro de conexão: "+e.message});}S.viriatoLoading=false;render();setTimeout(()=>{const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},80);}
+function renderViriatoFab(){const fab=el("button",{class:"train-fab",title:"Viriato - Assistente IA",onClick:()=>{S.viriatoOpen=!S.viriatoOpen;if(S.viriatoOpen){setTimeout(()=>{const inp=document.getElementById("viriato-inp");if(inp)inp.focus();const chat=document.getElementById("viriato-chat");if(chat)chat.scrollTop=chat.scrollHeight;},80);}render();}});fab.appendChild(svgViriato(34));return fab;}
+function renderViriatoModal(){const msgs=S.viriatoMsgs.map(m=>{const isBot=m.role==="assistant";return el("div",{class:"viriato-msg "+(isBot?"viriato-bot":"viriato-user")},[isBot?el("div",{class:"viriato-avatar"},svgViriato(22)):null,el("div",{class:"viriato-bubble",style:{background:isBot?"var(--card2)":"#0ea5e922",border:"1px solid "+(isBot?"var(--border)":"#0ea5e966"),color:"var(--text2)",whiteSpace:"pre-wrap"}},m.txt)]);});if(S.viriatoLoading)msgs.push(el("div",{class:"viriato-msg viriato-bot"},[el("div",{class:"viriato-avatar"},svgViriato(22)),el("div",{class:"viriato-bubble",style:{color:"var(--muted)"}},["Pensando",el("span",{class:"viriato-dots"},"...")])]));const inp=el("input",{id:"viriato-inp",class:"add-inp",style:{flex:1,fontSize:"13px"},placeholder:"Pergunte ao Viriato...",value:S.viriatoInput,onInput:e=>S.viriatoInput=e.target.value,onKeydown:e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();viriatoSend();}}});const sendBtn=el("button",{class:"add-btn",style:{background:"#4ade80",color:"#000",fontWeight:700,minWidth:"44px"},onClick:viriatoSend},S.viriatoLoading?"⏳":"▶");const configBtn=el("button",{class:"icon-btn",style:{fontSize:"13px",padding:"4px 8px"},title:"Configurar chave API Gemini",onClick:()=>{const k=prompt("Cole sua chave de API Gemini\n(Obtenha gratuitamente em: aistudio.google.com):",S.viriatoApiKey||"");if(k!==null){S.viriatoApiKey=k.trim();try{localStorage.setItem("viriatoKey",S.viriatoApiKey);}catch(e){}showToast(k.trim()?"🔑 Chave Gemini salva!":"🔑 Chave removida");render();}}},"⚙️");return el("div",{class:"viriato-panel"},[el("div",{class:"viriato-header"},[svgViriato(26),el("div",{style:{flex:1}},[el("div",{style:{fontWeight:700,color:"#4ade80",fontSize:"14px"}},"Viriato"),el("div",{style:{fontSize:"10px",color:"var(--muted)"}},"Assistente Ferroviário IA")]),configBtn,el("button",{class:"close-btn",onClick:()=>{S.viriatoOpen=false;render();}},"x")]),el("div",{id:"viriato-chat",class:"viriato-chat"},msgs),el("div",{class:"viriato-input-row"},[inp,sendBtn])]);}
+function renderDocViewer(){const dv=S.docViewer;return el("div",{class:"overlay",onClick:()=>{S.docViewer=null;render();}},[el("div",{class:"doc-viewer-box",onClick:e=>e.stopPropagation()},[el("div",{class:"doc-viewer-header"},[el("span",{style:{fontWeight:600,color:"var(--text2)",fontSize:"13px",flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},dv.name),el("button",{class:"close-btn",style:{background:"#22d48a22",color:"#22d48a",border:"1px solid #22d48a44",padding:"6px 14px",fontSize:"13px",borderRadius:"10px"},onClick:()=>{S.docViewer=null;render();}},"✕ Voltar ao App")]),el("iframe",{src:dv.data,style:{width:"100%",height:"calc(100% - 50px)",border:"none",borderRadius:"0 0 14px 14px"}})])]);}
 /* INIT */
 loadS();render();
 if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
 
 if("serviceWorker" in navigator){
-  const sw=`const CACHE="turmaA-v2";self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["/"]))));self.addEventListener("fetch",e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
+  const sw=`const CACHE="turmaA-v3";self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["/"]))));self.addEventListener("fetch",e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request))));`;
   const blob=new Blob([sw],{type:"application/javascript"});
   navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
 }
