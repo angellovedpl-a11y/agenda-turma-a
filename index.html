@@ -442,6 +442,7 @@ function showToast(msg,ok=true){if(S.toastTimer)clearTimeout(S.toastTimer);S.toa
 
 /* DOM HELPERS */
 function el(tag,attrs,children){const e=document.createElement(tag);if(attrs)Object.keys(attrs).forEach(k=>{if(k==="class")e.className=attrs[k];else if(k==="style"&&typeof attrs[k]==="object")Object.assign(e.style,attrs[k]);else if(k.startsWith("on"))e.addEventListener(k.slice(2).toLowerCase(),attrs[k]);else e.setAttribute(k,attrs[k]);});if(children)[].concat(children).forEach(c=>{if(c==null||c===false)return;e.appendChild(typeof c==="string"||typeof c==="number"?document.createTextNode(c):c);});return e;}
+function svgIcon(h){var s=document.createElement("span");s.style.cssText="display:flex;align-items:center;justify-content:center;pointer-events:none;";s.innerHTML=h;return s;}
 function svgIcon(html){const s=document.createElement("span");s.style.cssText="display:flex;align-items:center;justify-content:center;pointer-events:none;";s.innerHTML=html;return s;}
 function chip(label,cor){return el("span",{class:"chip",style:{background:cor+"22",color:cor,border:"1px solid "+cor+"55"}},label);}
 function divider(){return el("div",{style:{height:"1px",background:"var(--border2)",margin:"4px 0"}});}
