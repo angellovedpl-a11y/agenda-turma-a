@@ -1,0 +1,10 @@
+{
+  "sala": "DOCUMENTOS",
+  "descricao": "Documentos obrigatorios e seus prazos de validade",
+  "tipos": [
+    {"id": "CNH", "nome": "Carteira Nacional de Habilitacao", "validade_anos": 5, "obrigatorio": true},
+    {"id": "ASO", "nome": "Atestado de Saude Ocupacional", "validade_anos": 1, "obrigatorio": true},
+    {"id": "NR11", "nome": "Certificado NR-11 (Transporte e movimentacao de cargas)", "validade_anos": 3, "obrigatorio": true}
+  ],
+  "alertas_dias": 30
+}

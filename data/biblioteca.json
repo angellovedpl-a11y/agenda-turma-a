@@ -1,0 +1,44 @@
+{
+  "sala": "BIBLIOTECA",
+  "descricao": "Regulamentos, normas e boletins internos",
+  "regulamentos": [
+    {
+      "id": "nr11",
+      "titulo": "NR-11 - Transporte, Movimentacao, Armazenagem e Manuseio de Materiais",
+      "resumo": "Norma regulamentadora que estabelece os requisitos de seguranca para operacoes de transporte ferroviario, movimentacao e manuseio de cargas. O maquinista deve manter certificado atualizado a cada 3 anos.",
+      "itens_principais": [
+        "Uso obrigatorio de EPI durante operacoes",
+        "Velocidade maxima conforme sinalização da via",
+        "Comunicacao obrigatoria em caso de anomalias",
+        "Verificacao pre-operacional da locomotiva"
+      ]
+    },
+    {
+      "id": "escalas",
+      "titulo": "Regulamento de Escalas e Jornadas - Turma A",
+      "resumo": "Define o padrao 2x2 (2 dias de servico, 2 dias de folga) para a Turma A no periodo 2026-2030. Inclui regras de compensacao em feriados.",
+      "itens_principais": [
+        "Jornada de 12 horas por turno de servico",
+        "Folga obrigatoria de 48 horas apos 2 dias de servico",
+        "Feriados nacionais: folga garantida ou compensacao em dobro",
+        "Atestado medico para ausencias: entregar em ate 48 horas"
+      ]
+    }
+  ],
+  "boletins": [
+    {
+      "id": "bol-2026-01",
+      "titulo": "Boletim Operacional 01/2026",
+      "data": "2026-01-15",
+      "assunto": "Procedimentos de seguranca em trechos criticos",
+      "conteudo": "Reforco dos procedimentos de reducao de velocidade nos trechos km 42 a km 58. Sinalização temporaria instalada. Velocidade maxima permitida: 40 km/h. Vigencia: Janeiro a Marco/2026."
+    },
+    {
+      "id": "bol-2026-02",
+      "titulo": "Boletim Administrativo 02/2026",
+      "data": "2026-02-01",
+      "assunto": "Renovacao de ASO - Campanha 2026",
+      "conteudo": "Todos os maquinistas devem agendar renovacao do ASO ate 31/03/2026. Clinica conveniada: Centro Medico Ferroviario. Agendamentos pelo ramal 4521. Apresentar ASO anterior e CTPS."
+    }
+  ]
+}
