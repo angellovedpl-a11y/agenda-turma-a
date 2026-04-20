@@ -5,6 +5,8 @@ from datetime import datetime
 from anthropic import Anthropic
 
 app = Flask(__name__, static_folder='.')
+app.json.ensure_ascii = False
+app.config['JSON_AS_ASCII'] = False
 
 # === MEM PALACE ===
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
