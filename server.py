@@ -7,6 +7,7 @@ import re
 import time
 from datetime import datetime
 from anthropic import Anthropic
+import auth
 
 app = Flask(__name__, static_folder='.')
 app.json.ensure_ascii = False
@@ -172,7 +173,56 @@ def static_files(path):
     return send_from_directory('.', path)
 
 # === API CLAUDE ===
+# === API AUTH ===
+@app.route('/api/auth/registrar', methods=['POST'])
+def api_registrar():
+    return auth.handle_registrar(request.json or {})
+
+@app.route('/api/auth/login', methods=['POST'])
+def api_login():
+    return auth.handle_login(request.json or {})
+
+@app.route('/api/auth/logout', methods=['POST'])
+def api_logout():
+    return auth.handle_logout()
+
+@app.route('/api/auth/me', methods=['GET'])
+def api_me():
+    return auth.handle_me()
+
+@app.route('/api/admin/pendentes', methods=['GET'])
+@auth.require_approver
+def api_pendentes():
+    return auth.handle_pendentes()
+
+@app.route('/api/admin/usuarios', methods=['GET'])
+@auth.require_approver
+def api_usuarios():
+    return auth.handle_listar_usuarios()
+
+@app.route('/api/admin/aprovar/<matricula>', methods=['POST'])
+@auth.require_approver
+def api_aprovar(matricula):
+    return auth.handle_aprovar(matricula, request.current_user)
+
+@app.route('/api/admin/negar/<matricula>', methods=['POST'])
+@auth.require_approver
+def api_negar(matricula):
+    return auth.handle_negar(matricula, request.current_user)
+
+@app.route('/api/admin/promover/<matricula>', methods=['POST'])
+@auth.require_admin
+def api_promover(matricula):
+    return auth.handle_promover(matricula, request.current_user)
+
+@app.route('/api/admin/despromover/<matricula>', methods=['POST'])
+@auth.require_admin
+def api_despromover(matricula):
+    return auth.handle_despromover(matricula, request.current_user)
+
+
 @app.route('/api/claude', methods=['POST'])
+@auth.require_auth
 def claude_chat():
     try:
         data = request.json or {}
@@ -245,6 +295,7 @@ def claude_chat():
 
 # === API BIBLIOTECA - LISTAR ===
 @app.route('/api/biblioteca', methods=['GET'])
+@auth.require_auth
 def biblioteca():
     data = mem_palace_load('biblioteca')
     docs = data.get('documentos', [])
@@ -265,6 +316,7 @@ def biblioteca():
 
 # === API BIBLIOTECA - UPLOAD ===
 @app.route('/api/biblioteca/upload', methods=['POST'])
+@auth.require_auth
 def biblioteca_upload():
     try:
         data = request.json or {}
@@ -314,6 +366,7 @@ def biblioteca_upload():
 
 # === API BIBLIOTECA - REMOVER ===
 @app.route('/api/biblioteca/<doc_id>', methods=['DELETE'])
+@auth.require_auth
 def biblioteca_remover(doc_id):
     biblioteca = mem_palace_load('biblioteca')
     docs = biblioteca.get('documentos', [])
@@ -326,6 +379,7 @@ def biblioteca_remover(doc_id):
 
 # === API BIBLIOTECA - BUSCAR ===
 @app.route('/api/biblioteca/buscar', methods=['POST'])
+@auth.require_auth
 def biblioteca_buscar():
     data = request.json or {}
     query = data.get('query', '')
@@ -334,12 +388,14 @@ def biblioteca_buscar():
 
 # === API MEM CRUD ===
 @app.route('/api/mem/<sala>', methods=['GET'])
+@auth.require_auth
 def mem_get(sala):
     if sala not in SALAS:
         return jsonify({'error': 'Sala invalida'}), 400
     return jsonify(mem_palace_load(sala))
 
 @app.route('/api/mem/<sala>', methods=['POST'])
+@auth.require_auth
 def mem_update(sala):
     if sala not in SALAS:
         return jsonify({'error': 'Sala invalida'}), 400
@@ -354,11 +410,13 @@ def mem_update(sala):
 
 # === API HELPDESK ===
 @app.route('/api/helpdesk', methods=['GET'])
+@auth.require_auth
 def helpdesk_listar():
     guias = helpdesk_load()
     return jsonify({'total': len(guias), 'guias': [{'arquivo': g['arquivo'], 'preview': g['conteudo'][:200]} for g in guias]})
 
 @app.route('/api/helpdesk/<arquivo>', methods=['GET'])
+@auth.require_auth
 def helpdesk_ler(arquivo):
     if '/' in arquivo or '..' in arquivo or not arquivo.endswith('.md'):
         return jsonify({'error': 'Nome invalido'}), 400
@@ -370,6 +428,7 @@ def helpdesk_ler(arquivo):
 
 # === API DIAGNOSTICO ===
 @app.route('/api/diag/health', methods=['GET'])
+@auth.require_auth
 def diag_health():
     biblioteca = mem_palace_load('biblioteca')
     docs = biblioteca.get('documentos', [])
@@ -395,6 +454,7 @@ def diag_health():
     })
 
 @app.route('/api/diag/biblioteca', methods=['GET'])
+@auth.require_auth
 def diag_biblioteca():
     biblioteca = mem_palace_load('biblioteca')
     docs = biblioteca.get('documentos', [])

@@ -416,8 +416,26 @@ const S={events:{},docs:{},auditorias:[],checklist:[...DOCS_OBRIGATORIOS_DEFAULT
   viriatoApiKey:"",
   viriatoConfig:false,
   viriatoStatus:"",
-  viriatoApiUsada:""
+  viriatoApiUsada:"",
+  auth:{ready:false,token:"",user:null,pendentes:0},
+  authView:"login",authMat:"",authSenha:"",authNome:"",authMsg:"",authBusy:false,
+  adminOpen:false,adminTab:"pendentes",adminUsuarios:[],adminPendentes:[],adminBusy:false,adminMsg:""
 };
+
+/* ===== AUTH ===== */
+function authToken(){return S.auth.token||"";}
+function authFetch(url,opts){opts=opts||{};opts.headers=Object.assign({},opts.headers||{});const t=authToken();if(t)opts.headers["Authorization"]="Bearer "+t;if(opts.body&&!opts.headers["Content-Type"])opts.headers["Content-Type"]="application/json";return fetch(url,opts).then(async r=>{if(r.status===401){authClear();render();}return r;});}
+function authClear(){S.auth={ready:true,token:"",user:null,pendentes:0};try{localStorage.removeItem("turmaA_authToken");}catch(e){}}
+async function authBoot(){try{const t=localStorage.getItem("turmaA_authToken")||"";S.auth.token=t;const r=await fetch("/api/auth/me",{headers:t?{"Authorization":"Bearer "+t}:{}});const d=await r.json();if(d.authenticated){S.auth={ready:true,token:t,user:{matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar},pendentes:d.pendentes||0};}else{authClear();}}catch(e){authClear();}render();}
+async function authRefresh(){try{const r=await fetch("/api/auth/me",{headers:{"Authorization":"Bearer "+authToken()}});const d=await r.json();if(d.authenticated){S.auth.user={matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar};S.auth.pendentes=d.pendentes||0;render();}}catch(e){}}
+async function authLogin(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Matrícula deve ter 6 dígitos.";render();return;}if(!/^\d{4}$/.test(S.authSenha)){S.authMsg="Senha deve ter 4 dígitos.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,senha:S.authSenha})});const d=await r.json();if(!r.ok){S.authMsg="🚦 "+(d.error||"Falha no login");S.authBusy=false;render();return;}localStorage.setItem("turmaA_authToken",d.token);S.auth={ready:true,token:d.token,user:Object.assign({pode_aprovar:d.user.role!=="user"},d.user),pendentes:0};S.authMat="";S.authSenha="";S.authMsg="";S.authBusy=false;S.userName=S.userName||(d.user.nome||"").split(" ")[0];try{localStorage.setItem("turmaA_userName",S.userName);}catch(e){}render();authRefresh();}catch(e){S.authMsg="🚦 Erro de conexão: "+e.message;S.authBusy=false;render();}}
+async function authRegistrar(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Matrícula deve ter 6 dígitos.";render();return;}if(!/^\d{4}$/.test(S.authSenha)){S.authMsg="Senha deve ter 4 dígitos.";render();return;}if(!S.authNome||S.authNome.trim().length<2){S.authMsg="Informe seu nome completo.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/registrar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,senha:S.authSenha,nome:S.authNome.trim()})});const d=await r.json();S.authBusy=false;if(!r.ok){S.authMsg="🚦 "+(d.error||"Falha no cadastro");render();return;}if(d.admin&&d.token){localStorage.setItem("turmaA_authToken",d.token);S.auth={ready:true,token:d.token,user:Object.assign({pode_aprovar:true},d.user),pendentes:0};S.authMat="";S.authSenha="";S.authNome="";S.authMsg="";S.userName=(d.user.nome||"").split(" ")[0];try{localStorage.setItem("turmaA_userName",S.userName);}catch(e){}render();return;}S.authView="login";S.authMsg="✅ "+d.mensagem;S.authNome="";S.authSenha="";render();}catch(e){S.authBusy=false;S.authMsg="🚦 Erro de conexão: "+e.message;render();}}
+async function authLogout(){try{await fetch("/api/auth/logout",{method:"POST",headers:{"Authorization":"Bearer "+authToken()}});}catch(e){}authClear();render();}
+
+/* ===== ADMIN ===== */
+async function adminAbrir(){S.adminOpen=true;S.adminTab="pendentes";S.adminMsg="";render();await adminCarregar();}
+async function adminCarregar(){S.adminBusy=true;render();try{const[p,u]=await Promise.all([authFetch("/api/admin/pendentes").then(r=>r.json()),authFetch("/api/admin/usuarios").then(r=>r.json())]);S.adminPendentes=p.pendentes||[];S.adminUsuarios=u.usuarios||[];S.auth.pendentes=S.adminPendentes.length;}catch(e){S.adminMsg="Erro ao carregar: "+e.message;}S.adminBusy=false;render();}
+async function adminAcao(url,msgOk){S.adminBusy=true;render();try{const r=await authFetch(url,{method:"POST"});const d=await r.json();S.adminMsg=r.ok?("✅ "+(d.mensagem||msgOk)):("🚦 "+(d.error||"Falha"));}catch(e){S.adminMsg="🚦 "+e.message;}S.adminBusy=false;await adminCarregar();}
 
 function loadS(){
   try{const vk=localStorage.getItem("viriatoKey");if(vk)S.viriatoApiKey=vk;}catch(e){}
@@ -502,13 +520,91 @@ function svgLocoFace(size=32){
 }
 
 /* RENDER PRINCIPAL */
+function renderLogin(){
+  const isReg=S.authView==="reg";
+  const inpStyle={width:"100%",padding:"12px 14px",fontSize:"16px",borderRadius:"10px",border:"1px solid var(--border)",background:"var(--card2)",color:"var(--text2)",letterSpacing:"2px",textAlign:"center",fontWeight:600};
+  const matInp=el("input",{type:"tel",inputMode:"numeric",maxlength:"6",placeholder:"000000",style:inpStyle,value:S.authMat,onInput:e=>{S.authMat=e.target.value.replace(/\D/g,"").slice(0,6);}});
+  const senhaInp=el("input",{type:"password",inputMode:"numeric",maxlength:"4",placeholder:"••••",style:inpStyle,value:S.authSenha,onInput:e=>{S.authSenha=e.target.value.replace(/\D/g,"").slice(0,4);},onKeydown:e=>{if(e.key==="Enter"&&!isReg)authLogin();}});
+  const nomeInp=isReg?el("input",{type:"text",maxlength:"60",placeholder:"Seu nome completo",style:Object.assign({},inpStyle,{letterSpacing:"normal",textAlign:"left"}),value:S.authNome,onInput:e=>{S.authNome=e.target.value;}}):null;
+  const lab=t=>el("div",{style:{fontSize:"11px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",margin:"14px 0 6px",fontWeight:600}},t);
+  const btnPrimario=el("button",{style:{width:"100%",padding:"13px",background:S.authBusy?"#334155":"#4ade80",color:"#000",fontWeight:700,fontSize:"15px",border:"none",borderRadius:"10px",marginTop:"18px",cursor:S.authBusy?"wait":"pointer"},onClick:isReg?authRegistrar:authLogin},S.authBusy?"Aguarde...":(isReg?"Criar cadastro":"Entrar"));
+  const switchBtn=el("button",{style:{width:"100%",padding:"10px",background:"transparent",color:"var(--muted)",fontSize:"13px",border:"1px solid var(--border)",borderRadius:"10px",marginTop:"10px",cursor:"pointer"},onClick:()=>{S.authView=isReg?"login":"reg";S.authMsg="";S.authNome="";render();}},isReg?"Já tem cadastro? Fazer login":"Primeira vez? Criar cadastro");
+  const msg=S.authMsg?el("div",{style:{padding:"10px 12px",borderRadius:"9px",marginTop:"14px",fontSize:"13px",background:S.authMsg.startsWith("✅")?"#4ade8014":"#ef444414",border:"1px solid "+(S.authMsg.startsWith("✅")?"#4ade8055":"#ef444455"),color:S.authMsg.startsWith("✅")?"#4ade80":"#fca5a5"}},S.authMsg):null;
+  const hint=isReg?el("div",{style:{fontSize:"11px",color:"var(--muted)",marginTop:"12px",lineHeight:"1.5",textAlign:"center"}},"O primeiro cadastro vira admin automaticamente. Cadastros seguintes ficam pendentes até aprovação."):el("div",{style:{fontSize:"11px",color:"var(--muted)",marginTop:"12px",textAlign:"center"}},"Use sua matrícula de 6 dígitos e senha de 4 dígitos.");
+  const card=el("div",{style:{maxWidth:"380px",margin:"0 auto",padding:"30px 24px",background:"var(--card)",border:"1px solid var(--border)",borderRadius:"18px",boxShadow:"0 30px 80px #00000088"}},[
+    el("div",{style:{textAlign:"center",marginBottom:"24px"}},[
+      el("div",{style:{fontSize:"40px",marginBottom:"6px"}},"🚂"),
+      el("div",{style:{fontWeight:700,fontSize:"18px",color:"var(--text2)"}},"Agenda Turma A"),
+      el("div",{style:{fontSize:"12px",color:"var(--muted)",marginTop:"2px"}},isReg?"Criar cadastro":"Entrar")
+    ]),
+    isReg?lab("Nome"):null,nomeInp,
+    lab("Matrícula (6 dígitos)"),matInp,
+    lab("Senha (4 dígitos)"),senhaInp,
+    msg,btnPrimario,switchBtn,hint
+  ]);
+  return el("div",{style:{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",background:"linear-gradient(160deg,#0f172a,#020617)"}},[card]);
+}
+
+function renderAdminPanel(){
+  const u=S.auth.user;const isAdmin=u&&u.role==="admin";
+  const tab=(id,lab,n)=>el("button",{style:{flex:1,padding:"10px",background:S.adminTab===id?"var(--card2)":"transparent",color:S.adminTab===id?"#4ade80":"var(--muted)",border:"none",borderBottom:"2px solid "+(S.adminTab===id?"#4ade80":"transparent"),fontWeight:600,fontSize:"13px",cursor:"pointer"},onClick:()=>{S.adminTab=id;render();}},lab+(n>0?" ("+n+")":""));
+  const linhas=[];
+  if(S.adminBusy)linhas.push(el("div",{style:{textAlign:"center",padding:"20px",color:"var(--muted)"}},"⏳ Carregando..."));
+  else if(S.adminTab==="pendentes"){
+    if(!S.adminPendentes.length)linhas.push(el("div",{style:{textAlign:"center",padding:"20px",color:"var(--muted)",fontSize:"13px"}},"Nenhum cadastro pendente."));
+    S.adminPendentes.forEach(p=>{
+      linhas.push(el("div",{style:{padding:"12px",background:"var(--card2)",border:"1px solid #f59e0b55",borderRadius:"10px",marginBottom:"8px"}},[
+        el("div",{style:{fontWeight:600,color:"var(--text2)",fontSize:"14px"}},p.nome),
+        el("div",{style:{fontSize:"12px",color:"var(--muted)",marginTop:"2px"}},"Matrícula: "+p.matricula),
+        el("div",{style:{display:"flex",gap:"8px",marginTop:"10px"}},[
+          el("button",{style:{flex:1,padding:"8px",background:"#4ade80",color:"#000",fontWeight:700,border:"none",borderRadius:"8px",fontSize:"12px",cursor:"pointer"},onClick:()=>adminAcao("/api/admin/aprovar/"+p.matricula,"Aprovado")},"✓ Aprovar"),
+          el("button",{style:{flex:1,padding:"8px",background:"#ef4444",color:"#fff",fontWeight:700,border:"none",borderRadius:"8px",fontSize:"12px",cursor:"pointer"},onClick:()=>{if(confirm("Negar cadastro de "+p.nome+"?"))adminAcao("/api/admin/negar/"+p.matricula,"Negado");}},"✕ Negar")
+        ])
+      ]));
+    });
+  }else{
+    const aprovs=S.adminUsuarios.filter(x=>x.role==="aprovador").length;
+    if(isAdmin)linhas.push(el("div",{style:{padding:"8px 12px",background:"#0ea5e911",border:"1px solid #0ea5e955",borderRadius:"8px",marginBottom:"10px",fontSize:"12px",color:"var(--text2)"}},"Aprovadores extras: "+aprovs+"/3 (você é o admin principal)"));
+    S.adminUsuarios.forEach(x=>{
+      const cor=x.status==="aprovado"?"#4ade80":x.status==="pendente"?"#f59e0b":"#ef4444";
+      const tag=x.role==="admin"?"👑 ADMIN":x.role==="aprovador"?"🛡️ APROVADOR":"USER";
+      const acoes=[];
+      if(isAdmin&&x.status==="aprovado"&&x.role==="user")acoes.push(el("button",{style:{padding:"5px 10px",background:"#0ea5e9",color:"#fff",border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:600,cursor:"pointer"},onClick:()=>{if(confirm("Promover "+x.nome+" a aprovador?"))adminAcao("/api/admin/promover/"+x.matricula,"Promovido");}},"Promover"));
+      if(isAdmin&&x.role==="aprovador")acoes.push(el("button",{style:{padding:"5px 10px",background:"#475569",color:"#fff",border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:600,cursor:"pointer"},onClick:()=>{if(confirm("Remover poder de aprovação de "+x.nome+"?"))adminAcao("/api/admin/despromover/"+x.matricula,"Removido");}},"Remover"));
+      linhas.push(el("div",{style:{padding:"10px 12px",background:"var(--card2)",border:"1px solid var(--border)",borderRadius:"9px",marginBottom:"6px"}},[
+        el("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"8px"}},[
+          el("div",{style:{flex:1,minWidth:0}},[
+            el("div",{style:{fontWeight:600,color:"var(--text2)",fontSize:"13px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},x.nome),
+            el("div",{style:{fontSize:"11px",color:"var(--muted)"}},x.matricula+" • "+tag)
+          ]),
+          el("span",{style:{fontSize:"10px",color:cor,fontWeight:700,padding:"3px 7px",background:cor+"22",borderRadius:"6px"}},x.status.toUpperCase())
+        ]),
+        acoes.length?el("div",{style:{display:"flex",gap:"6px",marginTop:"8px"}},acoes):null
+      ]));
+    });
+  }
+  const msg=S.adminMsg?el("div",{style:{padding:"8px 12px",borderRadius:"8px",fontSize:"12px",margin:"10px 0",background:S.adminMsg.startsWith("✅")?"#4ade8014":"#ef444414",color:S.adminMsg.startsWith("✅")?"#4ade80":"#fca5a5"}},S.adminMsg):null;
+  const box=el("div",{class:"modal-box",style:{maxWidth:"460px"}},[
+    el("div",{style:{padding:"15px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},[
+      el("div",{style:{fontWeight:700,color:"var(--text2)",fontSize:"16px"}},"🛡️ Painel "+(isAdmin?"Admin":"Aprovador")),
+      el("button",{class:"close-btn",onClick:()=>{S.adminOpen=false;render();authRefresh();}},"x")
+    ]),
+    el("div",{style:{display:"flex",borderBottom:"1px solid var(--border)"}},[tab("pendentes","Pendentes",S.adminPendentes.length),tab("usuarios","Usuários",0)]),
+    el("div",{style:{padding:"14px",maxHeight:"60vh",overflowY:"auto"}},[msg].concat(linhas))
+  ]);
+  return el("div",{class:"overlay",onClick:()=>{S.adminOpen=false;render();authRefresh();}},[el("div",{onClick:e=>e.stopPropagation()},[box])]);
+}
+
 function render(){
   applyTheme();
   const app=document.getElementById("app");
   const wm=app.querySelector(".watermark");
   app.innerHTML="";if(wm)app.appendChild(wm);
+  if(!S.auth.ready){app.appendChild(el("div",{style:{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--muted)",fontSize:"15px"}},"🚂 Carregando..."));return;}
+  if(!S.auth.user){app.appendChild(renderLogin());return;}
   if(S.alarmRinging){app.appendChild(renderAlarmScreen());return;}
   app.appendChild(renderHeader());
+  if(S.adminOpen)app.appendChild(renderAdminPanel());
   app.appendChild(renderStats());
   app.appendChild(renderSemana());
   app.appendChild(renderLegenda());
@@ -544,11 +640,14 @@ function renderHeader(){
   const alBtn=el("button",{class:"icon-btn",title:"Alarme",onClick:()=>{S.showAlarmModal=true;render();}},["⏰",S.alarmOn?el("span",{class:"alarm-dot"}):null]);
   const auditBtn=el("button",{class:"icon-btn",title:"Auditorias",onClick:()=>{S.showAuditoriaModal=true;render();}},"🛑");
   const checkBtn=el("button",{class:"icon-btn",title:"Documentos Obrigatorios",onClick:()=>{S.showChecklistModal=true;render();}},"📋");
+  const u=S.auth.user;const podeAdmin=u&&u.pode_aprovar;
+  const adminBtn=podeAdmin?el("button",{class:"icon-btn",title:"Painel Admin",style:{position:"relative"},onClick:adminAbrir},[u.role==="admin"?"👑":"🛡️",S.auth.pendentes>0?el("span",{style:{position:"absolute",top:"-3px",right:"-3px",background:"#ef4444",color:"#fff",fontSize:"9px",fontWeight:700,minWidth:"15px",height:"15px",padding:"0 3px",borderRadius:"8px",display:"flex",alignItems:"center",justifyContent:"center",border:"1.5px solid var(--card)"}},String(S.auth.pendentes)):null]):null;
+  const sairBtn=el("button",{class:"icon-btn",title:"Sair ("+(u?u.nome:"")+")",onClick:()=>{if(confirm("Sair da conta?"))authLogout();}},"🚪");
   const logoBox=el("div",{class:"logo-box"});logoBox.appendChild(svgLocoFace(30));
   return el("header",{class:"hdr"},[
     logoBox,
     el("div",null,[el("div",{class:"app-title"},"Agenda Turma A"),el("div",{class:"app-sub"},"Escala Ferroviaria 2026-2030")]),
-    el("div",{class:"hdr-right"},[cd,darkBtn,alBtn,auditBtn,checkBtn])
+    el("div",{class:"hdr-right"},[cd,darkBtn,alBtn,auditBtn,checkBtn,adminBtn,sairBtn].filter(Boolean))
   ]);
 }
 
@@ -851,14 +950,14 @@ function enviarParaBiblioteca(nome,mimetype,dataUrl){
   const ehSuportado=(mimetype&&mimetype.includes("pdf"))||(mimetype&&mimetype.includes("text"))||/\.(pdf|txt)$/i.test(nome);
   if(!ehSuportado)return;
   showToast("🧠 Viriato lendo o documento...");
-  fetch("/api/biblioteca/upload",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nome:nome,mimetype:mimetype,data:dataUrl})}).then(r=>r.json()).then(d=>{
+  authFetch("/api/biblioteca/upload",{method:"POST",body:JSON.stringify({nome:nome,mimetype:mimetype,data:dataUrl})}).then(r=>r.json()).then(d=>{
     if(d.error){showToast("🚦 Parada pelo Governador! "+d.error,false);return;}
     showToast("✅ '"+nome+"' indexado ("+d.categoria+", "+d.chunks+" trechos)");
   }).catch(e=>{showToast("🚦 Parada pelo Governador! Falha ao indexar: "+e.message,false);});
 }
 
 /* ===== DIAGNOSTICO ===== */
-async function abrirDiagnostico(){S.diagOpen=true;S.diagDados=null;render();try{const[h,b]=await Promise.all([fetch("/api/diag/health").then(r=>r.json()),fetch("/api/diag/biblioteca").then(r=>r.json())]);S.diagDados={health:h,biblioteca:b,ts:new Date().toLocaleTimeString("pt-BR")};}catch(e){S.diagDados={erro:"🚦 Parada pelo Governador! O servidor não respondeu: "+e.message};}render();}
+async function abrirDiagnostico(){S.diagOpen=true;S.diagDados=null;render();try{const[h,b]=await Promise.all([authFetch("/api/diag/health").then(r=>r.json()),authFetch("/api/diag/biblioteca").then(r=>r.json())]);S.diagDados={health:h,biblioteca:b,ts:new Date().toLocaleTimeString("pt-BR")};}catch(e){S.diagDados={erro:"🚦 Parada pelo Governador! O servidor não respondeu: "+e.message};}render();}
 function renderDiagnostico(){if(!S.diagOpen)return null;const d=S.diagDados;const linhas=[];if(!d){linhas.push(el("div",{style:{textAlign:"center",padding:"30px",color:"var(--muted)"}},"⏳ Verificando..."));}else if(d.erro){linhas.push(el("div",{style:{padding:"15px",background:"#7f1d1d22",border:"1px solid #ef444466",borderRadius:"10px",color:"#fca5a5"}},d.erro));}else{const h=d.health,b=d.biblioteca;const item=(label,ok,detalhe)=>el("div",{style:{display:"flex",justifyContent:"space-between",padding:"10px 12px",background:"var(--card2)",borderRadius:"9px",border:"1px solid var(--border)",marginBottom:"6px",fontSize:"13px"}},[el("span",{style:{color:"var(--text2)"}},label),el("span",{style:{color:ok?"#4ade80":"#f87171",fontWeight:600}},detalhe)]);linhas.push(el("div",{style:{fontSize:"11px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",marginBottom:"8px"}},"Servidor"));linhas.push(item("Servidor respondendo",true,"✓ ok"));linhas.push(item("Hora do servidor",true,h.hora_servidor));linhas.push(item("Pasta data/ gravável",h.data_dir_writable,h.data_dir_writable?"✓ ok":"✕ falha"));linhas.push(item("Extração de PDF",h.pdf_extracao_disponivel,h.pdf_extracao_disponivel?"✓ disponível":"✕ indisponível"));linhas.push(item("Claude configurado",h.claude_configurado,h.claude_configurado?"✓ ok":"✕ sem chave"));linhas.push(item("Guias do helpdesk",h.helpdesk_guias>0,h.helpdesk_guias+" guia(s)"));linhas.push(el("div",{style:{fontSize:"11px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",margin:"14px 0 8px"}},"Biblioteca"));linhas.push(item("Documentos indexados",true,b.total_documentos+" doc(s)"));linhas.push(item("Trechos pesquisáveis",true,b.total_chunks+" trecho(s)"));linhas.push(item("Tamanho em disco",true,Math.round(b.tamanho_bytes/1024)+" KB"));if(Object.keys(b.categorias||{}).length){linhas.push(el("div",{style:{fontSize:"11px",color:"var(--muted)",margin:"10px 0 4px"}},"Por categoria:"));Object.entries(b.categorias).forEach(([cat,n])=>linhas.push(el("div",{style:{fontSize:"12px",color:"var(--text3)",padding:"3px 12px"}},"• "+cat+": "+n)));}linhas.push(el("div",{style:{fontSize:"11px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",margin:"14px 0 8px"}},"Armazenamento local"));try{const sz=JSON.stringify(localStorage).length;linhas.push(item("localStorage usado",sz<4*1024*1024,Math.round(sz/1024)+" KB"));}catch(e){linhas.push(item("localStorage","disponível","?"));}linhas.push(el("div",{style:{fontSize:"10px",color:"var(--muted)",textAlign:"right",marginTop:"10px"}},"Coletado às "+d.ts));}const box=el("div",{class:"modal-box",style:{maxWidth:"440px"}},[el("div",{style:{padding:"15px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},[el("div",{style:{fontWeight:700,color:"var(--text2)",fontSize:"16px"}},"🩺 Diagnóstico"),el("button",{class:"close-btn",onClick:()=>{S.diagOpen=false;render();}},"x")]),el("div",{style:{padding:"16px",maxHeight:"70vh",overflowY:"auto"}},linhas)]);return el("div",{class:"overlay",onClick:()=>{S.diagOpen=false;render();}},[el("div",{onClick:e=>e.stopPropagation()},[box])]);}
 
 
@@ -871,7 +970,7 @@ function extrairTextoDoc(doc){if(!doc||!doc.data)return"["+doc.name+"]";try{if(d
 function viriatoContexto(){const hoje=HOJE_KEY,fol=isFolga(HOJE_DT),diasF=diasParaFolga(),fer=FER[hoje]||"",ano=HOJE_DT.getFullYear(),mes=HOJE_DT.getMonth(),maxD=new Date(ano,mes+1,0).getDate();let dMes="";for(let d=1;d<=maxD;d++){const dt=new Date(ano,mes,d),k=toKey(dt);dMes+=d+"="+(isFolga(dt)?"F":"S")+(FER[k]?"(F)":"")+"|"; }const prox=[];for(let i=1;i<=14;i++){const d=new Date(HOJE_DT);d.setDate(d.getDate()+i);const k=toKey(d);prox.push(k+"="+(isFolga(d)?"F":"S"));}const evs=[];Object.keys(S.events).sort().forEach(k=>(S.events[k]||[]).forEach(ev=>evs.push(k+":"+getEvText(ev))));const docs=[];Object.keys(S.docs).sort().forEach(k=>(S.docs[k]||[]).forEach(doc=>docs.push("'"+doc.name+"'("+k+")")));const cl=(S.checklist||[]).map(i=>{const d=diasParaVencer(i.validade);return i.nome+(i.validade?"["+i.validade+(d!==null?","+(d<0?"VENCIDO":d+"d"):"")+"]":"")+( i.ok?"[OK]":"[PEND]");});const aud=(S.auditorias||[]).map(a=>a.nome+":"+a.inicio+"~"+a.fim);const audAt=(S.auditorias||[]).find(a=>hoje>=a.inicio&&hoje<=a.fim);return "=== AGENDA TURMA A === User:"+"Angelo Silva|Turma A|Escala 2x2 2026-2030 Data:"+hoje+" Status:"+(fol?"FOLGA":"SERVICO")+(fer?"|Fer:"+fer:"")+" "+diasF+"d/prox Escala "+MESES[mes]+"/"+ano+":"+dMes+" Prox14d:"+prox.join("|")+" "+(evs.length?"Evs:"+evs.join("|"):"SemEvs")+" "+(docs.length?"Docs:"+docs.join("//"):"SemDocs")+" Checklist:"+cl.join("|")+" "+(aud.length?"Auditorias:"+aud.join("|"):"")+" "+(audAt?"AUDITORIA_ATIVA:"+audAt.nome:"")+" ===";}
 function virCarregarMem(){try{const m=JSON.parse(localStorage.getItem("viriatoMemoria")||"[]");return m.length?"Mem:"+m.map(x=>x.data+":"+x.resumo).join("|"):"";}catch(e){return"";}}
 function virSalvarMem(txt){try{const m=JSON.parse(localStorage.getItem("viriatoMemoria")||"[]");m.unshift({data:HOJE_KEY,resumo:txt.substring(0,300)});localStorage.setItem("viriatoMemoria",JSON.stringify(m.slice(0,10)));}catch(e){}}
-const VIRIATO_APIS=[{id:"haiku",nome:"Claude Haiku",builtin:true,sk:"",vision:true,call:async(k,h,s,img)=>{const msgs=h.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.txt}));const body={messages:msgs,system:s};if(img)body.image=img;const r=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||"Erro no servidor Claude");}const d=await r.json();return d.text;}},{id:"g2",nome:"Gemini 2.0 Flash",sk:"viriatoKey",call:async(k,h,s)=>{const b={system_instruction:{parts:[{text:s}]},contents:h.map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]})),generationConfig:{temperature:0.8,maxOutputTokens:2048}};const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+k,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.candidates[0].content.parts.map(p=>p.text||"").join("");}},{id:"g15",nome:"Gemini 1.5 Flash",sk:"viriatoKey",call:async(k,h,s)=>{const b={system_instruction:{parts:[{text:s}]},contents:h.map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]})),generationConfig:{temperature:0.8,maxOutputTokens:2048}};const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+k,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.candidates[0].content.parts.map(p=>p.text||"").join("");}},{id:"groq",nome:"Groq Llama3",sk:"viriatoGroqKey",call:async(k,h,s)=>{const msgs=[{role:"system",content:s},...h.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.txt}))];const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"llama3-70b-8192",messages:msgs,temperature:0.8,max_tokens:2048})});const d=await r.json();if(d.error)throw new Error(typeof d.error==="string"?d.error:d.error.message||"groq err");return d.choices[0].message.content;}},{id:"oai",nome:"OpenAI GPT-4o-mini",sk:"viriatoOpenAIKey",call:async(k,h,s)=>{const msgs=[{role:"system",content:s},...h.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.txt}))];const r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"gpt-4o-mini",messages:msgs,temperature:0.8,max_tokens:2048})});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.choices[0].message.content;}}];
+const VIRIATO_APIS=[{id:"haiku",nome:"Claude Haiku",builtin:true,sk:"",vision:true,call:async(k,h,s,img)=>{const msgs=h.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.txt}));const body={messages:msgs,system:s};if(img)body.image=img;const r=await authFetch("/api/claude",{method:"POST",body:JSON.stringify(body)});if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||"Erro no servidor Claude");}const d=await r.json();return d.text;}},{id:"g2",nome:"Gemini 2.0 Flash",sk:"viriatoKey",call:async(k,h,s)=>{const b={system_instruction:{parts:[{text:s}]},contents:h.map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]})),generationConfig:{temperature:0.8,maxOutputTokens:2048}};const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+k,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.candidates[0].content.parts.map(p=>p.text||"").join("");}},{id:"g15",nome:"Gemini 1.5 Flash",sk:"viriatoKey",call:async(k,h,s)=>{const b={system_instruction:{parts:[{text:s}]},contents:h.map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.txt}]})),generationConfig:{temperature:0.8,maxOutputTokens:2048}};const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+k,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.candidates[0].content.parts.map(p=>p.text||"").join("");}},{id:"groq",nome:"Groq Llama3",sk:"viriatoGroqKey",call:async(k,h,s)=>{const msgs=[{role:"system",content:s},...h.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.txt}))];const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"llama3-70b-8192",messages:msgs,temperature:0.8,max_tokens:2048})});const d=await r.json();if(d.error)throw new Error(typeof d.error==="string"?d.error:d.error.message||"groq err");return d.choices[0].message.content;}},{id:"oai",nome:"OpenAI GPT-4o-mini",sk:"viriatoOpenAIKey",call:async(k,h,s)=>{const msgs=[{role:"system",content:s},...h.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.txt}))];const r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+k},body:JSON.stringify({model:"gpt-4o-mini",messages:msgs,temperature:0.8,max_tokens:2048})});const d=await r.json();if(d.error)throw new Error(d.error.message);return d.choices[0].message.content;}}];
 function virGetKeys(){try{return{viriatoKey:localStorage.getItem("viriatoKey")||"",viriatoGroqKey:localStorage.getItem("viriatoGroqKey")||"",viriatoOpenAIKey:localStorage.getItem("viriatoOpenAIKey")||""};}catch(e){return{};}}
 function virDisponivel(){const k=virGetKeys();return VIRIATO_APIS.filter(a=>a.builtin||!!k[a.sk]);}
 function virSystemPrompt(){const ctx=viriatoContexto();const mem=virCarregarMem();const nome=S.userName?"O usuario com quem voce esta falando se chama "+S.userName+". Trate-o pelo nome quando fizer sentido. ":"";return "Voce e Viriato, assistente IA avancado do app Agenda Turma A (maquinistas ferroviarios). "+nome+"REGRA TRABALHISTA: quando um dia de SERVICO cai em FERIADO nacional, por Lei 605/49 art.9 deve ser pago em DOBRO, salvo folga compensatoria. Avise o usuario quando isso ocorrer e lembre que o acordo coletivo pode ter regras adicionais. Tem ACESSO TOTAL aos dados do app: escala, eventos, documentos com conteudo, checklist, auditorias. Responda QUALQUER pergunta: saude, direito, tecnologia, ciencia, matematica, programacao, etc. Leia os docs anexados. Responda em portugues BR. Use markdown. Seja direto e completo."+(mem?" "+mem:"")+" "+ctx;}
@@ -893,7 +992,7 @@ const inputRow=el("div",{class:"viriato-input-row",style:{flexWrap:"wrap"}},[doc
 let preview=null;
 if(S.viriatoImagemPendente){const ip=S.viriatoImagemPendente;preview=el("div",{style:{display:"flex",alignItems:"center",gap:"8px",padding:"8px 12px",background:"#0ea5e911",borderTop:"1px solid var(--border)",fontSize:"12px",color:"var(--text2)"}},[el("img",{src:ip.data,style:{width:"40px",height:"40px",objectFit:"cover",borderRadius:"6px",border:"1px solid var(--border)"}}),el("div",{style:{flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},"🖼️ "+(ip.nome||"imagem")+" pronta"),el("button",{class:"icon-btn",style:{padding:"3px 7px",color:"#f87171",fontSize:"12px"},title:"Remover imagem",onClick:()=>{S.viriatoImagemPendente=null;render();}},"✕")]);}
 return el("div",{class:"viriato-panel"},[header,el("div",{id:"viriato-chat",class:"viriato-chat"},msgs),preview,inputRow]);}/* INIT */
-loadS();render();
+loadS();render();authBoot();
 if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
 
 if("serviceWorker" in navigator){
