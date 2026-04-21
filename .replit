@@ -40,5 +40,5 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "vm"
-run = ["uv", "run", "gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "--timeout=120", "server:app"]
-build = ["uv", "sync"]
+run = ["gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "--timeout=120", "server:app"]
+build = ["sh", "-c", "pip install --user flask anthropic pdfplumber gunicorn sendgrid requests"]
