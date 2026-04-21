@@ -17,6 +17,20 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 HELPDESK_DIR = os.path.join(os.path.dirname(__file__), 'helpdesk')
 SALAS = ['escala', 'eventos', 'documentos', 'checklist', 'biblioteca']
 
+# Inicializa banco e migra JSONs antigos (uma unica vez por chave).
+import kvstore as _kv_init
+_kv_init.init_schema()
+for _k, _f in [
+    ('users', os.path.join(DATA_DIR, 'users.json')),
+    ('sessions', os.path.join(DATA_DIR, 'sessions.json')),
+    ('sala:escala', os.path.join(DATA_DIR, 'escala.json')),
+    ('sala:eventos', os.path.join(DATA_DIR, 'eventos.json')),
+    ('sala:documentos', os.path.join(DATA_DIR, 'documentos.json')),
+    ('sala:biblioteca', os.path.join(DATA_DIR, 'biblioteca.json')),
+    ('sala:checklist', os.path.join(DATA_DIR, 'checklist.json')),
+]:
+    _kv_init.migrar_de_arquivo(_k, _f)
+
 def helpdesk_load() -> list:
     if not os.path.isdir(HELPDESK_DIR):
         return []
@@ -40,19 +54,13 @@ def helpdesk_resumo() -> str:
         partes.append(f"\n--- {g['arquivo']} ---\n{g['conteudo'][:1500]}")
     return '\n'.join(partes)
 
+import kvstore
+
 def mem_palace_load(sala: str) -> dict:
-    path = os.path.join(DATA_DIR, f'{sala}.json')
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception:
-        return {}
+    return kvstore.load(f'sala:{sala}')
 
 def mem_palace_save(sala: str, data: dict):
-    os.makedirs(DATA_DIR, exist_ok=True)
-    path = os.path.join(DATA_DIR, f'{sala}.json')
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    kvstore.save(f'sala:{sala}', data)
 
 _anthropic_client = Anthropic(
     api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),

@@ -32,6 +32,8 @@ def validar_funcao(f: str) -> bool:
 def obrigado_prontos(funcao: str) -> bool:
     return funcao in FUNCOES_OBRIGADAS_PRONTOS
 
+import kvstore
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 USERS_PATH = os.path.join(DATA_DIR, 'users.json')
 SESSIONS_PATH = os.path.join(DATA_DIR, 'sessions.json')
@@ -43,36 +45,20 @@ MATRICULA_RE = re.compile(r'^\d{6,10}$')
 SENHA_RE = re.compile(r'^\d{4}$')
 
 
-def _load(path):
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception:
-        return {}
-
-
-def _save(path, data):
-    os.makedirs(DATA_DIR, exist_ok=True)
-    tmp = path + '.tmp'
-    with open(tmp, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    os.replace(tmp, path)
-
-
 def users_load():
-    return _load(USERS_PATH)
+    return kvstore.load('users')
 
 
 def users_save(data):
-    _save(USERS_PATH, data)
+    kvstore.save('users', data)
 
 
 def sessions_load():
-    return _load(SESSIONS_PATH)
+    return kvstore.load('sessions')
 
 
 def sessions_save(data):
-    _save(SESSIONS_PATH, data)
+    kvstore.save('sessions', data)
 
 
 def hash_senha(matricula: str, senha: str) -> str:
@@ -205,6 +191,8 @@ def handle_registrar(data):
         return jsonify({'error': 'Informe seu nome (minimo 2 caracteres)'}), 400
     if not validar_funcao(funcao):
         return jsonify({'error': 'Selecione sua função na ferrovia'}), 400
+    if not kvstore.health():
+        return jsonify({'error': 'Banco de dados indisponivel. Tente novamente em instantes.'}), 503
     users = users_load()
     if matricula in users:
         return jsonify({'error': 'Matricula ja cadastrada. Use login ou recuperacao.'}), 409
