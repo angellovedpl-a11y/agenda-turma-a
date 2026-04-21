@@ -97,7 +97,7 @@ sumario = [
     ("3.", "A tela inicial e o que cada coisa faz", "5"),
     ("4.", "A escala 2x2: como ler", "6"),
     ("5.", "Eventos: marcar exames, férias, folgas e trocas", "7"),
-    ("6.", "Documentos: ASO, BAU, NR e outros vencimentos", "8"),
+    ("6.", "Documentos: ASO, NR-11 e outros vencimentos", "8"),
     ("7.", "Checklist da viagem", "9"),
     ("8.", "Viriato — o ajudante de bordo", "10"),
     ("9.", "Painel do administrador", "11"),
@@ -251,7 +251,7 @@ story.append(nota("As trocas de turno ficam registradas com data e nome — úti
                   "pergunta meses depois quem cobriu quem."))
 
 # 6. Documentos
-story.append(Paragraph("6. Documentos: ASO, BAU, NR e outros vencimentos", H1))
+story.append(Paragraph("6. Documentos: ASO, NR-11 e outros vencimentos", H1))
 story.append(Paragraph(
     "Na aba <b>Documentos</b>, cadastre tudo que tem prazo de validade na ferrovia:", P))
 story.append(li("ASO (Atestado de Saúde Ocupacional) — o principal, exigido por lei"))
@@ -379,8 +379,7 @@ gloss = [
     ["Turma A", "Equipe da escala 2x2 deste app."],
     ["Escala 2x2", "Dois dias de trabalho seguidos por dois de folga, sem parar."],
     ["ASO", "Atestado de Saúde Ocupacional — exame periódico obrigatório."],
-    ["BAU", "Brevê de Aptidão de Uso — habilitação específica da função."],
-    ["NR-10 / NR-35", "Normas regulamentadoras (eletricidade / trabalho em altura)."],
+    ["NR-11", "Norma regulamentadora de transporte e movimentação de cargas."],
     ["Aprovador", "Colega que o admin promoveu para aprovar cadastros (até 3)."],
     ["Senha temporária", "Senha de 4 dígitos gerada pelo Viriato ou pelo admin, válida só até você trocar."],
     ["Viriato", "O trenzinho assistente que ajuda dentro do app."],
