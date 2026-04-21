@@ -34,6 +34,11 @@ waitForPort = 5000
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 5001
+externalPort = 3000
+
 [deployment]
-deploymentTarget = "static"
+deploymentTarget = "vm"
 publicDir = "."
+run = ["gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "--timeout=120", "server:app"]
