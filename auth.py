@@ -13,16 +13,11 @@ from flask import request, jsonify
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
 FUNCOES_VALIDAS = [
-    'Oficial Maquinista',
-    'Inspetor de Operação',
-    'Controlador de Pátio e Terminais',
-    'Auxiliar de Operação',
-    'Outro',
+    'Função Operacional',
+    'Função Administrativa',
 ]
 FUNCOES_OBRIGADAS_PRONTOS = {
-    'Oficial Maquinista',
-    'Inspetor de Operação',
-    'Controlador de Pátio e Terminais',
+    'Função Operacional',
 }
 
 
@@ -259,7 +254,8 @@ def handle_login(data):
     token = session_create(matricula)
     return jsonify({'ok': True, 'token': token, 'user': {
         'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
-        'funcao': u.get('funcao', ''), 'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
+        'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
+        'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
     }})
 
 
@@ -279,6 +275,8 @@ def handle_me():
         users = users_load()
         pendentes = sum(1 for x in users.values() if x.get('status') == 'pendente')
     funcao = u.get('funcao', '')
+    if funcao and funcao not in FUNCOES_VALIDAS:
+        funcao = ''
     return jsonify({
         'authenticated': True,
         'matricula': u['matricula'],
