@@ -188,7 +188,7 @@ sumario = [
     ("4.", "A escala 2x2: como ler", "6"),
     ("5.", "Eventos: marcar exames, férias, folgas e trocas", "7"),
     ("6.", "Documentos: ASO, NR-11 e outros vencimentos", "8"),
-    ("7.", "Checklist da viagem", "9"),
+    ("7.", "Checklist Pré-Jornada", "9"),
     ("8.", "Viriato — o ajudante de bordo", "10"),
     ("9.", "Painel do administrador", "11"),
     ("10.", "Esqueci minha senha — e agora?", "12"),
@@ -404,7 +404,7 @@ story.append(Paragraph(
 story.append(aviso("Documento vencido = afastamento. Não confie só na memória, deixe o app cuidar."))
 
 # 7. Checklist
-story.append(Paragraph("7. Checklist da viagem", H1))
+story.append(Paragraph("7. Checklist Pré-Jornada", H1))
 story.append(Paragraph(
     "Toque no ícone da <b>prancheta 📋</b> no topo da tela para abrir o <b>Checklist</b>. "
     "Ele já vem pronto com o básico da Turma A:", P))
