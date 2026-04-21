@@ -14,7 +14,7 @@ A progressive web application (PWA) for railway workers ("Turma A") to manage th
 ## Key Features
 
 - Railway 2x2 shift rotation calculator (2026–2030)
-- Document management (CNH, ASO, NR-11) with expiration alerts
+- Document management (ASO) with expiration alerts
 - Audit period visualization on calendar
 - "Viriato" assistant chatbot for schedule queries
 - Built-in alarm clock and browser notification support

@@ -12,9 +12,30 @@ from flask import request, jsonify
 
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
+FUNCOES_VALIDAS = [
+    'Oficial Maquinista',
+    'Inspetor de Operação',
+    'Controlador de Pátio e Terminais',
+    'Auxiliar de Operação',
+    'Outro',
+]
+FUNCOES_OBRIGADAS_PRONTOS = {
+    'Oficial Maquinista',
+    'Inspetor de Operação',
+    'Controlador de Pátio e Terminais',
+}
+
 
 def validar_email(e: str) -> bool:
     return bool(e and len(e) <= 120 and EMAIL_RE.match(e))
+
+
+def validar_funcao(f: str) -> bool:
+    return f in FUNCOES_VALIDAS
+
+
+def obrigado_prontos(funcao: str) -> bool:
+    return funcao in FUNCOES_OBRIGADAS_PRONTOS
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 USERS_PATH = os.path.join(DATA_DIR, 'users.json')
@@ -180,18 +201,22 @@ def handle_registrar(data):
     matricula = (data.get('matricula') or '').strip()
     senha = (data.get('senha') or '').strip()
     nome = (data.get('nome') or '').strip()[:60]
+    funcao = (data.get('funcao') or '').strip()
     if not validar_matricula(matricula):
         return jsonify({'error': 'A matricula deve ter exatamente 6 digitos'}), 400
     if not validar_senha(senha):
         return jsonify({'error': 'A senha deve ter exatamente 4 digitos'}), 400
     if not nome or len(nome) < 2:
         return jsonify({'error': 'Informe seu nome (minimo 2 caracteres)'}), 400
+    if not validar_funcao(funcao):
+        return jsonify({'error': 'Selecione sua função na ferrovia'}), 400
     users = users_load()
     if matricula in users:
         return jsonify({'error': 'Matricula ja cadastrada. Use login ou recuperacao.'}), 409
     primeiro = (len(users) == 0)
     novo = {
         'nome': nome,
+        'funcao': funcao,
         'senha_hash': hash_senha(matricula, senha),
         'status': 'aprovado' if primeiro else 'pendente',
         'role': 'admin' if primeiro else 'user',
@@ -233,7 +258,8 @@ def handle_login(data):
         return jsonify({'error': 'Cadastro negado pelo administrador'}), 403
     token = session_create(matricula)
     return jsonify({'ok': True, 'token': token, 'user': {
-        'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user')
+        'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
+        'funcao': u.get('funcao', ''), 'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
     }})
 
 
@@ -252,6 +278,7 @@ def handle_me():
     if can_approve(u):
         users = users_load()
         pendentes = sum(1 for x in users.values() if x.get('status') == 'pendente')
+    funcao = u.get('funcao', '')
     return jsonify({
         'authenticated': True,
         'matricula': u['matricula'],
@@ -261,7 +288,24 @@ def handle_me():
         'pendentes': pendentes,
         'senha_temp': bool(u.get('senha_temp')),
         'email': u.get('email', ''),
+        'funcao': funcao,
+        'obrigado_prontos': obrigado_prontos(funcao),
+        'funcoes_disponiveis': FUNCOES_VALIDAS,
     })
+
+
+def handle_set_funcao(data, user):
+    funcao = (data.get('funcao') or '').strip()
+    if not validar_funcao(funcao):
+        return jsonify({'error': 'Função inválida'}), 400
+    users = users_load()
+    u = users.get(user['matricula'])
+    if not u:
+        return jsonify({'error': 'Usuário não encontrado'}), 404
+    u['funcao'] = funcao
+    users_save(users)
+    return jsonify({'ok': True, 'funcao': funcao, 'obrigado_prontos': obrigado_prontos(funcao),
+                    'mensagem': 'Função atualizada!'})
 
 
 def handle_set_email(data, user):

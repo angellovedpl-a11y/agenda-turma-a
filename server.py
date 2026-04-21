@@ -234,6 +234,11 @@ def api_trocar_senha():
 def api_set_email():
     return auth.handle_set_email(request.json or {}, request.current_user)
 
+@app.route('/api/auth/funcao', methods=['POST'])
+@auth.require_auth
+def api_set_funcao():
+    return auth.handle_set_funcao(request.json or {}, request.current_user)
+
 @app.route('/api/admin/reset-senha/<matricula>', methods=['POST'])
 @auth.require_admin
 def api_reset_senha(matricula):
