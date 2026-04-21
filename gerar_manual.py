@@ -25,9 +25,8 @@ H3 = ParagraphStyle("H3", parent=styles["Heading3"], fontSize=12, textColor=CINZ
 P  = ParagraphStyle("P", parent=styles["BodyText"], fontSize=10.5, textColor=black,
                      leading=15, alignment=TA_JUSTIFY, spaceAfter=6)
 LI = ParagraphStyle("LI", parent=P, leftIndent=14, bulletIndent=4, spaceAfter=3)
-NOTA = ParagraphStyle("NOTA", parent=P, fontSize=9.5, textColor=CINZA,
-                       backColor=CINZA_CLARO, borderPadding=8, leftIndent=0, rightIndent=0,
-                       spaceBefore=4, spaceAfter=10)
+NOTA = ParagraphStyle("NOTA", parent=P, fontSize=10, textColor=CINZA, fontName="Helvetica-Oblique",
+                       leftIndent=12, rightIndent=12, spaceBefore=4, spaceAfter=10)
 CAPA_TIT = ParagraphStyle("CAPA_TIT", parent=H1, fontSize=30, alignment=TA_CENTER,
                            textColor=AZUL, spaceAfter=20)
 CAPA_SUB = ParagraphStyle("CAPA_SUB", parent=P, fontSize=14, alignment=TA_CENTER,
@@ -76,7 +75,7 @@ def nota(txt):
     return Paragraph("<b>💡 Dica:</b> " + txt, NOTA)
 
 def aviso(txt):
-    s = ParagraphStyle("AV", parent=NOTA, textColor=VERMELHO, backColor=HexColor("#fee2e2"))
+    s = ParagraphStyle("AV", parent=NOTA, textColor=VERMELHO)
     return Paragraph("<b>⚠️ Atenção:</b> " + txt, s)
 
 doc = SimpleDocTemplate(OUT, pagesize=A4,
@@ -375,8 +374,8 @@ story.append(PageBreak())
 story.append(Paragraph("13. Glossário ferroviário rápido", H1))
 gloss = [
     ["Termo", "Significado"],
-    ["Bater asa", "Esquecer alguma coisa (a senha, o crachá, o lanche...)."],
-    ["Parada pelo Governador", "Algo te impediu (acesso negado, erro, bloqueio)."],
+    ["Bater asa", "Cometer erros bobos no dia a dia."],
+    ["Parada pelo Governador", "Parada no sistema (operação interrompida)."],
     ["Turma A", "Equipe da escala 2x2 deste app."],
     ["Escala 2x2", "Dois dias de trabalho seguidos por dois de folga, sem parar."],
     ["ASO", "Atestado de Saúde Ocupacional — exame periódico obrigatório."],
@@ -408,15 +407,9 @@ story.append(PageBreak())
 story.append(Paragraph("14. Créditos e agradecimentos", H1))
 
 story.append(Paragraph("Idealização, projeto e desenvolvimento", H2))
-creditos_box = ParagraphStyle("CRED", parent=P, fontSize=12, alignment=TA_CENTER,
-                               backColor=HexColor("#fff8e0"), borderPadding=14,
-                               borderColor=AMARELO, borderWidth=1.2,
-                               textColor=AZUL, leading=18, spaceAfter=14)
 story.append(Paragraph(
-    "<b>Angelo Silva</b><br/>"
-    "<font size='10' color='#374151'>Maquinista — Turma A</font><br/><br/>"
-    "<font size='10'>Criador, idealizador e desenvolvedor deste aplicativo</font>",
-    creditos_box))
+    "<b>Angelo Silva</b> — Maquinista da Turma A. Criador, idealizador e "
+    "desenvolvedor deste aplicativo.", P))
 
 story.append(Paragraph("Sobre o esforço por trás do app", H2))
 story.append(Paragraph(
@@ -431,59 +424,34 @@ story.append(Paragraph(
     "patrocínio, sem prazo. Só com vontade de deixar a vida da turma um pouquinho mais "
     "organizada — e, quem sabe, servir de exemplo de que dá pra ir além do volante.", P))
 
-story.append(Spacer(1, 0.4*cm))
 story.append(Paragraph("Agradecimentos especiais", H2))
 
-agrad_box = ParagraphStyle("AGR", parent=P, fontSize=11, alignment=TA_LEFT,
-                            backColor=HexColor("#f0f9ff"), borderPadding=14,
-                            borderColor=HexColor("#0ea5e9"), borderWidth=1,
-                            textColor=CINZA, leading=17, spaceAfter=10)
 story.append(Paragraph(
     "À <b>Coordenação</b>, na pessoa da <b>Jéssica</b>, pela confiança, pelo apoio e por "
-    "acreditar que uma boa ideia pode vir de qualquer lugar — inclusive da cabine.",
-    agrad_box))
+    "acreditar que uma boa ideia pode vir de qualquer lugar — inclusive da cabine.", P))
 
 story.append(Paragraph(
     "Aos amigos que doaram tempo, ouvido e crítica construtiva ao longo do caminho:", P))
 
-amigos_data = [
-    ["Ivana Viegas",       "Glória Mulato"],
-    ["Geidher Aurélio",    "Rafael Melo"],
-    ["Carlos Deleon",      "Bruno Anderson"],
-]
-amigos_tbl = Table(amigos_data, colWidths=[7.5*cm, 7.5*cm])
-amigos_tbl.setStyle(TableStyle([
-    ("FONT", (0,0), (-1,-1), "Helvetica-Bold", 12),
-    ("TEXTCOLOR", (0,0), (-1,-1), AZUL),
-    ("ALIGN", (0,0), (-1,-1), "CENTER"),
-    ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
-    ("BOTTOMPADDING", (0,0), (-1,-1), 12),
-    ("TOPPADDING", (0,0), (-1,-1), 12),
-    ("BACKGROUND", (0,0), (-1,-1), HexColor("#fff8e0")),
-    ("GRID", (0,0), (-1,-1), 0.6, AMARELO),
-]))
-story.append(amigos_tbl)
+amigos = ["Ivana Viegas", "Glória Mulato", "Geidher Aurélio", "Rafael Melo",
+          "Carlos Deleon", "Bruno Anderson", "Micael Viana"]
+for nome in amigos:
+    story.append(li("<b>" + nome + "</b>"))
 
-story.append(Spacer(1, 0.3*cm))
+story.append(Spacer(1, 0.2*cm))
 story.append(Paragraph(
     "E a <b>todos os amigos da Turma</b> que, de alguma forma, contribuíram com disponibilidade "
     "para ouvir a ideia, dar palpites, apontar o que não fazia sentido e sugerir o que ficaria "
-    "melhor. Sem vocês, este app seria só um arquivo esquecido no celular.",
-    P))
-
-story.append(Spacer(1, 0.6*cm))
-mensagem_final_style = ParagraphStyle(
-    "FINAL", parent=P, fontSize=14, alignment=TA_CENTER,
-    backColor=AZUL, textColor=white, borderPadding=18,
-    leading=22, fontName="Helvetica-Bold")
-story.append(Paragraph(
-    "🚂  O App tá pronto, gente.  🚂<br/><br/>"
-    "Espero que gostem.",
-    mensagem_final_style))
+    "melhor. Sem vocês, este app seria só um arquivo esquecido no celular.", P))
 
 story.append(Spacer(1, 0.6*cm))
 story.append(Paragraph(
-    "<i>— Angelo Silva, com carinho, para a Turma A. Abril de 2026.</i>",
+    "🚂  O App tá pronto, gente. Espero que gostem.  🚂",
+    ParagraphStyle("FINAL", parent=P, alignment=TA_CENTER, textColor=AZUL,
+                   fontName="Helvetica-Bold", fontSize=14, spaceAfter=18)))
+
+story.append(Paragraph(
+    "<i>— Angelloti, com carinho, para toda nossa turma. Abril de 2026.</i>",
     ParagraphStyle("ASS", parent=P, alignment=TA_CENTER, textColor=CINZA,
                    fontName="Helvetica-Oblique", fontSize=11)))
 
