@@ -16,6 +16,8 @@ app.config['JSON_AS_ASCII'] = False
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 HELPDESK_DIR = os.path.join(os.path.dirname(__file__), 'helpdesk')
 SALAS = ['escala', 'eventos', 'documentos', 'checklist', 'biblioteca']
+MAX_MEMORIA_PESSOAL = 50
+MAX_FATOS_TURMA = 300
 
 # Inicializa banco e migra JSONs antigos (uma unica vez por chave).
 import kvstore as _kv_init
@@ -61,6 +63,75 @@ def mem_palace_load(sala: str) -> dict:
 
 def mem_palace_save(sala: str, data: dict):
     kvstore.save(f'sala:{sala}', data)
+
+# === MEMPALACE — MEMORIA PESSOAL POR USUARIO ===
+def memoria_pessoal_load(matricula: str) -> list:
+    d = kvstore.load(f'memoria:{matricula}')
+    return d.get('entradas', []) if isinstance(d, dict) else []
+
+def memoria_pessoal_add(matricula: str, texto: str, autor: str = '') -> dict:
+    texto = (texto or '').strip()[:500]
+    if len(texto) < 3:
+        return {'ok': False, 'erro': 'Texto muito curto'}
+    entradas = memoria_pessoal_load(matricula)
+    import time as _t
+    nova = {'id': int(_t.time() * 1000), 'data': time.strftime('%Y-%m-%d'),
+            'texto': texto, 'autor': autor or matricula}
+    entradas.insert(0, nova)
+    entradas = entradas[:MAX_MEMORIA_PESSOAL]
+    kvstore.save(f'memoria:{matricula}', {'entradas': entradas})
+    return {'ok': True, 'entrada': nova}
+
+def memoria_pessoal_remove(matricula: str, id_entrada: int) -> bool:
+    entradas = memoria_pessoal_load(matricula)
+    novo = [e for e in entradas if e.get('id') != id_entrada]
+    if len(novo) == len(entradas):
+        return False
+    kvstore.save(f'memoria:{matricula}', {'entradas': novo})
+    return True
+
+# === MEMPALACE — FATOS COMPARTILHADOS DA TURMA ===
+def fatos_load() -> list:
+    d = kvstore.load('fatos_turma')
+    return d.get('fatos', []) if isinstance(d, dict) else []
+
+def fatos_add(texto: str, matricula: str, nome: str) -> dict:
+    texto = (texto or '').strip()[:800]
+    if len(texto) < 5:
+        return {'ok': False, 'erro': 'Fato muito curto'}
+    fatos = fatos_load()
+    import time as _t
+    novo = {'id': int(_t.time() * 1000), 'data': time.strftime('%Y-%m-%d'),
+            'texto': texto, 'matricula': matricula, 'autor': nome or matricula,
+            'tokens': tokenize(texto)}
+    fatos.insert(0, novo)
+    fatos = fatos[:MAX_FATOS_TURMA]
+    kvstore.save('fatos_turma', {'fatos': fatos})
+    return {'ok': True, 'fato': novo}
+
+def fatos_remove(id_fato: int) -> bool:
+    fatos = fatos_load()
+    novo = [f for f in fatos if f.get('id') != id_fato]
+    if len(novo) == len(fatos):
+        return False
+    kvstore.save('fatos_turma', {'fatos': novo})
+    return True
+
+def buscar_fatos(query: str, top_k: int = 4) -> list:
+    qtokens = set(tokenize(query))
+    if not qtokens:
+        return []
+    fatos = fatos_load()
+    scored = []
+    for f in fatos:
+        ftokens = set(f.get('tokens') or tokenize(f.get('texto', '')))
+        if not ftokens:
+            continue
+        score = len(qtokens & ftokens)
+        if score > 0:
+            scored.append((score, f))
+    scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
+    return [s[1] for s in scored[:top_k]]
 
 _anthropic_client = Anthropic(
     api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),
@@ -399,6 +470,12 @@ def claude_chat():
         biblioteca = mem_palace_load('biblioteca')
         trechos = buscar_chunks(ultima, biblioteca, top_k=3) if ultima else []
 
+        u = request.current_user
+        matricula_user = u.get('matricula', '')
+        nome_user = u.get('nome', '')
+        memoria_pess = memoria_pessoal_load(matricula_user)
+        fatos_relev = buscar_fatos(ultima, top_k=4) if ultima else []
+
         docs = biblioteca.get('documentos', [])
         prefixo = ''
         if docs:
@@ -413,6 +490,30 @@ def claude_chat():
             for d in docs:
                 prefixo += f"- {d['nome']} [{d.get('categoria','outros')}] :: {d.get('resumo','')}\n"
             prefixo += '### FIM DA BIBLIOTECA ###\n\n'
+        if memoria_pess:
+            prefixo += f'### MEMORIA PESSOAL DE {nome_user or matricula_user} (matricula {matricula_user}) ###\n'
+            prefixo += 'Coisas que voce ja aprendeu sobre este usuario especifico. Use quando relevante.\n'
+            for e in memoria_pess[:30]:
+                prefixo += f"- [{e.get('data','')}] {e.get('texto','')}\n"
+            prefixo += '### FIM MEMORIA PESSOAL ###\n\n'
+        if fatos_relev:
+            prefixo += '### FATOS APRENDIDOS DA TURMA (conhecimento compartilhado) ###\n'
+            prefixo += 'Fatos validados pela equipe. Sao verdadeiros e devem ser citados quando relevantes. '
+            prefixo += 'PRIORIZE estes fatos sobre conhecimento generico.\n'
+            for f in fatos_relev:
+                prefixo += f"- [{f.get('autor','?')}, {f.get('data','')}]: {f.get('texto','')}\n"
+            prefixo += '### FIM FATOS ###\n\n'
+        prefixo += (
+            '### COMO SALVAR NA MEMORIA ###\n'
+            'Voce PODE salvar coisas na memoria persistente. Quando o usuario pedir explicitamente '
+            '("anota ai", "lembra disso", "memoriza", "guarda essa", "salva ai"), responda confirmando '
+            'e termine sua mensagem com UMA linha exatamente assim:\n'
+            '  [SALVAR_MEMORIA tipo=pessoal] texto curto\n'
+            '  [SALVAR_MEMORIA tipo=fato] texto curto e factual\n'
+            'Use tipo=pessoal para preferencias/contexto SO deste usuario. Use tipo=fato para '
+            'conhecimento da turma toda (ex: "Linha 105B comporta 110 vagoes"). NAO use sem o usuario pedir.\n'
+            '### FIM ###\n\n'
+        )
         full_system = prefixo + system
         full_system += helpdesk_resumo()
         if trechos:
@@ -429,7 +530,25 @@ def claude_chat():
             system=full_system,
             messages=messages
         )
-        return jsonify({'text': response.content[0].text, 'trechos_usados': len(trechos)})
+        texto_resp = response.content[0].text
+        salvos = []
+        marcador = re.compile(r'\[SALVAR_MEMORIA\s+tipo=(pessoal|fato)\]\s*([^\n]+)', re.IGNORECASE)
+        for m in marcador.finditer(texto_resp):
+            tipo = m.group(1).lower()
+            conteudo = m.group(2).strip().rstrip('.').strip()
+            if not conteudo:
+                continue
+            if tipo == 'pessoal':
+                r = memoria_pessoal_add(matricula_user, conteudo, nome_user)
+                if r.get('ok'):
+                    salvos.append({'tipo': 'pessoal', 'texto': conteudo})
+            else:
+                r = fatos_add(conteudo, matricula_user, nome_user)
+                if r.get('ok'):
+                    salvos.append({'tipo': 'fato', 'texto': conteudo})
+        texto_limpo = marcador.sub('', texto_resp).strip()
+        return jsonify({'text': texto_limpo, 'trechos_usados': len(trechos),
+                        'memoria_salva': salvos})
     except Exception as e:
         err = str(e)
         if "FREE_CLOUD_BUDGET_EXCEEDED" in err:
@@ -561,6 +680,48 @@ def mem_update(sala):
         return jsonify({'ok': True, 'sala': sala})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# === API MEMPALACE — MEMORIA PESSOAL & FATOS ===
+@app.route('/api/memoria', methods=['GET'])
+@auth.require_auth
+def memoria_listar():
+    u = request.current_user
+    return jsonify({
+        'pessoal': memoria_pessoal_load(u['matricula']),
+        'fatos': fatos_load()
+    })
+
+@app.route('/api/memoria/pessoal', methods=['POST'])
+@auth.require_auth
+def memoria_pessoal_post():
+    u = request.current_user
+    data = request.json or {}
+    r = memoria_pessoal_add(u['matricula'], data.get('texto', ''), u.get('nome', ''))
+    return jsonify(r), (200 if r.get('ok') else 400)
+
+@app.route('/api/memoria/pessoal/<int:id_e>', methods=['DELETE'])
+@auth.require_auth
+def memoria_pessoal_del(id_e):
+    u = request.current_user
+    ok = memoria_pessoal_remove(u['matricula'], id_e)
+    return jsonify({'ok': ok})
+
+@app.route('/api/memoria/fato', methods=['POST'])
+@auth.require_auth
+def memoria_fato_post():
+    u = request.current_user
+    data = request.json or {}
+    r = fatos_add(data.get('texto', ''), u['matricula'], u.get('nome', ''))
+    return jsonify(r), (200 if r.get('ok') else 400)
+
+@app.route('/api/memoria/fato/<int:id_f>', methods=['DELETE'])
+@auth.require_auth
+def memoria_fato_del(id_f):
+    u = request.current_user
+    if u.get('role') not in ('admin', 'aprovador') and \
+       not any(f.get('id') == id_f and f.get('matricula') == u['matricula'] for f in fatos_load()):
+        return jsonify({'error': 'Apenas o autor ou admin pode remover'}), 403
+    return jsonify({'ok': fatos_remove(id_f)})
 
 # === API HELPDESK ===
 @app.route('/api/helpdesk', methods=['GET'])
