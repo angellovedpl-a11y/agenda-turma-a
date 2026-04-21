@@ -1,0 +1,2275 @@
+Inspeção de Vagões
+
+
+Trilha Técnica de Manutenção Ferroviária
+OBJETIVOS
+
+
+
+    Proporcionar às pessoas da área operacional e de
+    manutenção das ferrovias da VALE, conhecimentos
+  necessários sobre classificação, partes e características
+ técnicas dos vagões, para realizarem inspeções visuais e
+ manutenção, a fim de detectar possíveis falhas mecânicas
+                      e operacionais.
+CONCEITOS
+
+
+
+
+       Vagões              Vagão geminado
+
+
+
+
+                “Carros”
+CLASSIFICAÇÃO
+
+
+
+
+  Os vagões são classificados conforme a Norma
+   Brasileira NBR 11691. Ela estabelece que a
+   classificação de vagões seja feita através de
+  codificação alfa numérica, formada por três ou
+                   quatro grupos
+CLASSIFICAÇÃO
+CLASSIFICAÇÃO
+Tabela de Classificação
+Grupo A (X1 e X2)
+CLASSIFICAÇÃO
+Tabela de Classificação
+Grupo A (X1 e X2)
+CLASSIFICAÇÃO
+Tabela de Classificação
+Grupo A (X1 e X2)
+CLASSIFICAÇÃO
+Tipo de vagões na EFC
+
+
+
+
+                                                                 2.845
+                        CVRD
+                        EFC
+
+
+
+
+                                                                 990
+                                         NIV. BOLETO (TRILHO )
+
+
+
+
+                               GERADOR
+
+
+
+
+ Tipo de
+ vagões
+CLASSIFICAÇÃO
+Tabela de Classificação – Grupo A (X3)
+CLASSIFICAÇÃO
+Tabela de Classificação – Grupo B (X4 a X9)
+
+
+
+
+                  NUMERAÇÃO                   PROPRIETÁRIO
+
+                 000001 a 099999              Frota Particular
+
+                 100000 a 299999                Frota Vale
+
+                 300000 a 599999              Frota FEPASA
+
+                 600000 a 999999               Frota RFFSA
+CLASSIFICAÇÃO
+Cálculo do Dígito Verificador – Grupo C (X10)
+
+
+Seu cálculo obedece a seguinte marcha:
+
+• Multiplica-se, da direita para esquerda do número do veículo, os seus algarismos por 2,
+3, 4, 5, 6 e 7;
+
+• Soma-se todos os produtos obtidos;
+
+• Divide-se o resultado da adição por 11;
+
+• Subtrai-se de 11 o resto da divisão citada no item anterior e o valor encontrado se
+determina na tabela o valor do dígito.
+CLASSIFICAÇÃO
+Cálculo do Dígito Verificador – Grupo C (X10)
+CLASSIFICAÇÃO
+Nomenclatura para Carros de Passageiros
+ESTRUTURA DE VAGÕES
+
+
+
+
+                     Os vagões se dividem
+                       basicamente em:
+
+
+
+
+    Superestrutura                          Infra- estrutura
+ESTRUTURA DE VAGÕES
+
+
+
+                 Superestrutura
+
+
+
+
+            É composta de Caixão e Estrado
+ESTRUTURA DE VAGÕES
+
+
+
+                           Caixão
+
+
+
+
+    É a parte superior do vagão, que repousa sobre o Estrado. É
+    construído normalmente de aço ou de madeira, conforme sua
+                            necessidade.
+ESTRUTURA DE VAGÕES
+       Caixão                                             Testeira ou cabeceira
+
+
+                                         Canto superior
+                                                                                                    Canto superior
+                                                Frechal
+
+                 Testeira ou cabeceira
+
+
+
+                                                                                                         Escada
+                                                            Assoalho
+
+
+            Canto superior
+
+
+
+                                                                                          Lateral
+       Travessa superior da
+            cabeceira
+
+
+Travessa intermediária
+    da cabeceira                                                                        Montante principal da
+                                                                                             travessa
+
+   Travessa inferior da
+       cabeceira
+                                                                       Canto inferior
+      Viga central
+ESTRUTURA DE VAGÕES
+
+
+
+                   Caixão
+
+
+
+
+      Cabeceiras            Lados
+ESTRUTURA DE VAGÕES
+
+
+
+                 Cabeceiras
+ESTRUTURA DE VAGÕES
+
+
+
+                  Lados
+ESTRUTURA DE VAGÕES
+
+
+
+                           Estrado
+
+
+
+
+     É a estrutura sobre onde se apóia o caixão dos veículos,
+       tem as funções de transferir para os truques o peso
+    transmitido pelo caixão, transmitir os esforços de tração e
+                compressão de um veículo a outro.
+ESTRUTURA DE VAGÕES
+
+
+
+                  Estrado
+
+
+
+
+    Testeiras   Viga ou longarina   Assoalho
+ESTRUTURA DE VAGÕES
+
+
+
+                 Testeiras
+ESTRUTURA DE VAGÕES
+                              Viga ou Longarina
+
+                   Viga Central
+
+
+                                                                Travessa secundária
+         Travessa principal
+
+
+
+
+                                                                        Reforço da
+                                                                    travessa Principal
+
+             Longarina
+              Principal
+
+
+
+
+           Longarina                                                      Reforço
+           secundária
+
+                                                                                         Reforço travesso do
+                                                                                                pião
+
+
+
+
+             Travessa
+              do pião                                                                    Prato do pião
+                                                                                           superior
+                                              Extremidade da viga
+ESTRUTURA DE VAGÕES
+
+
+
+                 Assoalho
+ESTRUTURA DE VAGÕES
+
+
+
+                   Infra-estrutura
+
+
+
+
+           É composto de truques, aparelho
+           de choque e tração e sistema de
+                        freio.
+ESTRUTURA DE VAGÕES
+Truque
+
+
+
+                                  Truques
+
+
+
+
+         É a parte do vagão sobre a qual é assentado o estrado. Tem a
+         função de distribuir e transferir para os trilhos o peso do vagão,
+          permitir a inscrição do vagão em curvas e absorver choques e
+                    amortecimento dos movimentos parasitas.
+ESTRUTURA DE VAGÕES
+Truque
+
+
+
+                  Truques
+ESTRUTURA DE VAGÕES
+Truque
+                                      O truque divide-se
+                                             em:
+
+                                                                        Alavanca Padrão
+                                                Setor de graduação
+          Pedestal ou Gafo
+
+                                              Lateral do truque
+
+
+
+
+         Roda ferroviária    Bolsa de molas
+                                                                         Sapata de freio
+                              Barra de compressão
+    Rolamento ferroviário
+                                                                     Contra Sapata
+ ESTRUTURA DE VAGÕES
+ Laterais
+                                                                        Chapa desgaste da
+                Corpo da Lateral                                         coluna de fricção
+
+
+
+
+Chapa desgaste do
+  teto pedestal.                   Base de assento   Pedestal ou Gafo
+                                     das molas
+
+
+
+         São duas laterais por truque, com guias para encaixe do triângulo de freio
+            tipo “UNIT”. Possui corrediças para encaixe das travessas centrais
+            munidas de chapas de desgaste substituíveis. Sobre as chapas de
+                   desgastes trabalham as cunhas dos amortecedores.
+ESTRUTURA DE VAGÕES
+Laterais
+
+
+
+              Base Rígida é a distância entre os centros das cadeiras ou
+           pedestal da lateral, obtida através de medição com instrumento e
+                                    precisão exigidos.
+ESTRUTURA DE VAGÕES
+Laterais
+
+
+
+           Botão ou “Maminha” é o ressalto fundido ou soldado na parte
+                externa de uma das extremidades de cada lateral.
+ESTRUTURA DE VAGÕES
+Laterais
+
+
+
+
+                              Os botões são fundidos:
+
+
+
+           • Na parte externa de uma das extremidades do lateral novo;
+
+           • Em local bem visível;
+
+           • Posicionado vertical ou obliquamente;
+
+           • Em linha reta;
+
+           • Igualmente espaçados.
+ESTRUTURA DE VAGÕES
+Travessa central
+
+
+
+                Confeccionadas em aço fundido classe “B”, em cuja face superior
+                 se localizam o centro do pião inferior e dois ampara-balanços.
+
+
+
+    Amparo balanço do tio rolos                                      Prato do pião com o disco de desgaste
+
+
+
+
+                             Chapa de desgaste da cunha de fricção          Base Amparo balanço
+
+
+
+
+    Amparo balanço do tio rolos                                             Prato do pião com o disco de
+                                                                                      desgaste
+ESTRUTURA DE VAGÕES
+Travessa central
+Ampara balanço
+
+
+               Conjunto de peças localizado nas extremidades da travessa
+               central e nas vigas do estrado tem a finalidade de manter o
+                              equilíbrio do estrado do vagão.
+
+
+
+
+                                        a = 6 a 8 mm
+ESTRUTURA DE VAGÕES
+Travessa central
+Ampara balanço
+
+
+
+
+                          Localizado na extremidade superior da
+                             travessa central, tem a função de
+             Coxim
+                          alojamento das castanhas do ampara-
+                                         balanço.
+
+
+
+
+                           Tem a função de apoiar o batente do
+          Castanha do     ampara-balanço do estrado e absorver o
+         amparo-balanço   desgaste vertical provocado pelo giro do
+                                           truque.
+ESTRUTURA DE VAGÕES
+Travessa central
+Ampara balanço
+ESTRUTURA DE VAGÕES
+Travessa central
+Ampara balanço
+
+
+
+
+         Amparo Balanço com   Amparo Balanço de contato
+               Rolos            constante (Capacete)
+ESTRUTURA DE VAGÕES
+Travessa central
+Prato do Pião Inferior
+
+               Também conhecido como berço do pião, está localizado no
+              centro da travessa central e tem a função de encaixe do prato
+                 pião superior para permitir o giro do truque em curvas.
+
+
+
+
+                                                                 Disco de desgaste
+         Corpo do prato do pião
+
+
+
+                                                                     Furo do pino do pião
+
+
+
+          Corpo da travessa
+
+
+
+
+                                                  Anel de desgaste
+ESTRUTURA DE VAGÕES
+Travessa central
+Prato do Pião Inferior
+
+
+
+                            Localizado no centro do prado do
+        Pino de centro      pião, tem a finalidade de acoplar o
+                               estrado do vagão ao truque.
+
+
+                          Tem a função de absorver o desgaste
+                           lateral entre prato de pião superior e
+       Anel de Desgaste
+                            inferior, proveniente da rotação do
+                                      truque em curvas.
+
+
+                          Tem a função de absorver o desgaste
+                          vertical entre prato de pião superior e
+      Disco de Desgaste
+                           inferior, proveniente da rotação do
+                                     truque em curvas.
+ESTRUTURA DE VAGÕES
+Suspensão
+ESTRUTURA DE VAGÕES
+Suspensão
+Cunhas de fricção
+
+
+         São confeccionadas em aço fundido e endurecidas nas superfícies de
+     fricção. Trabalham encaixadas nas cavidades da travessa central e têm por
+         função manter a travessa central em perfeito contato com as laterais,
+           amortecendo variações de movimento e carga sobre as mesmas.
+ESTRUTURA DE VAGÕES
+Suspensão
+Cunhas de fricção
+
+
+
+
+      Cunha de Fricção para Truque
+                                     Cunha de Fricção para Truque
+               “Metálica”
+                                       com “ELASTOWEDGE”
+ESTRUTURA DE VAGÕES
+Suspensão
+Molas das Cunhas de Fricção
+
+
+
+
+                      Têm por função atuar nas cunhas de
+                      fricção. São confeccionadas em aço
+                                     mola:
+
+
+
+
+            • Há uma mola para cada cunha de fricção nos truques Barber-
+            Stabilized;
+
+            • Duas molas para cada cunha nos truques Ride-Control.
+ESTRUTURA DE VAGÕES
+Suspensão
+Molas do truque
+
+
+            São confeccionadas em aço mola, variam em número e forma de
+             arranjo de acordo com o tipo de truque e de manga de eixo do
+             vagão e têm a função de amortecer e tirar a rigidez do vagão.
+ESTRUTURA DE VAGÕES
+Frame Brace
+
+              Dispositivo instalados nos truques deixando mais rígidos nas
+               curvas. A função do Frame Brace é a redução de defeitos
+                       mecânicos como friso fino ou escamações.
+ESTRUTURA DE VAGÕES
+Rodeiros
+
+                É o conjunto de um eixo, duas rodas e dois rolamentos. Possui
+                  várias dimensões, de acordo com o tipo de truque e vagão,
+                              conforme tonelagem bruta exigida.
+
+
+                 Tem a função de suportar todo o peso do vagão através dos
+                rolamentos e manga de eixo. Recebe choques causados pelas
+                                irregularidades dos trilhos.
+
+
+
+                                                                                Rolamento
+   Manga do eixo
+
+
+
+
+                                              Eixo
+         Roda
+ESTRUTURA DE VAGÕES
+Rodeiros
+Eixo
+
+           É a parte do rodeiro onde são fixados as rodas e rolamentos,
+                           elemento de união das rodas.
+ESTRUTURA DE VAGÕES
+Rodeiros
+Rodas
+
+            Presas ao eixo, através de pressão, têm a função de transmitir todo o
+           peso do vagão aos trilhos, guiando-o sobre os mesmos além de obter e
+             permitir a frenagem e proporcionar o rolamento sem arrastamento.
+                                   Adoçamento do flange
+                      Pista de rolamento
+                                                          Flange
+
+
+                      Face da frente                         Face posterior da
+                      da bandagem                               bandagem
+
+
+
+                                                      Alma
+
+
+
+
+                                                                    Cubo
+
+
+                                                                    Furo
+ESTRUTURA DE VAGÕES
+Rodeiros
+Rodas
+
+
+
+
+                           Também chamada de Bandagem, é a
+              Coxim
+               Aro         parte periférica da roda que se apóia
+                                       sobre o trilho.
+
+
+
+
+                           É a parte do aro da roda que se apóia
+           Superfície de
+                           sobre o trilho, contra o qual a sapata
+            Rolamento
+                              atrita no processo de frenagem.
+ESTRUTURA DE VAGÕES
+Rodeiros
+Rodas
+
+
+
+                      É a parte do aro da roda responsável
+           Friso          por guiar o truque nos trilhos.
+
+
+
+
+                           Parte da roda intermediária
+           Disco
+                           limitada pelo aro e o cubo.
+
+
+
+
+                        Parte central da roda, perfurada
+           Cubo
+                              para receber o eixo.
+
+
+
+  Defeitos em
+  rodas
+ESTRUTURA DE VAGÕES
+Rodeiros
+Rodas
+
+
+
+
+                Limites de rejeição
+ESTRUTURA DE VAGÕES
+Mancais
+
+          Têm a função de transmitir todo peso do vagão à manga de eixo,
+            permitindo que o rodeiro gire com baixíssimo atrito entre a
+                               manga e o mancal.
+
+
+
+                                          Mancal
+
+
+
+
+                 01                  02                      04
+
+
+
+
+                                                    03
+ESTRUTURA DE VAGÕES
+Mancais
+Rolamentos
+
+
+
+
+        Os rolamentos têm a finalidade de efetuar o casamento com o
+      pedestal ou gafo do truque, transportando a carga e facilitando o
+     giro do eixo com a roda movimentando o vagão. Existem dois tipos
+       de rolamentos em vagões que circulam na EFC, os rolamentos
+        autocompensadores conhecido com de rolamentos de caixa e
+      rolamentos cartucho. Os rolamentos ou também conhecidos com
+         mancais possuem tamanhos de acordo com o tipo de eixo:
+                         6½X12”, 6X11” e 5½X10”.
+ESTRUTURA DE VAGÕES
+Mancais
+Rolamentos
+
+
+
+                                    Tipo caixa:
+
+
+
+
+          • Dois rolamentos autocompensadores de rolos;
+
+          • Diâmetro especial para adaptar-se à manga de eixo padrão AAR;
+
+          • Alojados em carcaça de ferro ou de aço fundido;
+
+          • Vedação por anel de labirinto ou labirinto combinado com feltro;
+
+          • Caixa com apoio de carga adequado para truques de pedestal.
+ESTRUTURA DE VAGÕES
+Mancais
+                                                    Corpo da caixa de rolamento
+Rolamentos do tipo caixa                    Bujão
+                                                                Junta da caixa de rolamento.
+
+                                                                    Parafuso da tampa do eixo
+
+                                                                          Trava de segurança
+
+                                                                                      Tampa do eixo
+
+                                                                                                 Rolamento
+
+
+
+
+                                  Prisioneiro
+
+
+                           Rolamento
+
+                                                    Porca
+
+                                                                                  Espaçador
+
+
+                     Parafuso                                              Anel do labirinto
+
+
+                                                                                      Tampa inferior e
+                                                                                     superior do labirinto
+
+
+
+                            Arruela de pressão
+ESTRUTURA DE VAGÕES
+Mancais
+Rolamentos
+
+
+
+
+                               Tipo cartucho:
+
+
+
+
+          • Rolamento de duas carreiras de rolos cônicos;
+          • Um anel externo (capa) de grande largura;
+          • Dois anéis internos;
+          • Vedados por dois retentores;
+          •Transmissão de carga da lateral do truque para o anel externo
+          feita por um adaptador de ferro fundido nodular;
+          • Anel externo exposto, apoiado no adaptador, no arco da
+          região de carga.
+ESTRUTURA DE VAGÕES
+Mancais
+Rolamentos tipo cartucho
+
+
+
+                             PAD
+
+
+
+
+                     Adaptador do
+                     rolamento no
+                         truque
+
+                                Trava
+
+
+
+
+                                          Parafusos
+                     Tampa
+
+
+                   Corpo da caixa do rolamento
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+
+
+         A timoneria de freio do truque é um conjunto de peças responsável por
+       transmitir e multiplicar a força aplicada pelo cilindro de freio à superfície de
+                          rolamento das rodas para frear o vagão.
+
+                                                                        Ponteira
+
+
+
+
+            Setor de graduação                                     Barra de compressão
+
+          Triangulo de freio                                           Alavanca Padrão
+
+                                                                   Triangulo de freio
+                Contra Sapata
+
+
+                                                                         Corrediça
+
+       Sapata de freio
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+Triângulo de freio
+
+
+              São confeccionados em aço fundido ou em chapas estampadas
+                                     tipo “UNIT”.
+
+
+   Alavanca
+                                                                       Contra-sapata
+
+                                                                          Corrediça
+
+
+  Triângulo
+
+
+
+                                                                           Ponteira
+   Barra e
+ compressão
+
+
+
+                Nas extremidades possuem: contra-sapatas e chapas de
+                                desgaste removíveis
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+Chavetas
+
+
+                   Grampo que prende a sapata na contra-sapata.
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+Barra de compressão
+
+
+
+      Barra de aço com forquilhas (palmatórias) nas extremidades. Tem a
+      função de interligar, transferir força para acionamento dos triângulos
+                                       de freio.
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+Alavanca de força
+
+
+             Confeccionada em chapa de aço de 1”, tem a função de
+            alavanca de força para acionamento do triângulo de freio.
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+Setor de graduação
+
+
+          Confeccionado em chapa de aço de ½”, tem por função graduar
+          a distância entre a sapata de freio e a roda devido ao desgaste
+                                sofrido pela sapata.
+ESTRUTURA DE VAGÕES
+Timoneria de Freio do Truque
+Pinos e contra pinos
+
+                  Peças destinadas a fixar a maioria das peças móveis da
+                                        timoneria.
+ESTRUTURA DE VAGÕES
+Sapata de freio
+
+           Elemento de material de atrito que, quando friccionada contra a
+          roda, reduz a velocidade do veículo através do atrito. São fixadas
+           na contra-sapata do triângulo de freio travadas por chavetas de
+                                         aço.
+
+
+
+               Aba de apoio da contra-sapata
+
+
+
+
+          Encosto ou costa da sapata
+
+
+
+
+                            Caxilho
+                                                                  Massa
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+
+       Localizado nas cabeceiras dos vagões, tem a finalidade de permitir o
+      acoplamento, transmitir, de um veículo ao outro, os esforços de tração e
+     compressão e amortecer parte dos choques decorrentes das variações de
+                              velocidade dos vagões.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+
+
+
+
+                               Espelho
+
+
+                Viga central
+
+
+
+
+                                                                Engate
+
+
+
+                                                   Braçadeira
+
+
+
+
+                                         Aparelho de choque
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+
+
+
+
+        É o componente do aparelho de choque que tem a
+             função básica de fazer o acoplamento e
+       desacoplamento e a ligação entre os diversos vagões
+       de uma composição, transmitindo as forças de tração
+            e compressão de um veículo para o outro.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+
+
+
+
+                              Tipos de engates:
+
+
+
+
+    Engate de haste de           Engate rotativo   Engate fixo
+         ligação
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+
+
+
+
+                              Engate de haste de
+                                   ligação
+
+
+
+
+             É utilizado para o acoplamento de dois vagões de minério,
+          formando uma dupla geminada. Este tipo de engate não permite
+                    a operação de desengate da dupla de vagões.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+
+                                 Engate de haste de
+                                      ligação
+
+
+
+
+                              Uma cauda rotativa e outra fixa.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+                                 Engate de haste de
+                                      ligação
+
+
+
+
+                                                      Ponto fixo
+
+
+
+
+                              Ponto fixo
+
+
+
+
+                                Duas hastes fixas.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+
+                                               Engate fixo
+
+
+                 Cauda do engate fixo
+                                                                 Pino da mandíbula
+
+
+
+
+                                                                   Alojamento da mandíbula
+    Alojamento do pino
+
+                             Corpo do engate
+
+
+
+       Alojamento do pino da
+            mandíbula
+
+
+                                                                           Castanha
+   Conjunto do rotor duplo
+
+                                                                   Conjunto do levantador da castanha
+                                                             4
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+       Corpo do engate
+
+
+
+
+  Recebe as demais peças que
+ vão possibilitar o acoplamento e
+ desacoplamento entre veículos.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+      Mandíbula ou garra
+
+
+
+
+ Tem a função de acoplamento
+  de veículos, sofre também os
+ impactos dos ajustes de folgas
+          dos engates.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+         Castanha da
+          mandíbula
+
+
+
+
+   É o dispositivo responsável
+  pelo travamento da mandíbula
+   no impacto do acoplamento,
+  possibilitando o tracionamento
+             do vagão.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+       Levantador superior
+
+
+
+
+   Tem a finalidade de, quando
+  acionado pelo rotor, levantar a
+     castanha destravando a
+     mandíbula, permitindo o
+      desengate do vagão.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+         Acionador da
+          mandíbula
+
+
+
+
+  Tem como finalidade acionar a
+  mandíbula no sentido de abrir,
+  quando a castanha é levantada
+   pelo levantador da castanha.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+       Pino da mandíbula
+
+
+
+
+     Tem a função de fixar a
+    mandíbula em sua sede no
+        corpo do engate.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates/ Engates fixos
+
+
+
+
+             Rotor
+
+
+
+
+ Quando acionado pela alavanca
+     de manobra, transmite o
+    movimento ao levatador da
+     mandíbula possibilitando
+  levantamento da castanha e o
+  destravamento da mandíbula.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+
+
+
+
+                                      Engate rotativo
+
+
+
+
+          É utilizado no acoplamento de vagões e permite a rotação do vagão no
+                    seu eixo longitudinal para descarga em car-dumper.
+
+
+
+
+          Além dos mesmos componentes do engate fixo, estes ainda possuem:
+            mancal do pino do engate; mola de manca e olhal móvel do rotor.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Engates
+                              Engate rotativo
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Conjunto de choque
+
+
+
+
+             É o conjunto amortecedor para absorver os
+                  choques de tração e compressão.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+                                    Divide-se em:
+
+
+
+
+              •Chapa de desgaste;      •Pino e contra pino;
+
+              •Espelho;                •Chapa de retenção;
+
+              •Quadro do espelho;      •Braçadeira;
+
+              •Chaveta do engate;      •Aparelho de choque;
+
+                                       •Alavanca de manobra.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+                                  Chapa de desgaste
+
+
+
+
+                              Placa colocada sob haste do
+                                 corpo do engate para
+                                  absorver o desgaste
+                               proveniente do alto atrito,
+                              entre o engate e o espelho.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+                                                Quadro do espelho   Retentor da bolsa
+Acessórios de Choque e Tração
+
+
+
+
+           Espelho
+
+                                             Apoio do
+                                             Retentor
+
+
+
+   Tem a função de proteger as
+  mesmas contra amassamento
+em caso de choques muito fortes,
+ além de servir de suporte para o
+        corpo do engate.
+                                                                         Trava do
+                                                                          Rotor
+
+                   Engate F3 da mangueira
+                                                                                    Bolsa do
+                      Chapa de desgaste do apoio                                     apoio
+
+                                       Apoio da bolsa
+
+                          Conjunto de Molas do apoio flexível
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+         Espelho
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+         Chaveta do Engate
+
+
+
+
+       Elemento que trava o
+       engate a viga central.
+      Usado em vagões do tipo
+               HAS
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+           Braçadeira
+
+
+
+
+    Peça que faz a ligação entre o
+   engate e o aparelho de choque
+   na tração e que só atua quando
+       o engate é tracionado. A
+     braçadeira pode ser fixa ou
+               rotativa.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+                                      Cruzeta
+
+
+      Tem a função de fazer o travamento entre a cunha central do aparelho de
+       choque e o batente dianteiro do espelho do vagão, fazendo com que os
+        impactos reflitam diretos no sistema de amortecimento do aparelho de
+                                         choque.
+     Existem três tipos de cruzetas que são: á Fixa, Rotativa e Lisa, sendo que a
+      fixa é utilizada no conjunto de tração fixo, enquanto a rotativa e a lisa são
+                        utilizadas no conjunto de tração rotativo.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+                                  Cola
+
+
+
+
+       Tem a função de fazer com que a cauda do engate possa girar
+    dentro do alojamento da braçadeira rotativa, que por sua vez permite
+    que o vagão gire fazendo o processo de descarregamento no virador
+                                de vagão.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+                                   Pino da tração
+
+
+
+
+      Peça que trava o engate no conjunto de tração, para vagão GDT é usado
+    dois tipos de pinos o fixo e o rotativo, sendo que o fixo é utilizado nas trações
+                        fixas e o rotativo nas trações rotativas.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+
+
+          Alavanca de
+            manobra
+
+
+
+
+     Também conhecida como
+   varão de desengate, é feita de
+    aço redondo e encaixada ao
+  rotor tem a função de realizar o
+            desengate.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+                                Braçadeira Rotativa, somente em
+                                         vagões GDT.
+    Braçadeira rotativa
+
+          Cruzeta lisa
+
+
+
+           Colar Rotativo
+                                           Pino Rotativo
+
+
+
+
+        Cruzeta Rotativa
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+                                              Braçadeira Fixa                    Pino Fixo
+
+
+
+                               Cruzeta Fixa
+                                                                                 Furo do Pino Fixo
+
+   Braçadeira fixa
+                                                                                   Chapa suporte
+                            Chapa de                                                  do pino
+                            desgaste
+
+                                                                                   Retentor da chapa
+                                                                                    superior do pino
+
+
+
+
+          Parafusos de fixação da Chapa de
+                  desgaste e apoio
+
+
+                               Chapa de apoio
+
+
+                              Alavanca de Corte                               Suporte da Alavanca de
+                                 ou Manobra                                     Corte ou Manobra
+                                                                Contra pino
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+                                  Aparelho de choque
+
+
+        Amortecer os impactos que a tração sofre no momento de compressão e
+    tração dos vagões. Cada componente interno do Aparelho de Choque tem sua
+                                 função e particularidade.
+      As molas amortecem os impactos e reconstituem o sistema. A cunha central
+       recebe os esforços e os transmitem para as cunhas de fricção que farão a
+    dissipação de energia através do atrito sobre as placas internas estacionárias.
+      As placas móveis atuam como elementos de atrito e auxiliam nas absorções
+       das energias, quando forem pressionadas pela cruzeta, deslizam sofrendo
+     atritos entre as placas estacionárias. As placas internas estacionárias estarão
+         exercendo um esforço normal proveniente das cunhas de fricção. Para
+       reconstituir o sistema as molas pressionam os assentos de molas, que em
+        seguida forçam as duas cunhas de fricção, que por sua vez, empurram a
+      cunha central com a mola de retorno, fazendo o sistema retornar a posição
+                                         normal.
+ESTRUTURA DE VAGÕES
+Aparelho de Choque e Tração
+Acessórios de Choque e Tração
+
+
+  Aparelho de choque
+                                          Mola externa              Mola de canto              Placa externa
+                                                                                                estacionária
+                        Carcaça
+                                                                                                               Placa
+                                                                                                               móvel
+               Mola interna
+
+                                                                                                     Placa interna
+                                                                                                     estacionária
+
+
+
+                                                                                                           Cunha
+                                                                                                           Central
+
+
+                                                                                                         Cunha de
+                                                                                                          Fricção
+
+
+                                                                                                       Calço de
+                          Assento das           Assento das molas                                       Bronze
+                          molas central                                      Mola de Retorno
+                                                    de canto
+ESTRUTURA DE VAGÕES
+Sistema de freio
+
+
+              É o conjunto de componentes que formam todo o sistema de
+                        freio do vagão, inclusive o freio manual.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+                   É a parte do sistema de freio que serve para conduzir e
+                    armazenar o ar pressurizado. É utilizada para gerar e
+                           descarregar força na timoneria de freio.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+        Mangueiras do
+      Encanamento Geral
+
+
+
+
+       Têm a função de dar
+  continuidade ao encanamento
+   com certa flexibilidade entre
+       vagões, permitindo a
+         passagem do ar.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+         Engate cego
+
+
+
+
+  É o suporte da mangueira do
+   encanamento geral quando
+       não está acoplada,
+  protegendo-a contra avarias e
+    entrada de impurezas no
+            sistema.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+                                                                             Torneira Reta com punho
+                                                                                    Removível
+
+      Torneira Angular ou
+             Reta                 Torneira Reta com punho
+                                            fixo
+
+
+
+
+ Tem a função de interromper o                                                  Torneira Angular com
+ fluxo de ar no sistema, quando                                                      punho fixo
+   fechada, e dar continuidade,
+         quando aberta.
+
+
+
+
+                                      Torneira Reta com punho Removível na     Torneira Reta com punho Removível na
+                                         posição Aberta (passagem de ar           posição Fechado (interrupção da
+                                                     liberada)                            passagem de ar)
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+     Encanamento Geral
+
+
+
+
+Tem a função de conduzir o ar
+  pressurizado para todo o
+   sistema de freio de uma
+ cabeceira à outra do vagão.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+                                                                                        Tampa da torneira de
+                                      Flange que liga o                              isolamento com punho fixo
+                                   encanamento do suporte
+                                         de Válvulas
+
+
+                                        Punho fixo
+      Torneira Combinada
+       com Coletor de Pó               Coletor de pó                                       Flange que liga o
+                                                                                         encanamento do Te de
+                                                                                                ramal
+
+
+
+
+Coletor de pó: Protege a válvula                                                         Tampa da torneira de
+                                                                                        isolamento com punho
+ de controle contra entrada de                                                                removível
+          impurezas.
+                                                                                          Flange que liga o
+                                                                                     encanamento do Te de ramal
+
+                                                                                   Mangueira do encanamento
+                                                                                        do Te de ramal
+ Torneira: Interrompe o fluxo de
+  ar para a válvula de controle.                                                    Punho Removível
+
+                                                                                    Coletor de pó
+
+                                                            Flange que liga o encanamento do suporte de Válvulas
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+       Válvula de Controle
+
+
+
+
+ Tem a função de aplicar e aliviar
+   os freios do vagão mediante
+     variação de pressão do
+       encanamento geral e
+ carregamento dos reservatórios
+   auxiliares e de emergência.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+         Reservatório
+         Combinado
+
+
+
+
+Tem a função de armazenar o
+ar oriundo da locomotiva nos
+     vagões por meio do
+  encanamento geral e da
+     válvula de controle.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+        Cilindro de Freio
+
+
+
+
+    Tem a função de receber a
+     pressão de ar oriunda do
+  reservatório do vagão, através
+      da válvula de controle.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+       Válvula Retentora
+           de Alívio
+
+
+
+
+Tem a função de controlar o alívio
+  do cilindro de freio dos vagões
+ nos trechos de descida para que
+os freios não soltem rapidamente.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática
+
+
+
+
+                                     Dispositivo Vazio-
+                                        Carregado
+
+
+
+
+                   É uma válvula de operação mecânica ou pneumática
+                    que tem a função de alterar a taxa de frenagem do
+                   vagão em função do seu peso (vazio ou carregado).
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática / Dispositivo vazio-carregado
+
+
+                                       Mecânica
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática / Dispositivo vazio-carregado
+
+
+
+
+                                                 VTA (Válvula de Transferência
+         Automático
+                                                         Automático)
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Parte pneumática / Dispositivo vazio-carregado
+
+
+
+
+           Pneumático                            ELX e EL 60
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Timoneria
+
+
+
+
+               É a parte do sistema de freio que serve para multiplicar e
+                   transmitir a força mecânica gerada pelo sistema
+                  pneumático e freio manual até as sapatas de freio.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Timoneira
+
+
+
+
+                        Alavanca de Distribuição de
+                            Força da Timoneria
+
+
+
+
+                      Tem a função de transmitir aos
+                   tirantes ou varões de freio, a força
+                      aplicada pelo cilindro de freio e
+                               freio manual.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Timoneira
+
+
+
+
+             Ajustador
+        Automático de Folga
+
+
+
+    Tem a finalidade de ajustar as
+        folgas provenientes do
+      desgaste da sapata junto à
+    timoneria do vagão, mantendo
+       assim o curso padrão do
+            cilindro de freio.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Timoneira
+
+
+
+
+      Tirantes de Freio ou
+             Varão
+
+
+
+   Têm a função de transmitir às
+  alavancas de força do triângulo
+  de freio as forças recebidas da
+    alavanca de distribuição de
+         força da timoneria.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Freio manual
+
+
+
+
+              Tem a função de exercer força manual diretamente na
+            timoneria, a fim de manter o vagão freado, mesmo que o
+                   freio pneumático não esteja mais atuando.
+ESTRUTURA DE VAGÕES
+Sistema de freio
+Freio manual
+
+
+
+
+                                      Corrente   Volante
+                   Alavanca Móvel
+
+
+
+                                    Engrenagem
+ESTRUTURA DE VAGÕES
+Sistema de DDV
+Detector de Descarrilamento do Vagão
+
+
+
+
+       Em toda grande ferrovia existe a possibilidade de descarrilamento, adernamento e/ou
+      tombamento de vagões. Esse tipo de acidente pode trazer prejuízos tanto impessoais,
+   ambiental e principalmente pessoais. Visando minimizar os efeitos de um descarrilamento,
+        adernamento e/ou tombamento de vagõe, foi desenvolvido na EFC o Detector de
+       Descarrilamento de Vagões (DDV), que tem a função de aplicar freio pneumático na
+  composição no momento do descarrilamento do rodeiro do vagão, parando-o, evitando que
+  o trem percorra uma grande distancia com o rodeiro descarrilado. O DDV possui um suporte
+   que fica instalado na viga central do vagão, um fusível com formato cônico (extremamente
+   frágil) que no momento que quebra liberar a saída do ar, um aro que fica ao redor do eixo,
+  uma cantoneira que fixa o aro e o fusível, um Te com uma torneira de isolamento (em caso
+     de quebra interrompe a passagem do ar) que fica instalado no encanamento geral, uma
+       mangueira que liga o fusível a torneira. Após a implantação do DDV em toda frota de
+            vagões, reduziu-se o índice de descarrilamento com tombamento na EFC.
+ESTRUTURA DE VAGÕES
+Sistema de DDV
+Detector de Descarrilamento do Vagão
+
+
+
+          Encanamento                  Mangueira
+             geral
+
+                                       Torneira de
+           Viga Central
+                                       Isolamento
+
+                                        Suporte
+
+
+
+              Aro                       Fusível
+
+
+                                        Cantoneira
+
+              Eixo
+ Sistema de
+ manutenção
+Preditiva para
+   Vagões
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Hot Box
+
+
+
+
+  Atualmente na EFC utiliza-se dois tipos de equipamento para a detecção de caixa
+   quente (alarme de Hot Bearing) e roda quente (alarme de Hot Wheel). O Micro
+      Hot Box via rádio instalados ao longo da EFC, sempre no BA entre duas
+   Locações, na região não sinalizada, conforme croqui de localização do sistema
+                                       abaixo.
+  O sistema de HOT BOX tem o objetivo detecta temperaturas anormais nas caixas
+       (rolamentos) e rodas do trem em movimento para garantir a segurança
+                           operacional dos trens na EFC.
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Hot Box
+
+
+
+
+                                                                               MO
+                                        Mastro 9m
+
+                   Carajás         9m
+
+
+
+
+                                                      8m
+                                    Case Hot Box                       Rádio
+                                                                       MDS
+                                                                                         FOX
+                                                    Caixa
+
+
+
+
+                                                                                    Fibra Óptica
+                              HB
+              HB
+      HW                           HW
+                                                            CCO
+
+                                                              MSQ      Off
+                                                    net       Series
+                                                                       ice
+                   São Luís                                                                 FOX
+
+
+
+                                                    SGF
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Hot Box
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Hot Box
+
+
+
+
+                                   SISTEMA HOT BOX
+                      COMPONENTE       TEMPERATURA DE ALARME
+                       ROLAMENTO               ≥ 70º C
+                           RADA                ≥ 273º C
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema TPD (Dispositivo de Performance do Truque)
+
+
+
+
+   O TPD (Truque Performace Detector) é um sistema de detecção e análise de performance
+    de truques ferroviários (suspensão de vagões), baseado na medição das forças laterais e
+   verticais(L/V) e ângulo de ataque. O sistema é instalado na via, e inclui sensores, antenas,
+  rádio de comunicação. Este se comunica com um supervisório centralizado (computador) na
+     oficina de vagões, com objetivo de adquirir as medidas efetivadas pelo equipamento de
+         campo, prover alarmes no caso de determinadas medições excederem a limites
+      configuráveis, relatórios com as medições efetivadas em campo, indexados por data,
+     vagões, eixos, etc, software de análise dos dados adquirido. É composto por sensores,
+                 rádios de comunicação e computador que será montado no local.
+           O TPD está instalado na RH 02 exatamente no Km 15+970 até o Km 17+644
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema TPD (Dispositivo de Performance do Truque)
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Rail BAM (Detector Acústico)
+
+
+
+
+                   Rail BAM é um sistema de Monitoramento de Rolamentos por
+     Detector Acústico desenhado para detectar e classificar defeitos nos rolamentos de eixo,
+   fornecer relatórios do monitoramento das condições e como aviso antecipado das falhas em
+     potencial nos rolamentos. O Sistema Rail BAM está localizado em caixas ao lado da via
+             (apropriado para ambientes severos eg. deserto, tropical, frio/umidade &
+     neve/congelamento) com uma instalação cobrindo vários milhares de quilômetros de via.
+         Uma malha inteira pode ser monitorada com apenas poucos sistemas Rail BAM
+                                  estrategicamente localizados.
+       Dados em tempo real levantados por amostragem são analisados por uma unidade
+   computadorizada de captura e análise de dados durante e imediatamente depois que o trem
+                               tenha passado o sistema Rail BAM .
+   O sistema RailBAM® extrai as “assinaturas” das falhas nos rolamentos e dos calos de rodas
+   do ruído extrínseco , permitindo a identificação do defeito e sua classificação de severidade
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Rail BAM (Detector Acústico)
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Rail BAM (Detector Acústico)
+ESTRUTURA DE VAGÕES
+Sistema de Manutenção Preditiva
+Sistema Rail BAM (Detector Acústico)
+
+
+
+
+   Wai Side
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Freio
+
+
+
+
+         Pode ocorrer alarme de Hot Wheel e Sapara Agarrada devido o
+           travamento do sistema de freio. No alarme de Hot Wheel o
+       travamento sistema de freio ocorre antes da passagem no sistema,
+      ocorrendo o alarme. È considerado alarme de Hot Wheel quando a
+     temperatura da roda ultrapassa 273° C lido pelo scanner do sistema e
+        confirmado pela leitura realizado pelo maquinista com o raytek. A
+     Sapata Agarrada ocorre o travamento do sistema de freio identificado
+          na passagem do trem por terceiros posicionados ao lado via.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Freio
+
+
+   Freio manual aplicado e/ou
+           danificado
+
+
+
+  O freio manual aplicado pode
+  ocorre devidamente (quando
+     um operador autorizado
+     acionar o freio manual e
+   esquece de desacionar) ou
+  indevidamente (acionado por
+      terceiros que não são
+       autorizados para tal
+   atividade). Pode ocorrer as
+   duas atividades dentro dos
+   pátios ou no parada do trem
+          ao longo EFC.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Freio
+
+
+
+     Triangulo empenado e/ou
+            emperrado
+
+
+
+
+  O triângulo de freio pode está
+   emperrado e/ou emperrado
+     devido erro e/ou falta de
+  manutenção, sapata de freio
+     com desregularidade na
+  massa, rodas excêntricas e
+     desgaste excessivo das
+      chapas de desgastes.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Freio
+
+
+
+
+      Sapata de freio avariado
+
+
+
+
+ A ausência de sapata de freio,
+ sapata quebrada, sapata sem
+       a massa provoca
+    aquecimento das rodas
+  alarmando o sistema de Hot
+            Wheel.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+
+
+
+        A quebra de componentes de conjunto de tração podem ser
+       provocados por duas circunstancias, a primeira por problemas
+      com o componente como porosidade, trincas, fadiga e vácuo no
+      momento da fabricação e a segunda por problemas operacionais
+     (penalização por erro operação do trem, penalização por oscilação
+     de sinalização e penalização por via). Dependendo das condições
+          da via, posição do vagão no trem, peso do vagão, tipo de
+         procedimento adotado na região em que o trem quebrou e
+     velocidade que o trem estava pode vim a quebra componentes de
+                                  tração.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+
+
+                         Mandíbula com Porosidade
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+  Engates com Trincas Antigas
+     (processo de Fadiga )
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+ Mandíbula com Trincas Antigas
+     (processo de Fadiga )
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+   Mandíbula com Vácuo no
+   momento de fabricação
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+   Quebra do componente por
+ colapso de sobrecarga de tração
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Tração
+
+
+
+
+  Quebra da chapa de apoio do
+ pino do engate e/ou haste rígida
+
+
+
+  Chapa de apoio que pode
+     quebra ou empenar,
+   favorecendo a queda do
+  pino do engate e/ou haste
+     rígida provocando o
+     desacoplamento dos
+    vagões ocasionando a
+          emergência
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+
+         Os principais defeitos em rodas que é controlado pela equipe de
+        inspeção do Virador de Vagões e Pátio que inspeciona a frota de
+        vagões que passam no virador de vagões após a descarga e em
+                            seguida é feito a inspeção.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+
+            Trinca
+
+
+
+
+  É quando há o surgimento
+  de pequenas escamações
+  na Superfície da Pista de
+         Rolamento
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+
+         Escamação
+
+
+
+ É quando há                                           Escamação tipo 1
+ desprendimento de Metal da
+ Superfície da Pista de
+ Rolamento em vários locais.
+  O seu grau de extensão e
+ profundidade que determina
+   o seu tipo (E1, E2 e E3).
+
+
+
+                                         Escamação tipo 2            Escamação tipo 3
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+         Calo por arrasto
+
+
+
+
+    É quando a roda sofre um
+  grande esforço em um ponto
+    da sua pista de rolamento.
+   Pode ser entre a sapata de
+  freio X pista de rolamento ou
+   pista de rolamento X trilho.
+       Sua característica é
+   apresentar defeito nas duas
+    rodas na mesma direção.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+
+          Calo térmico
+
+
+
+    É quando a roda sofre um
+  grande esforço em um ponto
+    da sua pista de rolamento.
+   Pode ser entre a sapata de
+  freio X pista de rolamento ou
+   pista de rolamento X trilho.
+       Sua característica é
+    apresentar no defeito uma
+    mancha e ocorre em uma
+            única roda.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+             Friso Fino
+
+
+
+
+     É quando a roda sofre um
+       desgaste excessivo no
+  adoçamento do flange podendo
+     causar até uma quebra do
+         flange. Friso de roda
+  considerado crítico quando sua
+  medida efetuado com o medidor
+  de friso fica abaixo de 20 mm. A
+    GAROG efetua retirada de
+      rodeiros de vagões para
+   usinagem com friso abaixo de
+                24 mm
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+
+
+
+ Condições anormais com Rodas
+          Ferroviárias
+
+
+
+ Em casos esporádicos pode vim
+  ocorrer quebra de roda, onde
+    essa falha é grave, sendo
+       preciso parar o trem
+    imediatamente retirando o
+ vagão da composição para que
+  não ocorra acidente ferroviário
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+       Alma trincada
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+      Friso quebrado
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Rodeiros
+
+ Rompimento de manga de eixo
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Superestrutura
+
+
+
+
+     As falhas mais comuns de superestrutura em vagões é
+     a caixa danificada (surgimento de trincas e/ou fissuras
+     na chaparia) ou rompimento do espelho devido fadiga
+                       no ponto de solda.
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Superestrutura
+
+  Rompimento do espelho por
+ fadiga ou erro na manutenção
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Superestrutura
+
+    Trincas e/ou avarias na
+  estrutura da caixa do vagão
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Truque
+
+
+
+
+          As falhas que ocorrem mais com o sistema de truque é a quebra da ponteira
+         do triângulo de freio devido fadiga do componente e/ou por ter sofrido pancada
+          por objeto na via sendo que a barra de compressão também pode vir a sofrer
+                                         esse tipo de falha
+ESTRUTURA DE VAGÕES
+Falhas comuns com componentes de Vagão
+Sistema de Truque
+
+  Fadiga e/ou trinca no triângulo
+              de frei
+

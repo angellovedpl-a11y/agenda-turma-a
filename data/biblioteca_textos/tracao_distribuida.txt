@@ -1,0 +1,3243 @@
+Tração distribuída
+Valer – Universidade Corporativa Vale
+
+Edição, Revisão e Design Instrucional – ID Projetos Educacionais
+Design Gráfico e Produção – Laborativa Educacional
+
+Conteúdo
+Vale
+
+Conteudistas
+Eustáquio Andrade – Vitória (ES)
+
+Janeiro / 2008
+
+Impresso pela Laborativa Educacional no Brasil.
+Cada árvore utilizada foi plantada para esse fim.
+
+
+É proibida a duplicação ou reprodução deste material,
+ou parte do mesmo, sob qualquer meio, sem autorização
+expressa da Vale.
+“Longo é o caminho do ensino por meio de teorias; breve
+                       e eficaz por meio de exemplos.”
+                                              (Sêneca)
+APRESENTAÇÃO
+
+Caro Empregado,
+
+As Trilhas Técnicas são currículos que
+propõem itinerários de formação e o apren-
+dizado contínuo dos profissionais que atuam no
+nível técnico-operacional, como você.
+
+Os treinamentos contidos nas trilhas possibilitam o apri-
+moramento das competências técnicas exigidas para o pleno
+exercício da sua atuação na Vale.
+
+A Valer – Universidade Corporativa Vale – construiu esta Trilha Técnica
+em conjunto com os profissionais da Ferrovia, que participaram aumentando
+a legitimidade e a eficiência do currículo proposto.
+
+Uma das ações de desenvolvimento que fazem parte da Trilha Técnica de Operação
+Ferroviária, para o público dessa área, é o curso de Tração Distribuída.
+
+Este curso foi desenvolvido com o objetivo de proporcionar a você habilidades para promover
+a operação de trens com segurança e eficiência, considerando as melhores práticas, procedimentos
+e regulamentos para condução de trens.
+
+Você desenvolverá competências técnicas exigidas para o desempenho de sua função, agindo
+seguramente em conformidade com os procedimentos estabelecidos pela Vale.
+
+Além disso, você terá a oportunidade de interagir com seus colegas, podendo trocar informações
+e esclarecer dúvidas.
+
+Vale a pena participar!
+                                               SUMÁRIO
+
+INTRODUÇÃO_____________________________________________11
+
+1 SISTEMA DE CONTROLE ELETRÔNICO-PNEUMÁTICO: CCBII _ ____12
+  Filtro_ ________________________________________________12
+
+  Porção ERCP_ __________________________________________13
+
+  Porção BPCP (KR5)_ _____________________________________14
+
+  Porção 20 _ ____________________________________________15
+
+  Porção BCCP___________________________________________18
+
+  Porção 16______________________________________________18
+
+  Porção 13 _____________________________________________21
+
+  Porção pneumática______________________________________23
+
+  Porção TV _____________________________________________23
+
+  Porção JB_ ____________________________________________23
+
+  EBV_ _________________________________________________23
+
+  EIPM _ _______________________________________________24
+
+  EPCU_ ________________________________________________24
+
+  OIM __________________________________________________24
+2 LOCOTROL_ ____________________________________________33
+  RM _ _________________________________________________33
+
+  EIPM _________________________________________________34
+
+  TIM _ _________________________________________________35
+
+  RIM __________________________________________________37
+
+  TM CM _ ______________________________________________38
+
+  EPCU _________________________________________________39
+
+  OIM e módulo de conversor DC/DC 74V/13,6V__________________39
+
+  Comunicação de dados _ _________________________________53
+
+  Vantagens da tração distribuída____________________________54
+
+3 COMUNICAÇÃO ENTRE LOCOMOTIVA LÍDER E REMOTA_________58
+  Comunicação da líder para a remota _ ______________________58
+
+  Comunicação da remota para a líder ________________________58
+
+  Comando _ ____________________________________________59
+
+  Falha ou perda de comunicação _ __________________________59
+
+4 PROBLEMAS E SOLUÇÕES: ESTUDOS DE CASOS_______________63
+5 TERRITÓRIO ONDULADO__________________________________68
+  Iniciando viagem _______________________________________68
+
+  Acelerando ____________________________________________68
+
+  Administrando a operação _ ______________________________69
+
+6 POSICIONAMENTO DAS LOCOMOTIVAS REMOTAS_____________72
+  Posicionadas na cauda _ _________________________________72
+
+  Peso no primeiro lote_ ___________________________________73
+
+  Peso no segundo lote ____________________________________74
+
+  Nodal à frente da locomotiva remota_ _______________________74
+
+7 PROJETO: SISTEMA DE TRAÇÃO DISTRIBUÍDA – CONSIDERAÇÕES___77
+  O projeto ______________________________________________77
+
+  Avaliações preliminares _ ________________________________77
+
+  Testes preliminares com o trem de minério vazio ______________78
+
+  Testes com o trem de minério carregado_ ____________________79
+
+  Conclusão_ ____________________________________________79
+
+  Desafio________________________________________________80
+INTRODUÇÃO
+Você está iniciando estudos sobre Tração Distribuída.
+
+Primeiramente, você entenderá o que é o sistema de controle eletrônico-pneumático, bem como a
+função dos diferentes módulos que o compõem.
+
+Em seguida, irá conhecer o sistema de Locotrol, bem como seus componentes e as vantagens do mesmo.
+
+Também verá como ocorre a comunicação entre as locomotivas líder e remota e o que fazer em situ-
+ações de falha e perda de comunicação, bem como em demais situações-problema.
+
+Você ainda entenderá como controlar a locomotiva em territórios com características próprias.
+
+Além disso, verá como as operações de locomotivas ocorrem de acordo as diferentes formas de po-
+sicioná-las.
+
+Por fim, você irá conhecer o projeto “Sistema de Tração Distribuída”, que destaca principais pontos
+acerca do uso do sistema de Tração Distribuída.
+
+Com tudo isso, você poderá compreender como a operação de trens deve ser feita com um sistema
+mais rápido, eficaz e lucrativo: a Tração Distribuída.
+1 SISTEMA DE CONTROLE ELETRÔNICO-PNEUMÁTICO: CCBII
+O sistema de controle eletrônico-pneumático (CCBII) é um sistema de freio eletrônico.
+
+Ele substitui todo o conjunto 26L, compreendendo manipuladores (independente e automático), válvu-
+la reguladora, válvula de aplicação de penalidade (P2A), conjunto BD26, válvula interruptora, etc.
+
+Aqui, cada um desses subsistemas é substituído por software.
+
+No caso das partes de aplicação pneumática, estas são substituídas por conjuntos pneumáticos ele-
+tronicamente controlados.
+
+Além disso, o CCBII é composto por algumas unidades:
+   •   filtro;
+   •   porção ERCP;
+   •   BPCP – (KR5);
+   •   porção 20;
+   •   porção BCCP;
+   •   porção 16;
+   •   porção 13;
+   •   porção pneumática;
+   •   porção TV;
+   •   porção JB – caixa de junção;
+   •   EBV;
+   •   EIPM;
+   •   EPCU;
+   •   OIM.
+
+Veja-as mais detalhadamente a seguir.
+
+
+FILTRO
+Está localizado no encanamento geral na entrada do CCBII (EPCU).
+
+
+
+           12
+                                                                        Tração Distribuída
+
+
+
+
+Esse elemento também é destinado a eliminar as impurezas e a umidade remanescentes do secador
+de ar e drenos da locomotiva.
+
+
+PORÇÃO ERCP
+                                                                    1
+                                  7                    8
+                                               9                             2
+
+                                                                                    3
+
+
+
+
+                         6
+
+
+
+                                  5
+                                           4
+
+1 – válvula magnética de alívio
+
+2 – válvula magnética padrão
+
+3 – ERT: transdutor de pressão do ER
+
+4 – torneira para locomotiva morta
+
+5 – TP ER: ponto de leitura da pressão do ER
+
+6 – TP MR: ponto de leitura da pressão do reservatório principal
+
+7 – válvula reguladora de locomotiva remota
+
+8 – válvula magnética de aplicação
+
+9 – MRT: transdutor do reservatório principal
+
+Essa porção controla a pressão do reservatório equilibrante em resposta à posição do EBV, tanto em
+posição de comandante como de comandada, além de compartilhar informação com outras unidades
+através do cabo de rede LON.
+
+Ela também faz esse controle em resposta a uma penalidade de freio.
+
+Quando em posição de comandada, a pressão do ER é reduzida a zero.
+
+
+
+                                                   Trilha Técnica da Operação Ferroviária    13
+No caso de falta de alimentação, a ERCP levará o encanamento do reservatório equilibrante para
+pressão zero.
+
+A porção ERCP também incorpora a função de “locomotiva morta”, permitindo que a locomotiva tenha
+o seu cilindro de freio aliviado.
+               Módulo eletrônico                      Verde – Alimentação
+               Pneumático de controle do              Vermelha – Falha
+               reservatório equilibrante – ER         Amarela – Carga do software
+
+
+
+
+                                                                 MR = leitura da pressão
+                                                                 do reservatório principal
+                                                                 ER = leitura da pressão
+                                                                 do reservatório equilibrante
+
+                                                                      Orifício de saída de ar
+
+        Pontos
+        de teste                                                    Locomotiva morta
+
+
+
+
+PORÇÃO BPCP (KR5)
+                                 Leitura        Leitura do
+                                 do fluxo       encanamento geral
+
+                Módulo
+                de controle                                             Conector
+                                                                        da rede LON
+
+
+
+
+                                                                      Orifício de ar
+
+
+
+
+          14
+                                                              Tração Distribuída
+
+
+
+
+Trata-se de uma porção controladora do encanamento geral. Esse controle é feito tanto eletrônica
+como pneumaticamente.
+
+Sua função é alimentar e regular a pressão do encanamento, bem como providenciar o fechamento da
+válvula de freio automático. Além disso, é ela que inicia a emergência no encanamento geral.
+
+A porção BPCP funciona recebendo pressão vinda da ERCP e desenvolve a pressão da linha do enca-
+namento geral. A válvula relé do encanamento, por sua vez, desenvolve uma pressão de alimentação.
+
+Nessa porção, o relé do encanamento abre quando há falha completa da alimentação. Com isso, ele
+joga ar do encanamento para a atmosfera na razão da aplicação de serviço.
+
+Porém, quando o ER reduz para aproximadamente 10 psi, o relé fecha.
+
+É importante compreender que o encanamento geral permanecerá fechado na operação de locomo-
+tiva comandada.
+
+É nessa unidade que se encontra também toda a lógica de controle do encanamento geral.
+
+A porção BPCP ainda compartilha informação com outras unidades através do cabo da rede LON.
+
+
+PORÇÃO 20
+
+
+
+                         Ponto de leitura
+                         da pressão
+
+
+
+
+É uma porção controladora da pressão do encanamento de equalização do cilindro de freio, que equi-
+vale a 2,5 da redução no encanamento geral.
+
+Quando a locomotiva está na posição de comandante, essa porção desenvolve as aplicações e alívio
+na linha do encanamento 20.
+
+Vale destacar que a porção 20 está ativa apenas na operação de locomotiva comandante. Sendo as-
+sim, ela não alimenta nem esgota a BCEP quando em locomotiva comandada.
+
+
+
+
+                                            Trilha Técnica da Operação Ferroviária   15
+           Vale saber!
+           A pressão BCEP está limitada a um máximo de 60 a 64 psi, quando é controlada
+           normalmente pelo computador.
+           Sem alimentação ou no modo backup, a pressão máxima fica entre 68 e 73 psi.
+
+
+
+Essa porção é composta por:
+
+20 Relay – válvula relé
+Alimenta a porção 20 com ar do reservatório principal, até que a pressão interna equivalha à pressão
+do encanamento de equalização – BCEP.
+
+SUPP – válvula magnética de alimentação
+Quando energizada, faz com que o ar do reservatório principal carregue o reservatório de volume da
+linha 20. (Reservatório de 45 pol. cub).
+
+Já quando desenergizada, pára o carregamento do reservatório da linha 20.
+
+REL – válvula magnética de alívio
+Energizada, ela esgota a linha 20.
+
+Desenergizada, essa válvula pára a exaustão da linha.
+
+MVLT – válvula magnética comandante/comandada
+Na locomotiva líder, quando energizada ou desenergizada, regula pressão da válvula relé da linha
+20. Além disso, também regula a razão de acréscimo e decréscimo da pressão de controle e abre a
+válvula piloto PVLT.
+
+Quando em locomotiva comandada, ela é desenergizada, fecha PVLT e esgota a pressão do relé da
+linha 20.
+
+PVLT – válvula piloto comandante/comandada
+Na locomotiva comandante, é pilotada aberta. Isso ocorre se MVLT estiver regulando a pressão da
+linha 20.
+
+
+
+           16
+                                                                Tração Distribuída
+
+
+
+
+É desenergizada quando fechada por pressão de mola na posição de comandada e MVLT.
+
+20 TL – transdutor da linha 20 para comandante
+Produz um sinal de tensão proporcional à pressão do relé da linha 20.
+
+20 TL – transdutor da linha 20 para comandada
+Produz um sinal de tensão proporcional à aplicação e alívio da linha 20.
+
+TP-20
+Trata-se de um ponto para instalação de um manômetro calibrado para testes.
+
+IMPORTANTE: no caso de falha de alimentação, a porção 20 ficará na posição “lap”. Com isso, a por-
+ção 16 desenvolverá a pressão do cilindro de freio diretamente das variações do manipulador do freio
+independente para as aplicações na locomotiva comandante. Ainda assim, o encanamento 20 não
+será pressurizado.
+                                                                    6
+                                                   5
+                                 3             4                             7
+                             2
+
+
+
+
+                         1
+
+1 – TP-20
+2 – 20 relay
+3 – 20 TL - comandada
+4 – 20 TL - comandante
+5 – SUPP
+6 – REL
+7 – MVLT
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária   17
+PORÇÃO BCCP
+Esta porção corresponde à pressão do encanamento de equalização do cilindro de freio.
+
+Ela desenvolve diretamente a pressão de aplicação/alívio do cilindro de freio e interage com o
+freio dinâmico.
+
+A porção BCCP contém a válvula piloto – PVPL (pilor valve power loss).
+
+Essa válvula conecta a saída do módulo BC ao encanamento de equalização BCE quando:
+   •   há falha de energia;
+   •   o sistema estiver no modo backup e a pressão no ER for maior que 25 psi.
+
+
+
+
+PORÇÃO 16
+A porção 16, exercendo função normal, alimenta a pressão de aplicação do cilindro de freio.
+
+Assim, na locomotiva comandante, a porção 16 desenvolve eletronicamente o controle da pressão do
+cilindro de freio (BC) da locomotiva em resposta:
+   •   às reduções do encanamento geral (EG);
+   •   à pressão do encanamento de equalização;
+   •   ao comando de alívio (13);
+   •   à ativação do pino 21T (aplicação de dinâmico) – BGTL;
+   •   diretamente à posição do manipulador automático (EBV).
+
+Já na locomotiva comandada, a pressão do cilindro de freio (BC) é desenvolvida em resposta à pres-
+são do encanamento de equalização (20P).
+
+OBSERVAÇÃO: a porção 16 não desenvolve pressão em resposta à queda do EG para pressões meno-
+res que 20 psi.
+
+
+
+
+          18
+                                                                Tração Distribuída
+
+
+
+
+Na relação entre a pressão do cilindro de freio (BC) e o encanamento geral (EG), o comando do primei-
+ro se desenvolve a cada redução em psi, em relação aproximada de 2,5 vezes. Pode-se desenvolver
+também pela redução do EG. Isso ocorre com a interruptora em “CARGA” ou “FORA”.
+
+Já no caso de alívio do BC, este ocorre quando há:
+   •   uma leitura maior ou igual a 25 psi no transdutor de pressão 13T (BAIL-OFF).
+   •   um comando no TL21 (freio dinâmico).
+   •   um aumento de 2 psi no EG.
+
+No caso de falha tanto da porção ERCP quanto da porção 20, a porção 16 trabalhará em modo backup.
+
+Falha na porção ERCP
+Com relação ao ERCP, a porção 16 exercerá suas funções, assumindo o controle do reservatório
+de equalização.
+
+Assim, a porção 16 é isolada do cilindro de freio, passando a atuar no reservatório de equalização
+através da atuação de três válvulas magnéticas.
+
+São essas válvulas que realizam o desenvolvimento da pressão “piloto” do cilindro de freio, tendo sua
+pressão máxima limitada a 45 psi.
+
+Esse modo é chamado de “ER backup” e permite o funcionamento do freio da locomotiva, mesmo na
+presença da falha.
+
+Falha na porção 20
+Quanto à falha na porção 20, a porção 16 desenvolverá a pressão piloto do cilindro de freio diretamen-
+te da posição do manipulador independente do EBV.
+
+Desse modo, a pressão BC apropriada será desenvolvida na locomotiva comandante, mas não pres-
+surizará o encanamento de equalização do cilindro de freio (BCE) 20P para o desenvolvimento da
+pressão BC nas locomotivas comandadas.
+
+Os componentes da porção 16 são:
+
+ELV – válvula limitadora de emergência
+
+Leva a pressão vinda do reservatório principal para os valores limites do sistema, quando emergência.
+Esses valores são, tipicamente, entre 75 e 79 psi.
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária     19
+APL – válvula magnética de aplicação
+
+Quando energizada, joga a linha 16 para a atmosfera.
+
+Porém, quando desenergizada, a APL pára a exaustão da linha 16.
+
+REL – válvula magnética de alívio
+
+No caso de a válvula estar energizada, ela alimenta com ar o encanamento 16. Mas, estando desener-
+gizada, a REL pára de alimentar o encanamento 16.
+
+MV16 – válvula magnética da linha 16
+
+Faz parte do bloco comum, onde está montada a válvula piloto.
+
+BPT – transdutor do encanamento geral
+
+Mede pressão do cilindro de freio.
+
+16T – transdutor da linha 16
+
+Mede pressão do encanamento 16.
+
+TP-16
+
+Ponto de teste do encanamento 16.
+
+TP-BC
+
+Ponto de teste do cilindro de freio.
+
+
+
+
+           20
+                                                                Tração Distribuída
+
+
+
+
+                                                 5
+                                                            6
+                             3            4
+                                                                   7
+
+                                                                           8
+
+
+
+
+                                                                                   9
+
+
+
+
+                         2
+
+                                  1
+
+1 – TP-BC
+2 – TP-16
+3 – válvula reguladora ELV
+4 – BPT
+5 – válvula magnética de aplicação
+6 – REL
+7 – válvula magnética padrão
+8 – 16T
+9 - BPT
+
+
+PORÇÃO 13
+A porção 13 controla o encanamento de alívio rápido do cilindro de freio 13.
+
+Quando em uma locomotiva comandante, a porção 13 pressuriza o encanamento de atuação n° 13.
+
+Além desse encanamento, a porção 13 pressuriza também as passagens internas do EPCU para o
+alívio do cilindro de freio (bail). Isso acontece quando trabalha numa aplicação pelo EBV ou pelo EG.
+
+A porção 13 também possui relé e lógica para controle da válvula magnética de alívio rápido tripla –
+TVB (triple valve bail) e comando do 21T (freio dinâmico).
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária    21
+Com relação à falha de alimentação (bateria desligada), essa porção desenvolve uma pressão do
+cilindro de freio em emergência, porém só se a falha for detectada.
+
+Já em falhas da porção ER, a porção 13 possui o controle que substitui a porção 16 para desenvolver
+a pressão do reservatório de equalização em lugar da ERCP.
+
+A porção 13 possui os seguintes componentes:
+    •     solenóide de aplicação 13;
+    •     solenóide de alívio 13;
+    •     válvula de corte 13;
+    •     transdutor 13T;
+    •     ponto de teste 13;
+    •     solenóide ERBU – controle de “backup”.
+                                                   3
+
+                                                       4
+                                                             5
+                                                                     6
+
+
+
+
+                                 2
+
+
+
+
+                                       1
+
+1 – ponto de teste 13
+2 – válvula de corte 13
+3 – solenóide ERBU
+4 – 13T
+5 – solenóide de alívio 13
+6 – solenóide de aplicação 13
+
+
+
+
+             22
+                                                                Tração Distribuída
+
+
+
+
+PORÇÃO PNEUMÁTICA
+Controla a atuação mecânica do atuador do cilindro de freio da locomotiva.
+
+
+PORÇÃO TV
+
+
+
+
+A TV (triple valve) é uma válvula pneumática de backup do sistema de freio eletrônico.
+
+Sendo assim, a porção TV controla a válvula tripla e a válvula pneumática de apoio do sistema, em
+caso de falha do controle eletrônico pneumático.
+
+Além disso, ela joga a linha de controle BC Control (16TV) para a atmosfera e carrega o reservatório
+auxiliar, aumentando a pressão do EG.
+
+Também direciona a pressão do reservatório auxiliar para controlar a linha BC Control (16TV), propor-
+cionalmente à redução de pressão no EG.
+
+
+PORÇÃO JB
+Porção de conexão com rede LON, cuja fonte conversora de 74/24 V alimenta todo conjunto CCBII.
+
+
+EBV
+A válvula EBV é a interface homem-máquina para o freio eletrônico do CCBII.
+
+Ela contém uma série de dispositivos que permitem a frenagem do trem. São eles:
+   •   manipuladores dos freios automáticos e independentes;
+   •   mecanismos para ativar o alívio rápido;
+   •   válvula pneumática, que inicia uma aplicação de freio de emergência (em caso de falha de
+       alimentação da bateria);
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária     23
+   •   encaixes que definem as posições de alívio (REL), aplicação mínima (MIN), aplicação de
+       serviço (FS), supressão (SUP), punho fora (HO/CS) e emergência (EMER);
+   •   display que indica as pressões do sistema.
+
+Além disso, a válvula EBV pode atuar na comunicação em tempo real com cinco módulos eletrônicos
+inteligentes do Locotrol.
+
+Você também pode substituir a válvula de freio pneumático 26-C pela EBV de tipo “26”, já que eles
+possuem as mesmas posições reativas.
+
+
+
+
+EIPM
+Quando no modo “Freio Eletrônico”, o EIPM realiza todo o processamento de sinal de comando de freio.
+
+
+EPCU
+Na CCBII, a válvula magnética MEMV é de funcionamento interno ao EBV e é ativada quando o mani-
+pulador é colocado na posição de emergência.
+
+Ela abre a passagem 21, atuando dessa forma na válvula de emergência do encanamento geral.
+
+
+OIM
+O OIM (Dispositivo de Interface para o Sistema LEB) é um display gráfico com comandos executados
+por teclas.
+
+Ele é dividido em duas telas planas na cor âmbar com iluminação fluorescente, que mostram informa-
+ções tanto do freio quanto do Locotrol.
+
+Quanto à luminosidade das duas telas, esta é controlada pos teclas up-down.
+
+
+
+
+          24
+                                                                  Tração Distribuída
+
+
+
+
+Já a chave de Liga/Desliga pode ser encontrada na parte traseira do dispositivo.
+
+Na versão da Vale, este dispositivo recebe sinais de satélite tipo GPS (Sistema de Posicionamento
+Global) e mostra o posicionamento atual da locomotiva em coordenadas de latitude e longitude.
+
+
+
+
+Para operações com freio eletrônico, é necessária uma série de comandos:
+    •   ligar freio eletrônico;
+    •   passar locomotiva para o modo “comandada”;
+    •   passar locomotiva para o modo “líder”;
+    •   fazer teste de vazamento;
+    •   ajustar pressão do reservatório equilibrante.
+
+Veja mais detalhes a seguir.
+
+Ligar freio eletrônico
+Para ligar o freio eletrônico, você deve:
+    •   ligar o disjuntor LEB no painel. Ele inicia o software do freio eletrônico;
+    •   aguardar cerca de um minuto e meio, quando aparecerá a mensagem: “Freio automático está
+        sendo energizado”;
+    •   ligar o disjuntor ECB no painel.
+
+
+
+
+                                                Trilha Técnica da Operação Ferroviária   25
+Passar locomotiva para o modo “comandada”
+Nesta situação, você deve fazer o seguinte:
+   •   colocar: a chave reversora centrada, manipulador automático em punho fora e indepen-
+       dente aplicado;
+   •   pressionar o botão AJUST FR EL;
+
+
+
+
+   •   pressionar o botão LÍDER CMDAD para selecionar CMDAD. Nesse momento a válvula inter-
+       ruptora muda automaticamente para FORA;
+
+
+
+
+   •   pressionar o botão ACEIT NOVO. Ele confirma o comando que você definiu;
+
+
+
+
+Passar locomotiva para o modo “líder”
+Para passar a locomotiva para o modo “líder”, faça assim:
+   •   pressione o botão AJUST FR E.L;
+
+
+
+
+          26
+                                                               Tração Distribuída
+
+
+
+
+   •   pressione o botão LÍDER CMDAD para selecionar LÍDER;
+
+
+
+
+   •   pressione o botão CARGA FORA para selecionar CARGA;
+
+
+
+
+   •   pressione o botão ACEIT NOVO. Este botão confirma o comando definido pelo operador;
+
+
+
+
+   •   verifique no display esquerdo se a locomotiva está no modo líder (carga líder).
+
+
+
+
+Fazer teste de vazamento
+Para fazer o teste de vazamento, primeiramente é necessário que a composição já esteja formada e
+abastecida de ar.
+
+Depois você precisa:
+   •   verificar a pressão na cauda: gradiente mínimo subindo 82 psi e descendo 88 psi;
+   •   fazer uma aplicação de 12 a 15 psi;
+   •   conferir aplicação do último vagão e aguardar um minuto para equalizar o sistema;
+   •   pressionar o botão AJUST FR EL;
+
+
+
+                                             Trilha Técnica da Operação Ferroviária      27
+•   pressionar o botão CARGA FORA para selecionar FORA;
+
+
+
+
+•   pressionar o botão ACEIT NOVO. Este botão confirma o comando definido pelo operador;
+
+
+
+
+•   verificar no display esquerdo se a locomotiva está no modo FORA LÍDER;
+•   avisar o manobreiro;
+•   conferir e marcar o vazamento;
+•   aliviar os freios;
+
+
+
+
+•   pressionar o botão AJUST FR EL;
+
+
+
+
+•   pressionar o botão CARGA FORA para selecionar CARGA;
+
+
+
+
+       28
+                                                               Tração Distribuída
+
+
+
+
+   •   pressionar o botão ACEIT NOVO;
+
+
+
+
+   •   verificar no display esquerdo se a locomotiva está no modo CARGA LÍDER;
+   •   aguardar o carregamento do sistema de ar;
+
+
+
+
+   •   esperar a liberação da cauda e entrar em contato com a torre ou estação.
+
+Ajustar pressão do reservatório equilibrante
+No caso de ajuste da pressão do reservatório equilibrante, você deve proceder da seguinte maneira:
+   •   pressione o botão AJUST FR EL;
+
+
+
+
+   •   pressione o botão AJUST RES EQ;
+
+
+
+
+   •   pressione o botão 90 LIBRAS;
+
+
+
+
+                                             Trilha Técnica da Operação Ferroviária   29
+•   pressione o botão SAIR;
+
+
+
+
+•   confira no display esquerdo a pressão do RE.
+
+
+
+
+      30
+                                                              Tração Distribuída
+
+
+
+
+               Vale a pena relembrar!
+1) Qual é a função do CCBII?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+2) Complete:
+
+
+
+a) O filtro é o elemento do _______________ destinado a eliminar as impurezas e a umidade remanes-
+centes do _______________ e _______________.
+
+
+
+b) A porção ERCP controla a _____________________________ em resposta à posição do EBV, tanto
+em posição de ______________ como de _______________.
+
+
+
+c) A função da porção BPCP é alimentar e regular a ______________________________, bem como
+providenciar o fechamento da ______________________________. Além disso, é ela que inicia a
+emergência no ______________________________.
+
+
+
+d) A porção 16 trabalha em modo backup em casos de falha tanto da ______________ quanto da
+_______________.
+
+
+
+
+                                            Trilha Técnica da Operação Ferroviária   31
+3) Como você deve proceder para realizar o teste de vazamento no CCBII?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+4) Destaque os comandos necessários para passar a locomotiva para o modo “líder” no sistema CC-
+BII.
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+
+          32
+                                                               Tração Distribuída
+
+
+
+
+2 LOCOTROL
+A tração distribuída (também chamada de Locotrol ou potência distribuída) é um sistema de con-
+trole de tração e frenagem de trens que permite na prática a utilização de mais vagões em um
+mesmo trem.
+
+Dessa maneira, ela possibilita um transporte com mais volume e lucratividade.
+
+O Locotrol é composto pelos seguintes módulos:
+   •    RM;
+   •    EIPM;
+   •    TIM;
+   •    RIM;
+   •    TM CM;
+   •    EPCU;
+   •    OIM e módulo de conversor DC/DC 74 V/13,6 V para OIM.
+
+Veja agora os principais módulos mais detalhadamente.
+
+
+RM
+       J1 = antena do rádio A
+
+
+
+        J2 = antena do rádio B
+
+                                                                                       J3 = cabo de
+                                                                                       comunicação
+                                                                                       com IPM
+   J4 = cabo de alimentação
+
+
+
+
+                                  Led indicador “Ligado”             TxPwrTest = chave para teste
+                                                                     de potência dos rádios A e B
+
+
+
+
+                                             Trilha Técnica da Operação Ferroviária       33
+EIPM
+O EIPM é um módulo de processamento central.
+
+Quando no modo “Locotrol”, ele realiza todo o processamento de sinal dos comandos da Locomotiva
+e do Freio.
+                                                                         CPU OK – Indica que a
+                                                                         CPU do EIPM funciona
+                                                                         normalmente. É testado
+                                                                         a cada 15 minutos
+                                                                         DP LEAD – Indica que
+                                                                         a locomotiva é líder
+     J2 − Cabo de
+     comunicação                                                         DP REMOTE – Indica que
+     serial DB-9                                                         a locomotiva é remota
+                                                                         DP TX A – Indica
+                                                                         que o sistema está
+ J1 − Data Link – Cabo                                                   transmitindo pelo rádio A
+ de comunicação com
+ o display (OIM)                                                         DP TX B – Indica
+                                                                         que o sistema está
+                                                                         transmitindo pelo rádio B
+         J3 − Cabo de                                                    DP RX − Indica que o
+         comunicação                                                     sistema está recebendo
+         com o Rádio                                                     mensagens
+                                                                         DP COMM INT − Indica
+  J7 – IPM Bus – Cabo                                                    que o sistema de
+  de comunicação com                                                     Locotrol está em falha
+  o TIM                                                                  de comunicação
+                                                                         DATALINK / FA – Não
+                                                                         usado na Vale
+      J6 – Network −
+      Cabo da rede de                                                    NETWORK FA − Indica
+      comunicação “LON”                                                  que o sistema está
+                                                                         com falhas em um dos
+                                                                         componentes da rede
+                                                                         de comunicação “LON”
+                                                                         (local operating network)
+                    J4 − Air Brake − Cabo de      J5 – Cabo de
+                    comunicação com o RIM         alimentação            EBV FAIL – Indica falhas
+                                                                         no EBV (freio auto),
+                                                                         podendo ser eletrônica
+                                                                         ou pneumática
+
+Quando é ligado, o EIPM realiza uma série de diagnósticos e autoconfigurações que duram cerca de
+um minuto e meio.
+
+Durante esse tempo, uma tentativa de ligar o CCBII implica a geração de um alarme. Isso é necessário
+porque o EIPM necessita detectar uma transição no sinal “BOD”.
+
+
+
+          34
+                                                                 Tração Distribuída
+
+
+
+
+O EIPM só verifica essa transição quando ele coloca na tela a mensagem: “Freio Automático está
+sendo energizado” (um minuto e meio após ser ligado).
+
+O módulo em questão só irá energizar o relé de alarme e PCS após a detecção da transição em
+“BOD”. Assim, se o sistema não for ligado corretamente, a PCS nunca será fechada e o alarme po-
+derá soar continuamente.
+
+
+TIM
+O módulo TIM faz interface entre o EIPM e o cabo “Jumper” da Locomotiva.
+
+Ele trata e transforma os sinais de controle do barramento isolado de 5 V em 74 V e os sinais de 74 V
+da locomotiva em entradas isoladas de 5 V.
+
+Este módulo ainda transforma sinal digital de 5 V em saída de controle analógico de 0 – 74 V e trans-
+forma sinal de controle analógico de 0 – 74 V em entrada lógica digital (5 V).
+
+Nele está localizado o relé PIR, que realiza travamento interno do controle da locomotiva e é permitido
+pelo sistema de potência distribuída no modo remota a habilitar as linhas de controle do:
+    •   16T – aceleração;
+    •   6T – excitação do campo gerador;
+    •   17T – preparação para dinâmico;
+    •   15T – AV;
+    •   12T – BV;
+    •   3T – DV;
+    •   *T – frente;
+    •   9T – ré;
+    •   27T – aceleração dinâmica;
+    •   24T – sinal analógico;
+    •   1T – reset do relé de terra.
+
+O módulo TIM ainda possui dois tipos de cartões. Veja a seguir:
+
+TIM Binary Trainline I/O Card
+É o cartão que ativa e lê os sinais digitais de 74 V. Esses sinais controlam o cabo Jumper.
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária     35
+Observe o quadro a seguir. Tenha em mente que qualquer resultado diferente da tabela é conside-
+rado inválido.
+
+      Pto aceleração       DV       CV      BV             AV   Marcha       Comentário
+          Vazio            0         0       0             0       0                          0
+             1             0         0       0             0       1                          0
+             2             0         0       0             1       1                          1
+             3             0         1       0             0       1                          4
+             4             0         1       0             1       1                          5
+             5             1         1       1             0       1                          e
+             6             1         1       1             1       1                          f
+             7             0         1       1             0       1                          6
+             8             0         1       1             1       1                          7
+           Stop            1         0       0             0       1       Motor apagado      8
+        Baixo vazio        1         0       0             1       0                          9
+
+TIM Analog Trainline I/O Card
+O referido cartão ativa e lê o sinal analógico de 0-74 V do 24T (aceleração do freio dinâmico).
+
+Além disso, ele faz interface de entrada com o módulo TM CM (corrente do motor de tração – 2).
+
+                Cel    24T [V]      17T          21T                   Comentário
+                DB0       0        74 V        0                Preparação para dinâmico
+                DB1      3,75      74 V       74 V                      Acelera
+                DB2      7,5       74 V       74 V
+                DB3       17       74 V       74 V
+                DB4       30       74 V       74 V
+                DB5       38       74 V       74 V
+                DB6       53       74 V       74 V
+                DB7       65       74 V       74 V
+                DB8       70       74 V       74 V
+                                                       ,
+
+
+
+
+           36
+                                                                         Tração Distribuída
+
+
+
+
+RIM
+A função desse módulo é fazer a interface entre o EIPM e o subsistema de freio na locomotiva.
+
+
+                                  PCS (Output 2)
+                                                                   RIM
+                                  Y            NC1                 PCS    OBS:
+                                              NO1              P
+                                                               T   ** = GM/DASH
+                                  Z
+                                                  C1           R
+                                                               U   * = DASH
+                                             K2
+
+                                   ALR (Output 4)
+                                  Y            NC1             K
+                                              NO1                  ALARM
+                                                  C1           M   ECB
+                                  Z          K2
+
+                                   ESR (Output 5)
+                                  Y            NC1                 ES
+                                              NO1              Q   ÁREA DE
+                                                  C1           T   EMERGÊNCIA
+                                  Z          K2
+
+                                      IBR (Output 6)
+                                  Y            NC1
+                                              NO1              V   INDEPENDENT
+                                                  C1           J   BRAKE RELAY
+                                  Z          K2
+
+
+                                 BCPS (Output 7)
+                                  Y            NC1             Y
+                                              NO1
+                                                                   BRAKE CYLINDER
+                                                  C1           X
+                                                                   CONTROLL PRESSURE
+                                  Z          K2
+
+                                 DBKO (Output 8)
+                                  Y            NC1             P
+                                              NO1                  ** DBCO > ABRE
+                                                  C1           S   < FECHA
+                                  Z          K2
+
+
+
+
+                                                       Trilha Técnica da Operação Ferroviária   37
+                                   •   PCRC = contato do relé de corte de tração do ATC;
+                                   •   PCS = contato do PCS, retirado e substituído por contato
+                                       do relé PCR do RIM;
+                                   •   PCRC = relé de corte de tração do ATC;
+                                   •   THS IDLE = posição da alavanca de aceleração, fechada
+                                       em vazio;
+                                   •   PCRA, PCRB – relés PCR da Locomotiva;
+                                   •   J1 = Cabo da rede LON;
+                                   •   J2 = Cabo de conexão com EIPM;
+                                   •   J3 = Cabo de conexão com EPCU;
+                                   •   J4 = Cabo de conexão com a locomotiva.
+
+
+
+
+TM CM
+Observe a imagem:
+
+
+                                                                            J4       TIM
+         Motor de tração - 2
+
+     +                                    +15 -12V     Vo
+                                            TM - CM
+            Gerador TM                    Amp. Isolação
+                                             AD-210
+                     Shunt
+     -       [mV]
+
+
+Os terminais do módulo em questão são conectados ao shunt de corrente do motor de tração 2
+da locomotiva.
+
+Com isso, o TM CM amplifica a tensão proveniente da leitura do shunt para que ela seja medida por
+um conversor analógico-digital no Módulo TIM.
+
+O valor da corrente medida é mostrada no display OIM.
+
+
+
+
+            38
+                                                                  Tração Distribuída
+
+
+
+
+EPCU
+Esse módulo gera o sinal “BOD” quando o disjuntor ECB é ligado.
+
+No caso do Locotrol, a válvula em questão é a EMV. Ela é comandada pelo IPM e só é ativada durante
+as operações de potência distribuída quando uma emergência for detectada ou se houver falha da
+alimentação da MEVM.
+
+
+OIM E MÓDULO DE CONVERSOR DC/DC 74 V/13,6 V
+Você já viu no capítulo anterior o que é o Dispositivo de Interface para o Sistema LEB (OIM).
+
+Ele também pode ser utilizado com o Locotrol.
+
+No caso do sistema do Locotrol, o OIM é controlado por dois grupos de teclas iluminadas, tipo push-
+bottons. Estas teclas estão posicionadas no painel frontal do display, abaixo das telas de indicação.
+
+Além disso, aqui o dispositivo é utilizado em sistema de link e unlink.
+
+Mas o que isso significa?
+
+O link corresponde ao início de potência distribuída, enquanto o unlink indica seu fim.
+
+
+
+           Vale saber!
+           Link é a identificação das locomotivas, no mesmo trem, que evita a interferência de
+           um trem de Locotrol no outro.
+
+
+
+Link
+Locomotiva remota
+
+Para iniciar a potência distribuída na locomotiva remota, siga os seguintes passos:
+    •   verifique se a locomotiva está no modo líder;
+    •   ligue os disjuntores rádio Locotrol e TL (Cabo Jumper);
+    •   coloque a chave reversora em neutro;
+    •   aplique o freio independente;
+
+
+
+
+                                                Trilha Técnica da Operação Ferroviária    39
+   •   desligue o disjuntor do campo gerador;
+   •   coloque a chave isoladora para trabalho;
+   •   pressione o botão POT DIST;
+
+
+
+
+   •   pressione o botão REMOTA AJUSTA.
+
+
+
+
+Depois disso, na própria locomotiva remota, você deve:
+   •   observar a mensagem: “Pot Dist - Comandada ativada”;
+   •   aliviar o freio independente;
+   •   colocar o manipulador em punho fora.
+
+A tela a seguir encerra o processo, e o maquinista poderá retornar para a locomotiva líder.
+
+
+
+
+Locomotiva líder
+
+Na locomotiva líder, o link deve acontecer da seguinte maneira:
+   •   verifique se a locomotiva está no modo líder;
+   •   ligue os disjuntores Rádio Locotrol e TL (Cabo Jumper);
+   •   coloque a chave reversora em neutro;
+   •   aplique o freio independente;
+
+
+
+          40
+                                                                Tração Distribuída
+
+
+
+
+   •   ligue o disjuntor do campo gerador;
+   •   coloque a chave isoladora para trabalho;
+   •   pressione o botão POT DIST;
+
+
+
+
+   •   pressione o botão LIDER AJUSTA;
+
+
+
+
+   •   coloque o número da(s) locomotiva(s) remota(s);
+   •   pressione o botão CONECT.
+
+
+
+
+Depois disso, na locomotiva líder:
+   •   repita os 2 últimos procedimentos para mais locomotivas remotas, caso necessário;
+   •   leve o punho do manipulador automático para supressão;
+   •   pressione o botão FEITO;
+   •   alivie o manipulador automático, e a locomotiva estará pronta para o teste do encanamento geral.
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária      41
+Se houver alguma reclamação de link, siga os procedimentos detalhados no diagrama a seguir:
+
+
+                                       Reclamações de LINK
+
+
+
+                                              Aparece
+                                            “POT DIST”?                  Reclamações de LINK
+                                                                 Não
+
+                                      Sim
+
+
+                           Sim               Mensagem                  Não
+                                            “LINK FAIL”?
+
+         Verifique disjuntor:
+         a) rádio locotrol líder;                                      Mensagem:
+         b) rádio locotrol remota;                   Sim               “TIM A, B sem
+         c) número da líder.                                           alimentação”?
+
+                                              Verifique disjuntor:
+                                              a) TL líder;
+                                              b) TL remota.
+                                                                             Não
+
+
+
+
+                           Não                   Aparece a te-                     Sim
+                                                 cla “FEITO”?
+
+
+                Número das            Não
+                 locos OK?                                                         Link OK
+
+                                 a) Ajuste o nùmero da
+                                 locomotiva líder no display
+                                 do locotrol;
+                                 b) Confira o número da
+                     Sim         locomotiva remota no display
+                                 do locotrol.
+
+
+
+
+          42
+                                                                 Tração Distribuída
+
+
+
+
+Como você pôde ver no último tópico, é através do link que você pode fazer alguns testes e iniciar a
+operação do trem. São eles:
+   •     teste do encanamento geral;
+   •     teste de vazamento;
+   •     modo de operação.
+
+Teste do encanamento geral
+
+O encanamento geral faz parte do sistema pneumático do freio e é contínuo em todo o trem.
+
+Através desse teste, o sistema de controle determina as locomotivas que estão identificadas e pre-
+sentes no trem.
+
+É importante saber que o sistema de tração distribuída só se completa após o término desse passo, e
+apenas as locomotivas reconhecidas como presentes no encanamento geral farão parte do locotrol.
+
+
+                                             Link
+
+
+
+ Líder
+                                                                                                 Remota
+                                                                                   Remota
+
+                                             Remota
+         Encanamento geral
+
+
+
+                2º trem
+
+
+
+Para o teste do encanamento geral, você precisa:
+   •     aguardar o fluxo da locomotiva líder e remota(s) caírem abaixo de 10 psi e estabilizarem;
+   •     pressionar o botão “EG TESTE” e depois “EXECUT”;
+   •     fazer uma aplicação mínima;
+   •     observar a mensagem: “Teste de Encanamento OK, alivie quando pronto”.
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária       43
+OBSERVAÇÃO: se a tecla “EG” não estiver automaticamente disponibilizada, você precisa pressionar
+a tecla “POT DI MENU” e depois “SISTEM”.
+
+Quando o teste for para três locomotivas (duas remotas), ele acontecerá assim:
+   •   todos os comandos são iniciados pela líder. Eles não serão reproduzidos pelas remotas auto-
+       maticamente;
+   •   a líder inicia uma aplicação de 7 psi para a primeira remota, que espera essa aplicação chegar
+       pelo encanamento geral;
+   •   após sentir e confirmar para a líder a aplicação de 7 psi, a primeira remota repete a operação
+       para a segunda;
+   •   a segunda remota confirma a aplicação pelo encanamento para a líder;
+   •   confirmada a aplicação recebida pelas remotas, a líder coloca a mensagem “Teste de EG OK”.
+
+Veja agora como proceder em caso de falha nesse teste:
+
+
+
+
+          44
+                                                                       Tração Distribuída
+
+
+
+
+                             Falhas no teste EG
+
+
+
+                Não            Fluxo remota
+                                decresce?               Sim
+
+         Vazamento
+          no trem?
+
+                                                  Fluxo < 20 CFM?              Sim
+             Sim
+
+                                                       Não
+    a) Cancele o teste;
+    b) Verifique e elimine
+                                                                                     Aplicação = MIN
+    os vazamentos;
+    c) Repita teste EG.                       a) Cancele o teste;
+                                              b) Espere o fluxo da                      Não
+                                              remota < 20 CFM;
+                                              c) Repita teste EG.                 a) Cancele o teste;
+                                                                                  b) Repita a aplicação; Sim
+                                                                                  c) Repita teste EG.
+
+
+ CFM – pés cúbicos / min
+                                                                                                        Teste ok
+
+
+Teste de vazamento (cauda)
+
+O teste de vazamento verifica a quantidade de perda de ar do encanamento geral quando o sistema
+de freio está sem reposição de ar (em repouso).
+
+A quantidade máxima de perda tolerada pela ferrovia é de 5 psi por minuto. Acima desse limite não é
+permitido o prosseguimento do trem.
+
+
+
+
+                                                     Trilha Técnica da Operação Ferroviária        45
+Visto isso, os procedimentos necessários são os seguintes:
+   •   pressione o botão “TST VZ TESTE”. Nesse instante, o sistema fará uma aplicação de 20 psi no trem;
+   •   pressione “EXECUT”;
+
+
+
+
+   •   observe a aplicação na cauda;
+   •   observe as seguintes mensagens no display:
+       •   teste de vazamento: estabilização da linha;
+       •   teste de vazamento: válv de freio fora;
+       •   teste de vazamento: temporiz fecha válvs;
+       •   ajuste freio automático para total.
+   •   leve o punho do manipulador automático para aplicação total;
+   •   observe no display qual foi o vazamento;
+   •   alivie o freio automático e observe o alívio na cauda;
+   •   pressione o botão POT DI MENU;
+
+
+
+
+           46
+                                                               Tração Distribuída
+
+
+
+
+   •   pressione o botão “MODO”, depois “OPERAR”.
+
+
+
+
+           Vale saber!
+           A torneira entre a líder e a remota é testada durante o teste do encanamento geral.
+           Já aquela entre a remota e a cauda é testada após o teste de vazamento.
+
+
+
+Havendo falha, faça o seguinte:
+
+                                                Falhas no teste de vazamento
+
+
+
+
+                                  Não                      Vazamento >
+                                                           = 5 psi?
+
+
+                                                               Sim
+                   Coloque trem no modo
+                   “OPERAÇÃO”.
+                                                    a) Elimine o vazamento;
+                                                    b) Repita o teste de
+                                                    vazamento.
+
+
+                        Boa viagem!
+
+
+Modo de operação
+
+Finalmente, para o modo de operação:
+   •   pressione o botão “EXECUT”, e depois “SAIR”;
+
+
+
+                                             Trilha Técnica da Operação Ferroviária    47
+    •   pressione o botão “SELECT MEDIDOR”, leve a chave reversora para frente e opere no modo locotrol.
+
+
+
+
+No caso de ocorrerem falhas de operação, um alarme será enviado para o display.
+
+Quando isso acontece, o evento é armazenado no registro de eventos Locotrol “Log” e o alarme é
+mostrado no display da locomotiva líder.
+
+Desse modo, o display gera dois sinais sonoros curtos.
+
+Isso ocorrerá todas as vezes que a pressão (MR) do reservatório principal for menor que a pressão do
+encanamento geral mais 5 psi durante um intervalo de tempo maior ou igual a cinco segundos.
+
+Porém, se o reservatório principal for menor que a pressão do encanamento geral menos 2 psi, a válvula
+interruptora será comandada para fechamento e a aceleração da remota será cortada (não ampera).
+
+IMPORTANTE: para a correta operação do sistema, é necessário que você atente para as seguintes
+considerações:
+    •   a pressão máxima do reservatório principal deve ser de 145 psi;
+    •   a pressão mínima do reservatório principal deve ser de 115 psi;
+    •   a locomotiva deve ser testada em modo convencional;
+    •   tanto o freio dinâmico como a aceleração precisam estar funcionando em toda a faixa;
+    •   o freio independente e o encanamento geral das locomotivas devem estar sem vazamento.
+
+Unlink
+Como você já viu, o processo de unlink finaliza a potência distribuída.
+
+Veja como ele ocorre a seguir.
+
+Locomotiva remota
+
+Para ativar o processo de unlink em locomotiva remota, siga as instruções a seguir:
+
+
+
+           48
+                                                                 Tração Distribuída
+
+
+
+
+   •   pressione o botão “POT DIST”;
+   •   pressione o botão “FIM POT DIST” e depois “EXECUT”. Irá ocorrer penalidade por fim de
+       potência distribuída;
+
+
+
+
+   •   leve o punho do manipulador automático para supressão;
+   •   aguarde a chave PC fechar;
+   •   desligue os disjuntores Rádio Locotrol e TL.
+
+
+
+
+Locomotiva líder
+
+Na locomotiva líder, o processo de unlink deve ocorrer assim:
+   •   aplique o freio independente e pressione o botão “POT DIST” e depois “SISTEM”;
+   •   pressione o botão “DESCONECT” e depois “EXECUT”;
+   •   pressione o botão “FIM” e depois “EXECUT”. Irá ocorrer penalidade por fim de potência distribuída;
+   •   leve o punho do manipulador automático para supressão;
+   •   aguarde a chave PC fechar;
+   •   desligue os disjuntores Rádio Locotrol e TL e prossiga o corte.
+
+
+
+           Vale saber!
+           Você só pode fechar a torneira após ter terminado o unlink.
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária      49
+No caso da utilização do display gráfico com Locotrol, existem ainda as operações especiais. São elas:
+   •   verificar a continuidade do trem (TREM CHECAR);
+   •   operar em túnel (VAL FR FORA);
+   •   deixar a locomotiva remota no modo de ESPERA (ESP);
+   •   retirar a locomotiva remota do modo de ESPERA (ESP);
+   •   isolar os comandos elétricos da remota (ISOL);
+   •   apagar a locomotiva remota (DIESEL PARADO).
+
+Veja cada uma delas a seguir.
+
+Operações especiais
+Verificar a continuidade do trem (TREM CHECAR)
+
+Este procedimento deve ser executado na situação de uma parada programada, momentos antes da
+partida do trem.
+
+
+
+
+Veja como proceder:
+   •   faça uma aplicação de no mínimo 10 psi;
+   •   pressione o botão “TREM CHECAR”, depois “EXECUT”;
+   •   aguarde a seguinte mensagem: “Teste do trem o.k.! Alivie quando pronto”;
+   •   alivie o freio automático;
+   •   pressione o botão “SAIR”;
+   •   pressione o botão “POT DIST”, depois “SISTEM”;
+   •   pressione o botão “MODO OPERADOR” e prossiga viagem.
+
+
+
+
+          50
+                                                                Tração Distribuída
+
+
+
+
+Operar em túnel (VAL FR FORA)
+
+Este processo consiste em isolar a válvula interruptora para fora e é ativado da seguinte maneira:
+   •   pressione o botão “MENU REMOTA”;
+   •   pressione o botão “EXECUT”;
+
+
+
+
+   •   pressione o botão “VALV FR FORA”;
+   •   pressione o botão “EXECUT”;
+
+
+
+
+   •   pressione o botão “NORMAL” e depois “EXECUT”;
+   •   pressione o botão “MENU CONTR” e continue a operar.
+
+
+
+
+IMPORTANTE: quando ocorrer um acréscimo de 4 psi após aliviar o freio automático, a válvula inter-
+ruptora volta para CARGA.
+
+Deixar a locomotiva remota no modo de ESPERA (ESP)
+
+Este modo de operação permite ao maquinista “desacoplar” e realizar manobras com a locomotiva líder de
+um trem “Locotrol”, sem que as operações de frenagem e tração da mesma afetem a locomotiva remota.
+
+Para isso, a composição deve estar parada com freio independente aplicado.
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária     51
+Veja o passo-a-passo:
+    •   faça uma aplicação total;
+    •   pressione o botão “ESP” e depois “EXECUT”;
+    •   efetue o corte e faça a manobra.
+
+
+
+
+Retirar a locomotiva remota do modo de ESPERA (ESP)
+
+Para este procedimento, basta fazer o seguinte:
+    •   engate novamente na composição;
+
+
+
+    •   faça uma aplicação total;
+    •   abra a torneira lentamente;
+    •   pressione o botão “NORMAL” e depois “EXECUT”.
+
+Isolar os comandos elétricos da Remota (ISOL)
+
+Este processo é utilizado quando for necessário isolar os comandos elétricos e pneumáticos da locomotiva.
+
+Para isolar os comandos elétricos de uma locomotiva remota, você só precisa pressionar o botão
+“ISOL” e depois “EXECUT”.
+
+
+
+
+Neste modo, a locomotiva comporta-se como um vagão e o compressor deixa de carregar o reser-
+vatório principal.
+
+Além disso, a locomotiva não traciona e nem aplica freios.
+
+
+
+           52
+                                                                   Tração Distribuída
+
+
+
+
+Apagar a locomotiva remota (DIESEL PARADO)
+
+Este procedimento é utilizado quando o maquinista é obrigado a apagar o motor diesel da remota.
+
+Para essa operação especial, pressione o botão “DIESEL PARADO” e depois “EXECUT”.
+
+Quando quiser ligar novamente o motor, aperte “NORMAL” e “EXECUT”.
+
+
+
+
+           Vale saber!
+           O módulo de conversor DC/DC 74/13,6 V é a fonte de alimentação do display.
+           Ele recebe 74 VDC do disjuntor LEB.
+
+
+
+
+COMUNICAÇÃO DE DADOS
+Agora você verá como a comunicação no sistema de Locotrol acontece.
+
+Transmitindo dados
+Para a transmissão de dados, são utilizados os rádios em um módulo RM, com freqüência de Tx/Rx 464.025 MHz.
+
+O RM faz comunicação com o módulo processador (EIPM), através de um modem (padrão CCITT V.23
+1200 Baud).
+
+Depois, o EIPM pode receber dados do RIM ou TIM (interfaces de entrada/saída) ou da seção de men-
+sagens do display (OIM).
+
+Assim, o EIPM trata os dados recebidos, enviando-os através de seu barramento (padrão CCITT V.23
+1200 Baud). É dessa forma que o EIPM converte o sinal.
+
+Feito isso, o sinal é enviado internamente do modem para o rádio.
+
+O rádio, por sua vez, trata esse sinal e eleva a sua freqüência, enviando-o depois para sua antena.
+
+Ali o sinal é propagado na velocidade da luz, até a antena receptora.
+
+
+
+                                                 Trilha Técnica da Operação Ferroviária      53
+Recebendo dados
+Após a transmissão dos dados, o rádio recebe o sinal transmitido, através de sua antena.
+
+Com isso, o primeiro converte o segundo em sinal de modem e o envia para a placa de interface de
+comunicação do IPM (Comm I/O Board).
+
+É nessa placa que o sinal é decodificado e enviado através do barramento para o processador EIPM.
+
+O processador do EIPM trata esses dados, enviando-os para o TIM (interface com a locomotiva), RIM
+(interface pneumática com a locomotiva), ou diretamente para o EPCU, através da rede de comunica-
+ção LON.
+
+
+
+           Vale saber!
+           Em regime de perda de comunicação, o IPM provoca uma interligação automática dos
+           rádios A e B, prevalecendo aquele que primeiro responder ao comando de comunicação.
+
+
+
+
+VANTAGENS DA TRAÇÃO DISTRIBUÍDA
+A utilização de tração distribuída (Locotrol) confere algumas vantagens para operação de trens, em
+comparação ao sistema de tração convencional.
+
+Mas quais são essas vantagens?
+
+Essas vantagens estão relacionadas, entre outras:
+   •   ao compressor de ar distribuído no trem;
+   •   à frenagem;
+   •   a engates, rodas e trilhos.
+
+Compressor de ar distribuído no trem
+Com relação ao compressor de ar, a tração distribuída confere mais rapidez ao:
+   •   carregamento inicial;
+   •   carregamento após aplicações;
+   •   alívio de freio.
+
+
+
+
+          54
+                                                                 Tração Distribuída
+
+
+
+
+                                                                             com Locotrol*
+                                                                             trem convencional
+                                                                   *60% de redução no tem-
+                                                                   po do carregamento e do
+                                                                   alívio do freio pneumático
+
+Além disso, a partir desta tração, você pode perceber aplicações mais suaves e seguras, principal-
+mente em descidas.
+
+Frenagem
+No que diz respeito à frenagem, a tração distribuída auxilia no monitoramento de aplicações erradas
+da mesma, além de reduzir sua distância.
+
+                                                                             com Locotrol*
+                                                                             trem convencional
+
+                                                                    *20% de redução em
+                                                                    distâncias de frenagem
+
+Constata-se também que a frenagem com Locotrol (tração distribuída) ocorre em menos da metade do
+tempo da frenagem convencional. Veja os dados a seguir:
+
+                                                                                              Locotrol
+                    Tempo...                              Convencional
+                                                                                        (tração distribuída)
+de carregamento
+                                                            46 minutos                      20 minutos
+(0 a 85 psi)
+de recarregamento após emergência                          15 minutos                      4 a 5 minutos
+de recarregamento após aplicação de serviço             8 minutos e meio                     3 minutos
+de início de aplicação na cauda                           10 segundos                       3 segundos
+de início de emergência na cauda                           6 segundos                       3 segundos
+Valores comparativos para um trem com duas locomotivas e 160 vagões.
+
+            A                                                Ganho de tempo
+
+                                           A                             B
+
+
+
+
+             B
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária             55
+Engates, rodas e trilhos
+Para os engates, rodas e trilhos, os ganhos estão relacionados à distribuição de potência do trem, em
+que há um menor esforço nos engates e um melhor contato entre as rodas e trilhos.
+          Convencional
+
+
+                         Loc1
+                           +     Força nos engates
+                         Loc2
+
+                                                     Fluxo de ar
+
+           Potência
+           distribuída
+
+
+                                           Força nos engates
+
+
+
+                                           Fluxo de ar
+
+Você também pode perceber que há um ganho na velocidade, principalmente em curvas ou rampas.
+                          Curvas
+
+
+                                Convencional             Potência distribuída
+
+
+
+
+                          Rampas
+
+                                Convencional             Potência distribuída
+                                                                           FD
+
+
+Outras vantagens
+A tração distribuída também possibilita acompanhar vazamentos, realizar os testes de cauda (vaza-
+mento) e de continuidade e economizar combustível, entre outras vantagens.
+
+
+
+          56
+                                                                Tração Distribuída
+
+
+
+
+            Vale a pena relembrar!
+1) O que é tração distribuída?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+2) Qual é a diferença entre o TIM Binary Trainline I/O Card e o TIM Analog Trainline I/O Card?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+3) Marque C (correto) ou I (incorreto):
+
+( ) O OIM no sistema Locotrol é utilizado em sistema de unlink e link. O unlink corresponde ao início
+de potência distribuída, enquanto o link indica seu fim.
+
+( ) Um dos passos para iniciar a potência distribuída na locomotiva remota é colocar a chave rever-
+sora em neutro.
+
+( ) A quantidade máxima de perda tolerada pela ferrovia é de 5 psi por minuto, sendo que acima desse
+limite ainda é permitido o prosseguimento do trem.
+
+
+
+4) Explique a função e como ocorre o teste de encanamento geral no sistema de Locotrol.
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+5) Comparando com o sistema convencional, quais são as principais vantagens do emprego do siste-
+ma de Locotrol (tração distribuída)?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+                                              Trilha Técnica da Operação Ferroviária    57
+3 COMUNICAÇÃO ENTRE LOCOMOTIVA LÍDER E REMOTA
+A comunicação entre as locomotivas líder e remota(s) é realizada através de rádios.
+
+No caso de falha de um dos rádios, a comunicação é feita utilizando software.
+
+Veja a seguir em que situações a comunicação entre a locomotiva líder e a(s) locomotiva(s) remota(s) é feita.
+
+
+COMUNICAÇÃO DA LÍDER PARA A REMOTA
+Durante a operação em potência distribuída (locotrol), a locomotiva líder transmite mensagem de
+rádio para a locomotiva remota a cada 20 segundos, no mínimo.
+
+Além disso, esta comunicação pode acontecer:
+    •   quando o maquinista inicia uma operação na locomotiva;
+    •   quando a locomotiva remota não responde à mensagem de comando;
+    •   em resposta a uma aplicação de emergência ou penalidade iniciada pela locomotiva remota;
+    •   quando houver penalidade de freio ou emergência iniciada pela locomotiva líder;
+    •   em resposta a um teste de comunicação iniciado pela remota;
+    •   durante o teste de encanamento geral (EG) e teste de vazamento.
+
+
+COMUNICAÇÃO DA REMOTA PARA A LÍDER
+Nesse caso, a comunicação é utilizada:
+    •   em resposta a uma mensagem de comando da líder;
+    •   na detecção de fluxo durante o teste de encanamento geral (EG);
+    •   nas mudanças dos pontos de aceleração;
+    •   nas transições de modo síncrono para parado e vice-versa.
+
+Também pode ocorrer quando:
+    •   há fluxo inesperado;
+
+
+
+
+           58
+                                                                 Tração Distribuída
+
+
+
+
+   •    existe falha do transdutor de fluxo;
+   •    há ocorrência de alarme;
+   •    acontece falha de comando da interruptora;
+   •    há deslizamento de roda sustentada;
+   •    o reservatório principal está em baixa pressão;
+   •    a PCS está aberta;
+   •    a remota inicia uma aplicação de penalidade ou emergência.
+
+
+COMANDO
+Todas as vezes que a unidade líder transmite um comando para a unidade remota, esse é imediata-
+mente implementado dentro de, no máximo, dois segundos após a recepção.
+
+Na implementação do comando, a locomotiva remota confirma seu status para a líder.
+
+Depois de o comando ser transmitido, ele é atualizado no display da unidade líder entre três e cinco
+segundos após seu envio. Isso ocorre desde que a comunicação esteja funcionando sem interrupção.
+
+
+FALHA OU PERDA DE COMUNICAÇÃO
+Você já sabe que máquinas são passíveis de erros, devido à influência de fatores externos ou internos.
+
+Isso pode ocasionar falha ou perda de comunicação.
+
+Mas o que fazer quando isso acontece?
+
+Falha
+No caso de falha de comunicação entre a locomotiva líder e as locomotivas remotas, as últimas reco-
+nhecem a falha.
+
+Assim, freando a líder, a válvula interruptora das remotas será automaticamente isolada. Com isso, o
+trem obedecerá à aplicação do freio normalmente.
+
+Havendo perda de comunicação depois da aplicação do freio, as válvulas interruptoras das remotas
+ficarão em carga. Durante este evento, o maquinista aliviará o trem, que entrará em emergência.
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária    59
+Perda
+Em se tratando de perda de comunicação, existem duas formas de recuperá-la:
+
+Se a perda de comunicação não foi prevista
+
+Após restabelecida a comunicação entre líder e remotas, um alívio de 4 psi recuperará a interruptora
+para carga novamente nas locomotivas motoras.
+
+Se a perda de comunicação foi prevista
+
+Se o maquinista sabe que a região é complexa, com vários túneis e/ou com problemas de comunica-
+ção entre líder e remotas, ele pode isolar a válvula interruptora das remotas para “FORA”, antes de
+chegar nesses locais.
+
+Com isso, ele usa o freio dinâmico normalmente e faz as aplicações de freio que achar necessárias.
+
+Assim, após o alívio, quando as locomotivas remotas entenderem 4 psi no encanamento geral, as in-
+terruptoras automaticamente serão ajustadas para “CARGA”.
+
+Conseqüências
+
+Dependendo do momento em que houve perda de comunicação, a locomotiva remota funcionará de
+uma determinada maneira.
+
+Se não existir aplicação de freio ou variação inesperada de fluxo e a válvula interruptora está aberta,
+ela manterá a sua operação corrente por 90 minutos.
+
+O mesmo ocorrerá quando:
+   •    a locomotiva remota estiver com a válvula interruptora fechada e tracionando. Assim, quando
+        os freios forem aplicados, a remota entrará imediatamente na condição de “ISOLADA”, fluxo
+        “FORA” e tração em “VAZIO”;
+   •    a locomotiva remota estiver com os freios aplicados, válvula interruptora aberta e em mo-
+        vimento. Neste caso, quando os freios forem aliviados, será aplicada emergência no trem,
+        indicada no display pela mensagem: “Aumento inesperado de fluxo no EG” da remota (En-
+        canamento Geral).
+
+Porém, quando existir aplicação de freio ou variação inesperada de fluxo, a válvula interruptora está
+aberta e:
+   •    remota em vazio
+
+
+
+
+           60
+                                                              Tração Distribuída
+
+
+
+
+Neste caso, a remota se comportará como um vagão e entrará na condição de “ISOLADA”, e sua
+válvula interruptora será fechada.
+   •    remota em tração
+
+Aqui a remota entrará no estado “ISOLADO” e se comportará como um vagão. Além disso, sua válvula
+interruptora será fechada e o ponto de aceleração decrescerá na razão de três segundos por ponto.
+   •   remota em freio dinâmico
+
+Nessa situação, a válvula interruptora da remota será fechada e não haverá alteração no estado do
+freio dinâmico.
+
+
+
+
+                                            Trilha Técnica da Operação Ferroviária   61
+            Vale a pena relembrar!
+1) Indique na segunda coluna da tabela se a situação refere-se a:
+
+− comunicação da líder para a remota; ou
+
+− comunicação da remota para a líder
+
+o maquinista inicia uma operação
+na locomotiva
+detecção de fluxo durante o teste
+de encanamento geral (EG)
+há ocorrência de alarme
+
+durante o teste de encanamento
+geral (EG) e teste de vazamento
+
+
+
+2) Descreva como proceder em locais com perda de comunicação
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+
+          62
+                                                                 Tração Distribuída
+
+
+
+
+4 PROBLEMAS E SOLUÇÕES: ESTUDOS DE CASOS
+Para compreender melhor como ocorre a operação de trens com tração distribuída, veja alguns exem-
+plos de problemas que podem surgir e suas possíveis soluções:
+
+1. A locomotiva líder no ponto oito acelera normalmente e a remota opera como se estivesse no
+ponto um.
+
+Solução: Rearmar disjuntor do motor que está trabalhando.
+
+2. Diante da situação em que o freio é aplicado estando em comunicação com as remotas, e em
+seguida perde-se a comunicação, seguido de sua ação de aliviar o freio, ocorre emergência.
+
+Solução:
+    •   colocar a remota em válvula fora;
+    •   antecipar a operação em locais onde se sabe que irá perder a comunicação;
+    •   aumentar a aplicação até atingir no mínimo 12 psi antes de efetuar o alívio;
+    •   acrescentar de 2 a 3 psi aguardando a equalização e então efetuar o alívio, caso já esteja com
+        as 12 psi.
+
+3. Caso não esteja conseguindo efetuar link entre remotas e líder.
+
+Solução: Observe se a pressão do reservatório principal está entre 115 e 140 psi, pois se estiver abaixo
+de 115 ou acima de 140, não é possível fazer link.
+
+4. Durante a viagem, o que ocorrerá se a pressão do RP na líder ou de uma das remotas cair para 5
+psi acima da pressão do EG por mais de 5 segundos?
+
+Resposta: A remota cairá para modo “isolar” e “válvula fora” e provocará emergência na líder.
+
+5. Qual é a ordem de “linkagem”?
+
+Resposta: O ideal para não haver perda de percurso é realizar link iniciando da última remota em di-
+reção à líder. Contudo, se for feito o link fora da ordem, não haverá problema. No momento em que se
+faz o teste de EG, o correto posicionamento é estabelecido.
+
+6. Se a locomotiva líder desliga o motor por algum motivo, perde-se o link total do locotrol, sendo
+necessário refazer inclusive nas remotas?
+
+Resposta: Não. Basta, após ligar a locomotiva líder, refazer o link somente nela, agregando novamente
+as remotas.
+
+
+
+                                               Trilha Técnica da Operação Ferroviária     63
+7. A locomotiva remota desliga.
+
+Solução: Neste caso, você deve refazer o link na locomotiva remota e depois na líder, agregando no-
+vamente TODAS as remotas que houver no trem.
+
+8. A locomotiva remota apaga o motor diesel.
+
+Solução: O maquinista deve informar ao CTC e, fazendo o procedimento de segurança recomendado,
+deslocar-se até a locomotiva remota e verificar a causa do problema.
+
+Solucionado o defeito, deve prosseguir normalmente com o Locotrol. Caso contrário, deve deixar a
+locomotiva apagada como se fosse um vagão na composição e prosseguir viagem até substituição ou
+manobra da locomotiva.
+
+9. A locomotiva remota de um trem pronto para partir, no pátio, apresenta defeito para o qual
+não há solução.
+
+Solução: Há duas alternativas que devem ser discutidas, envolvendo o CTC, a Estação e o Maquinista:
+    a) coloca-se outra locomotiva ligada por cabo jumper à remota, mesmo que não tenha aparelho
+       de locotrol (na frente ou atrás) e passam-se as três mangueiras de ar. A comunicação com
+        a líder será feita pela remota, que estará apagada, e esta repassará via cabo jumper à sua
+        comandada, que estará em operação. A locomotiva remota não irá registrar amperagem; ou
+    b) desfaz-se a formação locotrol prosseguindo-se com o trem na forma convencional.
+
+Recomenda-se a alternativa A, considerando que, já que a locomotiva remota irá ser rebocada com
+defeito e uma manobra será realizada de qualquer forma, ganha-se mais tempo com esta opção. Além
+disso, preservam-se os ganhos obtidos com um trem com tração distribuída.
+
+10. Se a locomotiva líder apresentar defeito, pode-se fazer o mesmo que é feito com a remota, ou
+seja, colocar outra loco e passar o cabo Jumper?
+
+Resposta: É possível a colocação de outra locomotiva junto à líder ligando o cabo Jumper apenas
+atrás da mesma. Nunca na frente, pois neste caso haverá a possibilidade de queima do TIM (Módulo
+de Interface com o cabo Jumper).
+
+11. Estando a locomotiva líder com o truck dianteiro isolado, é possível se fazer o link com as remotas?
+
+Resposta: Não. Para se fazer o link é necessário que haja uma pressão de cerca de 72 psi nos cilindros de freios.
+
+12. O trem está aplicado pelo Manipulador do Freio Automático, e ao levarmos para a posição de
+alívio o trem entra em emergência.
+
+Solução: Acontece com freqüência quando há perda de comunicação entre a líder e a remota.
+
+
+
+            64
+                                                                 Tração Distribuída
+
+
+
+
+Se houve aplicação pelo MFA quando ainda havia comunicação, a remota memoriza esse estado. É preciso
+esperar o retorno da comunicação para que não haja aplicação de emergência ao se aliviar o trem.
+
+13. Em que ponto deve estar o fluxo para efetuar os testes de EG e de Vazamento no trem com 320 vagões?
+
+Resposta: O fluxo deverá estar com 20 CFM ou menos.
+
+Conceito: 1 CFM = 28,32 litros de ar/minuto.
+
+14. E para o trem com 160 vagões?
+
+Resposta: O fluxo deverá estar com menos de 20 CFM para o teste de Encanamento Geral e menos de
+40 CFM para o Teste de Vazamento.
+
+15. O trem entrou em emergência e eu preciso saber o que está acontecendo.
+
+Solução:
+    •   pressione a tecla MENU da remota;
+    •   pressione a tecla SISTEM;
+    •   fazer leitura de eventos no display.
+
+Atenção para os procedimentos de segurança recomendados no Regulamento de Operação Ferroviária – ROF.
+
+16. Preciso efetuar manobra com a composição do trem.
+
+Solução: Separe as locomotivas no modo BACK e prossiga cumprindo procedimentos.
+
+17. Estando as locomotivas remotas em modo de ESPERA e ocorrendo uma aplicação de emergên-
+cia na Líder, o que acontecerá?
+
+Resposta: A emergência acontecerá também nas locomotivas remotas, daí a importância de se des-
+fazer o link ou separá-las em modo BACK conforme o caso.
+
+18. O alarme na locomotiva remota e a mesma passam para o modo VAZIO (não ampera ou não acelera).
+
+Solução: A reversora pode ter sido mudada de posição muito rapidamente e a remota não “entendeu”,
+perdendo o sentido. Faça o seguinte:
+    •   coloque-a novamente no centro;
+    •   aguarde a devolução do circuito;
+    •   verifique se está em VAZIO-ISOLADO;
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária     65
+   •   acesse o MENU da remota, aperte a tecla NORMAL e EXECUTE;
+   •   aguarde por 20 segundos;
+   •   não resolvendo, aperte as teclas ISOL, NORMAL e EXECUTE;
+   •   pressione MARCH/VAZIO, NORMAL e execute;
+   •   ligue e desligue a chave console do ATC;
+   •   se ainda assim não resolver, vistorie a locomotiva e informe ao CTC.
+
+19. Preciso recuar o trem. Há alguma recomendação especial?
+
+Resposta: Ao movimentar a reversora para o sentido desejado, o maquinista deverá aguardar no míni-
+mo 20 segundos para inverter o circuito de reversão da locomotiva remota.
+
+Atenção para os procedimentos recomendados pelo ROF.
+
+20. A chave PCS da remota está aberta, mas a locomotiva continua amperando.
+
+Solução: Acione a tecla POT DIST das locomotivas remotas. Em seguida, acione a tecla SAIR. Caso
+não normalize, prossiga viagem normalmente.
+
+Não se esqueça de anotar no relatório de bordo.
+
+21. Verificou-se um defeito nas locomotivas remotas que deixaram de tracionar em local que não
+poderá manobrar.
+
+Solução:
+   •   verifique o defeito nas remotas;
+   •   se for o caso, corte a válvula seguindo o procedimento;
+   •   não desfaça o link;
+   •   não desligue a bateria nem os disjuntores ECB, LEB, Rádio Locotrol e TL;
+   •   caso seja necessário, reboque a locomotiva.
+   •   desative o sistema Locotrol e circule com a locomotiva como vagão.
+   •   para isso, desligue os disjuntores do Locotrol / Freio Eletrônico e alivie o ar no cilindro de freio,
+       abrindo a torneira de equalização do mesmo.
+ATENÇÃO: Este procedimento é recomendado apenas para concluir a viagem estando o trem próxi-
+mo ao destino. Você deve informar ao CCO toda a situação e procedimentos e aguardar instruções.
+
+
+
+
+           66
+                                                             Tração Distribuída
+
+
+
+
+           Vale a pena relembrar!
+1) Agora discuta com os seus colegas possíveis soluções para os casos a seguir, baseado no que
+você já aprendeu.
+
+a) O compressor da remota está com defeito, mas a locomotiva está podendo tracionar.
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+b) Ao encostar o acelerador, com o trem tracionando, os freios são aplicados em emergência ou a
+válvula é colocada para fora.
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+c) A locomotiva remota por algum motivo foi penalizada e perdeu o sentido.
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+
+                                           Trilha Técnica da Operação Ferroviária   67
+5 TERRITÓRIO ONDULADO
+Considerar o tipo de território em que a viagem de trem ocorre é de grande importância, pois permite
+compreender como proceder em determinadas situações.
+
+O território ondulado é o que exige mais cuidado, pois é nele que as condições de folgas nos engates
+mudam, além de surgirem diferenciais de velocidade intra-trem.
+
+O território ondulado também pode ser chamado de lombada ou crista leve.
+
+A seguir você verá como iniciar, acelerar e administrar viagens de trem nesse tipo de território.
+
+
+INICIANDO VIAGEM
+O método mais apropriado para iniciar viagem nesse tipo de território dependerá das condições dos
+engates (encolhidos ou esticados) quando o trem foi parado, bem como a localização do trem.
+
+Para evitar forças excessivas intra-trem quando iniciar viagem, alguns cuidados precisam ser tomados:
+   •   manter a locomotiva numa velocidade baixa e nunca acima de 2 Km/h até que todo o trem
+       entre em movimento;
+   •   para isso, você deve controlar o acelerador com o freio independente ao iniciar o movimento
+       do trem, se ajustando à localização do trem;
+   •   iniciar procedimentos para ondulações, leves ou pesadas, conforme for o caso.
+
+
+ACELERANDO
+Após a partida do trem, o acelerador deve ser cuidadosamente avançado à medida que o trem ga-
+nha velocidade.
+
+É importante que você tome cuidado para que as forças de tração não excedam o limite dos engates
+nos veículos que estão passando pelo topo da ondulação.
+
+Nesse caso, o maior problema ao acelerar a uma velocidade mais baixa será a condição de controle
+das atividades de folgas de engates no trem administrando a modulação pelo acelerador.
+
+Essa dificuldade não ocorre nos casos em que a aceleração é feita depois de uma diminuição da ve-
+locidade do trem. Aqui, a velocidade será aumentada de forma crescente e constante.
+
+Assim, as forças intra-trem geradas pela ondulação serão governadas pela razão de frenagem e con-
+troladas pela modulação do acelerador.
+
+
+
+
+           68
+                                                                Tração Distribuída
+
+
+
+
+ADMINISTRANDO A OPERAÇÃO
+Para administrar a operação de trens em territórios ondulados, você deve seguir alguns passos.
+
+Iniciando subida
+Primeiramente, para minimizar as atividades de folgas e as forças intra-trem, é preciso manipular
+o acelerador.
+
+Quando a locomotiva inicia a subida da ondulação, você deve aumentar a aceleração. Isso evita choques
+de compressão quando os vagões “amontoam-se” uns nos outros ao sofrerem a ação da gravidade.
+
+Assim, o procedimento de aceleração manterá os engates esticados.
+
+Passando pelo topo
+Depois que a locomotiva passar o topo da ondulação, é necessário manter as folgas esticadas. Para
+tanto, você terá que diminuir a aceleração, mantendo as forças de tração dentro dos limites.
+
+ATENÇÃO: nunca se esqueça do efeito somatório da ação da gravidade.
+
+Quando a cabeceira do trem se mover para a descendência da ondulação alcançando o nível, o ace-
+lerador deverá ser aumentado de acordo com sua necessidade. Isso impedirá slack action (atividade
+de folgas) ou choques de compressão e manterá a composição esticada.
+
+
+
+           Vale saber!
+           Os mesmos procedimentos devem ser adotados quanto às unidades remotas, tanto
+           na operação de virada de uma lombada quanto ao entrar novamente no nível.
+
+
+
+Iniciando descida
+Por fim, quando a parte de trás do trem ou unidade remota iniciar a descida da ondulação (lombada),
+tenderão a surgir choques de compressão. Isso irá ocorrer até passar o ponto de inflexão (descen-
+dente para ascendente ou para nível).
+
+Com isso, iniciará o surgimento de choques de tração na abertura do acelerador.
+
+Nesse momento, você deve manter o acelerador aberto tanto quanto necessário, dependendo do per-
+centual da ondulação e do comprimento do trem. Assim, a manutenção do trem em condição esticada
+será possibilitada.
+
+
+
+                                              Trilha Técnica da Operação Ferroviária    69
+OBSERVAÇÃO: para prevenir choques de tração, você deve antecipar a aceleração do ponto onde os
+engates começarão a esticar. O acelerador deve ser reduzido antes de os engates se esticarem.
+
+Veja o esquema a seguir que indica o melhor momento para cada passo apresentado neste capítulo:
+                   A        B         C         D           E        F        G
+
+
+
+
+           20     21     22      23       24    25     26       27       28   29    30
+                                               Mile post
+
+A – manipulação do acelerador;
+
+B – início da subida: aumento da aceleração;
+
+C – a locomotiva passa pelo topo da ondulação: manter folgas esticadas e diminuir aceleração;
+
+D – aumentar o acelerador, mantendo a composição esticada;
+
+E – mesmos procedimentos devem ser aplicados às locomotivas remotas;
+
+F – iniciando descida: manter acelerador aberto;
+
+G – prevenção de choques.
+
+
+
+
+          70
+                                                              Tração Distribuída
+
+
+
+
+            Vale a pena relembrar!
+1) Após iniciar e acelerar viagem, como você deve administrar a operação?
+
+
+
+
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+
+                                            Trilha Técnica da Operação Ferroviária   71
+6 POSICIONAMENTO DAS LOCOMOTIVAS REMOTAS
+Primeiramente, é preciso entender que a ligação entre as locomotivas líder e remota(s) é feita por
+encanamento geral do freio e link de rádio (bidimensional).
+
+O uso de unidades remotas é uma tentativa de melhorar a aplicação de forças de tração, mantendo
+estas dentro dos limites operacionais.
+
+O limite destas forças deve estar dentro de valores e tempo toleráveis, uma vez que os engates são
+constante e fortemente forçados.
+
+O posicionamento das locomotivas remotas (unidades remotas) depende de vários fatores, como, en-
+tre outros:
+    •   características do território;
+    •   limitações da via permanente.
+
+Quanto ao posicionamento inadequado das locomotivas remotas, este pode resultar em ações de forças que
+podem exceder o limite dos engates (113,5 tons para engates comuns e 180 tons para engates especiais).
+
+A posição das locomotivas remotas tem diferentes funções.
+
+Veja algumas a seguir.
+
+
+POSICIONADAS NA CAUDA
+Quando as locomotivas remotas são posicionadas na cauda, devem ser considerados, entre outros pontos:
+    •   eixos de tratores;
+    •   vagões longos e curtos.
+
+Eixos de tratores
+Neste caso, as locomotivas remotas devem ficar limitadas ao número de eixos de tratores que terão que produ-
+zir forças dentro dos limites de segurança, principalmente se houver combinação de vagões longos e curtos.
+
+Isso normalmente resulta em restrições de 12 a 16 eixos para tração na cauda.
+
+Vale lembrar que esse número de eixos deve ser estabelecido após rigorosa análise e critério de utilização.
+
+De outro modo, é possível um número maior que 24 eixos motores em trens carregados se a grade ou
+curvatura permitir.
+
+
+
+
+           72
+                                                                                         Tração Distribuída
+
+
+
+
+Vagões longos e curtos
+Quando as locomotivas estão posicionadas na cauda e respeitando os limites dos eixos de tratores, uma
+tonelagem de compressão será criada entre a cauda e o vagão mais leve e longo (maior que 24 m).
+
+Isso ocorre quando este tipo de vagão está acoplado a vagões curtos. Neste caso, os vagões longos
+são operados no modo locotrol.
+
+Nesse sentido, a distância entre a locomotiva remota e o vagão longo mais leve deverá ser suficiente
+para absorver as forças nos engates (tração ou compressão), ficando dentro dos limites de segurança
+tolerados nas combinações de vagões longos e curtos.
+
+
+PESO NO PRIMEIRO LOTE
+As remotas podem ser posicionadas de modo a se obter o maior peso no primeiro lote e um peso menor
+no segundo lote.
+
+Neste caso, teremos vagões sendo empurrados e puxados.
+
+Aqui o ponto nodal ou node existirá entre:
+   •               a primeira locomotiva remota e a unidade principal: no caso de composição de dois lotes;
+   •               a primeira unidade remota e a segunda unidade remota: locotrol de três lotes.
+
+Quando em tração, a primeira parte será esticada à frente do node e comprimida entre ele e a primeira
+locomotiva remota e esticada atrás da última remota.
+
+No caso de trens com três lotes, a unidade principal será comprimida entre as duas remotas.
+
+Em frenagem dinâmica, você terá cada uma dessas condições invertidas.
+
+                                                               8 unidades (4 & 4)
+                                                               100 carros 75 na frente
+                                                                           25 atrás
+                        Tensão
+      Força da barra de tração
+
+
+
+
+                                 4
+                                        For
+                                           ça
+                                 3              da                     Ponto nodal          Forç
+                                                     bar
+                                                        ra d           da força zero             a da             Traseira do trem
+                                 2                          e tr                                        bar
+                                                                 açã                                       ra d
+                                                                    o                                           e tr
+                                 1                                                                             açã
+                                      5.000 toneladas                                                              o
+   Compressão
+
+
+
+
+                                                                                                 3,750 toneladas
+                                 0
+                                      4 unidades principais                                        4 unidades
+                                 -1
+                                                                            1.250 toneladas
+                                 -2
+
+
+
+
+                                                                       Trilha Técnica da Operação Ferroviária             73
+PESO NO SEGUNDO LOTE
+As locomotivas remotas também podem ser posicionadas de modo a distribuir o maior peso na parte
+de trás do trem (segundo lote).
+
+Neste caso, o trem estará sempre:
+    •                     esticado: quando em tração;
+    •                     comprimido: quando em freio dinâmico.
+
+                                                            8 unidades (4 & 4)
+                                                            100 carros 40 na frente
+        Força da barra de tração
+
+
+
+
+                                                                        60 atrás
+                                   4
+                                   3
+                                   2                                                               Traseira do trem
+
+                                   1
+                                         4.000 toneladas                  6.000 toneladas
+                                   0
+                                        4 unidades principais                 4 unidades remotas
+
+
+NODAL À FRENTE DA LOCOMOTIVA REMOTA
+As remotas ainda poderão ser posicionadas de forma que o nodal fique à frente da primeira unidade remota.
+
+Neste caso, isso será como se as duas partes fossem operadas com pouca interação.
+
+Algumas situações poderão mover o ponto nodal para frente ou para trás durante a viagem. São elas:
+    •                     variações de gradiente da locomotiva líder;
+    •                     variações de potência da locomotiva líder;
+
+
+
+
+                                   74
+                                                                                      Tração Distribuída
+
+
+
+
+  •             variações de potência da locomotiva remota;
+  •             variações de potência uma em relação à outra.
+
+                                                        8 unidades (4 & 4)
+                                                        100 carros 50 na frente
+                                                                    50 atrás
+Força da barra de tração
+ (tração das unidades)
+
+
+
+
+                           4         For
+                                        ça                  Ponto nodal                  For
+                                             da                                             ça
+                           3                      bar       da força zero                        da
+                                                     ra d                                             bar           Traseira do trem
+                                                         e tr                                            ra d
+                           2                                 açã                                             e tr
+                                                                o                                                açã
+                           1                                                                                           o
+                                     5.000 toneladas                                   5.000 toneladas
+                           0
+                                      4 unidades principais                              4 unidades remotas
+
+
+
+
+                           Vale saber!
+                           Em operação de tração distribuída é importante reconhecer os efeitos da localização
+                           node na operação do trem.
+                           O node (ou ponto nodal) é definido como ponto de força zero, onde os engates não
+                           estão sob tração ou compressão.
+
+
+
+
+                                                                    Trilha Técnica da Operação Ferroviária                 75
+               Vale a pena relembrar!
+1) Complete:
+
+a) O posicionamento das locomotivas remotas depende de vários fatores, como, entre outros,
+________________ e ________________.
+
+
+
+b) A distância entre a locomotiva remota e o vagão longo mais leve deverá ser suficiente para absor-
+ver as ______________.
+
+
+
+c) As locomotivas remotas também podem ser posicionadas de modo a distribuir o maior peso na
+parte de trás do trem. Neste caso, o trem estará sempre esticado, quando em _______________ ou
+comprimido, quando em _______________.
+
+
+
+2) Em que situações o node pode ser movido para frente ou para trás?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+
+          76
+                                                                Tração Distribuída
+
+
+
+
+7RAÇÕES
+   PROJETO: SISTEMA DE TRAÇÃO DISTRIBUÍDA – CONSIDE-
+
+Neste capítulo você verá algumas considerações sobre um projeto de pesquisa elaborado pela Estra-
+da de Ferro Carajás: o Projeto “Sistema de Tração Distribuída”.
+
+Trata-se um trabalho feito para avaliar o desempenho de operações de trens com o emprego de tra-
+ção distribuída (Locotrol).
+
+
+O PROJETO
+O processo de implantação do Sistema Locotrol foi iniciado no dia 28 de agosto de 2000.
+
+O sistema foi executado por técnicos da EFVM e da EFC, após estes terem recebido treinamento pré-
+vio durante uma semana em Vitória − Espírito Santo.
+
+A implantação dos kits nas locomotivas da EFC foi concluída, conforme o cronograma, em duas semanas.
+
+As locomotivas que receberam os equipamentos foram:
+   •   duas C-36 de números 392 e 393;
+   •   uma SD-40 número 412;
+   •   uma Dash-9 número 805.
+
+Todas as locomotivas tiveram seus sistemas de freio totalmente modificados devido à necessidade de
+se substituir o sistema existente (pneumático) pelo sistema de freio eletrônico, inclusive a Dash-9.
+
+Além disso, foram provocadas várias penalizações durante as viagens, tanto com o trem de minério
+vazio como com o trem de minério carregado.
+
+Isso foi feito para verificar as distâncias de frenagem obtidas com o equipamento Locotrol e compará-
+las com as distâncias de frenagem obtidas com os trens sem potência distribuída.
+
+
+AVALIAÇÕES PRELIMINARES
+Alguns aspectos foram observados já durante os testes preliminares realizados. Veja alguns deles:
+   •   as locomotivas C-36, quando estão no meio do trem, apresentam problemas de abastecimento
+       de ar. Isso causa a aplicação indesejada de emergência na composição;
+
+
+
+
+                                              Trilha Técnica da Operação Ferroviária      77
+    •   é preciso ficar atento com relação à velocidade mínima alcançada, para que não haja proble-
+        mas com os motores de tração e conseqüente desarme do sistema de proteção existente na
+        Dash-9, fato que parará o trem e exigirá reset;
+    •   durante o carregamento, você também deve tomar cuidado para que não haja derramamento
+        de minério dentro da descarga das locomotivas em posições intermediárias do trem.
+
+
+TESTES PRELIMINARES COM O TREM DE MINÉRIO VAZIO
+O trem utilizado para os testes foi:
+
+1 Loco (líder) +
+
+1 Loco (isolada) + 104 GDT +
+
+1 Loco (comandada remotamente) +
+
+102 GDT
+
+O resultado mostra que as distâncias de frenagem do trem de minério vazio, quando o sistema Locotrol
+está operando, ficaram em média 25,8 % mais curtas do que as obtidas com o trem padrão de minério.
+Veja no gráfico a seguir:
+
+                v (km/h)
+                                         Frenagem do Trem de Minério Vazio
+                     90
+                     80
+
+                     70
+                     60
+                     50
+
+                     40
+                     30
+
+                     20
+                     10
+                      0
+                           0   20   40     60     80    100   120   140      160   180 t (s)
+
+
+
+
+           78
+                                                                  Tração Distribuída
+
+
+
+
+TESTES COM O TREM DE MINÉRIO CARREGADO
+Para esses testes, foi utilizado o seguinte trem:
+
+1 Loco (líder) +
+
+1 Loco (isolada) - operou ao longo do trecho do help +
+
+104 GDT +
+
+1 Loco (comandada remotamente) +
+
+102 GDT
+
+              v (km/h)
+                                        Frenagem do Trem de Minério Cheio
+                   90
+                   80
+
+                   70
+                   60
+                   50
+
+                   40
+                   30
+
+                   20
+                   10
+                    0
+                         0   20    40     60     80    100     120     140     160       180 t (s)
+
+Observando o gráfico, você pode constatar que as distâncias de frenagem do trem de minério carre-
+gado, quando o sistema Locotrol está operando normalmente, ficaram em média 15,3 % mais curtas
+do que as obtidas com o trem padrão de minério.
+
+
+CONCLUSÃO
+Os resultados dos testes, de uma maneira geral, apresentaram-se satisfatórios.
+
+Isso porque a interação entre a locomotiva e o equipamento de tração distribuída transcorreu
+sem anormalidades.
+
+
+
+
+                                                Trilha Técnica da Operação Ferroviária               79
+As operações de trens com o Sistema Locotrol mostraram-se aceitáveis, pois:
+   •   reduziram os esticões e empurrões;
+   •   obtiveram resposta imediata do freio;
+   •   conseqüentemente, transmitiram mais confiança ao operador.
+
+Porém, apesar disso tudo, ainda são necessários alguns ajustes nas locomotivas C-36.
+
+
+DESAFIO
+Um dos desafios para a Estrada de Ferro Carajás é estabelecer recorde mundial de transporte, com-
+portando trem mais longo, mais pesado e que percorra maior distância.
+
+Veja alguns recordes mundiais:
+
+                            Recorde                      Tamanho    Quantidade de      Quantidade
+   País           Empresa               TBT      TU
+                             em...                        do trem    locomotivas       de vagões
+
+ África do Sishen-
+                            Ago/1989   71.210                             7               660
+    Sul    Saldanha
+
+
+ Austrália         BHP      Mai/1996   72.191   57.309    5.892m     10 (Dash-8)          540
+
+
+
+
+             80
+                                                                  Tração Distribuída
+
+
+
+
+            Exercitando pra valer!
+1) Como funciona o módulo OIM na versão da Vale?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+2) Quais são as vantagens da tração distribuída?
+__________________________________________________________________________________
+________________________________________________________________________________
+________________________________________________________________________________
+__________________________________________________________________________________
+
+
+
+3) Marque a(s) resposta(s) correta(s):
+
+a) ( ) a ligação entre as locomotivas líder e remota(s) é feita por teste de vazamento do freio e link de
+rádio (bidimensional).
+
+b) ( ) O território ondulado é o que exige mais cuidado, pois é nele que as condições de folgas nos
+engates mudam, além de surgirem diferenciais de velocidade intra-trem.
+
+c) ( ) O Locotrol possibilita um transporte com mais volume, porém a um custo maior.
+
+
+
+
+                                                Trilha Técnica da Operação Ferroviária     81
+4) O funcionário da empresa ABC precisa realizar unlink em locomotiva remota. Para ajudá-lo, coloque
+as etapas do processo na ordem que estas deverão ser executadas:
+
+pressione o botão “FIM POT DIST” e depois “EXECUT”. Irá ocorrer penalidade por fim de potência
+distribuída
+aguarde a chave PC fechar
+pressione o botão “POT DIST”
+desligue os disjuntores Rádio Locotrol e TL
+leve o punho do manipulador automático para supressão
+
+1.
+2.
+3.
+4.
+5.
+
+
+
+
+          82
+                                                                 Tração Distribuída
+
+
+
+
+GABARITOS
+VALE A PENA RELEMBRAR!
+CAPÍTULO I
+1) O sistema de controle eletrônico-pneumático (CCBII) é um sistema de freio eletrônico.
+
+Ele substitui todo o conjunto 26L, compreendendo manipuladores (independente e automático), válvu-
+la reguladora, válvula de aplicação de penalidade (P2A), conjunto BD26, válvula interruptora, etc.
+
+Aqui, cada um desses subsistemas é substituído por software.
+
+No caso das partes de aplicação pneumática, estas são substituídas por conjuntos pneumáticos ele-
+tronicamente controlados.
+
+2)
+
+a) CCBII; secador de ar; drenos da locomotiva.
+
+b) pressão do reservatório equilibrante; comandante; comandada.
+
+c) pressão do encanamento; válvula de freio automático; encanamento geral.
+
+d) porção ERCP; porção 20.
+
+3) Para fazer o teste de vazamento, primeiramente é necessário que a composição já esteja formada
+e abastecida de ar.
+
+Depois, deve-se:
+     •   verificar a pressão na cauda: gradiente mínimo subindo 82 psi e descendo 88 psi;
+     •   fazer uma aplicação de 12 a 15 psi;
+     •   conferir aplicação do último vagão e aguardar um minuto para equalizar o sistema;
+     •   pressionar o botão AJUST FR EL;
+     •   pressionar o botão CARGA FORA para selecionar FORA;
+     •   pressionar o botão ACEIT NOVO. Este botão confirma o comando definido pelo operador;
+     •   verificar no display esquerdo se a locomotiva está no modo FORA LÍDER;
+     •   avisar o manobreiro;
+     •   conferir e marcar o vazamento;
+
+
+
+                                               Trilha Técnica da Operação Ferroviária   83
+       •   aliviar os freios;
+       •   pressionar o botão AJUST FR EL;
+       •   pressionar o botão CARGA FORA para selecionar CARGA;
+       •   pressionar o botão ACEIT NOVO;
+       •   verificar no display esquerdo se a locomotiva está no modo CARGA LÍDER;
+       •   aguardar o carregamento do sistema de ar;
+       •   esperar a liberação da cauda e entrar em contato com a torre ou estação.
+
+4) pressione o botão AJUST FR E.L;
+
+pressione o botão LÍDER CMDAD para selecionar LÍDER;
+
+pressione o botão CARGA FORA para selecionar CARGA;
+
+pressione o botão ACEIT NOVO. Este botão confirma o comando definido pelo operador;
+
+verifique no display esquerdo se a locomotiva está no modo líder (carga líder).
+
+CAPÍTULO II
+1) A tração distribuída (também chamada de Locotrol ou potência distribuída) é um sistema de controle
+de tração e frenagem de trens que permite na prática a utilização de mais vagões em um mesmo trem.
+
+Dessa maneira, ela possibilita um transporte com mais volume e lucratividade.
+
+2) O TIM Binary Trainline I/O Card ativa e lê os sinais digitais de 74 V. Esses sinais controlam o cabo Jumper.
+
+Já o TIM Analog Trainline I/O Card ativa e lê o sinal analógico de 0-74 V do 24T (aceleração do freio dinâ-
+mico). Além disso, ele faz interface de entrada com o módulo TM CM (corrente do motor de tração – 2).
+
+3) I
+
+  C
+
+  I
+
+4) O teste ocorre da seguinte maneira:
+       •   aguardar o fluxo da locomotiva líder e remota(s) caírem abaixo de 10 psi e estabilizarem;
+       •   pressionar o botão “EG TESTE” e depois “EXECUT”;
+       •   fazer uma aplicação mínima;
+
+
+
+              84
+                                                                 Tração Distribuída
+
+
+
+
+     •   observar a mensagem: “Teste de Encanamento OK, alivie quando pronto”.
+
+Quando o teste for para três locomotivas (duas remotas), ele acontecerá assim:
+     •   todos os comandos são iniciados pela líder. Eles não serão reproduzidos pelas remotas
+         automaticamente;
+     •   a líder inicia uma aplicação de 7 psi para a primeira remota, que espera essa aplicação chegar
+         pelo encanamento geral;
+     •   após sentir e confirmar para a líder a aplicação de 7 psi, a primeira remota repete a operação
+         para a segunda;
+     •   a segunda remota confirma a aplicação pelo encanamento para a líder;
+     •   confirmada a aplicação recebida pelas remotas, a líder coloca a mensagem “Teste de EG OK”.
+
+É através deste teste que o sistema de controle determina as locomotivas que estão identificadas
+e presentes no trem. É importante saber que o sistema de tração distribuída só se completa após o
+término desse passo e apenas as locomotivas reconhecidas como presentes no encanamento geral
+farão parte do locotrol.
+
+5) O sistema Locotrol possui diversas vantagens relacionadas ao carregamento de ar e no desenvol-
+vimento de testes de vazamento, entre outras.
+
+Porém, com relação ao sistema convencional, o sistema de tração distribuída se mostra mais vantajo-
+so com relação tanto aos engates, rodas e trilhos como à frenagem.
+
+Quanto aos engates, rodas e trilhos, os ganhos estão relacionados à distribuição de potência do trem,
+em que há um menor esforço nos engates e um melhor contato entre as rodas e trilhos. Aqui pode-se
+perceber também que há um ganho na velocidade, principalmente em curvas ou rampas.
+
+Já a frenagem no sistema Locotrol ocorre em menos da metade do tempo da frenagem convencional.
+
+CAPÍTULO III
+1)
+
+ o maquinista inicia uma operação
+                                                   comunicação da líder para a remota
+ na locomotiva
+ detecção de fluxo durante o teste
+                                                    comunicação da remota para a líder
+ de encanamento geral (EG)
+ há ocorrência de alarme                            comunicação da remota para a líder
+ durante o teste de encanamento
+                                                   comunicação da líder para a remota
+ geral (EG) e teste de vazamento
+
+
+
+                                               Trilha Técnica da Operação Ferroviária     85
+2) A partir da locomotiva líder, isolar a interruptora das remotas para “FORA”, antes de chegar em lo-
+cais de perda de comunicação. Usar o freio dinâmico normalmente e fazer as aplicações de freio que
+achar necessárias. Após o alívio, quando as locomotivas remotas entenderem 4 psi no encanamento
+geral, as interruptoras automaticamente serão ajustadas para “CARGA”.
+
+CAPÍTULO IV
+1)
+
+a) Neste caso, você deve:
+     •   acessar o MENU da remota, cortar a válvula e EXECUTE.
+     •   Dessa forma, a locomotiva irá trafegar em condições de vagão;
+     •   desligar a locomotiva, se houver necessidade;
+     •   desligar a chave da bateria e os disjuntores.
+
+b) Neste caso, o compressor de ar pode estar com vazamento.
+
+Assim, coloque um ponto de aceleração nas locomotivas para aumentar o fluxo de ar no reservatório
+principal e mantê-lo acima de 115 psi.
+
+Evite encostar no acelerador durante a viagem.
+
+c) Após anular a penalização, conforme procedimento normal recomendado, coloque a reversora em
+neutro, espere alguns segundos e volte a reversora para a posição original, restabelecendo-se o sen-
+tido da locomotiva.
+
+CAPÍTULO V
+1) Primeiramente, para minimizar as atividades de folgas e as forças intra-trem, é preciso manipular
+o acelerador.
+
+Quando a locomotiva inicia a subida da ondulação, você deve aumentar a aceleração. Isso evita choques
+de compressão quando os vagões “amontoam-se” uns nos outros ao sofrerem a ação da gravidade.
+
+Assim, o procedimento de aceleração manterá os engates esticados.
+
+Depois que a locomotiva passar o topo da ondulação, é necessário manter as folgas esticadas. Para
+tanto, você terá que diminuir a aceleração, mantendo as forças de tração dentro dos limites.
+
+Quando a cabeceira do trem se mover para a descendência da ondulação alcançando o nível, o ace-
+lerador deverá ser aumentado de acordo com sua necessidade. Isto impedirá slack action (atividade
+de folgas) ou choques de compressão e manterá a composição esticada.
+
+
+
+
+            86
+                                                                  Tração Distribuída
+
+
+
+
+Por fim, quando a parte de trás do trem ou unidade remota iniciar a descida da ondulação (lombada),
+tenderão a surgir choques de compressão. Isso irá ocorrer até passar o ponto de inflexão (descen-
+dente para ascendente ou para nível).
+
+Com isso, iniciará o surgimento de choques de tração na abertura do acelerador.
+
+Neste momento, você deve manter o acelerador aberto tanto quanto necessário, dependendo do per-
+centual da ondulação e do comprimento do trem. Assim, a manutenção do trem em condição esticada
+será possibilitada.
+
+CAPÍTULO VI
+1)
+
+a) características do território; limitações da via permanente.
+
+b) forças nos engates.
+
+c) tração; freio dinâmico.
+
+2) Quando ele está localizado à frente da locomotiva remota, em variações de gradiente da locomotiva
+líder e de potência da locomotiva líder, da locomotiva remota e uma em relação à outra.
+
+
+EXERCITANDO PRA VALER!
+1) Na versão da Vale, este dispositivo recebe sinais de satélite tipo GPS (Sistema de Posicionamento
+Global) e mostra o posicionamento atual da locomotiva em coordenadas de latitude e longitude.
+
+2) Com relação ao compressor de ar, a tração distribuída confere mais rapidez ao carregamento ini-
+cial, carregamento após aplicações e ao alívio de freio. Além disso, a partir desta tração, você pode
+perceber aplicações mais suaves e seguras, principalmente em descidas.
+
+No que diz respeito à frenagem, a tração distribuída auxilia no monitoramento de aplicações erradas
+da mesma, além de reduzir sua distância. Constata-se também que a frenagem com locotrol (tração
+distribuída) ocorre em menos da metade do tempo da frenagem convencional.
+
+Para os engates, rodas e trilhos, os ganhos estão relacionados à distribuição de potência do trem, em
+que há um menor esforço nos engates e um melhor contato entre as rodas e trilhos. Há também um
+ganho na velocidade, principalmente em curvas ou rampas.
+
+A tração distribuída também possibilita acompanhar vazamentos, realizar os testes de cauda (vaza-
+mento) e de continuidade e economizar combustível, entre outras vantagens.
+
+3) B
+
+
+
+
+                                               Trilha Técnica da Operação Ferroviária   87
+4)
+
+ 1. pressione o botão “POT DIST”
+ 2. pressione o botão “FIM POT DIST” e depois “EXECUT”. Irá ocorrer penalidade por fim de potên-
+    cia distribuída
+ 3. leve o punho do manipulador automático para supressão
+ 4. aguarde a chave PC fechar
+ 5. desligue os disjuntores Rádio Locotrol e TL
+
+
+
+
+          88
+Anotações
+Anotações
+Anotações
+Anotações
+Anotações
+

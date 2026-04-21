@@ -1,0 +1,1867 @@
+Transporte de Produtos
+Perigosos
+
+
+
+
+                   VALER - EDUCAÇÃO VALE
+COLABORADORES:
+
+> Felipe Labanca
+
+
+Novembro – 2011
+                                                            mensagem Valer
+
+
+
+
+Caro Empregado,
+
+Você está participando da ação de desenvolvimento Transporte de
+Produtos Perigosos de sua Trilha Técnica.
+
+A Valer – Educação Vale construiu esta Trilha em conjunto com
+profissionais técnicos da sua área com o objetivo de desenvolver as
+competências essenciais para o melhor desempenho de sua função e
+o aperfeiçoamento da condução de suas atividades diárias.
+
+Todos os treinamentos contidos na Trilha Técnica contribuem para o
+seu desenvolvimento profissional e reforçam os valores saúde e
+segurança, que são indispensáveis para sua atuação em
+conformidade com os padrões de excelência exigidos pela Vale.
+
+Agora é com você. Siga o seu caminho e cresça com a Vale.
+
+Vamos Trilhar!
+INTRODUÇÃO                                                     5
+
+
+MÓDULO I: TRANSPORTE FERROVIÁRIO DE PRODUTOS
+PERIGOSOS                                                      6
+
+  Definições Básicas                                           7
+  Legislação                                                   9
+  Ficha de informação de segurança do produto químico-FISPQ   23
+  Movimentação e transporte de produtos perigosos             25
+
+
+
+MÓDULO II: SIMBOLOGIA E CLASSES DE RISCO                      28
+
+  Classes e rótulos de risco                                  29
+  Painel de segurança                                         33
+
+
+
+MÓDULO III: PREVENÇÃO E COMBATE A INCÊNDIOS                   34
+
+  Introdução                                                  35
+  O fogo                                                      37
+  O calor                                                     39
+  Efeitos do calor sobre os ombustíveis                       41
+  Incêndios                                                   43
+
+
+
+MÓDULO IV: RELAÇÃO DE PRODUTOS TRANSPORTADOS,
+FORMAS DE CONTRATAÇÃO DE PRODUTOS PERIGOSOS E
+PLANO DE EMERGÊNCIA                                           50
+
+  Relação de produtos transportados                           51
+  Formas de contratação de produtos perigosos                 53
+  Plano de emergência                                         55
+  Equipamentos de emergência                                  57
+  Equipamentos de proteção individual                         59
+                                                                                                        |5|
+
+
+
+
+                                                                                                         Introdução
+Introdução
+
+                                                     de máquinas e vagões; profissionais de via
+NESTE CURSO VOCÊ DESCOBRIRÁ que o
+                                                     permanente e manutenção de via;
+segmento de transporte de produtos
+                                                     profissionais com a função de atendentes de
+perigosos por via férrea é bastante amplo e
+                                                     emergência.
+complexo e que são muitos os profissionais
+envolvidos direta ou indiretamente nas
+diversas etapas deste tipo de transporte.            O principal objetivo do curso é orientar estes
+                                                     profissionais para um transporte eficiente e     / FNS
+Aqui você aumentará seu conhecimento                 seguro, visando à consciência e à
+sobre os profissionais envolvidos direta ou          responsabilidade, de forma a viabilizar uma
+indiretamente no transporte de cargas, que           redução dos danos causados, minimizar
+devem ter os conhecimentos exigidos pela             acidentes em trechos e acidentes de trabalho
+legislação em vigor: condutores, auxiliares e/       e aperfeiçoar a proteção às pessoas e ao meio
+ou equipagem; profissionais da manutenção            ambiente.
+
+
+
+
+Ao terminar o curso, você deverá ser capaz de:
+
+   >>reconhecer a legislação que regulamenta o transporte ferroviário de produtos perigosos;
+   >>identificar a simbologia e a classificação de riscos adotada no transporte ferroviário de
+      produtos perigosos;
+
+   >>descrever os principais elementos e procedimentos envolvidos na prevenção e combate a
+      incêndios no transporte de produtos perigosos;
+
+   >>identificar os produtos perigosos transportados e a forma de contratá-los;
+   >>reconhecer as características e procedimentos do plano de emergência;
+   >>identificar as bases e equipamentos de emergência;
+   >>identificar os equipamentos de proteção individual.
+ Módulo I
+ TRANSPORTE FERROVIÁRIO DE
+ PRODUTOS PERIGOSOS
+
+
+
+
+Neste módulo, você conhecerá os principais aspectos da legislação que regulamenta o transporte de
+produtos perigosos.
+
+Depois de estudar este módulo, você estará apto a:
+
+   >>identificar leis, decretos e resoluções reguladores do transporte de produtos perigosos;
+   >>reconhecer os principais aspectos do Decreto 98.973/90;
+   >>identificar as leis de crimes ambientais;
+   >>reconhecer os principais aspectos da Resolução 420/2004.
+                                                                                                   |7|
+
+        Relembrando
+
+
+
+
+                                                                                                   Definições básicas
+Definições básicas
+        Relembrando
+
+
+
+
+        Relembrando
+
+Para facilitar a compreensão devemos atentar para as definições a seguir.
+
+
+
+                          Carga é todo produto ou mercadoria a ser transportado de um ponto
+                          a outro com sucesso, utilizando as diversas modalidades de transporte
+                          existente.
+
+
+        Pesquisando
+                          Carga perigosa é toda e qualquer carga que represente risco, mesmo não
+                          contendo produto perigoso; por exemplo: carga alta, carga viva, tanque
+                          parcialmente preenchido com carga liquida etc.
+        Observando
+
+        Pesquisando
+                          Carga com produto perigoso é toda aquela carga que contém o produto
+                          perigoso e que representa riscos aos seres humanos, causa prejuízos
+                          materiais e danos ao meio ambiente.
+        Observando
+
+        Pesquisando
+
+
+
+
+        Observando
+      VALER - EDUCAÇÃO VALE
+
+
+
+
+|8|
+                                                                                                      |9|
+
+
+
+
+                                                                                                      Informações Gerais
+Legislação
+
+LEIS, DECRETOS, E RESOLUÇÕES
+
+No Brasil, até 1983, não existia norma a respeito do transporte de produtos perigosos. Neste ano,
+ocorreu um acidente rodoviário, na cidade do Rio de Janeiro, com o Pentaclorofenato de sódio
+(2567), um produto químico conhecido como Pó da China.
+
+A primeira regulamentação surgiu por meio do Decreto Lei 2.063/83, que determinava a cobrança
+de multas para as infrações decorrentes do transporte de produto perigoso e dava destino aos
+valores arrecadados.
+
+A partir deste Decreto surgiram outros.
+
+   >>Decreto 96.044/88 – regulamenta o transporte rodoviário de produto perigoso no Brasil.
+   >>Decreto 1.797/96 – regulamenta o transporte de produto perigoso no Mercosul.
+   >>Resolução 420/2004 – fornece todas as instruções complementares ao regulamento para o
+      transporte terrestre de produto perigoso.
+
+   >>Lei 9.605/98 – estabelece as sanções penais e administrativas derivadas de condutas e
+      atividades lesivas ao meio ambiente.
+
+   >>Decreto 98.973/90 – que regulamenta o transporte ferroviário de produto perigoso no Brasil.
+                          O Decreto 98.973/90, aprovado em 21 de fevereiro de 1990, determina
+                          como devem ser os procedimentos, as responsabilidades, as obrigações
+                          e as atribuições de cada parte envolvida no transporte de produto
+                          perigoso. Está dividido em 06 capítulos e 61 artigos, de forma a dar base
+        Relembrando       sobre o assunto.
+
+
+
+Resumidamente, vamos conhecer estes capítulos do Decreto 98.973/90, que nos darão uma visão a
+respeito da legislação sobre o transporte ferroviário de produto perigoso.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         DECRETO 98.973/90
+
+
+         CAPITULO I – DAS DISPOSIÇÕES PRELIMINARES
+
+         Art. 1º - O transporte por via férrea, de produtos que, por suas características, sejam perigosos ou
+         representem riscos para a vida e a saúde das pessoas, para a segurança pública, para o meio
+         ambiente ou para a própria ferrovia, fica submetido às regras a aos procedimentos estabelecidos
+         neste Regulamento, sem prejuízo do disposto na legislação peculiar a cada produto perigoso.
+
+         § 1º - Para os efeitos deste Regulamento, são produtos perigosos os relacionados em portaria
+         baixada pelo Ministério dos Transportes.
+
+         § 2º - No transporte de produtos explosivos e de substâncias radioativas, serão observadas,
+         também, as normas especificas do Ministério do Exército e da Comissão Nacional de Energia Nuclear,
+         respectivamente.
+
+
+
+         CAPITULO II – DAS CONDIÇÕES DO TRANSPORTE
+
+
+         Seção I – Dos Veículos e dos Equipamentos
+
+         O transporte de produtos perigosos somente será realizado por vagões e equipamentos cujas
+         características técnicas e estado de conservação possibilitem segurança compatível com o risco
+         correspondente ao produto transportado.
+
+         Os vagões e equipamentos destinados ao transporte de produtos perigosos a granel serão
+         fabricados de acordo com norma brasileira ou, na inexistência desta, com norma internacionalmente
+         aceita, devendo sua adequação para o transporte a que se destinam ser atestada pela ferrovia ou
+         entidade por ela reconhecida.
+
+         Os vagões e equipamentos que tenham sido utilizados no transporte de produtos perigosos
+         somente serão usados para quaisquer outros fins após sofrerem completa limpeza e
+         descontaminação.
+
+         Os vagões e equipamentos que tenham transportado produtos perigosos, descarregados, não
+         limpos ou que contenham resíduos daqueles produtos, estão sujeitos às mesmas prescrições
+         aplicadas aos carregados.
+
+
+
+         Seção II – Da Formação e da Circulação do Trem
+
+         Os vagões e equipamentos utilizados no transporte de produtos perigosos portarão rótulos de risco
+         e painéis de segurança específicos, de acordo com a Norma Brasileira – NBR-7500, enquanto durarem
+         as operações de carregamento, estiva, transporte, descarregamento, baldeação, limpeza e
+         descontaminação.
+
+
+
+
+| 10 |
+                                                                                                     | 11 |
+
+
+
+
+                                                                                                      Informações Gerais
+Após as operações de limpeza e descontaminação de vagões e equipamentos utilizados no
+transporte de produtos perigosos, os rótulos de risco e painéis de segurança serão retirados.
+
+A viagem de trem que transporte produtos perigosos será a mais direta possível e seguirá horário
+prefixado.
+
+A ferrovia dará prévio conhecimento da circulação de trem com produtos perigosos a todo pessoal
+envolvido nesse transporte, instruindo-o sobre as medidas operacionais a serem adotadas e
+definindo as responsabilidades.
+
+O transporte de produtos perigosos somente será realizado por vias cujo estado de conservação
+possibilite segurança compatível com o risco correspondente ao produto transportado.
+
+
+
+Seção III – Do Despacho, Acondicionamento, Carregamento, Estiva,
+Descarregamento, Manuseio e Armazenagem
+
+Os produtos perigosos fracionados serão acondicionados para suportar os riscos de carregamento,
+estiva, transporte, descarregamento e baldeação, sendo o expedidor responsável pela adequação
+do acondicionamento, segundo especificações do fabricante do produto.
+
+A ferrovia somente receberá para o transporte aqueles produtos perigosos cujas embalagens
+externas estejam adequadamente rotuladas, etiquetadas e marcadas de acordo com a NBR-7500.
+
+No mesmo vagão, não será permitido o transporte de produtos perigosos com outro tipo de
+mercadoria, salvo se houver compatibilidade entre os diferentes produtos transportados.
+
+
+
+Seção IV – Do Pessoal
+
+A ferrovia promoverá, sistematicamente, o treinamento para todo o seu pessoal envolvido com o
+manuseio, transporte, atendimento a emergências e vigilância de produtos perigosos, de acordo
+com instruções expedidas a respeito do assunto.
+
+Todo o pessoal envolvido nas operações de carregamento, descarregamento e baldeação de
+produtos perigosos deve usar traje e equipamentos de proteção individual adequados, conforme
+normas e instruções baixadas pelo Ministério do Trabalho e, no caso de substâncias radioativas, as
+da Comissão nacional de Energia Nuclear.
+
+Parágrafo único: Durante o transporte, a equipagem deve usar o traje mínimo obrigatório, ficando
+desobrigada do uso dos equipamentos de proteção individual.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+                                 Dependendo do produto, além do EPI básico, a NBR 9735, poderá exigir:
+
+                                 • capacete de proteção com cinta de amortecimento interno (1);
+
+                                 • par de luvas resistente aos produtos químicos (2);
+                 Relembrando
+                                 • botas de borracha;
+
+                                 • calça, camiseta e macacão trevira (5);
+
+                                 • óculos de segurança para produtos químicos (3);
+
+                                 • semimáscara para proteger nariz e boca (4);
+
+                                 • luvas de raspa;
+
+                                 • respirador para pó;
+
+                                 • máscara panorâmica;
+
+                                 • máscara de fuga;
+
+                                 • capacete com protetor facial;
+
+                                 • colete de sinalização;
+
+                                 • máscara contra gases tóxicos
+
+
+
+                 Pesquisando
+
+
+
+
+                 Observando
+
+
+
+
+                                 FIGURA 1.1: EQUIPAMENTOS DE PROTEÇÃO INDIVIDUAL
+
+
+         A ferrovia manterá o pessoal de estação, despacho, recebimento, entrega, manobra e condução de
+         veículos carregados com produtos perigosos inteirado dos dispositivos deste Regulamento e demais
+         instruções relativas à presença, manuseio e transporte desses produtos.
+
+
+
+
+| 12 |
+                                                                                                     | 13 |
+
+
+
+
+                                                                                                      Informações Gerais
+Seção V – Da Documentação
+
+Os trens transportando produtos perigosos somente poderão circular com os documentos a seguir
+especificados, além daqueles previstos na regulamentação dos transportes ferroviários e nas normas
+relativas ao produto perigoso transportado.
+
+I – Declaração de carga emitida pelo expedidor contendo as seguintes informações sobre o produto
+perigoso transportado:
+
+a) número e nome apropriado para o embarque;
+
+b) a classe e, quando for o caso, a subclasse à qual o produto pertence;
+
+c) declaração de que o produto está adequadamente acondicionado para suportar os riscos normais
+de carregamento, estiva, descarregamento, baldeação e transporte ferroviário e que atende à
+regulamentação em vigor.
+
+
+
+
+                     FIGURA 1.2: DECLARAÇÃO DE CARGA EMITIDA PELO EXPEDIDOR
+
+
+II – Ficha de Emergência, emitida pelo expedidor de acordo com as NBR-7503 e NBR- 8285.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+                                         FIGURA 1.3: FICHA DE EMERGÊNCIA
+
+
+
+
+         CAPITULO III – DOS PROCEDIMENTOS EM CASOS DE EMERGÊNCIA
+
+         Em caso de ocorrência com trem que esteja transportando produtos perigosos, afetando ou não a
+         carga, a equipagem procederá da seguinte forma:
+
+
+
+
+| 14 |
+                                                                                                       | 15 |
+
+
+
+
+                                                                                                        Informações Gerais
+I – dará ciência à estação mais próxima ou ao setor de controle de tráfego, pelo meio mais rápido ao
+seu alcance, detalhando a ocorrência, o local do evento, a classe e a quantidade do produto
+transportado;
+
+II – tomará as providencias cabíveis relativas à circulação do trem;
+
+III – adotará as medidas indicadas na Ficha de Emergência ou nas instruções específicas da ferrovia
+sobre o produto transportado.
+
+Nos casos em que os acidentes afetem ou possam afetar mananciais, áreas de proteção ambiental,
+reservas e estações ecológicas ou aglomerados urbanos, caberá à ferrovia:
+
+I – providenciar, junto aos órgãos competentes, o isolamento e severa vigilância da área, até que
+sejam eliminados todos os ricos à saúde de pessoas e animais, ao patrimônio a ao meio ambiente;
+
+II – dar ciência imediata do ocorrido às autoridades locais mobilizando todos os recursos
+necessários, inclusive por intermédio do órgão da defesa civil, do órgão de defesa do meio
+ambiente, das policias civil e militar, da corporação de bombeiros e hospitais.
+
+O fabricante do produto, o expedidor e o destinatário, em caso de emergência, prestarão apoio e
+darão os esclarecimentos que lhes forem solicitados pela ferrovia ou autoridades pública.
+
+
+
+CAPITULO IV – DOS DEVERES, OBRIGAÇÕES E RESPONSABILIDADES
+
+
+Seção I – Do Fabricante e do Importador
+
+O fabricante de vagões e equipamentos especialmente destinados ao transporte de produtos
+perigosos responderá pela sua qualidade e adequação aos fins a que se destinam.
+
+O fabricante (ou importador) do produto perigoso deverá:
+
+I – fornecer ao expedidor as especificações relativas à adequação do acondicionamento do produto
+e, quando for o caso, a relação do conjunto de equipamentos a que se refere o Art. 4º;
+
+II – fornecer ao expedidor as informações sobre as cautelas necessárias ao transporte e manuseio do
+produto, bem como ao preenchimento da Ficha de Emergência e a elaboração das instruções
+específicas;
+
+III – estabelecer, em conjunto com a ferrovia, as especificações e condições para limpeza e
+descontaminação de vagões e equipamentos;
+
+IV – prestar o apoio e as informações complementares que lhe forem solicitados pela ferrovia ou
+pelas autoridades públicas, em caso de emergência.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         Seção II – Do Expedidor e do Destinatário
+
+         O expedidor deverá:
+
+         a) fornecer à ferrovia os documentos exigíveis para o transporte de produtos perigosos, assumindo
+         responsabilidade pelo que declarar;
+
+         b) prestar à ferrovia, de conformidade com o fabricante do produto, todas as informações sobre o
+         produto perigoso a ser transportado, necessárias para a elaboração de instruções relativas às
+         medidas de segurança no transporte e para o atendimento a situações de emergência;
+
+         c) indicar, de conformidade com o fabricante, os principais riscos associados ao produto perigoso e
+         as providências essenciais a serem tomadas em caso de emergência.
+
+         d) exigir da ferrovia o emprego de rótulo de risco e painéis de segurança adequados aos produtos a
+         transportar, conforme disposto no Art. 8º;
+
+         e) entregar os produtos devidamente rotulados, etiquetados e marcados, no caso de carga
+         fracionada;
+
+         f) acordar com a ferrovia, caso está não os possua, o fornecimento de equipamentos específicos a
+         atender ás situações de emergência, com as devidas instruções para sua correta utilização;
+
+         g) fornecer à ferrovia, quando esta não os possua, os rótulos de risco e painéis de segurança para uso
+         em vagões ou equipamentos de propriedade do transportador, em caso de transporte eventual;
+
+         h) comprovar, junto à ferrovia, a realização de inspeções em vagões e equipamentos de sua
+         propriedade, previsto no § 3º, do Art. 3º.
+
+         O expedidor e o destinatário prestarão todo o apoio possível e darão os esclarecimentos necessários
+         que lhes forem solicitados pela ferrovia ou autoridades publica, em casos de emergência no
+         transporte de produtos perigosos.
+
+
+
+         Seção III – Da Ferrovia
+
+         Constituem deveres e obrigações da ferrovia:
+
+         I – garantir as condições de utilização, bem assim a adequação de seus vagões e equipamentos aos
+         produtos transportados;
+
+         II – verificar as condições de utilização e a adequação ao transporte de produtos perigosos dos
+         vagões e equipamentos, quando de propriedade de terceiro;
+
+         III – fazer acompanhar as operações de carga, descarga e baldeação, executadas pelo expedidor ou
+         destinatário em instalações da ferrovia, adotando as cautelas necessárias para prevenir riscos ao
+         meio ambiente, à saúde e à integridade física de seus prepostos;
+
+
+
+
+| 16 |
+                                                                                                       | 17 |
+
+
+
+
+                                                                                                        Informações Gerais
+IV – certificar-se de que o expedidor ou o destinatário da carga estão habilitados a executar as
+operações de sua movimentação em instalações próprias;
+
+V – observar a orientação do expedidor quanto à correta estiva da carga no vagão ou equipamento,
+sempre que, por acordo com o expedidor, tiver responsabilidade solidária ou exclusiva sobre as
+operações de carregamento e descarregamento;
+
+VI – providenciar para que o trem mantenha afixado em lugar visível os rótulos de risco e painéis de
+segurança específicos adequados aos produtos transportados e assegurar que os equipamentos
+necessários a situações de emergência estejam em condições de funcionamento adequadas;
+
+VII – instruir o pessoal envolvido na operação do transporte quanto à correta utilização dos
+equipamentos necessários ao atendimento a situações de emergência;
+
+VIII – zelar pela adequação profissional do pessoal envolvido nas operações de manuseio e de
+transporte, submetendo-o a exames de saúde periódicos;
+
+
+
+CAPITULO V – DA FISCALIZAÇÃO
+
+A fiscalização do cumprimento deste Regulamento, de suas normas e instruções complementares,
+será exercida pela Secretaria-Geral do Ministério dos Transportes cabendo-lhe:
+
+I – fixar a periodicidade com que as ferrovias deverão apresentar relatórios sobre o transporte e
+ocorrências;
+
+II – adotar as medidas adequadas para melhorar o nível de segurança nesse tipo de transporte;
+
+III – determinar, quando for o caso, providências para a apuração de responsabilidade nas
+ocorrências com produtos perigosos, garantindo às partes o direito de participação na apuração dos
+fatos.
+
+Caberá à ferrovia a fiscalização dos procedimentos operacionais de seu pessoal para assegurar o
+cumprimento dos dispositivos deste regulamento.
+
+
+
+CAPITULO VI – DAS DISPOSIÇÕES GERAIS
+
+Para a uniforme e generalizada aplicação deste Regulamento, o Ministério dos Transportes manterá
+cooperação com órgãos e entidades públicas ou privadas, mediante troca de experiência, consultas
+e execução de pesquisa, com a finalidade, inclusive, de complementação ou alteração deste
+Regulamento.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         Leis de crimes ambientais
+
+         O marco da história ambiental no Brasil ocorreu em 1981, com a primeira Lei, 6938/81, que
+         estabelecia a política nacional do meio ambiente e tinha por objetivo a preservação, melhoria e
+         recuperação da qualidade ambiental propícia à vida, visando assegurar, no País, condições ao
+         desenvolvimento socioeconômico, aos interesses da segurança nacional e à proteção da dignidade
+         da vida humana.
+
+         A segunda lei foi a 7347/85, que Disciplina a ação civil pública de responsabilidade por danos
+         causados ao meio ambiente, ao consumidor, a bens e direitos de valor artístico, estético, histórico,
+         turístico e dá outras providências.
+
+         Em 1988, a Constituição Federal incluiu o direito ambiental como direito fundamental do indivíduo,
+         dizendo:
+
+         “Todos têm direito ao meio ambiente ecologicamente equilibrado, bem de uso comum do povo e
+         essencial à sadia qualidade de vida, impondo-se ao poder publico e à coletividade o dever de
+         defendê-lo e preservá-lo para as presentes e futuras gerações.”
+
+         Em 1998 o Congresso nacional aprovou a Lei 9.605/98 que dispõe sobre as sanções penais e
+         administrativas derivadas de condutas e atividades lesivas ao meio ambiente e dá outras
+         providências.
+
+         As pessoas jurídicas serão responsabilizadas administrativas, civil e penalmente, conforme o
+         disposto nesta Lei, nos casos em que a infração seja cometida por decisão de seu representante legal
+                 Relembrando
+         ou contratual ou de seu órgão colegiado, no interesse ou beneficio da sua entidade.
+
+
+                                        A responsabilidade das pessoas jurídicas não exclui a das pessoas físicas,
+                                        autoras, coautoras ou participantes do mesmo fato.
+
+
+
+
+         As penas aplicáveis às pessoas jurídicas são:
+
+         I – multa;
+
+         II – restritivas de direito;
+
+         a) suspensão parcial ou total de atividades;
+
+         b) interdição temporária de estabelecimento, obra ou atividade;
+
+         c) proibição de contratar com o Poder Público ou obter dele subsídios, subvenções ou doações;
+
+                   Pesquisando
+
+
+
+
+                   Observando
+
+
+
+
+| 18 |
+                                                                                                    | 19 |
+
+
+
+
+                                                                                                     Informações Gerais
+III – prestação de serviços à comunidade;
+
+a) custeio de programas e de projetos ambientais;
+
+b) execução de obras de recuperação e de projetos ambientais;
+
+c) manutenção de espaços públicos;
+
+d) contribuições a entidades ambientais ou culturais públicas.
+
+Dos crimes contra o meio ambiente: fauna, flora, poluição e outros crimes ambientais.
+
+
+
+Resolução 420 / 2004
+
+As instruções que constituem esta Resolução têm o objetivo básico de complementar, esclarecer e
+aperfeiçoar a regulamentação do transporte terrestre de produtos perigosos e estão divididas nas
+sete partes a seguir.
+
+
+
+             1. Disposição geral e definições
+
+             2. Classificação
+
+             3. Relação de produtos perigosos e exceções para quantidades limitadas
+
+             4. Disposições relativas a embalagens e tanques
+
+             5. Procedimentos de expedição
+
+             6. Exigências para fabricação e ensaio de embalagens
+
+             7. Prescrições relativas às operações de transporte
+
+
+Inicialmente, apresentam-se as definições para as diversas classes e subclasses de produtos
+perigosos, recomendações gerais para o seu transporte por via terrestre e recomendações
+particulares para cada classe, bem como os cuidados a observar e as isenções admitidas para
+determinados produtos, além de disposições relativas aos métodos de embalagem.
+
+Fornece, ainda, orientação quanto à correta denominação do produto a ser transportado, no sentido
+de permitir uma uniformização das exigências regulamentares referentes à documentação e incluem
+critérios de classificação para produtos que não constem da relação de produto perigosos.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         Parte 2 - Capitulo 2 - Classificação e definição das classes de produtos perigosos
+
+         A classificação adotada para os produtos considerados perigosos é feita com base no tipo de risco
+         que apresentam e conforme as recomendações para o transporte de produto perigoso das nações
+         unidas, sétima edição revista em 1991.
+
+
+
+         Classes
+
+
+
+                                        1. Explosivo
+
+                                        2. Gases
+
+                                        3. Líquidos Inflamáveis
+
+                                        4. Sólidos Inflamáveis
+
+                                        5. Oxidantes e Peróxidos
+
+                                        6. Tóxicos e Infectantes
+
+                                        7.   Radioativos
+
+                                        8. Corrosivos
+
+                                        9. Substâncias perigosas diversas
+
+
+
+
+         Parte 3 - Capitulo 3.2 - Relação de produtos perigosos
+
+         Neste capitulo, são descritos os produtos reconhecidos como perigosos e números de risco
+         (códigos), podendo conter de 2 a 4 algarismos para informar quais riscos associados possui o
+         produto em questão.
+
+         Estão dispostos da seguinte forma e tabela:
+
+
+
+
+| 20 |
+                                                                                                       | 21 |
+
+
+
+
+                                                                                                        Informações Gerais
+TABELA 1.1: EXEMPLO DE TABELA DO GUIA DE EMERGÊNCIA ABIQUIM
+
+
+
+                   Nº ONU     Classe de risco   Subclasse   Nome do produto
+
+                   1203       3                 33          Combustíveis para motores inclusive
+                                                            gasolina
+                   1824       8                 88          Hidróxido de sódio, solução
+                   1017       2                 23          Cloro
+
+
+
+
+Parte 7 - Capitulo 7.1 - Prescrições gerais para o transporte de produto perigoso
+
+As prescrições, exceto as indicações contrárias, são aplicáveis ao transporte de produto de qualquer
+classe. Elas constituem as precauções mínimas que devem ser observadas para a prevenção de
+acidentes, bem como para restringir os efeitos de acidente ou emergência. Além destas, devem ser
+consultadas as disposições particulares aplicáveis a cada classe de produto.
+
+As unidades de transporte terrestres compreendem veículos de carga e veículos tanque, para o
+transporte rodoviário, vagões de carga e vagões tanque, para o transporte ferroviário, e os
+contêineres de carga e contêineres tanques, para o transporte multimodal.
+
+
+
+Parte 7 – Capitulo 7.2 - Prescrições particulares para cada classe de produto
+perigoso
+
+Além das recomendações contidas neste capitulo, devem ser observadas as prescrições particulares
+para as diferentes classes de produtos perigosos, baixadas pelas respectivas autoridades
+competentes, notadamente o regulamento do Ministério do Exército, em relação aos produtos
+explosivos, as resoluções da Comissão Nacional de Energia Nuclear, em relação a produtos
+radioativos e as disposições do Ministério da Saúde e do Meio Ambiente, quando se tratar de
+produtos tóxicos / infectantes e de resíduos.
+
+Para cada classe existe um tipo de veiculo, equipamento e prescrições de serviço a se executar.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 22 |
+                                                                                                   | 23 |
+
+
+
+
+                                                                                                    Ficha de informação de segurança do produto químico - FISPQ
+Ficha de informação de
+segurança do produto
+químico - FISPQ
+
+FICHA DE INFORMAÇÃO DE SEGURANÇA DO PRODUTO QUÍMICO – FISPQ
+
+Documento não obrigatório para o transporte, fornecida pelo fabricante, contém todas as
+informações a respeito do produto, tais como:
+
+   >>identificação do produto;
+   >>composição e informações sobre os ingredientes;
+   >>identificação de perigo;
+   >>medidas de primeiros socorros;
+   >>medidas de combate a incêndio;
+   >>medidas de controle para derramamento ou vazamento;
+   >>manuseio e armazenagem;
+   >>controle e exposição e proteção individual;
+   >>propriedades físico–químicas;
+   >>estabilidade e reatividade;
+   >>informações toxicológicas;
+   >>informações para transporte.
+
+A FISPQ não é confidencial, é usada em programas de saúde e segurança do trabalho e o fabricante
+deve atualizá-la sempre que houver alguma alteração no produto.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 24 |
+                                                                                                     | 25 |
+
+
+
+
+                                                                                                      Movimentação e transporte de produtos perigosos
+Movimentação e
+transporte de produtos
+perigosos
+
+Introdução
+          Relembrandoe manusearem produtos perigosos com segurança, os profissionais envolvidos
+Para transportarem
+devem conhecer tudo sobre os assuntos técnicos e, principalmente, ter consciência de que é preciso
+utilizar constantemente estes conhecimentos, aplicando-os no dia a dia, pois essas atividades
+exigem extrema responsabilidade, envolvem muitas empresas, entidades e indivíduos e só devem
+ser exercidas por pessoas treinadas e capacitadas.
+
+Entre as numerosas cargas transportadas e manuseadas todos os dias pelo Brasil, muitas pertencem
+à categoria de cargas perigosas ou cargas com produtos perigosos. Muitos desses produtos
+oferecem riscos à saúde das pessoas, ao meio ambiente e ao patrimônio, podendo resultar em
+graves prejuízos aos envolvidos em acidentes que ocorrem no transporte ou manuseio.
+
+
+
+TRANSPORTE DE PRODUTOS PERIGOSOS
+
+                          Transporte de produtos perigosos é o deslocamento de uma carga
+                          perigosa de um ponto a outro, com sucesso, no qual são utilizados todos
+                          os cuidados e técnicas necessárias.
+
+
+        Pesquisando
+São componentes principais para o transporte terrestre de uma carga com produtos perigosos:
+
+   >>o veículo, seus equipamentos e acessórios;
+        Observando
+
+   >>a carga e suas particularidades - tipo, embalagem, rótulos etc.;
+   >>as operações de carga e descarga e as pessoas envolvidas nestas operações;
+   >>a condução do veículo;
+   >>as vias, os estacionamentos e os locais por onde a carga irá passar.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         MOVIMENTAÇÃO DE PRODUTOS PERIGOSOS
+
+                                   Movimentação de produtos perigosos é toda e qualquer operação
+                                   necessária para transportar o produto perigoso – por exemplo, carga,
+                                   descarga, transbordo, manobra, condução etc.
+
+
+                 Pesquisando
+         Alguns cuidados devem ser observados quando da movimentação de produtos perigosos, tais como:
+         embalagens, tambores e contêineres que devem ser fabricados com materiais próprios para resistir à
+         corrosão de produtos que embalarão.
+                 Observando
+         Frascos galões e tambores são geralmente acondicionados individualmente dentro de engradados,
+         para evitar contato entre as embalagens. Toda e qualquer movimentação deve ser feita com muito
+         cuidado, obedecendo às instruções do fabricante e do expedidor.
+
+
+
+         POR QUE CONHECER OS PRODUTOS PERIGOSOS?
+
+         Para efetuar com segurança todas as movimentações e operações, é preciso conhecer mais sobre os
+         produtos perigosos, começando por algumas de suas propriedades físicas e químicas, tornando mais
+         fácil entender a origem e mecânica de certos fenômenos.
+
+         Todas as substâncias que estão à nossa volta são constituídas de matéria, se apresentando em
+         diferentes estados físicos: líquido, sólido e gasoso. É interessante saber que a matéria pode mudar de
+         um estado físico para outro, contribuindo para que o produto seja mais ou menos perigoso. Por
+         exemplo, o óleo diesel no estado líquido, apesar de inflamável, representa pouco perigo porque sua
+         queima é lenta, já um tambor ou tanque de óleo vazio, cheio de vapores, é extremamente explosivo.
+
+         Entender os fenômenos físicos ajuda a compreender melhor a matéria, porém, o que torna os
+         produtos extremamente perigosos são os fenômenos químicos, ou reações químicas, e estas são
+         irreversíveis.
+
+         Por exemplo, o ácido clorídrico (HCl), que, sozinho, é violentamente corrosivo, reage em partes iguais
+         com a soda cáustica (NaOH), que também é corrosiva, formando o inofensivo sal de cozinha (NaCl).
+
+
+
+         REAÇÕES QUÍMICAS INDESEJÁVEIS
+
+         No transporte de produtos perigosos, a prevenção consiste em não deixar que o produto saia da sua
+         embalagem ou compartimento, nem permitir que ele seja exposto a outras substâncias ou
+         condições, evitando-se, assim, que possam iniciar reações químicas indesejáveis.
+
+         O perigo maior consiste em acidentes, que podem expor ou misturar produtos perigosos,
+         permitindo seu contato com pessoas, substâncias e o meio ambiente, possibilitando o início de
+         reações químicas geralmente desastrosas.
+
+         São muitos os produtos perigosos, alguns têm características comuns entre si e são agrupados para
+         facilitar o estudo, a identificação e a padronização de medidas de segurança e em casos de
+         emergência.
+
+
+
+
+| 26 |
+| 27 |
+
+
+
+
+         Movimentação e transporte de produtos perigosos
+ Módulo II
+ SIMBOLOGIA E CLASSES DE RISCO
+
+
+
+
+Neste módulo, você estudará a simbologia e a classe de riscos aplicadas aos produtos perigosos.
+
+Depois de estudar este módulo, você estará apto a:
+
+   >>reconhecer os símbolos aplicáveis aos produtos perigosos;
+   >>identificar as classes em que se enquadram os produtos perigosos;
+   >>reconhecer a função e as informações disponíveis nos rótulos e painéis de segurança.
+                                                                                                   | 29 |
+
+
+
+
+                                                                                                    Painel sinóptico EFVM
+Classes e rótulos de risco
+
+Todo veículo, para transportar Produtos Perigosos, seja um caminhão ou vagão de trem, deve
+utilizar as duas placas de identificação, que são os Rótulos de Risco e os Painéis de Segurança.
+
+
+
+CLASSE 01 – EXPLOSIVOS
+
+
+
+
+CLASSE 02 – GASES
+
+
+
+
+CLASSE 3 – LÍQUIDOS INFLAMÁVEIS
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         CLASSE 4 – SÓLIDOS INFLAMÁVEIS
+
+
+
+
+         CLASSE 5 – SUBSTÂNCIAS OXIDANTES - PERÓXIDOS ORGÂNICOS
+
+
+
+
+         CLASSE 6 – SUBSTÂNCIAS TÓXICAS E INFECTANTES
+
+
+
+
+| 30 |
+                                            | 31 |
+
+
+
+
+                                             Painel sinóptico EFVM
+CLASSE 7 – SUBSTÂNCIAS RADIOATIVAS
+
+
+
+
+CLASSE 8 – SUBSTÂNCIAS CORROSIVAS
+
+
+
+
+CLASSE 9 – SUBSTÂNCIAS PERIGOSAS DIVERSAS
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 32 |
+  Relembrando
+
+                                                                                      | 33 |
+
+
+
+
+                                                                                       Painel de segurança
+Painel de segurança
+
+                O Painel de Segurança serve para informar qual é o produto que está
+                sendo transportado e informa, também, quais riscos estão envolvidos
+                naquele produto especifico.
+
+
+  Pesquisando
+
+
+
+
+  Observando
+ Módulo III
+ PREVENÇÃO E COMBATE A
+ INCÊNDIOS
+
+
+
+
+Neste módulo, você conhecerá os elementos envolvidos no trabalho de prevenção e combate a
+incêndios e suas características.
+
+Aprenderá, também, as classes de incêndios, suas causas, formas de propagação, procedimentos de
+prevenção, métodos de controle e extinção, aparelhos de combate e agentes extintores.
+
+Depois de estudar este módulo, você estará apto a:
+
+   >>definir fogo e calor e descrever suas características;
+   >>descrever os efeitos do calor sobre os combustíveis;
+   >>classificar os incêndios;
+   >>identificar as causas dos incêndios;
+   >>descrever as formas de propagação dos incêndios;
+   >>descrever os procedimentos de prevenção e os métodos de controle e extinção dos incêndios;
+   >>identificar os aparelhos de combate e os agentes extintores de incêndios;
+   >>aplicar os agentes exetintores de incêndios.
+                                                                                                     | 35 |
+
+
+
+
+                                                                                                      Introdução
+Introdução
+
+
+Incêndios, devido às suas consequências altamente destrutivas, é uma constante preocupação do
+ser humano. Apesar do grande avanço das técnicas de combate ao fogo e da organização de
+entidades especializadas como o Corpo de Bombeiros, somente estaremos protegidos contra
+incêndios se houver uma correta prevenção.
+
+Este módulo contém os conhecimentos gerais sobre o fogo, prevenção e combate a incêndios.
+
+Todos os incêndios são perigosos, os que envolvem cargas perigosas ou cargas com produtos
+perigosos são muito mais destrutivos. Somente com conhecimento é possível preveni-los ou
+combatê-los corretamente, utilizando técnicas para minimizar riscos à vida e à saúde das pessoas e
+animais, danos ao meio ambiente e prejuízos materiais.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 36 |
+                                                                                                  | 37 |
+
+
+
+
+                                                                                                   O fogo
+       Relembrando
+
+
+
+
+O fogo
+
+O Fogo é nosso velho conhecido, seu uso controlado tem prestado bons serviços à humanidade,
+sendo responsável por boa parte do nosso progresso.
+
+
+                        O Fogo é uma reação química chamada de combustão, na qual o
+                        combustível reage com o oxigênio liberando luz e calor. Para que exista
+                        o fogo são necessários três elementos: combustível (sólido, líquido ou
+                        gasoso) - é tudo que queima; oxigênio ou comburente e calor. Estes três
+                        elementos juntos dão o nome de triângulo do fogo e sem um destes
+        Pesquisando
+                        elementos não haverá fogo.
+
+
+
+        Observando
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 38 |
+                                                                                                    | 39 |
+
+
+
+
+                                                                                                     O calor
+O calor Relembrando
+
+
+
+
+        Relembrando
+
+
+
+Conhecer mais sobre o calor e suas formas de propagação é bastante útil para prevenir incêndios,
+         Relembrando
+pois o calor excessivo é uma das principais fontes de ignição.
+        Relembrando
+                         Manter afastadas as fontes de ignição é uma das melhores formas de
+                         prevenção.
+
+
+
+        Relembrando      Propagação é a propriedade que o calor tem de se transmitir através do
+                         ar e de certos materiais. Os metais são bons condutores de calor, outros
+                         materiais são maus condutores de calor, como o isopor, e podem ser
+                         usados, inclusive, como isolantes térmicos.
+        Pesquisando
+                         Condução é o modo de propagação do calor dentro de um mesmo
+                         corpo, ou de um corpo para outro, por contato direto. Exemplo: se um
+                         tanque de combustível for envolvido em fogo, o calor se propagara para
+        Observando
+                         o líquido no seu interior.
+        Pesquisando
+                         Convecção é modo de propagação do calor em que as partes quentes
+                         sobem e as frias descem, formando correntes térmicas. Acontece com
+                         gazes e líquidos. Exemplo: o calor da chama de uma vela desloca-se
+        Observando
+        Pesquisando      diretamente para cima. Um balão com ar quente sobe.
+        Pesquisando
+
+                         Irradiação é o modo de propagação em que o calor é transmitido a
+        Observando
+                         distância, através do ar e do espaço, por ondas eletromagnéticas (raios
+        Observando       infravermelhos). Exemplo: o calor do Sol sobre a nossa pele, o calor de
+                         uma lâmpada sobre a folha de papel, forno de micro-ondas etc.
+        Pesquisando
+
+
+
+
+        Observando
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 40 |
+                                                                                                   | 41 |
+
+
+
+
+                                                                                                    Efeito do calor sobre os combustíveis
+Efeitos do calor sobre os
+combustíveis
+Vimos que o calor, em presença de oxigênio, pode desencadear a queima de combustíveis ou
+materiais inflamáveis.
+
+Mas quanto calor é necessário para fazer um material queimar?
+
+Depende do tipo de combustível - existem materiais que só queimam em altas temperaturas, porém
+existem materiais que podem queimar mesmo a baixas temperaturas.
+        Relembrando
+        Relembrando
+
+
+                         Alguns combustíveis são altamente inflamáveis, mesmo a temperatura
+                         ambiente. Quanto maior a temperatura ou o calor a que um combustível
+                         é exposto, mais perigoso ele se torna.
+        Relembrando
+
+Para sabermos as temperaturas criticas dos combustíveis precisamos conhecer alguns conceitos:
+
+   >>Ponto de Fulgor;
+   >>Ponto de Combustão ou Inflamação;
+        Relembrando
+   >>Ponto de Ignição.
+
+                         Ponto de Fulgor é a menor temperatura em que um combustível exposto
+                         ao calor começa a liberar vapores ou gazes inflamáveis. Exemplos:
+                         gasolina – 42º Celsius; madeira - 150º Celsius; asfalto - 240º Celsius.
+
+        Pesquisando
+        Pesquisando
+                         Ponto de Combustão ou Inflamação - a partir do ponto de fulgor, a
+                         quantidade de vapores ou gazes que se desprendem do material
+                         aumentará; bastará aproximarmos uma chama e o fogo se inicia
+        Observando       imediatamente. Exemplo: a gasolina na temperatura ambiente está
+        Observando
+                         desprendendo vapores ou gazes inflamáveis, bastará uma fagulha ou
+        Pesquisando
+                         uma fonte de calor para fazê-la se inflamar.
+
+
+                         Ponto de Ignição - se a temperatura à qual um material estiver exposto
+        Observando
+                         continuar subindo, atingirá um ponto onde o material inflamável pegará
+                         fogo pelo simples contato com o oxigênio. A temperatura de Ignição,
+                         assim como a de Fulgor, varia de um produto para outro.
+        Pesquisando
+
+
+
+
+        Observando
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 42 |
+                                                                                                      | 43 |
+        Relembrando
+
+
+
+
+                                                                                                       Incêndios
+Incêndios
+
+
+                          Incêndio é a ocorrência na qual objetos ou bens pegam fogo de forma
+                          indesejável, desnecessária, geralmente onde falha a prevenção.
+
+
+        Pesquisando
+
+
+CLASSES DE INCÊNDIO
+        Observando
+Existem várias classes de incêndio, a diferença entre cada uma delas está, basicamente, no tipo de
+combustível que alimenta cada classe. Veja, a seguir, as quatro principais classes.
+
+   >>Classe A - incêndio em materiais sólidos cuja queima deixa resíduos, ocorrendo em superfície e
+      em profundidade, como madeira, papel, tecidos, borracha.
+
+   >>Classe B - incêndio em líquidos e gases cuja queima não deixa resíduos e ocorre apenas na
+      superfície, como a gasolina, o álcool, o GLP (gás liquefeito de petróleo).
+
+   >>Classe C - incêndio que envolva materiais condutores que estejam potencialmente conduzindo
+      corrente elétrica. Neste caso o agente extintor não pode ser um condutor para não eletrocutar
+      o operador.
+
+   >>Classe D - incêndio que envolva metais pirofóricos, como por exemplo potássio, alumínio,
+      zinco ou titânio.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         CAUSAS DO INCÊNDIO
+
+
+                                     Causa é o fator ou conjunto de fatores que provocam um inicio de
+                                     incêndio.
+
+
+         As causas de um incêndio podem ser:
+                 Pesquisando
+
+            >>naturais - provocadas por fenômenos como raios, vulcões, vendavais, terremotos etc.;
+            >>provocadas pelo homem - acidentais e criminosos acidentais, provocados, principalmente,
+                Observando
+               quando há falhas de segurança.
+
+
+
+         Incêndios criminosos:
+
+            >>culposos - provocados sem intenção de causar dano;
+            >>dolosos - provocados com intenção de causar o dano.
+
+         PROPAGAÇÃO DE INCÊNDIO
+
+         Devemos ter em mente que todo incêndio começa pequeno, num ponto chamado de foco inicial do
+         incêndio. É a partir deste foco inicial que o fogo irá se propagar.
+
+         É importante saber como o fogo se propaga e quais os fatores que facilitam ou dificultam sua
+         propagação. Veja as formas de propagação.
+
+
+                                                   FORMAS DE PROPAGAÇÃO DE INCÊNDIO
+                            Direta                        É a propagação do fogo pelo contato direto da chama
+                                                          com materiais inflamáveis.
+
+                            Pelo calor                    O calor aquece áreas próximas e estas, uma vez
+                                                          superaquecidas, propagam o fogo adiante.
+                            Por fagulhas                  O material incendiado solta fagulhas incandescentes,
+                                                          que caem sobre outros materiais inflamáveis.
+                            Ventos e correntes de ar      O vento pode agir de forma diferente sobre o fogo. Se
+                                                          assoprarmos uma vela, a chama se apagará; isto ocorre
+                                                          porque a chama é pequena e o forte jato de ar do sopro
+                                                          ira deslocá-la para longe do combustível (parafina).
+                                                          Havendo chamas mais fortes, a corrente de ar
+                                                          provavelmente servirá para avivá-las, acelerando a
+                                                          combustão; isto ocorre porque, com a corrente de ar,
+                                                          haverá disponibilidade maior de oxigênio.
+                                                          Além disso, o fogo se deslocará junto com a corrente
+                                                          de ar, na mesma direção do vento; portanto, o vento
+                                                          facilita a propagação do fogo e acelera a combustão.
+
+
+
+
+| 44 |
+                                                                                                       | 45 |
+
+
+
+
+                                                                                                        Incêndios
+PREVENÇÃO DE INCÊNDIO
+
+                          Prevenção é o conjunto de medidas que são adotadas para evitar que os
+                          incêndios aconteçam. Todas as pessoas, sem exceção, devem conhecer e
+        Relembrando       praticar as medidas de prevenção.
+
+        Pesquisando
+                          O profissional de transporte de produtos perigosos deve conhecer estes
+                          procedimentos a fundo e praticar a prevenção, porque disso poderá
+                          depender sua vida e a de outras pessoas.
+        Observando
+
+De maneira geral, prevenir incêndios é tentar manter ausente um dos três elementos do triângulo
+do fogo: combustível, oxigênio e fonte de ignição.
+
+Dois dos elementos geralmente estão presentes à nossa volta e fazem parte do nosso dia a dia: o
+combustível (madeira, papéis, tecidos etc.) e o comburente (oxigênio do ar). Neste caso, a prevenção
+maior consiste em manter afastadas as fontes de ignição (calor).
+
+As fontes de ignição - equipamentos elétricos, fogareiros, objetos que possam produzir faíscas,
+pontas de  cigarro etc., devem ser manuseadas e controladas com responsabilidade e cuidado.
+        Relembrando
+
+
+No caso de combustíveis altamente inflamáveis, o melhor procedimento é mantê-los isolados dentro
+de seus recipientes de armazenamento, fazendo a correta manutenção para evitar danos e
+mantendo   afastadas quaisquer fontes de calor.
+         Pesquisando
+
+
+
+MÉTODOS  DE CONTROLE E EXTINÇÃO
+     Observando
+        Relembrando
+        Relembrando
+
+                          Os métodos de extinção visam retirar um ou mais componentes do
+                          triângulo do fogo: o combustível, o comburente ou o calor.
+
+
+
+
+                          Resfriamento é a tentativa de controlar ou extinguir um incêndio
+                          retirando ou reduzindo o calor.
+
+
+        Pesquisando
+Ao jogarmos  água em um incêndio, estaremos retirando o componente calor. Resfriamento é um
+método bastante empregado no combate a incêndios. A aplicação de jatos de água pressurizada ou
+nebulizada tem ótimo poder de resfriamento.
+        Observando
+
+                          Abafamento é a tentativa de extinguir um incêndio diminuindo a
+                          quantidade de oxigênio disponível para a queima, abafando com
+                          cobertores, areia, tampas ou extintores específicos, como os de pó
+        Pesquisando
+                          químico.
+        Pesquisando
+
+
+
+        Observando
+        Observando
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         Por exemplo, o fogo na roupa de uma pessoa pode ser combatido abafando-se com cobertor, pano
+         ou toalha. Se não houver, a pessoa deverá rolar no solo, abafando as chamas contra o piso.
+
+
+                                    Isolamento - ao afastar ou isolar produtos inflamáveis que ainda não
+                                    queimaram, estaremos limitando o incêndio, evitando a sua propagação.
+
+
+                    Pesquisando
+         Por exemplo, pode-se afastar um objeto que está queimando, colocando-o sobre um piso de
+         cimento ou cerâmica, onde o fogo se extinguirá. Em incêndios florestais é costume isolar a área
+         incendiada, construindo faixas de isolamento (aceiros), de onde é removida toda a vegetação, para
+                 Observando
+         que o fogo não se propague para outras áreas.
+
+
+
+         APARELHOS DE COMBATE A INCÊNDIOS
+
+         Vários aparelhos e equipamentos são utilizados para combater incêndios ou facilitar seu combate.
+         Veja os mais conhecidos.
+
+            >>Hidrantes de rua: são grandes registros instalados em locais estratégicos nas cidades, ligados
+               à rede pública de água. Neles podem ser conectadas mangueiras e outros equipamentos de
+               combate a incêndios, além de servir para abastecer caminhões tanque utilizados no combate
+               a incêndios.
+
+            >>Hidrantes de parede: são equipamentos obrigatórios em edifícios, instalados em locais de fácil
+               acesso. Dentro possuem registros ligados a uma rede independente de água. São constituídos
+               de mangueiras, chaves e bicos. Deve o usuário, no momento de combater o fogo, desenrolar a
+               mangueira e conectá-la ao registro, abrindo lentamente a vazão da água.
+
+            >>Veículos: são veículos de fabricação especial, exclusivamente projetados para esta finalidade,
+               utilizados por grupos especiais de combate a incêndios, como o Corpo de Bombeiros. Estas
+               unidades também são utilizadas em reservas florestais e em rodovias privatizadas, pelas
+               empresas concessionárias.
+
+            >>Aspersores: também conhecidos como “SPRINKLER” ou ‘WATER FROGS”, são dispositivos para
+               aspergir água ou neblina no interior de edificações. Instalados, geralmente, no teto, são
+               conectados a uma rede independente de água. Alguns modelos são acionados e começam a
+               aspergir automaticamente, comandados por sensores que detectam aumento de temperatura
+               ou presença de fumaça.
+
+            >>Extintores: são aparelhos, geralmente, portáteis, cujo peso variam de 1 até 23 kg, dependo do
+               modelo, sendo que existem outros sobre rodas cujo peso pode variar de 20 a 118 kg. São
+               utilizados para combater princípios de incêndio e se classificam em função dos agentes
+               extintores utilizados:
+
+               >>      extintor de água pressurizada;
+               >>      extintor de água com pressão injetada;
+
+
+
+
+| 46 |
+                                                                                                         | 47 |
+
+
+
+
+                                                                                                          Incêndios
+      >>       extintor de pó químico seco pressurizado;
+      >>       extintor de pó químico seco com pressão injetada;
+      >>       extintor de gás carbônico;
+      >>       extintor de espuma mecânica.
+
+
+Um extintor de incêndio geralmente é formado pelas partes a seguir.
+
+
+
+
+           Relembrando
+
+
+
+
+AGENTES EXTINTORES
+
+                            São as substâncias contidas no interior do cilindro do extintor, que serão
+                            utilizadas para combater o principio de incêndio.
+
+
+           Pesquisando
+Existem muitas substâncias com as quais o fogo não tem afinidade. O agente extintor mais utilizado
+e mais conhecido é a água, mas existem outros, mesmo porque, para alguns tipos de incêndios, a
+água é contra indicada. Exemplos: água em jato, nas formas sólida e pulverizada.
+           Observando
+   >>Líquidos voláteis: tetracloreto de carbono; clorobrometano; brometo de metila.
+   >>Espuma química e mecânica.
+   >>Pós químicos: talco, sulfato de alumínio, grafite, bicarbonato de sódio.
+   >>Líquidos umectantes: água com aditivos penetrantes
+
+APLICAÇÃO DOS EXTINTORES
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         Os extintores tendem a ser mais eficientes no inicio do incêndio. Devido ao volume de carga
+         relativamente pequeno e esvaziamento rápido, não é possível combater um incêndio de grandes
+         proporções apenas com pequenos extintores.
+
+         É fundamental que se conheça a classificação dos extintores, de acordo com tipo de incêndio. A
+         aplicação do extintor de tipo incorreto em determinada situação poderá trazer sérias consequências.
+
+         O rótulo do extintor sempre informará o tipo e a classe de incêndio a que se destina.
+
+
+
+         Extintor de água – resfriamento
+
+            >>Ótimo resultado para materiais “A”.
+            >>Contraindicado para materiais classe “B” e “C”.
+
+         Extintor de pó químico seco – abafamento
+
+            >>Ótimo resultado para classes “B” e “C”.
+            >>Pouca eficiência para classe “A”.
+            >>Sem contraindicação.
+
+         Extintor de gás carbônico – abafamento
+
+            >>Ótimo resultado para classes “B” e “C”.
+            >>Pouca eficiência para classe “A”.
+            >>Sem contraindicação.
+
+         É muito importante que, antes de iniciar seu dia de trabalho, você verifique as condições dos
+         extintores em sua área de trabalho. Devem-se observar itens como o lacre, o manômetro e a
+         validade da carga; alguma irregularidade nestes itens pode ocasionar o mau uso do extintor na hora
+         necessária.
+
+
+
+
+| 48 |
+| 49 |
+
+
+
+
+         Incêndios
+         VALER - EDUCAÇÃO VALE
+
+
+
+          Módulo IV
+          RELAÇÃO DE PRODUTOS TRANSPORTADOS,
+          FORMAS DE CONTRATAÇÃO DE PRODUTOS
+          PERIGOSOS E PLANO DE EMERGÊNCIA
+
+
+
+
+         Neste módulo, você conhecerá a relação dos produtos perigosos, os procedimentos e instrumentos
+         usados na contratação desses produtos, as características do Plano de Emergência, as bases de
+         emergência da ferrovia e os equipamentos de emergência e de proteção individual.
+
+         Depois de estudar este módulo, você estará apto a:
+
+            >>identificar a relação de produtos perigosos;
+            >>reconhecer as formas de contratação de produtos perigosos e os instrumentos usados;
+            >>descrever as características do plano de emergência;
+            >>identificar as bases de emergência da ferrovia;
+            >>identificar os equipamentos de emergência;
+            >>identificar os equipamentos de proteção individual.
+
+
+
+
+| 50 |
+                                   | 51 |
+
+
+
+
+                                    Relação de produtos transportados
+Relação de produtos
+transportados
+
+     PRODUTO               ONU
+
+     Álcool                1170
+     Gasolina              1203
+     Óleo Diesel           1202
+     Alcatrões             1999
+     Isobutanol            1212
+     Octanos               1262
+     Butanol               1120
+     Metanol               1230
+     Paraxileno            1307
+     Tolueno               1294
+     GPL                   1075
+     Fertilizantes         1043
+     Carvão Vegetal        1361
+     Carvão Coque          N.C.
+     Enxofre               1350
+     Cianeto de Sódio      1689
+     Anidro Ftálico        1829
+     Soda Cáustica         1824
+     LAS Ácido Sulfônico   2584
+     Óleo Combustível      3082
+     Peróxido Hidrogênio   2014
+     Peróxido Hidrogênio   2015
+     Amônia                3318
+     LAB                   N.C .
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 52 |
+                                                                                  | 53 |
+
+
+
+
+                                                                                   Console do operador
+Formas de contratação de
+produtos perigosos
+Neste item vamos verificar como se realiza o contrato entre a Vale e o Cliente.
+
+
+
+
+                    FIGURA 4.1: FORMULÁRIO PARA ESTUDO DE TRANSPORTE GERAL
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         Questionário Básico para o Transporte de Produtos Perigosos
+
+
+
+         1- ESCOPO DOS SERVIÇOS
+
+         a) Nome do produto a ser transportado:
+
+         b) Ficha de segurança e de Emergência do produto:
+
+         c) Estado Físico do produto (gás, líquido ou sólido):
+
+         d) Rota de Ida e Volta (Origem/Destino)
+
+         e) Volume a ser transportado:
+
+         f) Frequência do transporte:
+
+         g) Ciclo do transporte:
+
+         h) Tamanho da composição:
+
+         i) Tipo de composição – exclusiva ou combinada com outras cargas:
+
+         j) Responsabilidade pelo carregamento e descarregamento do produto:
+
+         k) Auxiliar a possibilidade do uso de trechos de terceiros durante o transporte (p. ex. Ferroban):
+
+         l) Propriedade dos vagões (ferrovia ou cliente):
+
+         m) Avaliar a existência de procedimentos de inspeção e manutenção dos vagões:
+
+         n) Quais os recursos hoje em uso para o atendimento às emergências com produtos perigosos?
+
+
+
+         2- CONTRATO
+
+         a) Já existe algum compromisso assumido pela ferrovia junto ao cliente?
+
+         b) O início do transporte está condicionado à obtenção de licenças dos órgãos ambientais
+         competentes?
+
+         c) O contrato prevê cláusulas de meio ambiente e segurança? Se afirmativo, quais?
+
+         OBS: A análise crítica do contrato, realizada pela área comercial, deve contemplar a avaliação
+         do atual Plano de Gerenciamento de Riscos da Ferrovia, como forma de subsidiar o processo
+         de venda.
+
+
+
+
+| 54 |
+                                                                                                      | 55 |
+
+
+
+
+                                                                                                       Plano de emergência
+Plano de emergência
+
+OBJETIVO
+
+Esse Plano tem como finalidade estabelecer procedimentos técnicos e administrativos a serem
+adotados em situações emergenciais que, eventualmente, possam ocorrer na movimentação de
+Produtos Perigosos ou não. O Plano abordara critérios para minimizar as consequências, abordando
+temas de segurança, controle de vazamento, aspectos ambientais etc. Informar, esclarecer e reforçar
+os procedimentos corretos a serem tomados em casos de emergências diversas, envolvendo
+produto perigoso ou não, seguindo as características descritas a seguir.
+
+a) Prover recursos e informações o mais rápido possível para melhor o desempenho das ações
+emergenciais.
+
+b) Preservação da integridade física da comunidade, do meio ambiente e do patrimônio.
+
+c) Minimizar os efeitos da ocorrência, no aspecto pessoal, ambiental e material.
+
+d) Informar autoridades, expedidor, transportadora, destinatário e seguradora, sobre a ocorrência.
+
+
+
+ATRIBUIÇÕES
+
+Num Plano de Emergência todos os funcionários envolvidos, diretamente ou não, na ocorrência
+receberão tarefas a serem executadas. No caso de acidentes envolvendo os trens, a Equipagem terá
+as seguintes tarefas a serem executadas:
+
+a) equipar-se com os EPI’s disponíveis nas locomotivas (KIT);
+
+b) dirigir-se ao local do acidente, respeitando a direção do vento;
+
+c) observar a situação do local quanto à existência de fogo ou vazamento; qual o tamanho da área
+atingida; tipo de área atingida; quantos vagões foram envolvidos; local exato da ocorrência; outras
+observações;
+
+d) se possível, isolar o local e alguma ação para não agravar a situação do local; fazer diques de
+contenção; apagar pequenos focos de incêndio; outras ações;
+
+e) efetuar o acionamento ao CCO ou estação mais próxima pelo meio mais rápido - via auto track, via
+celular, via rádio. Só executar estas tarefas se a sua segurança não estiver comprometida.
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+         FORMAÇÃO DA BRIGADA DE EMERGÊNCIA
+
+         Após a comunicação por parte da Equipagem, será acionada a Brigada de Emergência. Essas
+         brigadas estão estabelecidas em cidades estratégicas e darão todo o atendimento para a ocorrência.
+
+         As Brigadas de Emergência são compostas da seguinte forma:
+
+
+
+
+| 56 |
+                                                                                                    | 57 |
+
+
+
+
+                                                                                                     Equipamentos de emergência
+Equipamentos de
+emergência
+TABELA 4.2: EQUIPAMENTOS DE EMERGÊNCIA
+
+
+          MATERIAIS/EQUIPAMENTOS                         Unidade              Quantidade por base
+
+          Mepoxab                                          litro                    2.000
+          Pet sorb                                  Saco de 56,6 litros               4
+          Barreiras absorventes                Saco com 4 peças (20 x 30cm)           48
+          Barreiras de contenção                          Metro                       60
+          Barreiras de contenção                          Metro                       60
+          Big bags                                      Unidade                       50
+          Mantas absorventes para petróleo e      Caixa com 50 unidades               10
+          seus derivados
+          Mantas absorventes para líquidos        Caixa com 50 unidades               5
+          agressivos
+          Massa Veda Fuga                             Galões de 10 l                  5
+          Bomba e4m aço inox à prova de                 Unidade                       1
+          explosão
+          Skimmer                                       Unidade                       1
+          Baldes                                        Unidade                       10
+          Tambores                                      Unidade                       20
+          Tanques infláveis                             Unidade                       2
+          Pá                                            Unidade                       5
+          Tubos de PVC                                 Tubo de 6m                     2
+          Lanternas à prova de explosão                 Unidade                       2
+          Pilhas para lanterna                          Unidade                       4
+          Tenda desmontável                             Unidade                       1
+          Mesa dobrável                                 Unidade                       1
+          Cadeiras dobráveis                            Unidade                       8
+          Fita Zebrada                                     Rolo                       5
+          Lona Preta                                       Rolo                       2
+          Corda                                           Metro                      100
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 58 |
+                                                                                              | 59 |
+
+
+
+
+                                                                                               Equipamentos de proteção individual
+Equipamentos de proteção
+individual
+Embora os equipamentos e EPI’s disponíveis nas bases sejam apropriados para o atendimento a
+emergências, dependendo do tipo do acidente pode ser que haja necessidade de equipamentos e
+EPI’s mais específicos.
+
+TABELA 4.3: EQUIPAMENTOS DE PROTEÇÃO INDIVIDUAL
+
+
+
+       MATERIAIS/EQUIPAMENTOS                     Unidade             Quantidade por base
+
+       Máscaras faciais                           Unidade                     20
+       Filtro para vapores orgânicos e ácidos     Unidade                     20
+       Macacão de PVC                             Unidade                     10
+       Luva de Couro em Raspa                       Par                       10
+       Capacetes                                  Unidade                     10
+       Óculos de segurança                        Unidade                     10
+       Respirador                                 Unidade                     20
+       Respirador facial com filtro químico       Unidade                     20
+       Luva de Vaqueta                              Par                       10
+       Luva de segurança                            Par                       10
+       Óculos de segurança para respingos         Unidade                     10
+       Colete salva-vidas                         Unidade                     6
+         VALER - EDUCAÇÃO VALE
+
+
+
+
+| 60 |
+                                                  VALER - EDUCAÇÃO VALE
+
+
+
+
+MENSAGEM DE DIREITOS AUTORAIS: É PROIBIDA A DUPLICAÇÃO OU REPRODUÇÃO DESTE MATERIAL,
+OU PARTE DO MESMO, SOB QUALQUER MEIO, SEM AUTORIZAÇÃO EXPRESSA DA VALE.
+

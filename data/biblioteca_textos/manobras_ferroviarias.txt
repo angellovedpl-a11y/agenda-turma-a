@@ -1,0 +1,2253 @@
+Trilha Técnica
+de Operação
+Ferroviária
+
+
+
+
+Manobras
+Ferroviárias
+
+
+
+
+valer - educação vale
+2
+Trilha Técnica
+de Operação
+Ferroviária
+
+
+
+
+Manobras
+Ferroviárias
+
+
+
+
+valer - educação vale
+Conteúdo
+Vale
+Valer - Educação Vale
+
+Conteudistas
+Berli Rocha
+Belo Horizonte | MG
+Hadson Nogueira
+Belo Horizonte | MG
+Ronilson Vieira
+Belo Horizonte | MG
+
+Desenho Instrucional
+ID Projetos educacionais
+
+Edição, Revisão
+e projeto gráfico
+MD MATERIAIS DIDÁTICOS
+e Editoriais
+
+Produção
+Vale
+
+
+MARçO 2008
+
+
+
+
+É proibida a duplicação ou reprodução
+deste material, ou parte do mesmo, sob
+qualquer meio, sem autorização expressa
+da Vale.
+Se aprendeste alguma coisa,
+não fiques orgulhoso,
+
+    fizeste
+pois só
+
+o teu dever.
+Provérbio Judaico
+apresentação
+
+Caro Empregado,
+As Trilhas Técnicas são currículos que propõem itinerários de formação e o aprendizado
+contínuo dos profissionais que atuam no nível técnico-operacional, como você.
+
+Os treinamentos contidos nas trilhas possibilitam o aprimoramento das competências
+técnicas exigidas para o pleno exercício da sua atuação na Vale.
+
+A Valer – Educação Vale construiu esta Trilha Técnica em conjunto com os profissionais da
+área de Ferrovia, que participaram aumentando a legitimidade
+e a eficiência do currículo proposto.
+Uma das ações de desenvolvimento que faz parte da Trilha Técnica de Operação Ferroviária,
+para o público dessa área, é o curso Manobras Ferroviárias.
+
+Este curso foi elaborado com o objetivo de proporcionar aos trabalhadores da área
+operacional das ferrovias os conhecimentos necessários para executarem manobras em
+conformidade com os procedimentos e o Regulamento de Operação Ferroviária (ROF).
+
+Você desenvolverá competências técnicas exigidas para o desempenho de sua função,
+agindo com segurança e em conformidade com os procedimentos estabelecidos pela Vale.
+
+Além disso, você terá a oportunidade de interagir com seus colegas, podendo trocar
+informações e esclarecer dúvidas.
+
+
+
+
+Vale a pena participar!
+10   INTRODUÇÃO
+
+     CAPÍTULO I
+     CUIDADOS BÁSICOS DE SÁUDE
+     E SEGURANÇA OCUPACIONAL
+14   Equipamentos de proteção individual (EPI)
+16   Cuidados especiais durante as operações de manobras
+18   Cuidados especiais ao engatar
+     ou desengatar veículos
+20   Dispositivo mecânico para levantamento de engate
+22   Procedimentos seguros para abertura da torneira angular
+23   Cuidados especiais no acoplamento
+     de locomotivas BB36
+
+
+     CAPÍTULO II
+     SEGURANÇA NAS MANOBRAS
+28   Cuidados ao atravessar linhas
+29   Cuidados na entrevia
+29   Cuidados ao atravessar vagões
+34   Engate de vagões
+36   Desengate de vagões
+36   Recuo de trens no pátio
+
+     CAPÍTULO III
+     DESCRIÇÃO DO PADRÃO
+44   Programação de atividades
+45   Medidas de segurança
+46   Manobras de passagem de veículo sobre AMV
+47   Estacionamento de vagões e locomotivas com segurança
+49   Engate de vagões
+51   Manobras em recuo
+
+     CAPÍTULO IV
+     COLOCAÇÃO DO CALÇO
+56   Calço
+56   Parâmetro para colocar o calço em veículos
+     (sentido do trem descendente)
+61   Calço no último veículo na extremidade oposta
+     ao serviço do trem
+62   Cuidados na retirada do calço
+     IN
+10
+     TRO
+     DU
+     ÇÃO
+
+
+     Neste curso você conhecerá os procedimentos e o
+     Regulamento da Operação Ferroviária (ROF) para garantir
+     a segurança das movimentações dos veículos
+     e a integridade física dos empregados que efetuam as
+     manobras ferroviárias, assegurando sua
+     execução com eficiência.
+
+     Dessa forma, terá a oportunidade de conhecer quais são os
+     cuidados de saúde que deve tomar ao realizar suas atribuições e
+     compreender os procedimentos adequados durante as manobras.
+
+     Você também verá a descrição dos padrões de manobras
+     ferroviárias e aprenderá como colocar calço nos vagões
+     das locomotivas.
+Para realizar os procedimentos corretos em manobras ferroviárias
+é importante conhecer seus campos de aplicação.
+
+São todas as estações, pátios e terminais da FCA, EFVM e EFC onde forem    11
+executadas manobras ferroviárias, com a atuação de empregados próprios
+e terceirizados.
+
+
+
+
+                                                                           Manobras ferroviárias | introdução | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+Aplica-se também a terminais particulares, quando atendidos por qualquer
+uma das ferrovias citadas. Neste caso, os empregados da Vale estarão
+sujeitos às normas internas, além das normas específicas do local de
+execução das manobras.
+
+
+Recursos
+Para executar as manobras ferroviárias serão necessários os seguintes
+recursos materiais e físicos:
+
+   lanterna (à noite);
+
+   rádios transceptores portáteis com alça;
+
+   chave de punho EG;
+
+   cadeado tetrachave de reserva;
+
+
+   funcionários devidamente treinados,
+  habilitados e uniformizados.
+
+Por fim, convém destacar os documentos referenciados para
+este curso:
+
+  PRO-0004-GEPQT
+  Utilização de Cinto de Segurança Tipo Alpinista em Manobras;
+
+  REG-0001-GEOPG
+  Regulamento de Operação Ferroviária (ROF);
+
+  PGS-0004-GAPTG
+  Segurança nas Atividades de Pátios e Terminais Ferroviários.
+12
+capítulo
+
+
+
+
+01
+                CUIDADOS BÁSICOS
+                DE SÁUDE E SEGURANÇA
+                OCUPACIONAL
+
+           14   Equipamentos de proteção individual - EPI
+
+           16   Cuidados especiais durante as operações
+                de manobras
+
+           18   Cuidados especiais ao engatar
+                ou desengatar veículos
+
+           20   Dispositivo mecânico para levantamento
+                de engate
+
+           22   Procedimentos seguros para abertura
+                da torneira angular
+
+           23   Cuidados especiais no acoplamento
+                de locomotivas BB36
+     CUIDADOS BÁSICOS
+     DE SAÚDE E SEGURANÇA
+     OCUPACIONAL
+
+
+                Neste capítulo você conhecerá os equipamentos de proteção individual
+14   capítulo   EPI imprescindíveis para a realização das atividades de manobras
+
+
+
+
+     01
+                ferroviárias.
+
+                Além disso, estudará sobre os cuidados especiais que você deve ter durante as
+                operações de manobras, assim como os procedimentos seguros em cada ocasião.
+
+
+                EQUIPAMENTOS DE PROTEÇÃO
+                INDIVIDUAL - EPI
+                É fundamental a utilização de equipamentos de proteção individual - EPI -
+                estipulados para cada atividade, conforme definições da Segurança do Trabalho.
+                É preciso também certificar-se, antes do início das atividades, que estão
+                em perfeitas condições de uso.
+
+                Assim, para desenvolver as manobras ferroviárias é necessário o uso
+                dos seguintes EPI:
+
+                  capacete;
+                  protetor auricular;
+                  óculos de segurança;
+                  cinto de segurança.
+
+                Agora você aprenderá em que momentos e locais cada EPI deve ser utilizado
+                e os tipos adequados para cada situação de risco.
+CINTO DE SEGURANÇA                    Capacete                                                      15
+tipo pára-quedista                    Deverá ser sempre utilizado em
+Seu uso é obrigatório para            todas as áreas produtivas da fábrica.
+trabalho em alturas maiores ou
+
+
+
+
+                                                                                                    Manobras ferroviárias | capítulo I | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+iguais a dois metros.
+
+
+
+
+                                                                                A suspensão
+                                                                                do capacete,
+                                                                                representada
+                                                                                pelas cintas que
+                                                                                ficam na parte
+                                                                                de dentro, é uma
+                                                                                peça de grande
+                                                                                importância
+                                                                                no alívio de
+                                                                                pancadas na
+                                                                                cabeça. Ela é
+Protetor auricular                     Óculos de segurança                      regulável e deve
+Deverá ser utilizado em                Deverá ser utilizado sempre que          ser ajustada para
+locais barulhentos.                    houver poeira por perto.                 firmar o capacete
+                                                                                e mantê-lo
+                                                                                uns quatro
+                                                                                centímetros
+                                                                                acima da cabeça
+                                                                                de quem usa.
+
+
+
+
+  Funcionários que usam lentes de contato devem se preocupar ainda mais
+  com o uso dos óculos de segurança, já que a poeira em contato com as lentes
+  causa irritação.
+16                         CUIDADOS ESPECIAIS DURANTE
+                           AS OPERAÇÕES DE MANOBRAS
+                           A partir de agora, veja alguns cuidados especiais que você deve ter durante
+                           as operações de manobras.
+
+                           Antes de tudo, conheça previamente os detalhes das operações a serem executadas.
+
+                           Obedeça aos procedimentos de recuo de trens e de manobras em pátios
+                           descritos no ROF.
+
+                           Antes de iniciar e durante a execução de todas as atividades, verifique as condições
+     As atividades         das linhas, marcos, gabaritos e áreas adjacentes.
+     que obriguem o
+     responsável pelo
+     engate/desengate      Movimentação
+     a se posicionar
+     entre os vagões nas     Evite manobras de acoplamento e desacoplamento de vagões nas linhas com
+     condições citadas       paredão de carregamento, rampas de passageiros ou qualquer outra condição que
+     anteriormente           limite a movimentação do operador para a lateral da via;
+     devem ser
+     realizadas onde         Não corra para executar as tarefas;
+     haja espaço
+     suficiente para que     Ao caminhar ao longo da composição, observe a circulação nas linhas adjacentes,
+     o profissional se       mantendo-se no meio da entrevia;
+     afaste da via para
+     qualquer um dos         Fique atento a equipamentos em movimento nas linhas adjacentes quando sair
+     lados.                  de entre locomotivas ou vagões parados;
+
+                             Cuidado com pisos irregulares e escorregadios, especialmente nas proximidades
+                             de AMV;
+
+                             Antes de atravessar cada linha, pare, olhe para ambos os lados e atravesse com
+                             segurança, sem pisar nos boletos dos trilhos;
+
+                             Procure não transpor a linha na região do AMV. Se isso for imprescindível para a
+                             continuidade dos serviços, verifique as movimentações nas linhas e dê ciência a
+                             todos os envolvidos;
+
+                             Não suba ou desça do veículo (vagão ou locomotiva) em movimento, ou com luvas
+                             impregnadas de óleo. Antes de descer, verifique as condições do piso;
+ Evite ao máximo transpor o engate em composição estacionada. Se for inevitável,
+ solicite ao maquinista e/ou CCP autorização para transpor a composição,                17
+ informando o término da transposição.
+
+
+
+
+                                                                                        Manobras ferroviárias | capítulo I | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+ Ao subir e descer mantenha as mãos apoiadas nos vagões e pise na alavanca
+ de corte (se a composição estiver sem tração, obtenha autorização do CPT
+ ou, na sua ausência, do TOF).
+
+
+
+
+ Não pise entre engates nem sobre as mandíbulas;
+
+ É proibido passar entre engates de vagões e locomotivas cuja distância seja inferior
+ a cinco metros, sem conhecimento do operador do trem e do controlador do pátio;
+
+ Não atravesse entre veículos a uma distância inferior de cinco metros sem
+ comunicar com o maquinista e/ou CCP;
+
+ Não se posicione entre veículos no momento do engate/acoplamento.
+ Mantenha postura correta ao acoplar ou desacoplar mangueiras,
+ evitando torção da coluna vertebral;
+
+ Fique alerta para uma possível torneira avariada. Não use a mão (dedo) para
+ destravar a castanha se a alavanca de desengate estiver inoperante;
+
+ Não suba em vagões com cargas sujeitas a deslocamentos.
+
+ Sempre confira a vedação da ponta de lança e o travamento do AMV quando for
+ movimentá-lo ou ao quando houve necessidade de ultrapassá-lo;
+
+ Os mangotes devem ser desacoplados no estouro, não com as mãos;
+
+ Observe atentamente a transposição dos AMV pela composição, durante a
+ manobra, bem como suas respectivas rotas.
+
+
+Comunicação
+ Mantenha comunicação clara e objetiva quando usar o rádio transceptor. Havendo
+ falha de comunicação ou o não entendimento das informações, suspenda
+ imediatamente a execução dos serviços. Reinicie somente após o restabelecimento
+ da comunicação, ou após os esclarecimentos necessários;
+       Todos os equipamentos de comunicação em operação devem permanecer ligados
+18     e com volume suficientemente alto para que as chamadas sejam ouvidas
+       e respondidas de imediato. Repita sempre todas as instruções recebidas via rádio,
+        a fim de garantir o perfeito entendimento;
+
+       Substitua a bateria do rádio transceptor ao primeiro sinal de bateria descarregada;
+
+
+     Trabalho à noite ou com pouca luz
+       Quando trabalhar à noite, em região não iluminada ou com iluminação
+       deficiente, use a lanterna para iluminar o local de trabalho;
+
+
+     Ar no encanamento geral e paradas
+     com freio pneumático
+     O trem em manobra deve ser operado com ar no encanamento geral, e suas paradas
+     feitas pelo freio pneumático. É permitido procedimento diferente nas seguintes
+     situações:
+
+       vagões avariados no pátio para a oficina;
+       no posicionamento para carga e descarga com tratores adaptados com engate;
+       no posicionamento ou retirada de vazios em car dumpers, manobras
+       de hump yard;
+       vagões acidentados;
+       em local onde haja procedimento de segurança específico.
+
+
+     CUIDADOS ESPECIAIS
+     AO ENGATAR OU DESENGATAR
+     VEÍCULOS
+     Você não deve se posicionar entre vagões ou locomotivas em movimento para
+     executar engates ou desengates, nem para acoplar ou desacoplar mangueiras.
+
+     É necessário aguardar a parada total dos veículos e solicitar ao maquinista
+     autorização para processar os engates e desengates ou acoplamento e
+     desacoplamento de mangotes.
+
+
+       É obrigatório o acionamento imediato dos freios manuais dos veículos
+       quando for informado sobre o seu estacionamento.
+É proibido passar na frente de veículos em movimento para ajustar engates,
+articulação ou pino de travamento. Não se pode ajustá-los com os pés                    19
+ou com as mãos.
+
+Com a composição totalmente parada, verifique se os mecanismos dos engates estão
+
+
+
+
+                                                                                        Manobras ferroviárias | capítulo I | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+alinhados e em bom estado. Certifique-se de que eles não irão atravessar ou passar
+um pelo outro quando se juntarem.
+
+Se o oficial estiver na cauda do trem, solicite a parada para que você possa descer e
+realizar o engate quando estiver no solo.
+
+Caso seja necessário, o operador deve alinhar e ajustar os engates.
+
+Para isso, precisa se afastar para o meio da entrevia e conduzir a aproximação da
+locomotiva pelo rádio, informando repetidamente a distância (em quantidade de
+vagões) que falta para o engate e controlando a velocidade até o acoplamento total.
+
+
+
+
+  Somente após certificar-se de que a composição está completamente parada
+  e avisar ao maquinista de que irá acoplar as mangueiras que o operador pode
+  se posicionar entre os veículos.
+
+
+Em seguida, o operador deverá se afastar para o meio da entrevia e informar ao
+maquinista, via rádio. O maquinista só poderá movimentar a composição após
+confirmar a mensagem recebida e acionar a buzina da locomotiva.
+
+Quando for necessário ajustar um engate no sentido vertical e/ou horizontal,
+sem utilização de dispositivo mecânico para levantamento de engate, cumpra os
+seguintes procedimentos:
+
+   confira com antecedência se os veículos estão parados a uma distância segura
+  (mínimo de seis metros) e que não serão movimentados;
+
+  certifique-se também do assentamento da folga do engate e de que
+  não há nenhum outro veículo em movimento na linha em que
+  você está trabalhando;
+
+  tente escutar movimentos de equipamento ou outros sons que possam indicar
+  perigo. Se ficar em dúvida quanto à segurança, afaste-se imediatamente;
+
+  ajuste o mecanismo de engate, com posicionamento firme para os pés e mãos.
+  Mantenha as mãos e os dedos afastados de pontos onde possam ser prensados;
+
+  verifique a união articulada e confirme se ela está fixa, mantendo os pés afastados
+  da área diretamente abaixo;
+        não tente ajustar o engate com o pé. Fique ao seu lado e empurre-o sem erguê-lo;
+20
+       se não conseguir ajustar o engate sem fazer esforço físico, suspenda a execução do
+       ajuste, avise a todos os envolvidos e busque ajuda de pessoal treinado, habilitado e
+       capacitado. Só reinicie a operação após esses procedimentos;
+
+       depois de realizar o ajuste, afaste-se da composição e autorize, via rádio, o
+       maquinista a fazer o engate.
+
+
+
+
+     não enfie o dedo no buraco do engate para ajustar o pino de travamento.
+
+
+
+
+     DISPOSITIVO MECÂNICO PARA
+     LEVANTAMENTO DE ENGATE
+     Para aplicar o dispositivo de levante de engate, o maquinista deve sair da locomotiva
+     com a chave reversora para auxiliar o OOF/TOF a fazer a instalação, deixando a
+     composição com os freios aplicados.
+
+
+
+
+     OOF – Oficial de Operação Ferroviária; TOF – Técnico de Operação Ferroviária.
+
+
+     Durante a instalação do dispositivo, a locomotiva e vagões devem ficar parados, no
+     mínimo a seis metros de distância dos vagões para os quais há diferença de engate.
+
+     Após a conclusão da operação de aplicação do dispositivo, o maquinista deve
+     retornar para a locomotiva e somente proceder à movimentação da composição
+     com autorização, obrigatoriamente via rádio, do OOF/TOF responsável pelo engate/
+     desengate.
+
+     Alinhamento vertical e horizontal
+Para sua segurança, mantenha os pés livres do alcance de qualquer movimento do
+engate e de qualquer peça móvel.                                                      21
+
+Ao abrir uniões articulares, deixe os pés afastados da área abaixo do engate,
+o que previne acidentes pessoais, no caso de queda.
+
+
+
+
+                                                                                      Manobras ferroviárias | capítulo I | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+Caso você precise entrar nos espaços entre veículos ou equipamentos por qualquer
+motivo, tenha o máximo de cuidado para não colocar o pé, a mão ou qualquer outra
+parte do corpo de forma que possa ficar presa ou ser atingida.
+
+Dessa forma, recomenda-se não apoiar o corpo sobre o engate, para abrir ou fechar a
+torneira do lado oposto do veículo. Não passe de um vagão para outro.
+Use a alavanca de corte para engatar e desengatar locomotivas e/ou vagões.
+
+Use a alavanca de corte para engatar e desengatar locomotivas e/ou vagões.
+
+Quando estiver operando a alavanca de corte do vagão, fique de frente para o
+movimento, observe as condições de apoio para os pés, use apenas uma mão na
+alavanca e mantenha o corpo afastado do canto e da lateral do vagão seguinte.
+
+
+
+
+Se for necessário engatar ou desengatar uma mangueira de ar, verifique se a
+composição não será movimentada pelo operador do trem ou pelo alivio de freios da
+composição.
+
+
+
+
+  A orientação é para que você permaneça com um dos pés fora dos trilhos
+  por todo o tempo, para facilitar uma escapada rápida, caso ocorra um
+  movimento inesperado da composição.
+                            PROCEDIMENTOS SEGUROS
+22
+                            PARA ABERTURA DA TORNEIRA
+                            ANGULAR
+     Feche a torneira
+     angular do             Para abrir a torneira angular de maneira segura, você deve agir da seguinte forma:
+     vagão do lado
+     da locomotiva e          abra lentamente a torneira, mantendo as pernas e os pés afastados do engate
+     depois a torneira        da mangueira e escute a passagem do ar no encanamento;
+     angular do vagão
+     da composição            caso escute um vazamento de ar na boquilha do mangote, feche as torneiras
+     que ficará               angulares de ambos os veículos e certifique-se de que a pressão nas mangueiras
+     estacionado.             está completamente aliviada antes de tentar um ajuste ou reparo;
+     Depois de fechar
+     as duas torneiras        não chute, bata ou balance as mangueiras acopladas e pressurizadas.
+     angulares e
+     abrir o aparelho
+     de engate, o
+     manobrador
+     (OOF) deverá se
+     afastar o suficiente
+     das mangueiras
+     para evitar que
+     elas o atinjam         O desacoplamento das mangueiras da tubulação de freio a ar deverá ser feito nos
+     ao estourarem.         casos abaixo:
+     Deve solicitar
+     ao maquinista            EFC e EFVM — no “estouro”, após prévio fechamento das torneiras;
+     que mova
+     vagarosamente            FCA — no “estouro”, para torneiras retas e, manualmente para torneiras angulares.
+     a composição
+     até completar o
+     desacoplamento
+     e posicionar as
+     mangueiras no
+     engate cego.
+
+
+
+
+                            Ao executar acoplamento, conecte o cabo jumper somente após atrelar os mangotes
+                            e fazer os comandos das locomotivas
+
+
+                            o empregado qualificado responsável está proibido de fechar o encanamento
+                            geral sem autorização do operador de trem. Todo corte de encanamento
+                            geral para deixar vagões parados durante manobra deve ser realizado dando
+                            emergência e mantendo a torneira angular aberta nessa parte da composição.
+Convém ressaltar que é importante nunca recuar um trem sem a sua devida
+cobertura da cauda.                                                                        23
+
+Faça o teste de vazamento (aplicação e alívio no vagão da cauda) e de gradiente na
+formação de trens, na anexação ou na desanexação de vagões. Proceda também com
+
+
+
+
+                                                                                           Manobras ferroviárias | capítulo I | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+testes de aplicação e de alívio no vagão da cauda após a anexação ou desanexação de
+locomotiva(s) à composição.
+
+Ao realizar o teste de vazamento e de gradiente, solicite ao maquinista autorização
+para colocar o manômetro na cauda do trem. Segure firme a mangueira e inicie a
+abertura lenta e gradual da torneira do vagão.
+
+Após a execução do teste de vazamento, feche a torneira do vagão e drene o ar
+existente na mangueira, desacoplando o manômetro. Informe ao maquinista a sua
+retirada e pendure a mangueira.
+
+
+CUIDADOS ESPECIAIS
+NO ACOPLAMENTO
+DE LOCOMOTIVAS BB36
+Como a BB36 possui as cabeceiras do estrado avançadas, no caso do acoplamento desse
+tipo de locomotiva, o operador deverá fazer o alinhamento e o ajuste dos engates dos
+veículos da mesma forma que nos itens anteriores.
+
+Deve também afastar-se obrigatoriamente para o meio da entrevia.
+
+Assim, pode proceder com a aproximação da locomotiva pelo contato via rádio com o
+maquinista. O operador não deve se aproximar dos veículos em hipótese alguma até o
+momento do engate.
+
+Em seguida, é importante verificar se a locomotiva está freada. Você deve comunicar-se
+com o maquinista, para depois se posicionar entre os veículos, com o objetivo de acoplar
+as mangueiras.
+
+Depois de fazer esse acoplamento, o operador/OOF deverá distanciar-se dos veículos
+para o meio da entrevia e informar sua posição ao maquinista, via rádio.
+
+Em hipótese alguma o maquinista poderá movimentar a locomotiva sem antes certificar
+se o operador/OOF encontra-se em local seguro. Recomenda-se que, por precaução, o
+maquinista acione a buzina da locomotiva para chamar a atenção do operador.
+     1. Você é um empregado que desenvolve atividades de manobras ferroviárias.
+        Cite dois recursos materiais necessários para realizar seu trabalho.
+24
+
+
+
+
+     2. Identifique os EPI abaixo e preencha a tabela.
+
+     a. Deverá ser utilizado sempre que houver poeira por perto.
+
+     b. Deverá ser utilizado em locais barulhentos.
+
+     c. Seu uso é obrigatório no trabalho em alturas maiores ou iguais a dois metros.
+
+     d. Deverá ser sempre utilizado em todas as áreas produtivas da fábrica.
+
+
+     a.
+
+     b.
+
+     c.
+
+      d.
+     										
+     						
+     3. Você é um empregado qualificado responsável pela manobra e precisa realizar
+        o engate entre dois veículos ferroviários. No entanto, um deles ainda está em
+        movimento. Como você deve proceder?
+   4. Analise as afirmativas a seguir sobre alguns procedimentos
+   de manobras ferroviárias e depois responda à pergunta.
+
+I – É permitido posicionar-se entre vagões ou locomotivas em movimento para
+    executar engates ou desengates, assim como para acoplar ou desacoplar
+    mangueiras.
+
+II – É proibido passar na frente de veículos em movimento para ajustar engates,         25
+    articulação ou pino de travamento. Não se pode ajustá-los com os pés
+    ou com as mãos.
+
+
+
+
+                                                                                        Manobras ferroviárias | capítulo I | CUIDADOS BÁSICOS DE SÁUDE E SEGURANÇA OCUPACIONAL
+III – Quando você estiver operando a alavanca de corte do vagão, fique de frente para
+    o movimento, observe as condições de apoio para os pés, use apenas uma mão na
+    alavanca e mantenha o corpo afastado do canto e da lateral do vagão seguinte.
+
+Quais afirmativas estão corretas?
+
+a. Apenas a I.
+b. Apenas a II.
+c. Apenas a III.
+d. Apenas II e III.
+e. Todas.
+
+
+5. Para abrir a torneira angular de maneira segura, você deve manter as pernas e os
+   pés afastados do engate da mangueira e abri-la lentamente. O passo seguinte
+   consiste em escutar a passagem do ar no encanamento.
+
+   Caso você ouça um vazamento de ar na boquilha do mangote, como deve
+   proceder?
+capítulo
+
+
+
+
+02
+                SEGURANÇA
+                NAS MANOBRAS
+
+
+           28   Cuidados ao atravessar linhas
+
+           29   Cuidados na entrevia
+
+           29   Cuidados ao atravessar vagões
+
+           34   Engate de vagões
+
+           36   Desengate de vagões
+
+           36   Recuo de trens no pátio
+     SEGURANÇA
+     NAS MANOBRAS
+
+
+
+                Neste capítulo você conhecerá as orientações para sua segurança pessoal
+28   capítulo   nas seguintes ocasiões: ao atravessar linhas e vagões, quando estiver na
+
+
+
+
+     02
+                entrevia, ao engatar e desengatar vagões e no recuo de trens no pátio.
+
+
+                CUIDADOS AO ATRAVESSAR
+                LINHAS
+                A sua segurança é prioridade em todas as atitudes realizadas. Siga os regulamentos,
+                obedeça às normas e não coloque sua vida em risco.
+
+
+
+
+                Atente-se às seguintes orientações:
+
+                  antes de atravessar cada linha, pare, olhe à direita e à esquerda e atravesse as linhas
+                  com segurança, sem pisar nos boletos dos trilhos;
+
+                  ao acessar área operacional e pátio de manobras, confira se você está com todos os
+                  EPI em perfeito funcionamento;
+
+                  dê preferência por atravessar nos locais apropriados (já destinados para travessias).
+
+                Veja, nas duas imagens abaixo, a forma correta e a forma insegura e proibida de
+                trânsito na ferrovia. Esse procedimento está sujeito a acidente pessoal.
+
+
+
+
+                certo                                         errado
+
+                É necessário respeitar a distância mínima de dois metros da linha férrea.
+CUIDADOS NA ENTREVIA                                                                 29
+
+Enquanto você estiver no pátio de manobras, mantenha-se sempre nas entrevias,
+dentro do gabarito, em movimento ou parado.
+
+
+
+
+                                                                                     Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+  É proibido ao empregado qualificado responsável pela manobra ficar entre
+  veículos ferroviários em movimento para realizar engates, desengates,
+  acoplar e desacoplar mangotes.
+
+Caminhe com muito cuidado, sempre observando as condições do lastro. É proibido
+correr. Fique atento a equipamentos em movimento nas linhas adjacentes quando
+passar entre veículos ou vagões parados.
+
+
+
+
+CUIDADOS AO ATRAVESSAR
+VAGÕES
+Ao transpor vagões pelo engate, tenha certeza de que o veículo está aplicado e que
+não será movimentado. Comunique ao maquinista (CCP ou TOF) o que você está
+fazendo e observe as condições do suporte da alavanca de corte antes de pisar.
+30
+
+
+
+
+     Depois, cumpra com os procedimentos a seguir:
+
+       ao subir e descer, mantenha as mãos apoiadas nos vagões, desde o inicio da subida
+       até a descida;
+
+       ao subir, pise na alavanca de corte. Seus pés devem pisar a haste de desengate e o
+       engate, tanto na subida quanto na descida;
+
+       não pise entre engates e/ou sobre mandíbulas;
+
+       ao descer, pise na alavanca de corte mantendo as mãos apoiadas no vagão;
+
+       ao executar o acoplamento entre locomotivas, abra a torneira do encanamento
+       geral e de equalização. Depois faça a conexão do cabo jumper;
+
+       durante o acoplamento e abertura de torneira, mantenha postura correta. Lembre-
+       se de utilizar luva e óculos. Fique atento à circulação de trens ao lado.
+
+     Abrir a torneira Acoplar                                    Anotar vagão
+     						                                                      no pátio
+
+
+
+
+     Cuidados especiais para evitar
+     quedas de veículos ferroviários
+     Quando descer e subir de veículos ferroviários, esteja alerta para as seguintes
+     situações:
+
+       observe o aspecto do veículo;
+       use somente a escada lateral;
+       fique atento aos movimentos imprevistos;
+       olhe para baixo e cheque as obstruções antes de desembarcar.
+                                                                                                      31
+
+o ROF, norma 10.21, proíbe subir e descer de veículo ferroviário em movimento.
+A norma 10.22 diz que, quando houver trens circulando na linha adjacente,
+
+
+
+
+                                                                                                      Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+é obrigatório o embarque e desembarque em veículos ferroviários pelo lado
+oposto à circulação.
+
+
+
+
+Não é permitido aos empregados ficar na frente de locomotivas, vagões ou
+outros veículos ferroviários em movimento, com o propósito de efetuar
+engates.
+
+Quando você estiver na escada do veículo ferroviário, tenha cuidado com o
+estreitamento do gabarito, como: portões, laterais de prédios, ou vagões vindo nas
+linhas ao lado.
+
+É necessário estar atento à iluminação no período noturno, principalmente em
+terreno irregular no pátio de manobra e piso escorregadio.
+
+Inspecione o cinto de segurança antes de prender-se ao veículo ferroviário e testar o
+desengate rápido. É importante verificar as condições de todos os seus EPI, inclusive
+botas para evitar escorregões.
+
+Informe ao maquinista quaisquer restrições que o trem possua, tais como:
+
+  excesso lateral/vertical;
+  carga mal distribuída;
+  carga com risco de deslocamento;
+  qualquer situação de risco pessoal e operacional.
+
+Esteja atento na linha à movimentação de trens e comunique ao maquinista qualquer
+anormalidade na operação.
+                                                                    haste de dreno
+
+
+
+
+                                                                                        torneira de
+                                                                                        isolamento
+
+    Freio manual                    Mandíbula               válvula de alívio
+     Antes de manusear qualquer um destes componentes, informe ao OOF/TOF/
+32   maquinista e mantenha-se dentro de gabarito entrevias.
+
+     Mantenha postura corporal adequada a cada tarefa. Ao término da atividade,
+     informe ao OOF/TOF/maquinista.
+
+     Movimentação de outros trens
+     Permaneça atento à movimentação de trens nas linhas adjacentes. Não mexa
+     em nenhum dispositivo do trem, locomotiva, ou vagões, sem autorização expressa
+     do maquinista.
+
+     Informações importantes
+     durante a operação
+     Saiba toda a movimentação de trens no pátio, linha ou trecho onde trabalha.
+     Permaneça fora da linha, nunca caminhe sobre os trilhos e não fique de
+     costas para os trens.
+
+     Não utilize telefone celular nos pátios durante manobras e comunicações.
+
+     Em nenhuma hipótese você deverá configurar, alterar ou manipular qualquer
+     dispositivo de vagão sem autorização do maquinista. Quanto às locomotivas,
+     também é proibido configurar, alterar ou manipular qualquer dispositivo ou
+     equipamento.
+
+
+
+
+       Não opere qualquer equipamento sem treinamento,
+       por exemplo: AMV, dispositivo de vagões ou rádio.
+
+
+
+
+     Nas manobras, é obrigatório utilizar o rádio transceptor portátil e proibida a utilização
+     de sinal manual.
+
+
+                                 MANEIRAS CORRETAS
+                                 DE COMUNICAÇÃO
+Verifique as condições de parada e estacionamento de veículos ferroviários, conferindo:
+                                                                                          33
+  os marcos de manobras;
+  obstrução de vagões na linha;
+  cilindro de freios dos vagões e locomotivas;
+
+
+
+
+                                                                                          Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+  quantidade de freio manual apertado;
+  calço;
+  inclinação da linha;
+  condições de engate para evitar movimento indesejável do veículo.
+
+É importante estar atento às linhas para evitar que qualquer movimentação
+indesejável de um vagão ou locomotiva provoque um acidente.
+
+Convém atentar também para a comunicação e para as condições de circulação de
+seu trem e de outros trens, nas linhas controladas pelo CCO/CCP/Estações.
+
+Para prevenir a possibilidade de atropelamento, evite atravessar linhas e, quando
+necessário, certifique-se olhando para os dois lados antes de cruzá-las. Execute a
+tarefa de manobra e saia do local.
+
+
+
+
+                   AMV MANUAL
+
+Não se esqueça de utilizar os EPI adequados e manter postura correta.
+34   ENGATE DE VAGÕES
+
+
+
+
+     Antes de proceder com o engate em composição de trem, posicione-se dentro do
+     gabarito entrevias, fora do raio de ação do engate. Verifique se a composição está
+     parada e confira o alinhamento dos engates vagão/locomotiva.
+
+     Se necessário, abra a mandíbula e retorne à sua posição inicial para
+     conclusão do engate
+
+
+
+
+     Cuidado na operação de engate
+     e acoplamento de mangueiras
+     Caso seja necessário fazer o alinhamento dos engates.
+
+       Tenha certeza que o maquinista sabe desta operação;
+       Verifique o engate minuciosamente para verificar suas condições;
+       Não fique na frente do engate (fique fora da sua direção);
+       Nunca puxe, chute, ou use o pé para fazer o alinhamento do engate.
+
+
+     Procedimentos inseguros
+
+     As imagens a seguir representam atos inseguros que provocam riscos de acidente.
+
+     Um exemplo é quando se está de costas para o trem e sem autorização do
+     maquinista. Assim, você estará descumprindo as normas de segurança e do ROF,
+     o que pode causar acidentes.
+Veja na próxima imagem uma maneira errada de alinhar o engate de vagões.                                       35
+
+
+
+
+                                                                                                               Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+Não se alinha um engate puxando-o em direção ao seu corpo, mas o
+empurrando com as mãos e os pés apoiados no solo
+
+
+
+
+Procedimentos recomendados
+
+Abra lentamente a torneira angular para evitar o “açoite da mangueira” contra
+o corpo do manobrador.
+
+Opere a alavanca de desengate com o corpo ereto e fora da testeira do vagão.
+
+                                                                                         Para fazer o
+                                                                                         alinhamento
+                                                                                         dos engates,
+                                                                                         use somente as
+                                                                                         mãos. Se, após
+                                                                                         empregar força
+                                                                                         relativamente
+                                                                                         razoável, o engate
+                                                                                         não se mover
+                                                                                         para a posição
+                                                                                         desejada, peça
+                                                                                         ajuda. Conforme
+                                                                                         item 10.15 do ROF
+                                                                                         é proibido pedir
+                                                                                         ajuda ou transferir
+                                                                                         atividades
+Ao abaixar para desacoplar as mangueiras é preciso tomar certos cuidados,                para pessoas
+como flexionar corretamente as pernas e não curvar a coluna cervical.                    que não sejam
+                                                                                         empregados,
+Convém observar o alívio de freio, a folga dos engates e o movimento súbito              contratados ou
+da composição.                                                                           terceirizados,
+                                                                                         mesmo que por
+Durante as atividades de manobra, evite postar-se inadequadamente para abrir as          iniciativa própria
+torneiras angulares. O mais correto é solicitar autorização ao maquinista e transpor o   de tais indivíduos.
+engate sem curvar o corpo sobre a peça.
+36                          DESENGATE DE VAGÕES
+                            Para o desengate dos vagões, após obter autorização do maquinista, você deve
+     Antes de engatar       cumprir o seguinte procedimento:
+     ou movimentar
+     vagões                   verifique se a composição está parada;
+     estacionados,            feche as torneiras;
+     o empregado              efetue o corte das mangueiras;
+     qualificado              puxe a alavanca de corte;
+     responsável              posicione-se dentro do gabarito entre vias;
+     deverá certificar-se     solicite ao maquinista que puxe para corte;
+     de que a operação        acompanhe a movimentação do vagão.
+     não causará
+     deslocamento
+     indesejado dos
+     vagões.
+
+
+
+
+                            RECUO DE TRENS NO PÁTIO
+                            Técnicas de controle de movimentação de veículo ferroviário
+
+
+
+
+                                                                   Plataforma vazia
+                                                                   Posicione-se sentado no meio do vagão
+
+
+
+
+                                                                   Plataforma carregada
+                                                                   Acompanhe o recuo a pé, entre vias,
+                                                                   obedecendo o gabarito
+                                                                                      37
+
+Gôndolas carregadas
+Posicione-se na escada lateral utilizando
+
+
+
+
+                                                                                      Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+cinto de segurança
+
+
+
+
+Gôndolas vazias
+Posicione-se na escada lateral utilizando
+cinto de segurança
+
+
+
+
+Controle de recuo de trens
+Todo recuo deve receber cobertura com empregado treinado e munido de rádio
+transceptor portátil. Todos os envolvidos no recuo devem ter ciência da autorização
+de circulação.
+
+Durante o recuo é obrigatório manter contato via rádio entre o maquinista e o
+empregado que faz a cobertura. Ele deve manter o maquinista informado de
+qualquer anormalidade observada no trem ou na via permanente.
+
+As condições dos AMV, vedação de agulha, linhas e marcos para linha adjacentes,
+também devem ser informadas pelo empregado responsável pela cobertura.
+
+O empregado que faz a cobertura deve orientar quanto à velocidade do recuo.
+
+O recuo de trens em PN deve ser feito com todo cuidado, inclusive com
+a movimentação súbita de veículos rodoviários.
+
+É importante observar as condições das linhas adjacentes, vagões estacionados,
+portões, paredes ou qualquer obstáculo que possa restringir o gabarito da via.
+38
+                         O empregado deve estar munido de cinto de segurança e todos EPI para a função.
+                         Quando estiver escada do vagão, apresentar o cinto travado. É permitido
+                         se posicionar em outro lugar conforme determinação de procedimento
+                         específico do local.
+
+                         Você deve cumprir todas as normas do ROF referentes ao:
+     Toda a segurança
+     é pouca no            “Recuo de Trens e Locomotivas na Via de Circulação”: normas 65, 65.1, 65.2, 65.3,
+     recuo de trens.       65.4, 65.5, 65.6, 65.7, 65.8, 65.9, 65.10, 65.11, 65.12, 65.13.
+     Na operação
+     ferroviária não       “Recuo em Manobras”: normas 45.1, 45.2, 45.3, 45.4, 45.5, 45.6,
+     existe espaço         45.7, 45.8, 45.9, 45.10, 45.11, 45.12.
+     para dúvidas e/
+     ou mal entendido.
+     Tenha muita         Correto dimensionamento da
+     precaução quando
+     recuar trens        distância necessária
+     em pátios com
+     movimentação        É fundamental passar para o maquinista a informação correta das distâncias a serem
+     de outros trens,    percorridas no recuo, para engate ou movimentação sem engate.
+     PN e trânsito de
+     pessoas.            O empregado que faz a cobertura precisa ter noção de distância em metros e utilizar
+                         um padrão de informação na ferrovia, que consiste em fornecer a distância em
+                         número de vagões.
+
+                         Não existe uma precisão, entretanto, é importante comunicar ao maquinista a
+                         percepção que a distância para o engate está reduzindo. Dessa forma, o maquinista
+                         reduzirá a velocidade para o engate ou parada do trem.
+
+                         O empregado que faz a cobertura precisa informar a velocidade adequada para o
+                         engate ou movimentação, solicitando redução da velocidade conforme a distância. É
+                         preciso ressaltar que a velocidade de recuo é definida por ele.
+
+
+
+
+                         Caso o operador do trem perca a comunicação com o OOF da cauda,
+                         ele deverá parar imediatamente o trem.
+1. Analise as afirmativas e marque verdadeiro (V) ou falso (F).
+                                                                                        39
+( ) Antes de atravessar cada linha, você deve parar, olhar para ambos os lados e
+  atravessá-las com segurança, sem pisar nos boletos dos trilhos.
+( ) É proibido ao empregado qualificado responsável pela manobra ficar entre
+
+
+
+
+                                                                                        Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+  veículos ferroviários em movimento para realizar o engate entre dois veículos
+  ferroviários.
+( ) Ao transpor os vagões pelo engate, é necessário ter certeza de que o veículo está
+  parado e não será movimentado. Neste caso, não é preciso comunicar-se com o
+  maquinista (CCP ou TOF).
+( ) Ao descer do vagão você deve pisar na alavanca de corte, mantendo as mãos
+  apoiadas nele.
+( ) É permitido o uso de telefone celular nos pátios durante manobras e
+  comunicações.
+( ) Para fazer o alinhamento dos engates, use somente as mãos. Se após empregar
+  força relativamente razoável, o engate não se mover para a posição desejada, peça
+  ajuda a alguém que esteja passando pelo local.
+( ) Alinha-se um engate puxando-o em direção ao seu corpo. Não se deve empurrá-
+  lo com as mãos ou com os pés apoiados no solo.
+
+2. Complete as frases com as expressões do quadro.
+
+          estacionado oposto autorização movimento
+   manobra obstruções curvar recuo operação circulando
+                      lateral indesejado
+
+a. O ROF, norma 10.21, proíbe subir e descer de veículo ferroviário em
+   ______________. A norma 10.22 diz que quando houver trens ______________ na
+   linha adjacente é obrigatório o embarque e desembarque em veículos ferroviários
+   pelo lado ______________ à circulação.
+
+b. Quando descer de veículos ferroviários fique alerta para o aspecto do veículo e a
+   movimentos imprevistos. Use somente a escada ______________, olhe para baixo
+   e cheque as ______________ antes de desembarcar.
+
+c. Durante as atividades de ______________, evite ficar com a postura inadequada
+   para abrir as torneiras angulares. O mais correto é solicitar ______________ ao
+   maquinista e transpor o engate, sem ______________ seu corpo sobre a peça.
+
+d. Antes de engatar ou movimentar um vagão ______________, o empregado
+   qualificado responsável deverá verificar se a ______________ não causará
+   deslocamento ______________ dos vagões.
+
+e. Todo ______________ deve ter cobertura com empregado treinado e munido de
+    rádio transceptor portátil.
+     3. Você precisa realizar o desengate entre dois vagões. O primeiro passo é obter
+        a autorização do maquinista. Numere os procedimentos a seguir na ordem
+        correta, de 1 a 7.
+
+     ( ) acompanhe a movimentação do vagão
+40   ( ) posicione-se dentro de gabarito entrevias
+     ( ) puxe a alavanca de corte
+     ( ) efetue o corte das mangueiras
+     ( ) solicite ao maquinista que puxe para corte
+     ( ) feche as torneiras
+     ( ) verifique se a composição está parada
+
+     4. Identifique nas imagens abaixo as partes do vagão.
+Manobras ferroviárias | capítulo I I | SEGURANÇA NAS MANOBRAS
+                                                                41
+capítulo
+
+
+
+
+03
+                DESCRIÇÃO
+                DO PADRÃO
+
+
+           44   Programação de atividades
+
+           45   Medidas de segurança
+
+           46   MANOBRAS DE PASSAGEM DE VEÍCULOS SOBRE AMV
+
+           47   Estacionamento de vagões e locomotivas
+
+                com segurança
+
+           49   Engate de vagões
+
+           51   Manobras em recuo
+     DESCRIÇÃO
+     DO PADRÃO
+
+
+
+
+                Neste capítulo você entenderá os padrões estabelecidos para as operações
+44   capítulo   de manobras ferroviárias.
+
+
+
+
+     03
+                Assim, terá a oportunidade de verificar as descrições das atividades, os desvios
+                e as ações necessárias para:
+
+                  programação de atividades;
+                  medidas de segurança;
+                  manobras envolvendo passagem de veículo sobre aparelho de mudança de via;
+                  estacionamento de vagões e locomotivas com segurança;
+                  engate de vagões;
+                  manobras em recuo.
+
+
+
+
+                PROGRAMAÇÃO
+                DAS ATIVIDADES
+                Antes de iniciar a execução das manobras, elas deverão ser planejadas e seus
+                procedimentos perfeitamente entendidos por todos os envolvidos.
+
+
+                  Descrição                       Desvio                    Ações
+                  da atividade                                              necessárias
+
+
+                  Planejar as atividades em       Falta de                  Repetir a programação
+                  conjunto com a equipe e         entendimento              das atividades
+                  certificar-se de que todos                                até que todos os
+                  os envolvidos entenderam                                  envolvidos entendam
+
+
+
+
+                  A execução das manobras só deve ser iniciada após o perfeito entendimento
+                  de todos os itens citados na tabela a seguir.
+MEDIDAS DE SEGURANÇA                                                                   45
+
+Os itens a seguir, relativos à segurança, deverão ser observados durante a execução
+de toda a operação de manobras.
+
+
+
+
+                                                                                       Manobras ferroviárias | capítulo I I I | DESCRIÇÃO DO PADRÃO
+  Descrição da atividade      Desvio                       Ações necessárias
+
+  Usar obrigatoriamente       Falta de algum dos EPI       Solicitar ao supervisor
+  os EPI necessários                                       os EPI faltantes
+
+  Testar se os sinais do      Falha de operação do         Substituir o rádio
+  rádio estão sendo           rádio                        por outro em boas
+  emitidos e recebidos                                     condições e testar
+  com clareza
+
+  Certificar-se de que        Composição em                Solicitar a parada total
+  a composição esteja         movimento                    da composição
+  parada todas as vezes
+  que for necessário nela
+  intervir
+
+  Prender o talabarte do      Veículo não possibilita      Realizar a manobra
+  cinto de segurança no       prender o talabarte do       com velocidade
+  vagão ou locomotiva,        cinto de segurança           reduzida e compatível
+  conforme descrito no                                     com a segurança,
+  PRO-0004-GEPQT                                           acompanhando a pé
+
+  Respeitar a velocidade      Velocidade acima da          Parar as manobras,
+  máxima de manobra           máxima regulamentada         solicitar ao maquinista a
+  regulamentada para                                       redução da velocidade e
+  acoplamentos                                             avisar ao supervisor
+
+  Para evitar                 Impossibilidade de           Suspender as operações
+  acidentes pessoais          contatar responsáveis        de manobra até que
+  e com materiais/            pelos locais onde            seja possível manter
+  equipamentos, antes de      serão feitas as              contato com os
+  engatar ou movimentar       movimentações                responsáveis
+  vagões e locomotivas
+  em pátios, terminais e
+  oficinas, dar ciência aos
+  encarregados sobre as
+  manobras que serão
+  realizadas
+46   MANOBRAS DE PASSAGEM DE
+     VEÍCULOS SOBRE AMV
+     Nas manobras envolvendo passagem de veículos sobre aparelho de mudança de via (AMV), é
+     preciso observar as orientações a seguir.
+
+
+      Descrição da atividade        Desvio                        Ações necessárias
+
+
+      Portar sempre cadeado         Falta cadeado reserva         Solicitar ao supervisor
+      tetrachave reserva
+
+
+
+
+      Verificar se o AMV está       Falta cadeado                 Substituir pelo cadeado
+      trancado com cadeado                                        reserva. Avisar ao
+      tetrachave                                                  supervisor
+
+
+
+
+      Observar se as agulhas        Agulha não veda               Verificar existência de
+      estão vedando o trilho                                      objeto entre a agulha e o
+      corretamente                                                trilho que possa prejudicar
+                                                                  a vedação. Em caso
+                                                                  positivo, deve retirá-lo. E
+                                                                  em caso negativo, solicitar a
+                                                                  presença do pessoal da via
+                                                                  permanente
+
+                                                                  Havendo risco de acidente,
+                                                                  interditar o AMV até que
+                                                                  seja liberado pelo pessoal
+                                                                  da via permanente
+
+      Observar se o braço           Braço destravado              Fazer o travamento.
+      (maromba) do AMV está                                       Não sendo possível,
+      travado                                                     interditar o AMV e acionar
+                                                                  a via permanente, para
+                                                                  regularização
+Descrição da atividade         Desvio                     Ações necessárias             47
+
+
+Trancar o AMV para a rota
+
+
+
+
+                                                                                        Manobras ferroviárias | capítulo I I I | DESCRIÇÃO DO PADRÃO
+desejada
+
+
+
+
+Verificar se a posição         Posição incorreta          Solicitar a parada da
+do AMV é a desejada,                                      composição e posicionar
+atentando que na condição                                 corretamente o AMV
+de saída ela deverá estar no
+sentido da circulação
+
+Não estacionar vagões e        Necessidade extrema        Verificar a correta posição
+locomotivas sobre AMV                                     do AMV antes da nova
+                                                          movimentação da
+                                                          composição
+
+
+
+
+ESTACIONAMENTO DE
+VAGÕES E LOCOMOTIVAS
+COM SEGURANÇA
+Descrição da atividade         Desvio                     Ações necessárias
+
+Estacionar vagões e            Vagão ou locomotiva fora   Cortar a composição e
+locomotivas sempre dentro      do marco                   posicionar o(s) veículo(s)
+do marco ferroviário                                      em outra linha, respeitando
+                                                          o marco
+
+Esgotar o ar do
+encanamento geral do
+vagão estacionado (aplicar
+emergência), verificando
+se o sistema de freio foi
+aplicado corretamente
+48   Descrição da atividade           Desvio                       Ações necessárias
+
+     Calçar corretamente              Calços insuficientes para    Solicitar os calços faltantes
+     os vagões que ficarem            distribuição na composição   à estação e supervisão
+     estacionados (utilizar calços
+     de madeira para vagões
+     tanques e de aço para os
+     demais tipos), exceto para
+     a EFC, onde deverão ser
+     cumpridos procedimentos
+     específicos
+
+     Solicitar ao maquinista que
+     movimente a composição,
+     para fixar o calço entre a
+     roda e o trilho
+
+     Certificar-se da fixação dos     Calço não fixou              Repetir a operação até fixar
+     calços entre a roda e o trilho                                o calço
+
+     Locomotivas desligadas
+     deverão permanecer
+     sempre calçadas e com
+     os freios independentes e
+     manuais aplicados
+
+     Apertar freio manual             No caso de um vagão          Colocar calço em ambas
+     dos vagões que ficarem           somente, o freio manual      extremidades do vagão
+     estacionados, conforme           não funciona                 e informar à área de
+     determinado no ROF                                            manutenção mecânica
+
+     Fazer teste de resistência
+     antes do corte, a fim de
+     confirmar a aplicação dos
+     freios
+ENGATE DE VAGÕES                                                                      49
+
+
+Descrição da atividade         Desvio                  Ações necessárias
+
+
+
+
+                                                                                      Manobras ferroviárias | capítulo I I I | DESCRIÇÃO DO PADRÃO
+Solicitar a parada
+da composição a no
+mínimo seis metros do(s)
+vagão(ões) estacionado(s)
+
+Descer do vagão ou da
+locomotiva, retirando o
+talabarte. Atentar antes
+para as condições do piso
+
+Verificar se a torneira do     Torneira aberta         Fechar a torneira
+encanamento geral do
+vagão estacionado está
+fechada
+
+Alinhar os engates e           Engates não alinhados   Seguir instruções referentes
+verificar se algum deles                               ao alinhamento dos
+está com a mandíbula                                   engates
+aberta para engatar, nunca
+permanecendo entre os
+engates
+
+Solicitar ao maquinista
+a movimentação da
+composição para o engate/
+acoplamento
+
+Solicitar ao maquinista        Vagões não foram        Repetir as operações até
+a movimentação da              engatados               que o engate/acoplamento
+composição, para certificar-                           esteja garantido.
+se de que os vagões foram
+engatados
+
+Havendo necessidade de
+ajustar engates, proceder
+conforme cuidados
+especiais para engatar ou
+desengatar veículos
+50   Descrição da atividade      Desvio          Ações necessárias
+
+     Garantir que a composição   Composição em   Solicitar ao maquinista a
+     não esteja em movimento     movimento       parada total da composição
+
+     Realizar as operações com   Mãos ocupadas   Livrar as mãos. Depositar
+     mangueiras e torneiras                      os materiais em local
+                                                 seguro. No caso de lanterna
+                                                 posicionar o foco para
+                                                 iluminação
+
+     Retirar a mangueira do
+     engate cego (briguelo)
+
+     Manter um dos pés
+     fora dos trilhos e
+     acoplar a mangueira do
+     encanamento geral.
+
+     Abrir lentamente a
+     torneira angular do vagão
+     estacionado e depois a
+     torneira angular do vagão
+     ligado à locomotiva,
+     sempre evitando apoiar as
+     mãos sobre os engates dos
+     vagões
+MANOBRAS EM RECUO                                                                    51
+
+
+Descrição da atividade         Desvio                    Ações necessárias
+
+
+
+
+                                                                                     Manobras ferroviárias | capítulo I I I | DESCRIÇÃO DO PADRÃO
+Certificar-se de que os AMV    AMV para rota diferente   Manipular AMV para a rota
+estão posicionados para a                                desejada
+rota desejada
+
+Prender o talabarte do cinto   O vagão não possibilita   Realizar a manobra com
+de segurança no último         prender de modo seguro    velocidade reduzida
+vagão da composição            o talabarte do cinto de   e compatível com a
+                               segurança                 segurança, acompanhando
+                                                         a pé
+
+Fornecer constantemente        Falha na comunicação      Parar imediatamente
+ao maquinista a posição                                  as operações, até o
+e a situação da via e a                                  restabelecimento da
+movimentação de terceiros                                comunicação
+via rádio, à medida que a
+composição for recuando
+
+Ao dar cobertura de
+recuo de uma locomotiva
+escoteira, o OOF deverá
+posicionar-se na sua parte
+traseira, no lado oposto ao
+do maquinista, utilizando o
+cinto de segurança
+     1. Uma das medidas de segurança é prender o talabarte do cinto de segurança
+        no vagão ou locomotiva, conforme descrito no PRO-0004-GEPQT. O que você
+52      deve fazer caso não tenha como prender o talabarte do cinto de segurança no
+        veículo?
+
+
+
+
+     2. Analise a pergunta e marque a opção correta.
+
+     Como você deve proceder quando não há um EPI de uso obrigatório?
+
+     a. Realizar sua tarefa normalmente e depois emitir relatório ao supervisor.
+     b. Tomar cuidado extra na realização da tarefa, mesmo sem o EPI.
+     c. Solicitar ao supervisor os EPI necessários antes de iniciar a tarefa.
+     d. Usar EPI emprestado do manobrista.
+
+
+     3. O que você deve fazer caso o AMV não esteja trancado com o cadeado
+        tetrachave?
+
+
+
+
+     4. Na condição de saída, o AMV deve estar no sentido da circulação. Como você
+        deve proceder se ele estiver em uma posição incorreta?
+5. Relacione as atividades (coluna 1) com as ações necessárias quando
+   há um desvio (coluna 2).
+
+( ) Não estacionar vagões e locomotivas sobre AMV.
+( ) Estacionar vagões e locomotivas sempre dentro do marco ferroviário.
+( ) Conferir a fixação dos calços entre a roda e o trilho.
+( ) Verificar se a torneira do encanamento geral do vagão estacionado está fechada.     53
+( ) Calçar corretamente os vagões que ficarem estacionados.
+( ) Solicitar ao maquinista a movimentação da composição para certificar se os
+  vagões foram engatados.
+
+
+
+
+                                                                                        Manobras ferroviárias | capítulo I I I | DESCRIÇÃO DO PADRÃO
+( ) Fornecer constantemente ao maquinista a posição e situação da via, e a
+  movimentação de terceiros, via rádio, à medida que a composição for recuando.
+
+1. Se o calço não ficar fixo, deve-se repetir a operação até fixá-lo.
+2. Caso você perceba falha na comunicação, pare imediatamente as operações até o
+   restabelecimento da comunicação.
+3. Se o vagão ou locomotiva estiver fora do marco é preciso cortar a composição e
+   posicionar o(s. veículo(s. em outra linha, respeitando o marco.
+4. Se os vagões não forem engatados é preciso repetir as operações até que o
+   acoplamento esteja garantido. Caso haja necessidade de ajustar engates, proceda
+   conforme cuidados especiais para engatar ou desengatar veículos.
+5. Em caso de necessidade extrema, verificar a correta posição do AMV antes da nova
+   movimentação da composição.
+6. Em caso de falta de calços para distribuir na composição é necessário solicitar os
+   calços faltantes à estação e supervisão.
+7. Caso a torneira esteja aberta, feche-a.
+capítulo
+
+
+
+
+04
+                COLOCAÇÃO
+                DO CALÇO
+
+
+           56   Calço
+
+           56   Parâmetro para colocar o calço em veículos
+
+                (sentido do trem descendente)
+
+           61   Calço no último veículo na extremidade oposta
+
+                ao serviço do trem
+
+           62   Cuidados na retirada do calço
+     COLOCAÇÃO
+     DE CALÇO
+
+
+
+
+56   capítulo   Neste capítulo você compreenderá os parâmetros para a colocação de
+
+
+
+
+     04
+                calço nos veículos ferroviários.
+
+                Para isso, é importante saber que o teste de resistência verifica a eficiência da
+                frenagem dos veículos estacionados utilizando-se da tração das locomotivas para
+                forçar o movimento dos veículos.
+
+
+
+
+                CALÇO
+                Qual é a função do calço?
+
+                O calço tem a finalidade de manter o veículo imobilizado, de modo a impedir o
+                movimento involuntário do trem, da composição ou do veículo, por meio de atrito.
+
+                Sob a roda, o calço a impede de girar por causa de seu formato côncavo ascendente e
+                simétrico à roda.
+
+
+                PARÂMETROS PARA COLOCAR
+                O CALÇO EM VEÍCULOS - SENTIDO
+                DO TREM DESCENDENTE
+                Trem com a tração acoplada à composição
+
+                O calço deverá ser colocado no primeiro rodeiro da locomotiva comandante e no
+                primeiro rodeiro do primeiro vagão.
+
+
+
+
+                Corte entre as locomotivas e os vagões estacionados
+
+                Neste caso, o calço deverá ser colocado no primeiro rodeiro do primeiro vagão da
+                composição.
+Nessas situações, é necessário obedecer aos parâmetros descritos na tabela a seguir.                     57
+
+
+   Padrão       Descrição                      Desvio                          Ações necessárias
+
+
+
+
+                                                                                                         Manobras ferroviárias | capítulo I V | COLOCAÇÃO DO CALÇO
+                da atividade
+
+
+
+
+   1
+                Parar o trem no local
+                desejado para o
+                estacionamento com a
+                aplicação suficiente para
+                mantê-lo parado
+
+
+
+
+   2
+                Encostar o engate              O trem já parou com             Seguir com o
+                dos primeiros vagões,          engates comprimidos/            procedimento
+                máximo de três, ou das         encostados
+                locomotivas, eliminando a
+                folga existente caso o trem
+                tenha parado esticado
+                Isso deverá ser feito
+                ainda com os freios da
+                composição aplicados
+
+
+
+
+   3
+                Colocar o calço na             Não tem calço                   Informar à Estação ou
+                extremidade que favorece                                       ao CCO e apertar o
+                o movimento dos vagões         Calços danificados ou sem       dobro dos feios manuais
+                conforme demonstrado           a lingüeta de subida            recomendado pelo ROF
+                nas imagens anteriores
+                                                                               Trocar calço por modelo
+                                                                               adequado
+58   Padrão   Descrição                     Desvio                      Ações necessárias
+              da atividade
+
+
+
+
+     4
+              Aliviar gradativamente o      Brusco movimento do trem    Atenção à aceleração, à
+              freio independente, a fim     Ultrapassagem do limite     velocidade, à amperagem,
+              de esticar os primeiros       do calço provocando risco   ao perfil de via e ao
+              engates, utilizando o         de descarrilamento          movimento inicial do trem
+              peso das locomotivas e a
+              força da gravidade para o     Elevada força de tração     Utilizar o freio
+              movimento inicial do trem                                 independente junto com
+              em direção ao calço                                       o acelerador para melhor
+              Caso isso não seja                                        controle da subida no
+              suficiente, auxiliar a                                    calço
+              subida com o acelerador,
+              gradativamente, até que                                   Atenção aos princípios do
+              o rodeiro do veículo suba                                 MT 0001 GATRG
+              na lingüeta do calço, de
+              forma que a superfície
+              da roda coincida com a
+              concavidade do calço
+
+
+
+
+     5
+              Fechar a torneira do
+              encanamento geral da
+              parte que não ficará
+              estacionada, aplicar os
+              freios de emergência na
+              composição que ficará
+              estacionada e apertar os
+              seus manuais
+
+
+
+
+     6
+              Efetuar o corte dos engates
+Corte entre vagões
+                                                                                                             59
+Neste contexto, independentemente da posição em que será feito o corte, o calço deverá ser colocado no
+primeiro rodeiro do primeiro vagão da parte que ficará estacionada, no sentido que favorece o movimento do
+trem.
+
+
+
+
+                                                                                                             Manobras ferroviárias | capítulo I V | COLOCAÇÃO DO CALÇO
+Veja abaixo a imagem que exemplifica a situação em um trecho de rampa descendente, considerando o sentido
+do trem.
+
+
+
+
+Para esse caso, obedeça aos parâmetros da próxima tabela.
+
+
+ Passo         Atividade                       Desvio                        Medida corretiva
+
+
+
+
+  1
+               Parar o trem no local
+               desejado para o
+               estacionamento e fazer a
+               aplicação total de freios da
+               composição
+
+
+
+
+  2
+               Fechar as torneiras do
+               encanamento geral dos
+               vagões onde será efetuado
+               o corte
+
+
+
+
+  3
+               Aliviar os freios da parte da   Elevada força de tração       Atenção aos princípios
+               composição que seguirá          durante o teste de            de operação do MT 0001
+               com as locomotivas e fazer      resistência                   GATRG
+               o teste de resistência com
+               as duas partes ainda com os
+               engates acoplados
+60   Passo   Atividade                      Desvio                       Medida corretiva
+
+
+
+
+     4
+             Movimentar o trem no           Elevada força de             Aguardar alívio completo
+             sentido contrário e encostar   compressão                   dos freios e atenção aos
+             o engate dos primeiros                                      princípios de operação do
+             vagões (máximo de três)        Composição já parou          MT 0001 GATRG
+             da composição que ficará       encolhida
+             estacionada, eliminando a                                   Prosseguir com a operação
+             folga existente entre eles
+
+
+
+
+     5
+             Colocar o calço na             Não tem calço                Informar à Estação ou
+             extremidade que favorece o                                  ao CCO e apertar o
+             movimento dos vagões           Calços danificados, de       dobro dos feios manuais
+                                            madeira ou sem lingüeta      recomendado pelo ROF
+
+                                                                         Trocar calço por modelo
+                                                                         adequado
+
+
+
+
+     6
+             Aliviar o freio independente   Brusco movimento do trem     Atenção à aceleração, à
+             esticando gradativamente                                    velocidade, à amperagem,
+             os engates, utilizando o       Ultrapassagem do limite do   ao perfil de via e ao
+             peso da composição que         calço provocando risco de    movimento inicial do trem
+             está com os freios aliviados   descarrilamento
+             e a força da gravidade para                                 Utilizar o freio
+             a subida no calço              Elevada força de tração ou   independente junto com
+                                            compressão                   o acelerador para melhor
+             Caso isso não seja                                          controle da subida no calço
+             suficiente, auxiliar com
+             o acelerador até que o                                      Atenção aos princípios do
+             rodeiro suba na lingüeta                                    MT 0001 GATRG
+             do calço, de forma que a
+             superfície da roda coincida                                 Caso necessário, utilizar
+             com a concavidade do calço                                  o freio automático na
+                                                                         parte ligada à locomotiva
+                                                                         para melhor controle da
+                                                                         velocidade de subida no
+                                                                         calço
+Passo   Atividade                     Desvio                       Medida corretiva              61
+
+
+
+
+7
+        Aplicar freios de
+        emergência na composição
+
+
+
+
+                                                                                                 Manobras ferroviárias | capítulo I V | COLOCAÇÃO DO CALÇO
+        que ficará estacionada
+
+        Apertar seus freios manuais
+        conforme item 31.3 do REG
+        0001 GEOPG
+
+
+
+
+8
+        Efetuar o corte dos engates
+
+
+
+
+CALÇO NO ÚLTIMO VEÍCULO
+NA EXTREMIDADE OPOSTA
+AO SERVIÇO DO TREM
+
+Passo   Atividade                     Desvio                       Medida corretiva
+
+
+
+
+1
+        Parar o trem no local         Elevada força de             Utilizar baixos pontos de
+        desejado para o               compressão durante o teste   aceleração apenas para
+        estacionamento com            de resistência               verificar a efetividade dos
+        a aplicação suficiente                                     freios da composição
+        para mantê-lo parado e,
+        ainda, com os freios da
+        composição aplicados,
+        efetuar o teste de
+        resistência
+
+
+
+
+2
+        Colocar o calço na            Não tem calço                Informar à estação ou
+        extremidade que favorece o                                 ao CCO e apertar o
+        movimento dos vagões          Calços danificados, de       dobro dos feios manuais
+                                      madeira ou sem a lingüeta    recomendado pelo ROF
+                                      de subida
+                                                                   Trocar calço por modelo
+                                                                   adequado
+     3
+62           Movimentar o trem no           O trem é muito longo e há     Aguardar alívio completo
+             sentido contrário e encostar   risco de excessiva força de   dos freios e atenção aos
+             gradativa e suavemente os      compressão                    princípios de operação do
+             engates, de forma que a                                      MT 0001 GATRG
+             subida no calço seja suave e   Subida brusca no
+             não ultrapasse o seu limite    calço provocando              Prosseguir com a operação
+                                            descarrilamento
+
+
+
+
+     4
+             Aplicar freios de
+             emergência na composição
+             que ficará estacionada e
+             apertar seus freios manuais
+
+
+
+
+     5
+             Efetuar o corte dos engates
+
+
+
+
+                   CUIDADOS NA RETIRADA
+     		            DO CALÇO
+
+     Passo   Atividade                      Desvio                        Medida corretiva
+
+
+
+
+     1
+             Acoplar o trem nos veículos    Engate brusco provocando      Acoplar engates de forma
+             estacionados garantindo        risco de descarrilamento do   suave, atentando para a
+             o engate sem riscos            vagão calçado                 velocidade, as distâncias
+             para o veículo que está                                      e as informações do
+             estacionado com o calço                                      funcionário que está
+                                                                          controlando a manobra
+             Verificar a posição do trem
+             e o lado da composição em
+             que será feito o engate
+
+             Não ligar as mangueiras de
+             ar após o acoplamento
+2
+    Movimentar a composição       O calço está distante da      Carregar e aliviar o sistema   63
+    apenas o suficiente para      tração e a tentativa de       de freios, atentando para
+    a liberação do calço pelo     movimentação pode             que a composição não se
+    rodeiro                       provocar elevadas forças de   movimente em sentido
+
+
+
+
+                                                                                               Manobras ferroviárias | capítulo I V | COLOCAÇÃO DO CALÇO
+                                  tração ou compressão          contrário ou em direção ao
+                                                                calço do vagão
+
+                                                                Os manuais aplicados
+                                                                deverão ser mantidos e os
+                                                                princípios de partida de
+                                                                trens contidos no MT 0001
+                                                                GATRG observados
+
+
+
+
+3
+    Aplicar freios de
+    emergência na composição
+    que ficará estacionada e
+    apertar seus freios manuais
+
+
+
+
+                                                                         É terminantemente
+                                                                         proibida a
+                                                                         colocação ou a
+                                                                         retirada do calço
+                                                                         do local desejado
+                                                                         pelo funcionário
+                                                                         responsável
+                                                                         com o trem em
+                                                                         movimento.
+     1. Quais são os campos de aplicação das manobras ferroviárias?
+
+
+64
+
+
+
+
+     2. Marque a alternativa incorreta:
+
+     a. Ao executar acoplamento entre locomotivas, abra a torneira do encanamento geral
+         somente após o acoplamento do cabo jumper.
+     b. Ao fazer o teste de vazamento e gradiente, solicite ao maquinista autorização para
+         colocar o manômetro na cauda do trem.
+     c. Em algumas situações é aconselhável chutar, bater ou balançar mangueiras
+         acopladas e pressurizadas.
+     d. Antes de abrir uma torneira angular para uma mangueira de ar desengatada, deve-
+         se utilizar o dispositivo de cauda.
+
+     3. Cite três cuidados gerais a serem observados durante as operações
+        de manobras.
+
+
+
+
+     4. Analise as afirmações e marque verdadeiro (V) ou falso (F).
+
+     ( ) As atividades que obriguem o responsável pelo engate/desengate a se
+        posicionar entre vagões devem ser realizadas onde exista espaço suficiente para
+        que ele se afaste da via para qualquer um dos lados.
+
+     ( ) Deve-se evitar ao máximo transpor o engate em composição estacionada. Sendo
+        inevitável, fazer antes a comunicação via rádio com o maquinista e obter resposta
+        dele, garantindo que em hipótese alguma a composição será movimentada.
+
+     ( ) É tolerável subir ou descer do veículo ( vagão ou locomotiva) em movimento e
+        com luvas impregnadas de óleo.
+5. Complete as frases e encontre a resposta correta no caça-palavras.
+
+a. Deverão ser utilizados os equipamentos de proteção individual
+estipulados para cada atividade, conforme definições da ______________,
+certificando-se antes do início das ______________ de que eles
+encontram-se em perfeitas condições de uso.
+
+b. Devem ser evitadas ______________ e desacoplamento de vagões                                                         65
+nas linhas com paredão de ______________, rampas de passageiros ou
+qualquer outra condição que limite a ______________ do operador para a
+lateral da via.
+
+
+
+
+                                                                                                                        Manobras ferroviárias | capítulo I V | COLOCAÇÃO DO CALÇO
+c. Se escutar um ______________, fechar as torneiras angulares de ambos
+os veículos e certificar que a ______________ nas mangueiras está
+completamente aliviada antes de tentar um ajuste ou ______________.
+
+
+
+r   m   w   x   a   r   m   o   v   i   m   e   n   t   a   ç   ã   o   s   A   D   o   E   ç   F   A   N   K   E   o
+
+L   T   C   B   S   E   J   F   G   J   K   L   S   Q   ç   X   A   Q   Z   X   T   O   P   Y   U   I   L   A   F   J
+
+L   o   W   C   A   F   H   U   R   Q   Q   C   o   C   V   I   ç   I   B   A   C   D   T   P   A   E   F   V   E   I
+
+I   R   V   o   S   X   V   Q   ç   U   E   C   V   I   W   C   N   S   Q   A   o   D   Q   W   T   O   K   G   J   o
+
+o   Y   B   m   W   Y   O   M   C   A   V   R   Y   U   C   W   Y   O   P   L   V   M   J   K   I   T   E   Q   D   H
+
+P   R   W   C   V   N   M   Y   E   U   o   E   R   N   ç   u   i   a   x   b   e   q   i   o   c   c   b   m   r   w
+
+r   c   n   w   a   m   e   e   i   m   a   n   o   b   r   a   s   d   e   a   c   o   p   l   a   m   e   n   t   o
+
+o   r   b   t   a   c   e   o   l   n   u   t   ç   r   f   g   h   e   d   x   y   u   e   v   r   d   e   j   k   e
+
+o   f   h   ç   a   a   t   u   m   c   b   o   y   e   m   t   t   o   l   k   i   5   5   s   r   i   o   ç   r   b
+
+f   e   x   z   g   h   r   w   d   v   m   i   l   t   g   v   b   n   i   m   o   k   h   n   e   r   y   r   e   w
+
+d   d   v   a   z   a   m   e   n   t   o   d   e   a   r   r   u   y   w   q   x   v   b   m   g   t   g   f   h   y
+
+j   f   v   t   g   e   r   u   ç   y   b   n   z   a   q   f   a   a   i   t   b   r   f   v   a   n   j   o   p   l
+
+j   m   g   i   s   e   r   m   s   c   n   v   m   p   o   u   l   m   k   b   n   V   c   f   m   e   t   u   i   e
+
+t   ç   e   v   b   n   m   t   u   i   q   a   e   r   t   m   b   v   c   j   o   p   i   l   e   m   t   u   i   r
+
+r   t   v   i   r   y   i   o   m   b   s   a   q   z   z   ç   r   r   b   n   u   i   o   r   n   b   r   h   m   ç
+
+t   i   o   d   n   v   e   s   d   b   i   k   j   l   t   y   e   b   v   a   x   o   u   r   t   w   c   h   f   t
+
+e   f   v   a   ç   a   m   c   u   r   ç   w   f   n   m   o   y   v   n   f   w   m   y   u   o   o   k   m   b   v
+
+t   i   f   d   a   c   w   g   i   t   e   t   m   j   o   r   q   a   a   o   y   k   j   h   r   t   u   h   g   n
+
+n   m   s   e   g   u   r   a   n   ç   a   d   o   t   r   a   b   a   l   h   o   e   e   b   m   m   s   b   d   e
+
+s   c   b   i   l   t   y   ç   e   e   y   u   k   f   s   r   s   c   u   o   e   e   a   x   s   c   d   s   c   i
+
+m   r   b   a   e   t   o   u   k   j   t   m   b   i   i   p   k   r   w   c   m   s   r   t   y   m   c   v   o   t
+
+a   d   e   t   ç   m   v   n   r   r   u   o   e   a   s   c   e   m   a   s   u   o   e   f   s   c   y   i   e   n
+
+ç   o   p   r   w   a   q   z   e   y   r   t   ç   i   b   b   u   i   m   r   a   t   u   e   c   u   o   n   a   o
+
+t   g   e   t   u   c   v   a   p   i   o   r   v   u   o   r   x   v   d   j   k   l   u   t   b   n   a   r   t   o
+
+d   f   b   y   k   l   m   b   a   s   c   v   y   h   s   v   z   m   g   v   n   i   p   r   ç   q   c   v   m   p
+
+f   v   b   n   u   r   w   d   r   a   ç   z   e   u   o   n   d   w   r   y   l   a   w   t   y   b   v   w   a   s
+
+m   e   v   m   n   b   t   u   o   x   t   i   w   x   m   c   o   e   v   v   a   e   o   g   t   e   o   i   m   m
+
+f   v   e   y   x   c   i   o   t   e   m   n   t   e   i   x   c   e   q   z   s   t   i   y   e   d   h   d   e   a
+
+h   r   t   w   c   ç   w   i   o   p   a   z   w   ç   v   b   y   e   ç   x   s   a   t   u   o   v   b   e   ç   s
+
+m   e   v   c   e   y   i   s   ç   c   x   w   i   p   w   z   d   y   p   r   e   s   s   ã   o   j   m   t   r   c
+VALE A PENA RELEMBRAR!                                 03.
+                                                       7–6–4–3–2–5–1
+CAPÍTULO I
+                                                       04.                                           haste do dreno
+01.
+Lanterna (à noite), chave de punho EG, cadeado
+tetrachave de reserva,
+rádios transceptores portáteis com alça.
+
+OBS: o aluno deverá citar apenas duas opções
+das respostas apontadas.
+                                                  Freio manual               Mandíbula           válvula de alívio
+02.
+a. Óculos de segurança
+b. Protetor auricular                                  CAPITULO III                             torneira de
+c. Cinto de segurança                                                                           isolamento
+d. Capacete                                            01.
+                                                       Realizar a manobra com velocidade reduzida e
+03.                                                    compatível com a segurança, acompanhando a pé.
+É necessário aguardar a parada total dos veículos
+e solicitar ao maquinista autorização via rádio        02.
+para processar o engate.                               c
+
+04.                                                    03.
+d                                                      Substituir pelo cadeado reserva e avisar ao
+                                                       supervisor.
+05.
+O empregado deve fechar as torneiras angulares         04.
+de ambos os veículos e certificar que a pressão        Solicitar a parada da composição e posicionar
+nas mangueiras está completamente aliviada             corretamente o AMV.
+antes de tentar um ajuste ou reparo. Não
+deve chutar, bater ou balançar as mangueiras           05.
+acopladas e pressurizadas.                             5 – 3 – 1 –7 – 6 – 4 – 2
+
+CAPITULO II                                            EXERCITANDO PRA VALER!
+
+01.                                                    01.
+V–V–F–V–F–F–F                                          Os campos de aplicação serão todas as estações,
+                                                       pátios e terminais da FCA, EFVM e EFC, onde forem
+02.                                                    executadas manobras ferroviárias, aplicando-se a
+a. movimento – circulando – oposto                     empregados próprios e terceiros.
+b. lateral – obstruções
+c. manobra – autorização – curvar                      02.
+d. estacionado – operação – indesejado                 c
+e. recuo
+03.                                                          04.
+Conhecer previamente os detalhes                             V–V–F
+das operações a serem executadas,
+obedecer aos procedimentos de                                05.
+recuo de trens e de manobras em                              a. segurança do trabalho – atividades.
+pátios descritos no ROF e antes de                           b. manobras de acoplamento –
+iniciar e durante a execução de todas                        carregamento – movimentação.
+as atividades, verificar as condições                        c. vazamento de ar – pressão – reparo.
+das linhas, marcos, gabaritos e áreas
+adjacentes.
+
+
+r    m   w   x   a   r   m   o   v   i   m   e   n   t   a   ç   ã   o   s   A   D   o   E   ç   F   A   N   K   E   o
+
+ L   T   C   B   S   E   J   F   G   J   K   L   S   Q   ç   X   A   Q   Z   X   T   O   P   Y   U   I   L   A   F   J
+
+ L   o   W   C   A   F   H   U   R   Q   Q   C   o   C   V   I   ç   I   B   A   C   D   T   P   A   E   F   V   E   I
+
+ I   R   V   o   S   X   V   Q   ç   U   E   C   V   I   W   C   N   S   Q   A   o   D   Q   W   T   O   K   G   J   o
+
+o    Y   B   m   W   Y   O   M   C   A   V   R   Y   U   C   W   Y   O   P   L   V   M   J   K   I   T   E   Q   D   H
+
+ P   R   W   C   V   N   M   Y   E   U   o   E   R   N   ç   u   i   a   x   b   e   q   i   o   c   c   b   m   r   w
+
+ r   c   n   w   a   m   e   e   i   m   a   n   o   b   r   a   s   d   e   a   c   o   p   l   a   m   e   n   t   o
+
+o    r   b   t   a   c   e   o   l   n   u   t   ç   r   f   g   h   e   d   x   y   u   e   v   r   d   e   j   k   e
+
+o    f   h   ç   a   a   t   u   m   c   b   o   y   e   m   t   t   o   l   k   i   5   5   s   r   i   o   ç   r   b
+
+ f   e   x   z   g   h   r   w   d   v   m   i   l   t   g   v   b   n   i   m   o   k   h   n   e   r   y   r   e   w
+
+d    d   v   a   z   a   m   e   n   t   o   d   e   a   r   r   u   y   w   q   x   v   b   m   g   t   g   f   h   y
+
+ j   f   v   t   g   e   r   u   ç   y   b   n   z   a   q   f   a   a   i   t   b   r   f   v   a   n   j   o   p   l
+
+ j   m   g   i   s   e   r   m   s   c   n   v   m   p   o   u   l   m   k   b   n   V   c   f   m   e   t   u   i   e
+
+ t   ç   e   v   b   n   m   t   u   i   q   a   e   r   t   m   b   v   c   j   o   p   i   l   e   m   t   u   i   r
+
+r    t   v   i   r   y   i   o   m   b   s   a   q   z   z   ç   r   r   b   n   u   i   o   r   n   b   r   h   m   ç
+
+ t   i   o   d   n   v   e   s   d   b   i   k   j   l   t   y   e   b   v   a   x   o   u   r   t   w   c   h   f   t
+
+ e   f   v   a   ç   a   m   c   u   r   ç   w   f   n   m   o   y   v   n   f   w   m   y   u   o   o   k   m   b   v
+
+ t   i   f   d   a   c   w   g   i   t   e   t   m   j   o   r   q   a   a   o   y   k   j   h   r   t   u   h   g   n
+
+n    m   s   e   g   u   r   a   n   ç   a   d   o   t   r   a   b   a   l   h   o   e   e   b   m   m   s   b   d   e
+
+ s   c   b   i   l   t   y   ç   e   e   y   u   k   f   s   r   s   c   u   o   e   e   a   x   s   c   d   s   c   i
+
+m    r   b   a   e   t   o   u   k   j   t   m   b   i   i   p   k   r   w   c   m   s   r   t   y   m   c   v   o   t
+
+a    d   e   t   ç   m   v   n   r   r   u   o   e   a   s   c   e   m   a   s   u   o   e   f   s   c   y   i   e   n
+
+ç    o   p   r   w   a   q   z   e   y   r   t   ç   i   b   b   u   i   m   r   a   t   u   e   c   u   o   n   a   o
+
+ t   g   e   t   u   c   v   a   p   i   o   r   v   u   o   r   x   v   d   j   k   l   u   t   b   n   a   r   t   o
+
+d    f   b   y   k   l   m   b   a   s   c   v   y   h   s   v   z   m   g   v   n   i   p   r   ç   q   c   v   m   p
+
+ f   v   b   n   u   r   w   d   r   a   ç   z   e   u   o   n   d   w   r   y   l   a   w   t   y   b   v   w   a   s
+
+m    e   v   m   n   b   t   u   o   x   t   i   w   x   m   c   o   e   v   v   a   e   o   g   t   e   o   i   m   m
+
+ f   v   e   y   x   c   i   o   t   e   m   n   t   e   i   x   c   e   q   z   s   t   i   y   e   d   h   d   e   a
+
+h    r   t   w   c   ç   w   i   o   p   a   z   w   ç   v   b   y   e   ç   x   s   a   t   u   o   v   b   e   ç   s
+
+m    e   v   c   e   y   i   s   ç   c   x   w   i   p   w   z   d   y   p   r   e   s   s   ã   o   j   m   t   r   c
+valer - educação vale
+

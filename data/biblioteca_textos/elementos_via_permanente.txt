@@ -1,0 +1,1968 @@
+   Elementos de
+   Via Permanente
+   Trilha Técnica: Ferrovia | Controle
+
+
+
+
+VALER - EDUCAÇÃO VALE
+Elementos de
+Via Permanente
+Trilha Técnica: Ferrovia | Controle
+
+
+
+
+  Colaboradores
+
+   •• Calixto Pestana
+   •• Carlos Fonseca
+   •• Edmar Mencher
+   •• Eustáquio Andrade
+   •• Joaquim Dutra
+   •• Marcos Rangel
+   •• Robson Borges
+   •• Sebastião Nobre
+
+
+
+
+  Mensagem de direitos autorais:
+
+  É proibida a duplicação ou a reprodução deste material ou de parte dele, sob
+  qualquer meio, sem autorização expressa da Vale.
+
+  Este material é destinado exclusivamente para o uso em treinamentos internos.
+Caro Empregado,
+
+
+
+
+                                                              Mensagem Valer
+Você está participando da ação de desenvolvimento
+Elementos de Via Permanente de sua Trilha Técnica.
+
+A Valer – Educação Vale construiu esta Trilha em conjunto
+com profissionais técnicos da sua área, com o objetivo de
+desenvolver as competências essenciais para o melhor
+desempenho de sua função e o aperfeiçoamento da condução
+de suas atividades diárias.
+
+Todos os treinamentos contidos na Trilha Técnica contribuem
+para o seu desenvolvimento profissional e reforçam os
+valores saúde e segurança, que são indispensáveis para sua
+atuação em conformidade com os padrões de excelência
+exigidos pela Vale.
+
+Agora é com você. Siga o seu caminho e cresça com a Vale.
+
+Vamos Trilhar!
+Introdução                                   5
+
+
+
+
+                                                 Sumário
+1. As Ferrovias de Carga no Brasil           6
+ 1.1 Histórico                               7
+ 1.2 Malha Ferroviária Brasileira            8
+ 1.3 Características do Modal Ferroviário   10
+
+2. Via Permanente                           12
+ 2.1 Definição                              13
+ 2.2 Superestrutura de Via Permanente       14
+ 2.3 Infraestrutura de Via Permanente       34
+
+3. Manutenção de Via Permanente             40
+ 3.1 Manutenção                             41
+ 3.2 Tipos de Serviços de Manutenção        43
+Os elementos de via permanente visam à garantia da
+
+
+
+
+                                                             Introdução
+segurança do sistema de deslocamento dos trens.
+
+Por esse motivo, existe a necessidade de um
+aprofundamento sobre os elementos de via permanente.
+Dessa forma, busca-se colaborar para o cumprimento
+dos objetivos da Vale, bem como atingir a excelência em
+pesquisa, desenvolvimento e implantação de projetos.
+
+Com sua participação neste curso e com o cumprimento dos
+procedimentos definidos pela Vale, você está dando mais um
+passo para que esses objetivos sejam atingidos.
+                Inserir Imagem
+
+
+
+
+                                                               1
+                                                         no Brasil
+                                                         As Ferrovias de Carga
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 1.1 Histórico
+•• 1.2 Malha Ferroviária Brasileira
+•• 1.3 Características do Modal Ferroviário
+Elementos de Via Permanente                                                                     7
+
+
+
+
+1.1 Histórico
+
+
+
+ Historicamente, as atividades de transporte ferroviário de carga no Brasil podem ser
+ divididas em três fases principais.
+ Em meados do século XIX, ocorreu a primeira fase, que foi referente à instalação das
+ primeiras ferrovias em território nacional.
+ Essa fase se caracterizou por um alto grau de investimento de empresas internacionais.
+ Isso aconteceu em decorrência da garantia de atraentes taxas de retorno dada pelo
+ governo brasileiro. A instalação da malha ferroviária paulista ocorreu no mesmo período e
+ foi financiada pelos cafeicultores do estado de São Paulo.
+ A segunda fase histórica foi a de nacionalização gradual das ferrovias brasileiras, processo
+ que se iniciou no século XX e teve como marcos:
+
+   •• a constituição da Rede Ferroviária Federal S.A. (RFFSA) pela lei nº 3.115, de 1957;
+   •• a criação da Ferrovia Paulista S.A. (FEPASA) pela lei estadual nº 10.410, de 1971.
+ A terceira e a última fase foi aquela em que se devolveu a malha e a operação ferroviárias aos
+ investidores privados. Nessa fase, é instituído o processo de arrendamento, por 30 anos.
+ O indício de que essa fase chegaria foi a inclusão da RFFSA, em 1992, no Programa Nacional de
+ Desestatização, e seu marco fundamental foi a Lei das Concessões, de 1995 (lei nº 8.987/95).
+        Elementos de Via Permanente                                                                    8
+
+
+
+
+        1.2 Malha Ferroviária
+        Brasileira
+
+
+
+         O objetivo da implantação da malha ferroviária brasileira foi interligar vários estados do país,
+         principalmente regiões próximas aos portos de Parati, Angra dos Reis e Porto de Santos.
+         Comparando as condições atuais da malha ferroviária brasileira com o período anterior
+         à desestatização, é possível notar que os índices apontam crescimento na recuperação
+         da atividade ferroviária no país. Há também possibilidades de aumento da participação
+         na matriz de transporte, sobretudo a médio e longo prazos. Isso se deu em função dos
+         investimentos feitos pelas empresas concessionárias.
+         Existem, no Brasil, ferrovias com padrões de competitividade internacional e com qualidade
+                                 0-126-122
+         de operações que permite,     por exemplo, a agilidade desejada para a integração multimodal.
+         A malha ferroviária brasileira é composta de 29,7 mil quilômetros de ferrovias e teve seu
+         programa de concessão concluído em dezembro de 1998.
+o!
+
+ nte!
+                Importante!
+
+ais!            Quase toda a malha ferroviária brasileira é administrada pela
+                iniciativa privada.
+ ndo!
+Elementos de Via Permanente                                                                 9
+
+
+
+
+ Veja, a seguir, o mapa ferroviário brasileiro:
+
+
+
+
+                 Mapa ferroviário brasileiro
+
+
+ Disponível em: <http://www.antf.org.br/pdfs/mapa-ferroviario-brasileiro-2011.pdf> Acesso
+ em: 11 setembro 2012.
+        Elementos de Via Permanente                                                            10
+
+
+
+
+        1.3 Características do
+        Modal Ferroviário
+
+
+
+                                      0-126-122
+
+         O modal ferroviário tem capacidade de transportar grandes volumes, com elevada eficiência
+         energética, principalmente em casos de deslocamentos a médias e grandes distâncias.
+o!
+
+ nte!
+                Importante!
+
+ais!            As principais características do modal ferroviário são:
+                  •• baixo custo tonelada/quilômetro;
+ ndo!
+                  •• eficácia para grandes distâncias e grandes volumes.
+
+
+
+        O modal ferroviário garante também maior segurança em relação ao modal rodoviário, pois
+        apresenta menor índice de acidentes e menor incidência de furtos e roubos.
+         São cargas típicas do modal ferroviário:
+
+           •• produtos siderúrgicos;
+           •• grãos;
+           •• minério de ferro;
+           •• cimento e cal;
+           •• adubos e fertilizantes;
+           •• derivados de petróleo;
+           •• calcário;
+           •• carvão mineral e clínquer;
+           •• contêineres.
+                                      0-126-122
+        Elementos de Via Permanente                                                               11
+
+
+
+o!
+
+ nte!    Em termos de carga transportada, o sistema ferroviário brasileiro é o maior da América
+         Latina, atingindo 290,5 bilhões de tku (tonelada por quilômetro útil), em 2011.
+ais!
+
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou as ferrovias de carga no Brasil, seu
+                histórico e sua evolução. Podem-se destacar:
+                  •• o histórico das atividades de transporte ferroviário de carga
+                      no Brasil;
+                  •• a implantação da malha ferroviária brasileira e suas mudanças
+                      ao longo dos anos;
+                  •• as características do modal ferroviário e sua capacidade para
+                      transportar grandes volumes;
+                  •• as cargas típicas do modal ferroviário.
+               Inserir Imagem
+
+
+
+
+                                                         2
+                                                         Via Permanente
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 2.1 Definição
+•• 2.2 Superestrutura de Via Permanente
+•• 2.3 Infraestrutura de Via Vermanente
+       Elementos de Via Permanente                                                               13
+
+
+
+
+       2.1 Definição
+
+
+
+        Ao conjunto de elementos que proporciona suporte e direção ao deslocamento dos trens,
+        dá-se o nome de "via permanente".
+        A via permanente é construída de modo a ser renovada quando:
+
+          •• ocorre desgaste e0-126-122
+                               é atingido o limite de tolerância exigido pela segurança e pela
+               comodidade da circulação;
+
+          •• há necessidade de melhoria em função do aumento de carga por eixo ou de
+               velocidade (remodelação).
+!
+
+nte!
+               Importante!
+
+ais!           A via permanente é composta pela superestrutura e
+               pela infraestrutura.
+ndo!
+Elementos de Via Permanente                                                              14
+
+
+
+
+2.2 Superestrutura de
+Via Permanente
+
+
+
+ Superestrutura de via permanente é a parte superior da estrutura da via, ou seja, é a
+ superfície de rolamento da ferrovia.
+ Essa superestrutura é formada por:
+
+   •• lastro e sublastro;
+   •• dormentes;
+   •• trilhos;
+   •• acessórios;
+   •• Aparelhos de Mudança de Via (AMVs).
+ Saiba mais sobre esses elementos a seguir.
+
+
+ Lastro e sublastro
+
+ Chama-se "lastro" a camada de material granular de diversas origens, na qual se apoiam e se
+ encaixam os dormentes da via férrea. O lastro funciona como suporte elástico da via.
+        Elementos de Via Permanente                                                                   15
+
+
+
+
+         Veja, a seguir, a imagem de um lastro:
+
+
+
+                                                                              Lastro
+
+
+
+
+                                      0-126-122
+
+
+                            Lastro
+
+o!
+
+ nte!
+                Importante!
+
+ais!            As funções do lastro são:
+                  •• transmissão de esforços às camadas inferiores (função estrutural);
+ ndo!
+                  •• resistência aos esforços transversais e longitudinais (por meio da
+                     ancoragem da linha);
+                  •• drenagem da via;
+                  •• facilidade na manutenção da via.
+
+         Existem algumas propriedades exigidas para o lastro. O lastro deve ser obtido por
+         intermédio da britagem de rochas duras, compactas, de estrutura não lamelar ou
+         xistosa, de elevada resistência à compressão (acima de 1.000 kgf/cm²) e elevada massa
+         específica aparente.
+         As rochas utilizadas para a obtenção do lastro são:
+
+           •• granito;
+           •• basalto;
+           •• calcário;
+           •• escória de aciaria.
+         É possível utilizar também o lastro alternativo. Esse é feito por meio da escória de aciaria, mas
+         apresenta algumas desvantagens (detectadas mediante ensaios de caracterização). São elas:
+
+           •• granulometria;
+           •• porosidade;
+           •• abrasão;
+           •• retenção de água;
+           •• teor de fragmentos.
+Elementos de Via Permanente                                                                   16
+
+
+
+
+ É necessário fazer a manutenção de lastro, que pode ser feita por meio de:
+
+   •• desguarnecimento (limpeza manual e mecânica do lastro);
+   •• substituição ou reposição do lastro, devido a sua contaminação ou perda de
+        granulometria, ocasionada pelo excesso de socaria e pela utilização da via com alta
+        carga por eixo.
+ Veja, a seguir, uma imagem da reposição de lastro:
+
+
+
+
+                              Reposição de lastro
+
+ A espessura de camada de lastro deve permitir que a pressão atuante na base do
+ dormente seja transmitida à plataforma com taxa de trabalho compatível com sua
+ capacidade de suporte.
+ Geralmente, as ferrovias estabelecem uma altura de lastro para cada segmento de linha, em
+ função do volume do transporte a realizar, do tipo de dormente utilizado, da bitola etc.
+ Veja, a seguir, a imagem da construção de uma via:
+
+
+
+
+                              Construção da via
+Elementos de Via Permanente                                                                    17
+
+
+
+
+ O sublastro é a camada granular que se localiza abaixo do lastro. Ela tem função de filtro e
+ selante e impede que as águas da chuva penetrem no solo que forma a base da plataforma.
+ Veja, a seguir, uma imagem de sublastro e uma imagem de processo de filtro:
+
+
+
+                                                                          Sublastro
+
+
+
+                                                                           Solo fino
+
+                      Sublastro
+
+
+
+
+                        Processo de filtro
+
+
+
+ Dormentes
+
+ Chamam-se "dormentes" os elementos da superestrutura ferroviária que formam a superfície
+ de apoio para os trilhos.
+ Os dormentes são travessas de conformação, geralmente prismáticas, nas quais são fixados
+ os trilhos.
+ Eles são colocados, de forma transversal, por entre o lastro e são espaçados regularmente
+ uns dos outros.
+ As funções dos dormentes são:
+
+   •• garantia da fixação e da manutenção do suporte adequado e seguro aos trilhos;
+   •• manutenção constante da bitola;
+   •• amortecimento e absorção dos choques do rolamento;
+   •• distribuição e transmissão dos esforços recebidos dos trilhos ao lastro;
+   •• provimento suficiente da estabilidade da via no sentido transversal, vertical e longitudinal;
+   •• manutenção do alinhamento longitudinal e transversal da via.
+Elementos de Via Permanente                                                             18
+
+
+
+
+ Veja, a seguir, um esquema que mostra os principais materiais dos quais os dormentes
+ podem ser feitos:
+
+
+                                                          Dormentes
+
+
+
+
+                    Madeira                      Aço              Concreto   Plástico
+
+
+ Os dormentes de madeira ou prismático têm algumas características específicas.
+ Os perfis dos dormentes de madeira aplicados na Estrada de Ferro Vitória a Minas
+ (EFVM) são:
+
+   EFVM
+   BITOLA MISTA: 1000 mm e 1600 mm
+
+   Comprimento                Largura           Altura
+
+   2800 mm                    240 mm            180 mm
+
+   2300 mm                    240 mm            180 mm
+
+   Dimensões dos dormentes de madeira comuns aplicados na EFVM
+
+
+ As dimensões dos dormentes de madeira comuns aplicados na Ferrovia Centro-Atlântica
+ (FCA) são:
+
+   FCA
+   BITOLA MÉTRICA: 1000 mm
+
+   Comprimento                Largura           Altura
+
+   2000 mm                    220 mm            160 mm
+
+
+
+   FCA
+   BITOLA MISTA: 1000 mm e 1600 mm
+
+   Comprimento                Largura           Altura
+
+   2800 mm                    220 mm            160 mm
+
+   Dimensões dos dormentes de madeira comuns aplicados na FCA
+        Elementos de Via Permanente                                                           19
+
+
+
+
+         As dimensões dos dormentes de madeira comuns aplicados na Estrada de Ferro Carajás
+         (EFC) são:
+
+           EFC
+           BITOLA LARGA E/OU MISTA: 1600 mm e/ou 1000 mm
+
+           Comprimento                Largura           Altura
+                                        0-126-122
+           2800 mm                    240 mm            170 mm
+
+           Dimensões dos dormentes de madeira comuns aplicados na EFC
+
+
+o!
+
+ nte!
+                 Importante!
+
+ais!             As vantagens da utilização dos dormentes de madeira são:
+                   •• boa resistência e elasticidade;
+ ndo!
+                   •• facilidade de manuseio (carga e descarga);
+                   •• bom isolamento em linhas sinalizadas;
+                   •• menores danos em caso de descarrilamento;
+                   •• facilidade de substituição da fixação.
+
+
+                 As desvantagens da utilização dos dormentes de madeira são:
+                   •• apodrecimento progressivo;
+                   •• queima com facilidade;
+                   •• afrouxamento da fixação;
+                   •• sujeito à escassez.
+
+
+         Veja, a seguir, uma imagem da utilização do dormente de madeira em uma estrada:
+
+
+
+
+                                         Dormente de madeira
+        Elementos de Via Permanente                                                                    20
+
+
+
+
+         Os dormentes de aço, por sua vez, possuem características próprias. Veja as dimensões
+         desses dormentes utilizados na EFVM e na EFC:
+
+         EFVM                                                     EFC
+         BITOLA MÉTRICA: 1000 mm                                  BITOLA LARGA: 1600 mm
+
+         Comprimento            Largura0-126-122 Altura           Comprimento       Largura   Altura
+
+         2200 mm                260 mm              200 mm        2800 mm           260 mm    300 mm
+
+         Dimensões dos dormentes de aço aplicados na EFVM e EFC
+
+o!
+
+ nte!
+                Importante!
+
+ais!            As vantagens da utilização dos dormentes de aço são:
+                  •• material perfeitamente homogêneo;
+ ndo!
+                  •• longa vida útil;
+                  •• boa resistência aos esforços transversais.
+
+
+                As desvantagens da utilização dos dormentes de aço são:
+                  •• maior dificuldade para socaria e nivelamento;
+                  •• falta de isolamento elétrico em linhas sinalizadas;
+                  •• necessidade de linha com alto padrão de lastro e isenta de
+                     impactos na superfície de rolamento.
+
+         Veja, a seguir, uma imagem da utilização do dormente de aço em uma estrada:
+
+
+
+
+                                         Dormente de aço
+
+         Os dormentes de concreto também possuem vantagens e desvantagens. Sob a ação
+         de cargas bruscas, o dormente de concreto geralmente se rompe. A ruptura acontece,
+         principalmente, na região de apoio do trilho e nas sedes das fixações. Nessas condições,
+         surgem fissuras e trincas, seguidas de desintegração mais ou menos total.
+        Elementos de Via Permanente                                                           21
+
+
+
+                                      0-126-122
+         Veja, a seguir, o perfil do dormente de concreto:
+         240 kg (FCA e EFVM)
+o!
+
+ nte!
+                Importante!
+
+ais!            As vantagens da utilização dos dormentes de concreto são:
+                  •• longa vida útil;
+ ndo!
+                  •• peso elevado, proporcionando mais elasticidade à via;
+                  •• resistência aos agentes atmosféricos;
+                  •• características físicas e mecânicas uniformes;
+                  •• redução dos custos de manutenção da via.
+
+
+                As desvantagens da utilização dos dormentes de concreto são:
+                  •• necessidade de processo de fabricação apurado;
+                  •• dificuldade de transporte e manuseio devido ao peso elevado;
+                  •• dificuldade de fixação eficaz;
+                  •• necessidade de linha com alto padrão de lastro e nivelamento;
+                  •• perda total em caso de acidente.
+
+         Veja, a seguir, uma imagem da utilização do dormente de concreto em uma estrada:
+
+
+
+
+                           Dormente de concreto
+
+         Existe ainda a possibilidade do uso de dormentes alternativos. Faz-se a busca permanente
+         de insumos diversos para suprir as necessidades de dormentes das ferrovias. O dormente
+         de madeira nativa tem se tornado uma opção cada vez menos defensável do ponto de vista
+         do meio ambiente, porém sua substituição por dormentes de eucalipto de reflorestamento
+         tem encontrado dificuldades de capacidade de fornecimento no mercado. Por outro lado, a
+         produção de dormentes a partir do concreto e do aço tem um custo relativamente elevado.
+Elementos de Via Permanente                                                                  22
+
+
+
+
+ A utilização de materiais recicláveis, como a borracha, o plástico ou a mistura de vários
+ componentes, tem sido a alternativa em testes. As dimensões dos dormentes alternativos
+ utilizados em testes são similares às dos dormentes de madeira.
+ Veja, a seguir, uma imagem de dormente alternativo em uma estrada:
+
+
+
+
+                                        Dormente alternativo
+
+
+
+ Trilhos
+
+ Trilhos são os elementos da superestrutura que constituem a superfície de rolamento para as
+ rodas dos veículos ferroviários.
+ Veja, a seguir, uma imagem das partes integrantes dos trilhos:
+
+
+
+                                                               Solda
+
+                                 Boleto
+
+
+                                 Alma
+
+
+
+                               Patim
+
+
+                          Partes integrantes dos trilhos
+
+ Os trilhos possuem três partes. Veja as características de cada uma delas:
+
+   •• boleto – é a parte superior do trilho, onde se apoiam e se deslocam as rodas dos
+        veículos ferroviários;
+
+   •• alma – é a parte estreita e vertical da seção transversal do trilho, compreendida entre o
+        boleto e o patim;
+
+   •• patim – é a parte mais larga do trilho, que pode ser apoiada e fixada no dormente de
+        forma direta ou indireta, por intermédio da placa de apoio.
+Elementos de Via Permanente                                                              23
+
+
+
+
+ Alguns tipos de trilhos utilizados são:
+
+   •• aço carbono;
+   •• aço liga;
+   •• boleto tratado.
+ Alguns perfis de trilhos são:
+
+   •• TR – 32 (32 kg por metro);
+   •• TR – 37 (37 kg por metro);
+   •• TR – 45 (45 kg por metro);
+   •• TR – 57 (57 kg por metro);
+   •• TR – 68 (68 kg por metro).
+ Acessórios de ligação
+
+ Os acessórios de ligação podem ser de diferentes materiais. Veja a seguir.
+
+
+ Acessórios metálicos
+
+ Os acessórios metálicos são os elementos que auxiliam a fixação dos trilhos nos dormentes.
+ Assim, permitem maior segurança para sustentar as cargas distribuídas.
+ Os acessórios metálicos dividem-se em acessórios de fixação e de ligação. Observe as
+ características de cada um.
+
+   •• Acessórios de fixação
+ Os acessórios de fixação são elementos necessários para a fixação do trilho no dormente ou
+ na placa de apoio do trilho, podendo ser elásticos ou rígidos.
+ Os acessórios de fixação elásticos são elementos que têm a capacidade de manter a pressão
+ de contato ao trilho constante, garantindo sua fixação e o retensionamento da via, além de
+ absorver as vibrações e os impactos inerentes à ação do tráfego ferroviário.
+ São componentes de sistemas de fixação elástica:
+
+       •• placas de apoio;
+       •• placa de ângulo (sistema Vossloh para dormente de concreto);
+       •• tirefonds;
+       •• arruelas duplas de pressão;
+       •• grampos;
+       •• garras tipo K ou GEO;
+       •• parafusos (utilizados em sistemas de fixação tipo K, GEO ou Vossloh);
+Elementos de Via Permanente                                                                24
+
+
+
+
+       •• shoulder (utilizado em dormentes de aço ou concreto);
+       •• almofadas isolantes (utilizadas em dormentes de aço);
+       •• tie pad (utilizado em dormentes de concreto);
+       •• isoladores – (para isolamento do contato do grampo com o trilho e do trilho
+             com o shoulder).
+ Observe as imagens a seguir. Elas representam os dois tipos de grampos elásticos, Deenik e
+ Pandrol, respectivamente:
+
+
+
+
+   Deenik                                             Pandrol
+
+
+ Há, também, a fixação do tipo KPO. Ela consiste em um conjunto de parafusos, garra, arruela de
+ pressão e porca, que, quando aplicado, oferece força de pressão equivalente à dos grampos.
+
+
+
+
+                                Fixação do tipo KPO
+
+
+ A fixação rígida é feita por elementos que possuem a capacidade de fixar o trilho sem
+ absorver as vibrações e os impactos inerentes à ação do tráfego ferroviário. Ela possui
+ limitações no que se refere ao impedimento do deslocamento longitudinal dos trilhos. Por
+ isso, há necessidade de se aplicar retensores em vias com sistema de fixação rígida.
+Elementos de Via Permanente                                                                25
+
+
+
+
+ São componentes de sistemas de fixação rígida:
+
+       •• placas de apoio;
+       •• tirefonds;
+       •• pregos.
+ A vantagem da fixação elástica sobre a fixação rígida é que a primeira absorve os choques
+ e as vibrações por meio de um ou mais elementos flexíveis, isto é, apresenta o efeito mola,
+ sem perder, no entanto, o poder de retenção dos trilhos e dos dormentes.
+ São utilizadas também as placas de apoio, que são chapas de aço com os furos necessários
+ para a fixação nos dormentes e com perfil e rasgos para se fixarem sob o trilho.
+ Verifique a imagem de uma placa de apoio:
+
+
+
+
+                              Placas de apoio
+
+
+ A seção transversal tem inclinação de, aproximadamente, 1:20 para o lado de dentro dos
+ trilhos. Essa inclinação é necessária para que o trilho fique inclinado do mesmo modo que a
+ conicidade do aro das rodas, de forma a possibilitar melhor contato roda-trilho.
+ As vantagens do uso de placas de apoio são:
+
+       •• prolongam a vida útil do dormente;
+       •• proporcionam melhor distribuição de carga sobre o dormente;
+       •• evitam a tendência de o patim do trilho penetrar no dormente;
+       •• permitem que o esforço transversal à via seja transmitido a toda a pregação.
+                                                Trilho
+                                                         Grampo
+                                                          Chapa de apoio
+                                    Tirefond
+                               Arruela dupla
+                                                                   Dormente
+                               de pressão
+
+
+
+
+                              Acessórios
+        Elementos de Via Permanente                                                                       26
+
+
+
+
+         Os retensores são peças que têm a finalidade de transferir aos dormentes o esforço
+         longitudinal que tende a deslocar o trilho. Eles ficam presos, por pressão, ao patim do trilho,
+         encostados à face vertical do dormente. Assim, transmitem a este os esforços longitudinais.
+         A movimentação do dormente fica impedida por estar engastado no lastro e fixado sob
+         pressão ao trilho.
+         Veja, a seguir, a imagem de um retensor:
+
+
+
+
+                                      0-126-122
+
+                                            Retensor
+
+
+o!
+
+ nte!
+                Importante!
+
+ais!            O uso do retensor é indispensável apenas em linhas com fixação
+                rígida, pois, do contrário, é quase impossível manter o alinhamento
+ ndo!           dos trilhos.
+
+         Existem ainda as almofadas isolantes. Essas peças são confeccionadas com material isolante
+         e têm a função de impedir o contato entre o patim do trilho e o dormente de aço.
+         Veja, a seguir, uma imagem de almofadas isolantes:
+
+
+
+
+                                            Almofadas isolantes
+
+           •• Acessórios de ligação
+         Os acessórios de ligação são peças de ligação entre duas barras de trilho. Eles também
+         podem ser chamados de juntas.
+         Os acessórios de ligação são constituídos de talas de junção, parafusos de talas, arruelas e porcas.
+Elementos de Via Permanente                                                                 27
+
+
+
+
+ As juntas podem ser:
+
+   •• metálicas;
+   •• isoladas convencionais ou encapsuladas;
+   •• isoladas coladas.
+ Os requisitos teóricos para uma junta perfeita são:
+
+   •• mesma resistência e mesma rigidez dos trilhos que ela une;
+   •• extremidades dos trilhos rigorosamente em linha, laterais e verticais.
+ As juntas metálicas geralmente são utilizadas em linhas de baixo tráfego, em pátios de
+ manobras e na correção emergencial de fraturas de trilhos; neste caso, são inseridas nas
+ linhas para posterior retirada por meio de soldagem aluminotérmica.
+ Veja, a seguir, um exemplo de juntas metálicas:
+
+
+
+
+                              Juntas metálicas
+
+ As juntas isoladas convencionais ou encapsuladas são utilizadas para isolamento elétrico
+ entre duas seções de trilho e também nas divisões de circuito em linhas sinalizadas.
+ Veja, a seguir, uma imagem de juntas isoladas convencionais ou encapsuladas:
+
+
+
+
+                              Juntas isoladas convencionais ou encapsuladas
+
+ As juntas isoladas e coladas possuem a mesma utilidade das isoladas encapsuladas, porém
+ sua utilização exige adesivo à base de epóxi, a fim de promover maior vedação na junta e,
+ consequentemente, reduzir o volume de impactos no material rodante e na linha.
+Elementos de Via Permanente                                                                  28
+
+
+
+
+ Observe na imagem uma junta colada:
+
+
+
+
+                                  Junta colada
+
+
+
+ Características geométricas de via permanente
+
+ Algumas características geométricas de via permanente são: bitola, entrevia, gabarito,
+ nivelamento e alinhamento.
+
+
+ Bitola
+
+ Bitola é a distância entre as faces internas das duas filas de trilhos, medida a 16 mm abaixo da
+ face superior dos trilhos.
+ Veja a ilustração de uma bitola:
+
+                                                                     Lastro
+
+
+
+
+ A bitola é um dos elementos mais importantes de todo o projeto e do traçado ferroviário,
+ pois é parâmetro na definição dos seguintes pontos da ferrovia:
+
+   •• velocidade;
+   •• capacidade de transporte;
+   •• tipo de material rodante;
+   •• aspectos econômicos da ferrovia;
+   •• possibilidade de uniﬁcação de ferrovias existentes.
+ Os três tipos de bitola mais utilizados no Brasil são:
+
+   •• bitola larga ............................ 1,60 m (EFC);
+   •• bitola estreita ou métrica ..... 1,00 m (EFVM e FCA);
+   •• bitola standard ....................... 1,435 m (MRS e ALL).
+Elementos de Via Permanente                                                                  29
+
+
+
+
+ Entrevia
+
+ Entrevia é a distância entre os eixos de duas vias férreas paralelas. Veja, a seguir, uma
+ imagem de entrevia:
+
+                                                 Entrevia
+
+
+
+
+                              Entrevia
+
+
+
+ Gabarito
+
+ Gabarito é o conjunto de medidas que padroniza e deﬁne o espaço mínimo necessário no
+ entorno das linhas, para a operação segura dos veículos ferroviários.
+
+
+ Nivelamento
+
+ É o posicionamento da linha férrea em relação ao terreno, conforme deﬁnido nas cotas de
+ projeto, em relação ao plano vertical. Esse serviço é realizado promovendo-se o levante da
+ linha, manualmente, utilizando macacos ou por meio de equipamentos de grande porte,
+ que são chamados de “socadoras”.
+
+
+
+
+      Nivelamento
+
+
+
+ Alinhamento
+
+ É o posicionamento da linha férrea em relação ao terreno, conforme definido nas cotas de
+ projeto, em relação ao plano vertical e/ou horizontal.
+ As imagens a seguir mostram um trecho alinhado e outro com flambagens horizontal e
+ vertical, que podem ser ocasionadas por falta de alívio de tensões, retensionamento e
+ aplicação de trilhos fora da faixa de temperatura neutra.
+Elementos de Via Permanente                                                                  30
+
+
+
+
+                Trecho alinhado                          Flambagem horizontal da via
+
+
+
+
+               Trecho alinhado                   Flambagem vertical da via
+
+
+
+ Geometria da linha
+
+ A geometria da linha tem por objetivo:
+
+   •• produção de melhor distribuição de cargas em ambos os trilhos;
+   •• redução dos defeitos superficiais e dos desgastes de trilhos;
+   •• redução dos defeitos dos materiais rodantes;
+   •• compensação parcial ou total dos efeitos da força centrífuga, reduzindo suas consequências.
+Elementos de Via Permanente                                                                     31
+
+
+
+
+ Função da qualidade e da tolerância das linhas
+
+ Os parâmetros básicos que definem a qualidade da pista de rolamento e permitem a fixação
+ de valores de tolerâncias são:
+
+   •• bitola da linha;
+   •• alinhamento;
+   •• nivelamento da linha.
+ Geometria em função da qualidade e da tolerância da linha
+
+ Nivelamento longitudinal é a diferença de cotas entre dois pontos da superfície do trilho ao
+ longo do eixo principal da linha.
+
+                                                          5,0 m
+                                                3,5                  1,5
+
+
+                                                               (
+
+                                   (Eixo 1)                                   (Eixo 3)
+                                                         (Eixo 2)_
+                                                                       (x) = Valor do defeito
+
+                              Nivelamento longitudinal
+
+ Nivelamento transversal é a disposição das cotas de topo de trilho, no sentido transversal.
+
+
+
+
+                               Nivelamento transversal
+
+ Empeno, ou torção da grade, é a mais crítica das anomalias de via por forçar a caixa do veículo a
+ oscilar violentamente sobre o ampara-balanços. É uma variação do desnivelamento transversal e
+ se baseia em um retângulo cujos vértices representam o ponto de apoio das rodas.
+Elementos de Via Permanente                                                               32
+
+
+
+
+ Aparelhos de Mudança de Via
+
+ Os AMVs são dispositivos instalados na ferrovia, que permitem a transferência de um trem
+ ou veículo ferroviário de uma linha para a outra.
+ Eles representam uma área crítica, mais fraca que o restante da via, mesmo que estejam
+ situados em tangente, devido ao grande número de componentes e à sua fragilidade frente
+ à elevada solicitação.
+ Assim, são necessárias intervenções constantes para manutenção e lubrificação dos AMVs.
+
+
+
+
+                              AMV
+
+ Para o correto funcionamento de um AMV, são necessárias a limpeza e a lubrificação periódicas
+ dos componentes sujeitos a atrito, ou seja, chapas de apoio, agulhas, maromba etc.
+ É necessário executar o reaperto dos parafusos, o nivelamento, a socaria e o esmerilhamento
+ do jacaré e das agulhas, o que garante maior vida útil para esses componentes.
+ Nas ferrovias da Vale, predominam os seguintes tipos de AMVs: 08; 10; 12; 14; 18; 20. Essa
+ classificação é realizada em função da razão de abertura do jacaré. No caso do AMV # 10, por
+ exemplo, a razão de abertura do jacaré é 1:10.
+Elementos de Via Permanente                                                     33
+
+
+
+
+ Veja, nas imagens a seguir, as aberturas do jacaré:
+
+
+
+
+                               Jacaré 1:10
+
+
+
+
+                                Jacaré 1:20
+
+ Nas imagens a seguir, você pode observar as agulhas presentes no trilho e os
+ tirantes, respectivamente.
+
+
+
+
+                               Agulhas
+
+
+
+
+                               Tirantes
+Elementos de Via Permanente                                                                34
+
+
+
+
+2.3 Infraestrutura de
+Via Permanente
+
+
+
+ Infraestrutura é o conjunto de obras e de elementos destinados a formar a plataforma da
+ ferrovia. Assim, garante estabilidade, delimitações, drenagens etc.
+ Os elementos mais comuns de infraestrutura ferroviária são:
+
+   •• terraplenagem;
+   •• cortes;
+   •• obras de arte especiais (OAE);
+   •• obras de arte correntes (OAC);
+   •• sistema de drenagem (canaletas, bueiros etc.).
+ Terraplenagem
+
+ Terraplenagem é o conjunto de operações de escavação, carga, transporte, descarga,
+ compactação e acabamento, a fim de transformar o terreno natural em plataforma projetada.
+ Qualquer serviço efetuado em um terreno modifica sua conformação natural, seja por
+ enchimento (aterro) ou escavação (corte).
+ A execução de terraplenagem manual é realizada com ferramentas manuais convencionais
+ e pequenos equipamentos semimecanizados. Foi utilizada até o aparecimento dos
+ equipamentos mecanizados.
+ A execução de terraplanagem mecanizada possui as seguintes características:
+
+   •• requisição de grandes investimentos em equipamentos;
+   •• exigência de serviços racionalmente planejados e executados;
+   •• redução substancial da mão de obra empregada;
+   •• permissão da movimentação de grandes volumes de terra em prazos curtos.
+Elementos de Via Permanente                                                                35
+
+
+
+
+ Veja, a seguir, uma imagem que ilustra a terraplanagem:
+
+
+
+
+                                       Terraplanagem
+
+
+
+ Cortes
+
+ Cortes são escavações executadas quando a obra possui uma cota menor que a da superfície
+ natural do terreno.
+ Veja, a seguir, uma imagem que ilustra o processo de corte:
+
+
+
+
+                              Cortes
+
+
+
+ Obras de arte especiais
+
+ Alguns exemplos de obras de arte especiais (OAE) são: túneis, pontes, viadutos, passagens
+ inferiores e muros de contenção.
+
+
+ Túnel
+
+ Os túneis são passagens subterrâneas destinadas às vias de comunicação (estradas) e têm
+ por finalidade:
+
+   •• encurtamento de distâncias nos traçados viários;
+   •• suspensão de cortes elevados, que possuem estabilidade e manutenção inviáveis;
+   •• divisão do tráfego superficial em vias urbanas;
+   •• substituição de pontes em transposições muito longas.
+Elementos de Via Permanente                                                            36
+
+
+
+
+ Veja, a seguir, a imagem de um túnel:
+
+
+
+
+                              Túnel
+
+
+
+ Pontes e viadutos
+
+ As pontes e os viadutos têm a função de dar continuidade às estradas quando não é possível
+ a execução de aterros, devido ao tipo de terreno ou à passagem de cursos d’água ou, ainda,
+ por causa de outros obstáculos no local da obra.
+ As pontes têm por objetivo transpor os obstáculos constituídos por água.
+ Veja, a seguir, imagens de uma ponte metálica e de um viaduto:
+
+
+
+
+                                      Ponte metálica
+
+
+
+
+                                      Viaduto
+Elementos de Via Permanente                                                 37
+
+
+
+
+ Obras de contenção
+
+ As obras de contenção podem ser:
+
+   •• muros de arrimo;
+   •• cortinas atirantadas;
+   •• muros de solo de cimento;
+   •• gabiões;
+   •• muro de trilhos e dormentes usados;
+   •• aterro auxiliar;
+   •• terra armada.
+ Há, ainda, a possibilidade de utilização dos geotêxteis (bidim).
+ Veja, a seguir, uma imagem que ilustra um enrocamento de pedra arrumada:
+
+
+
+
+                              Enrocamento de pedra arrumada
+
+
+
+ Obras de arte correntes
+
+ Alguns exemplos de obras de arte correntes (OAC) são:
+
+   •• dutos;
+   •• bueiros;
+   •• canaletas;
+   •• valas;
+   •• descidas d’água.
+        Elementos de Via Permanente                                                              38
+
+
+
+
+         Veja, a seguir, uma imagem de um duto:
+
+
+
+
+                                      Duto
+
+         Veja, a seguir, uma imagem de uma descida d'água:
+
+
+
+
+                                             Descida d'água
+
+
+
+         Sistema de drenagem
+
+         Drenagem é o conjunto de obras destinado a captar e a direcionar os fluxos de água pluvial
+         ou fluvial na estrutura da via.
+         A drenagem pode ser0-126-122
+                             dividida em:
+
+           •• profunda – drenos, bueiros etc.;
+           •• superficial – canaletas de plataformas/crista, canais, descida d’água etc.
+o!
+
+ nte!
+                Importante!
+
+ais!            Existem diversas obras de drenagem. São elas:
+                  •• aleta de bermas e banquetas;
+ ndo!
+                  •• valeta de bordos da plataforma, em aterro;
+                  •• dreno;
+                  •• dreno da base dos aterros;
+                  •• dreno longitudinal dos cortes;
+                  •• muretas de proteção de crista;
+                  •• drenagem na plataforma.
+        Elementos de Via Permanente                                                            39
+
+
+
+
+         O sistema de drenagem superficial pode apresentar problemas relacionados a danos em
+         canaletas, escadas d’água, bueiros ou em outros dispositivos.
+         Tais problemas, somados à deficiência do sistema de proteção superficial, provocam
+         infiltrações nos taludes e na própria plataforma.
+         Os danos ocasionam saturação e erosão em sulcos nos taludes, problemas que, ao
+         evoluírem, podem levar à ocorrência de escorregamentos.
+
+
+
+
+                                      0-126-122
+
+
+
+
+o!
+
+ nte!                                      Escorregamentos
+
+ais!
+
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou a superestrutura e a infraestrutura de
+                via permanente. Podem-se destacar:
+                  •• a construção das vias permanentes;
+                  •• a superestrutura de via permanente e sua formação;
+                  •• os diversos tipos de dormentes;
+                  •• os diversos tipos de acessórios;
+                  •• a infraestrutura de via permanente;
+                  •• os diversos elementos de infraestrutura ferroviária.
+               Inserir Imagem
+
+
+
+
+                                                              3
+                                                         Permanente
+                                                         Manutenção de Via
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 3.1 Manutenção
+•• 3.2 Tipos de Serviços de Manutenção
+Elementos de Via Permanente                                                                 41
+
+
+
+
+3.1 Manutenção
+
+
+
+ A manutenção da via permanente necessita contemplar tanto a superestrutura quanto
+ a infraestrutura.
+ Devido aos esforços de tração ou aos desnivelamentos, a manutenção da superestrutura
+ deve ocorrer quando houver alta incidência de desgaste de trilhos e fixações, apodrecimento
+ de dormentes de madeira, contaminação do lastro e perda de geometria, como a
+ flambagem de linha (ganchos).
+ A manutenção da infraestrutura da via permanente deve contemplar os serviços de remoção
+ de barreiras, recomposição da plataforma e limpeza dos seguintes dispositivos de drenagem:
+
+   •• valetas;
+   •• canaletas;
+   •• bueiros;
+   •• drenos;
+   •• valetas de proteção.
+ Os serviços precisam ser executados nos meses que antecedem as chuvas e após ocorrências
+ de queda de barreiras. A limpeza do lastro poderá ser necessária.
+ A manutenção é de responsabilidade da via permanente e é executada de acordo com as
+ programações, com pessoal próprio ou contratado, conforme o volume e o tipo de serviço.
+ Geralmente, as equipes de manutenção de via permanente se locomovem com
+ veículos ferroviários.
+ Na sinalização da via, os prefixos se iniciam sempre por:
+ A – auto ou caminhão de linha que transporta pessoal e/ou equipamentos de
+ manutenção ferroviária;
+ I – auto de linha de inspeção do trecho ferroviário ou conduzindo gerentes, visitantes etc.;
+ V – trem ou guindaste ferroviário que realiza serviços para a via permanente, geralmente de
+ carga ou descara de materiais;
+ R – equipamentos de manutenção de linha (socadora/reguladora, desguarnecedora,
+ multifuncional, esmerilhadora de trilhos etc.).
+        Elementos de Via Permanente                                                  42
+
+                                      0-126-122
+
+
+
+
+o!              Atenção!
+
+ nte!           A sinalização da via deve ser feita de acordo com o Regulamento
+                de Operação Ferroviária (ROF). A comunicação via rádio deve ser
+ais!            clara e objetiva, visando à total segurança do pessoal envolvido e
+                garantindo o uso adequado dos equipamentos.
+ ndo!
+Elementos de Via Permanente                                                               43
+
+
+
+
+3.2 Tipos de Serviços
+de Manutenção
+
+
+
+ Nesta lição, você conhecerá os tipos de serviços de manutenção e suas definições, a saber:
+
+   •• manutenção corretiva emergencial (mC);
+   •• manutenção corretiva programada (CP);
+   •• manutenção condicional (PC);
+   •• manutenção preventiva sistemática (mP);
+   •• inspeção/manutenção preditiva (IP);
+   •• manutenção por melhoria (mm);
+   •• reformas/recuperações (RR);
+   •• manutenção mecanizada da via permanente.
+ Manutenção corretiva emergencial (mC)
+
+ Manutenção corretiva emergencial é aquela realizada em um equipamento para retirada de
+ falha sem planejamento prévio.
+ Veja alguns exemplos:
+
+   •• fratura de trilho;
+   •• fratura de jacaré;
+   •• fratura/quebra de agulha;
+   •• almofadas em curto;
+   •• junta isolada em curto;
+   •• bitola acima da tolerância;
+   •• flambagem acentuada;
+   •• desnivelamento acentuado.
+Elementos de Via Permanente                                                                44
+
+
+
+
+ Manutenção corretiva programada (CP)
+
+ Manutenção corretiva programada é toda a manutenção realizada para retirada de defeito.
+ De preferência, a retirada deve ocorrer em até 48 h. Os eventos geradores não provocam a
+ paralisação total do equipamento.
+ Veja alguns exemplos:
+
+   •• excesso de mato/lixo na plataforma ferroviária;
+   •• bitola no limite da tolerância;
+   •• problemas na fixação;
+   •• curvas ou tangentes desalinhadas ou desniveladas sem necessidade de interdição;
+   •• lastro com excesso de contaminação;
+   •• bueiros e/ou componentes de drenagem quase entupidos;
+   •• alívio de tensões térmicas;
+   •• todo serviço que tiver necessidade de ser executado no prazo inferior a 48 h, sob o risco
+        de colocar o equipamento no estado de falha.
+
+
+ Manutenção condicional (PC)
+
+ Manutenção condicional é toda manutenção realizada para retirada de defeito com
+ programação prévia gerada a partir de uma inspeção.
+ Veja alguns exemplos:
+
+   •• defeito superficial em trilho;
+   •• desgaste de trilho acima dos valores estabelecidos;
+   •• dormente podre;
+   •• desnivelamento transversal/vertical, junta/agulha/jacaré necessitando de biselamento
+        e/ou esmerilhamento;
+
+   •• AMV desregulado e/ou sem lubrificação;
+   •• problemas na bitola dentro da tolerância.
+ Manutenção preventiva sistemática (mP)
+
+ Manutenção preventiva sistemática é toda manutenção planejada que ocorre com
+ determinada periodicidade. Do ponto de vista do executante, será sempre inquestionável.
+ A programação dessa manutenção segue critérios sistemáticos preestabelecidos. Os critérios
+ podem ser data calendário, tonelada, brita transportada, horas, entre outros.
+Elementos de Via Permanente                                                               45
+
+
+
+
+ Inspeção/manutenção preditiva (IP)
+
+ Todas as inspeções que não têm periodicidade são chamadas de preditiva. Essa é a manutenção
+ que visa ao acompanhamento e ao monitoramento das condições de um equipamento.
+ Ela pode ser executada mediante demanda de outras áreas ou, simplesmente, para
+ monitorar um limite de tolerância.
+ Veja alguns exemplos:
+
+   •• inspeções fora da rotina;
+   •• inspeções por meio de ultrassom;
+   •• carro controle.
+ Manutenção por melhoria (mm)
+
+ Manutenção por melhoria é toda manutenção que visa à melhoria no desempenho do
+ equipamento ou componente. Essa manutenção pode elevar sua capacidade ou seu ciclo de vida.
+ Veja alguns exemplos:
+
+   •• mudança de traçado;
+   •• aumento em ramais e em pátios;
+   •• remodelação e variantes.
+ Reformas/recuperações (RR)
+
+ Reforma ou recuperação é toda manutenção que tem planejamento de médio e longo
+ prazos. Ela visa restituir as características físicas e de capacidade de um equipamento e/ou
+ componente. Essas manutenções são baseadas na vida útil ou na sobrevida do equipamento
+ e/ou dos componentes.
+ Veja alguns exemplos:
+
+   •• reforma/recuperação de pontes;
+   •• reforma de jacarés;
+   •• recuperação de aterro.
+Elementos de Via Permanente                                                        46
+
+
+
+
+ Manutenção mecanizada da via permanente
+
+ A manutenção mecanizada da via permanente possui alguns tipos de equipamentos e
+ aplicações. São eles:
+
+   •• auto de linha;
+   •• caminhão de linha;
+   •• equipamento multifuncional;
+   •• guindaste rodoferroviário;
+   •• reperfiladora de trilhos;
+   •• esmerilhadora de trilhos;
+   •• carro controle;
+   •• carro ultrassom;
+   •• capina química;
+   •• guindaste ferroviário;
+   •• socadora de linha;
+   •• socadora de chave;
+   •• reguladora de lastro;
+   •• desguarnecedora de lastro;
+   •• desguarnecedora de ombro de lastro;
+   •• sugadora de lastro;
+   •• trem esmerilhador;
+   •• renovadora de linha.
+Elementos de Via Permanente                                                           47
+
+
+
+
+ Auto de Linha
+
+ Auto de linha é o equipamento usado para transporte de trabalhadores em viagens de
+ inspeções e manutenções e passageiros em visitas à ferrovia.
+ Veja, a seguir, uma imagem de auto de linha:
+
+
+
+
+              Auto de linha
+
+
+
+
+ Caminhão de Linha
+
+ O caminhão de linha é o equipamento usado no transporte de turmas, materiais e
+ equipamentos da manutenção da via férrea.
+ Seu guindaste pode ser usado na carga e na descarga de equipamentos e materiais, na
+ retirada e no assentamento de trilhos e componentes de AMVs. O caminhão de linha é
+ utilizado também em inspeções de via e lubrificação de trilhos, quando tem equipamentos e
+ bombas instalados para esse fim.
+ Veja, a seguir, uma imagem de caminhão de linha:
+
+
+
+
+                        Caminhão de Linha
+Elementos de Via Permanente                                                                 48
+
+
+
+
+ Equipamento Multifuncional
+
+ O equipamento multifuncional é usado no transporte de turmas, materiais e equipamentos
+ para manutenção de via permanente.
+ Sua principal função, além do transporte, é executar pequenos reparos de geometria
+ (alinhamento /nivelamento) e socaria de linha.
+ Seu guindaste pode ser usado na carga e na descarga de equipamentos e materiais, na
+ retirada e no assentamento de trilhos e componentes de AMVs.
+ Veja, a seguir, uma imagem de multifuncional:
+
+
+
+
+              Multifuncional
+
+
+
+
+ Guindaste Rodoferroviário
+
+ O guindaste rodoferroviário é um equipamento multifuncional que pode ser acoplado a
+ diversos implementos (garras, rompedores, escarificadores, eletroímãs etc.).
+ Ele permite executar diversas funções, como carga e descarga de materiais e equipamentos,
+ retirada de lastro, auxílio na retirada de dormentes, auxílio na retirada e no assentamento de
+ trilhos e componentes de AMVs.
+ Veja, a seguir, imagens de guindaste rodoferroviário:
+
+
+
+
+                               Adaptação de implemento de rompedor e
+                               removedor de lastro em rodoferroviário
+Elementos de Via Permanente                                                                49
+
+
+
+
+                              Guindaste rodoferroviário
+
+
+
+
+ Reperfiladora de Trilhos
+
+ Reperfiladora de trilhos é o equipamento que corta parte da superfície dos boletos
+ dos trilhos, corrigindo defeitos, imperfeições ou reperfilando o boleto de acordo com
+ as especificações. É muito usada em locais onde os defeitos estão muito acelerados,
+ demandando, assim, muito trabalho das esmerilhadoras.
+ Veja, a seguir, uma imagem de reperfiladora de trilhos:
+
+
+
+
+                              Reperfiladora de trilhos
+
+
+
+
+ Esmerilhadora de Trilhos
+
+ A esmerilhadora de trilhos é chamada também de "retificadora de trilhos". Ela possui um
+ conjunto de rebolos que são utilizados para esmerilhar a superfície dos boletos dos trilhos,
+ corrigindo defeitos, imperfeições e ajudando a melhorar o contato roda–trilho. É um
+ equipamento que complementa os trabalhos da reperfiladora de trilhos.
+Elementos de Via Permanente                                                        50
+
+
+
+
+ Veja, a seguir, algumas imagens de esmerilhadoras de trilhos:
+
+
+
+
+                              Esmerilhadora RT 1503 em operação na EFVM
+
+
+
+
+    RT1501                         RT1502                                 RT1503
+
+
+
+
+ Esmerilhadora de trilhos
+
+
+
+
+                              Esmerilhadora de trilhos
+Elementos de Via Permanente                                                               51
+
+
+
+
+ Carro Controle
+
+ Carro controle é o equipamento ferroviário dotado de instrumentos mecânicos e gráficos
+ para medir os defeitos de alinhamento, nivelamento, empeno e bitola na linha.
+ A Vale utiliza equipamentos modernos que filmam a viagem, podem realizar leituras a laser e
+ por ultrassom para executar medições e avaliações, como desgaste do boleto do trilho, falta
+ de acessórios e até trincas internas em trilhos.
+ Veja, a seguir, imagens de carro controle:
+
+
+
+
+                                   Carro controle
+
+
+
+
+ Carro controle 2102 da EFVM Carro Ultrassom
+
+
+ O carro ultrassom é o equipamento utilizado para inspeção preditiva, que visa detectar
+ falhas internas na composição de trilhos e soldas ao longo da ferrovia.
+ Seu uso cíclico aumenta a segurança operacional da ferrovia e diminui o tempo de
+ interdição indesejada. Durante sua passagem, pode detectar furos indesejados nas almas
+ dos trilhos localizados em cima de obras de arte especiais.
+Elementos de Via Permanente                                                                52
+
+
+
+
+ Veja, a seguir, uma imagem de carro ultrassom:
+
+
+
+
+                              Carro ultrassom
+
+
+
+
+ Capina Química
+
+ Capina química é o equipamento composto de tanques e bombas aspersoras que são
+ utilizadas no controle do saneamento vegetal ao longo da via. Todos os produtos utilizados
+ nessas operações são fiscalizados pelos órgãos ambientais.
+ Veja, a seguir, uma imagem de capina química:
+
+
+
+
+                              Capina química
+
+
+
+
+ Guindaste Ferroviário
+
+ Guindaste ferroviário é o equipamento com tração própria, que circula com auxílio de
+ locomotiva e não possui sistema de sinalização.
+ Ele é utilizado para recolhimento e descargas de trilhos curtos (3 a 12 metros), pacotes de
+ dormentes, postes, componentes de AMVs etc. Em caso de emergência, pode ser utilizado
+ também na cravação de estacas ao lado da linha.
+Elementos de Via Permanente                                                            53
+
+
+
+
+ Veja, a seguir, uma imagem de guindaste ferroviário:
+
+
+
+
+                                 Guindaste ferroviário em recolhimento de trilhos
+
+
+
+
+ Socadora de Linha
+
+ Socadora de linha é um dos principais equipamentos de manutenção mecanizada da via
+ permanente. Ela é usada para realizar correção geométrica da via (alinhamento/nivelamento)
+ e da socaria de linha. Pode ser usada também na manutenção corretiva, na manutenção
+ preventiva e nas construções de linhas.
+ Veja, a seguir, imagens de socadoras de linha:
+
+
+
+
+            Socadoras de linha
+Elementos de Via Permanente                                                                 54
+
+
+
+
+ Socadora de Chave
+
+ Socadoras de chave são equipamentos, normalmente, mais sofisticados e mais caros que as
+ socadoras de linha.
+ São capazes, também, de executar os mesmos serviços que as socadoras de linha e têm a
+ função principal de fazer a correção geométrica (alinhamento/nivelamento) em AMVs ou
+ “Chaves”, como são chamados os AMVs pelas equipes de manutenção. Podem ser usadas na
+ manutenção corretiva, na manutenção preventiva e nas construções de linhas e AMVs. Ao
+ realizarem os mesmos serviços das socadoras de linha, obtêm menor produtividade do que
+ a socadora apropriada.
+ Veja, a seguir, imagens de socadoras de chaves:
+
+
+
+
+            Socadoras de chaves
+
+
+
+
+ Reguladora de Lastro
+
+ É o equipamento utilizado para complementar os serviços da socadora de linha e/ou da
+ desguarnecedora de lastro.
+ Ela regulariza o lastro, removendo de um lado para o outro o material composto do lastro
+ (brita, escória de alto forno, minério/terra), completando, assim, os vazios entre os dormentes
+ e formatando o perfil do ombro do lastro.
+ Pode ser utilizada também para abrir o lastro em locais onde a descarga de brita ou a escória
+ foi realizada em excesso, não permitindo que sejam executados serviços na linha.
+ Deve possuir uma vassoura mecânica que sirva para dar acabamento aos serviços, retirando
+ os pequenos grãos que ficam em cima dos dormentes e entre os grampos de fixação dos
+ dormentes aos trilhos. Algumas possuem implementos de transporte de pequenos volumes
+ de lastro em caçambas, para completar pontos fracos na linha.
+Elementos de Via Permanente                                                             55
+
+
+
+
+ Veja, a seguir, algumas imagens de reguladoras de lastro:
+
+
+
+
+             Reguladoras de lastro
+
+
+
+
+                                     Reguladora de lastro
+
+
+
+
+ Desguarnecedora de Lastro
+
+ É o equipamento utilizado para a limpeza mecanizada total do lastro.
+ Quando o lastro alcança um índice de degradação ou de contaminação comprometedor,
+ ele deve ser recuperado por limpeza ou substituição. Como a substituição envolve um valor
+ financeiro considerável, as ferrovias, normalmente, optam pela recuperação por limpeza.
+ A limpeza é uma operação na qual todo o lastro passa por um processo de peneiramento.
+ Nele, ocorre a separação entre as partículas de granulometria padrão e aquelas consideradas
+ como “finos”, ou seja, as partículas e os rejeitos com granulometria abaixo do mínimo
+ aceitável são descartados. A esse processo, atribui-se o nome de desguarnecimento.
+Elementos de Via Permanente                                                                               56
+
+
+
+
+ As desguarnecedoras de lastro executam, com homogeneidade e continuidade, as
+ operações de coleta do lastro, peneiramento, reaproveitamento do lastro bom e eliminação
+ do lastro inadequado. O desenho a seguir exemplifica essas operações.
+
+
+
+
+                                                                                           4
+                                                                              Sistema de
+                                                                                               FINOS -
+                                   2                            1             roletes e
+                                                    3                                          material
+                                                               Camada de      macacos de
+                              Unidade de                                                       refugado
+                                                 Reposição     lastro sendo   levante da
+                              peneiramento       do lastro                    linha
+                              em três camadas                  coletado
+                                                 peneirado
+
+        Desenho do funcionamento básico de uma desguarnecedora Plasser & Theurer
+
+
+
+
+             DL em manutenção                                DL em operação
+
+
+
+
+ Desguarnecedora de Ombro de Lastro
+
+ A desguarnecedora de ombro de lastro é um equipamento utilizado para limpeza do
+ ombro do lastro, ou seja, realiza limpeza parcial do lastro. Consequentemente, tem uma
+ produtividade em metros lineares muito acima da desguarnecedora de lastro – dados dos
+ fabricantes indicam 3.200 m/h para ombro contra 400 m/h para completa.
+Elementos de Via Permanente                                                              57
+
+
+
+
+ Veja, a seguir, uma imagem de desguarnecedora de ombro de lastro:
+
+
+
+
+                              Foto de desguarnecedora trabalhando (LORAM)
+
+
+
+
+ Sugadora de Lastro
+
+ A sugadora de lastro é um equipamento também chamado de "desguarnecedora a vácuo";
+ os existentes na EFC e na EFVM são fabricados pela Loram LRV8 (GDGV100001).
+ Ela é utilizada para limpeza do lastro em pontos críticos da ferrovia. Sua principal
+ característica e vantagem é a possibilidade de retirar o lastro de pontos de difícil acesso,
+ como túneis, AMVs e pequenos laqueados, sem a necessidade de interdição total da ferrovia,
+ como ocorre com a desguarnecedora.
+ A desvantagem é a baixa produção, quando comparada com as desguarnecedoras. Além
+ disso, não executa o peneiramento do material, impossibilitando o reaproveitamento de
+ parte dele.
+ Veja, a seguir, imagens da desguarnecedora a vácuo Loram LRV8:
+
+
+
+
+ Desguarnecedora a vácuo Loram LRV8
+Elementos de Via Permanente                                                             58
+
+
+
+
+                               Desguarnecedora a vácuo Loram LRV8
+
+
+
+
+ Trem esmerilhador
+
+ O trem esmerilhador possui um conjunto máquinas esmerilhadoras que aperfeiçoam os
+ serviços de esmerilhamento das superfícies dos boletos dos trilhos, corrigindo defeitos,
+ imperfeições e ajudando a melhorar o contato roda–trilho. A EFC possui um trem
+ esmerilhador em plena operação. Com velocidade máxima de 80 km/h, este equipamento
+ possui 96 motores de esmerilhamento e tem capacidade produtiva de 15 km/h.
+ Veja, a seguir, imagens de um trem esmerilhador:
+
+
+
+
+  Trem esmerilhador
+
+
+
+ Renovadora de linha
+
+ A esmerilhadora de linha é um equipamento já utilizado na construção de novos pátios na
+ EFC e na manutenção da via. Está prevista a entrada em operação na EFVM em 2012.
+ A renovação de linha é o modelo definido para recuperação de toda a superestrutura
+ ferroviária, com a utilização de um comboio de máquinas que fazem a recuperação do lastro,
+ das fixações, dos dormentes e de toda a geometria da linha.
+Elementos de Via Permanente                                                                       59
+
+
+
+
+ A quantidade de máquinas, homens e materiais envolvidos é grande, o que exige janelas
+ de serviços de longa duração, para que o trabalho seja eficaz e os custos de mobilização se
+ mantenham controlados.
+ A sequência de atividades envolvidas no processo de renovação de linha é a seguinte:
+ 1º passo → Desguarnecimento de lastro – limpeza e renovação do lastro de brita ou escória,
+ mantendo uma granulometria uniforme do lastro.
+ 2º passo → Posicionamento automático dos dormentes e troca de trilhos com a renovadora
+ de linha.
+ 3º passo → Regularização do lastro com a reguladora e finalização com uma socadora de
+ linha com estabilizador dinâmico.
+ Veja, a seguir, um esquema que ilustra a renovação de linha:
+                    Sequência de trabalho
+
+
+
+                                                                            Desguarnecedora
+                                                                            Prod = 400m/h
+
+
+                    RH km i
+                                                                            Renovadora
+                                                                            Prod = 300m/h
+
+
+
+                                                                            Correção geométrica
+                                                                            Prod = 1600m/h
+
+
+
+                                                                            Descarga de lastro
+                                                                            Prod < 350m/h (x2)
+                                            Linha 2 operacional
+
+
+
+
+                                                                  RH km f
+
+
+
+                  Renovação de Linha – Comboio de máquinas
+
+ A troca de dormentes é feita automaticamente, por meio de extratores mecânicos. Os dormentes
+ antigos são recolhidos e armazenados em vagões da plataforma por meio dos gantries. O mesmo
+ processo é utilizado para o dormente novo, que é transportado em plataformas e posicionado
+ automaticamente na linha, de acordo com o espaçamento desejado.
+ Veja, a seguir, a figura de um gantry:
+        Elementos de Via Permanente                                                               60
+
+
+
+
+                                      Gantry em vagão de dormentes
+
+         A estocagem automática     de dormentes usados evita a deposição de material inservível na
+                                0-126-122
+         lateral da linha, com diversos ganhos:
+
+           •• inibição do vandalismo com a colocação de dormentes sobre a linha;
+o!         •• inibição das etapas secundárias de retirada de materiais inservíveis;
+ nte!      •• extinção do risco de incêndios em dormentes usados;
+ais!
+           •• facilidade no transporte dos dormentes usados para reaplicação e venda.
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou a manutenção de via permanente e
+                seus tipos de serviços. Podem-se destacar:
+                  •• a superestrutura e a infraestrutura na manutenção;
+                  •• os diversos tipos de serviços de manutenção;
+                  •• os diversos locais para manutenção;
+                  •• os diversos equipamentos utilizados na manutenção.
+Elementos de Via Permanente   61
+

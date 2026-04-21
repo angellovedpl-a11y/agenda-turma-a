@@ -1,0 +1,2328 @@
+                               INTRODUÇÃO
+
+
+
+A invenção e o uso do freio a ar comprimido contribuíram efetivamente na
+revolução do transporte ferroviário, já que este oferece mais segurança e amplia a
+quantidade de veículos por trem, além de melhorar a capacidade dos vagões, bem
+como a velocidade de operação da frota.
+Dominar a redução da velocidade de parada de um trem em uma rampa, até o
+ano 1869, era extremamente complicado. O maquinista apitava para solicitar os
+freios (este era um procedimento preestabelecido), o que poderia significar
+redução de velocidade, parada normal ou de emergência.
+Os guarda-freios dispostos sobre os vagões deveriam, então, interpretar o apito e
+correr para acionar os volantes dos freios manuais. Era de sua responsabilidade o
+acionamento dos freios e a conservação das rodas dos vagões.
+Quando encerrada a operação de frenagem, o maquinista empregava um
+“contravapor”, para que o trem parasse o mais próximo possível do lugar
+almejado.
+Mais complicado era o procedimento aplicado em caso de emergência: o
+maquinista apitava para que o guarda-freios atuasse os freios manuais do tender
+e aplicasse o “contravapor” o mais elevado possível.
+O guarda-freios tinha que apertar o volante de freios quantas vezes o pudesse
+fazer. Isso gerava um imenso desgaste físico. Você pode imaginar como os
+acidentes ferroviários da época eram, além de habituais, fatais para os
+passageiros.
+Porém, felizmente os tempos mudaram: o sistema ferroviário evoluiu e, com ele,
+a operação dos freios de trens e locomotivas!
+
+
+c) aplicar os freios.
+d) soltar os freios.
+e) aliviar os freios.
+
+
+
+
+                                          1
+                        EQUIPAMENTO DE FREIO 26-L
+
+
+O governo norte-americano, na década de 1950, disponibilizou uma verba para o
+New York Air Brake Co e o Westinghouse Air Brake Co – na época, os dois
+fabricantes de equipamento de freio.
+Após essa iniciativa, em 1960 o equipamento de freio aprovado pela AAR para
+locomotivas passou a ser o 26-L. Suas características vantajosas em relação ao
+equipamento que o antecedeu eram as seguintes:
+
+
+       Mais simples;
+       Mais leve;
+       Manutenção simplificada, constituída basicamente de:
+        Limpeza, troca das pecas de borrachas;
+        Alguma mola, de vez em quando;
+        Lubrificação;
+        Testes.
+
+
+   IMPORTANTE: possui as características de automantenedor de pressão e
+   auto-recobrimento.
+O equipamento de freio 26-L locomotivas é projetado para locomotivas,
+destinadas a tracionar trens com freio a ar comprimido. Esse sistema freia a
+locomotiva aplicando os freios de forma gradativa, com pequenos avanços, por
+meio do punho do manipulador automático para a posição de emergência.
+
+
+A válvula de controle do Equipamento de Freio de uma locomotiva geralmente não
+inclui a parte de emergência e, por isso, não possui um reservatório de tubulação
+entre a válvula de controle e a válvula relé tipo “J”. A pressão máxima de serviço
+é determinada pela calibragem da válvula limitadora de serviço.
+
+
+Segue uma tabela com as principais características desse sistema de freios:
+
+
+
+
+                                         2
+              CARACTERÍSTICAS DO SISTEMA DE FREIOS 26-L
+O freio da locomotiva pode ser aliviado pelo manipulador independente, por
+meio da válvula alívio rápido, após sofrer uma aplicação pelo manipulador
+automático.
+O freio da locomotiva não deve ser aliviado pelo manipulador independente
+após uma aplicação de emergência. Esta é uma medida de segurança!
+Em qualquer aplicação de emergência, a tração será desligada e os areeiros
+entrarão em funcionamento.
+Este equipamento possui um dispositivo de segurança como ATC, sobre
+velocidade e pedal que entrarão em funcionamento toda vez que forem
+desrespeitadas as normas de tráfego.
+
+
+
+
+                                       3
+COMPONENTES
+
+
+Veja quais são os elementos que compõem os equipamentos de freio 26-L e suas
+respectivas funções.
+    EQUIPAMENTO / COMPONENTE                           FUNÇÃO
+            Compressor de ar
+
+
+
+
+                                         Fornece ar comprimido para operação
+                                         de sistema de freio e dispositivos de
+                                         auxiliares
+
+
+
+
+        Regulador de compressor
+
+
+
+
+                                     4
+                                   Controla as pressões máximas e
+                                   mínimas de trabalho do compressor
+
+
+
+
+                                   Armazena o ar comprimido vindo do
+                                   compressor, além de resfriar e
+   Reservatório principal
+                                   condensar a unidade. Também retém
+                                   as impurezas
+
+
+   Válvula de segurança
+
+
+                                   Evita sobrecarga de pressão no
+                                   sistema. Toda vez que a pressão
+                                   atingir 150 psi a válvula abrirá,
+                                   jogando o excesso de pressão para a
+                                   atmosfera
+
+
+
+
+Válvula de retenção (1 1/4”)       Mantém a pressão em um dos
+                                   reservatórios, para operação do
+                                   sistema, caso haja ruptura entre os
+                                   reservatórios principais e entre
+                                   locomotivas quando em tração
+                                   múltipla
+
+
+                                   Purificam o ar que vai atuar no
+           Filtros                 sistema
+
+
+                               5
+   Dreno automático            Purifica a água condensada no
+                               reservatório, funcionando sempre que
+                               o regulador do compressor atingir a
+                               regulagem máxima. Apesar de
+                               automático, também pode ser
+                               operado manualmente
+
+
+                               Isola os reservatórios principais do
+Torneira Interruptora 1”       sistema de freio, possibilitando o
+                               descarregamento deste para a
+                               reparação
+
+
+    Encanamentos               Geral - percorre a locomotiva em toda
+                               sua extensão, possuindo em suas
+                               extremidades torneiras de 1 1/4”,
+                               além de mangueiras de acoplamento
+
+
+                               Equalização dos reservatórios
+                               principais - percorre a locomotiva em
+                               toda a sua extensão, possuindo em
+                               suas extremidades torneiras de 1”,
+                               com mangueiras que deverão ser
+                               acopladas no encanamento de
+                               equalização das outras locomotivas,
+                               quando em tração múltipla, a fim de
+                               fazer o carregamento uniforme dos
+                               reservatórios principais
+                               Equalização do cilindro de freio -
+                               repete nas locomotivas comandadas a
+                               pressão de aplicação da locomotiva
+                               comandante através de torneiras de
+                               3/4” e mangueiras de acoplamento
+
+                           6
+Manipulador automático
+
+
+
+
+        26-C
+
+
+                             Controla o carregamento, aplicação e
+                             alívio dos freios tanto na locomotiva
+                             como no trem
+
+
+
+
+      30AC-DW
+                             Marcha - Posição que alivia e carrega
+                             os freios da locomotiva e do trem
+                             Redução mínima - posição que
+                             possibilita uma redução de 42 a 56
+                             KPA (6 a 8 PSI) no encanamento
+                             geral
+                             Serviço - posição que possibilita a
+                             aplicação dos freios, a partir da
+                             redução mínima até a aplicação total
+                             Supressão - posição que anula o
+                             controle de segurança obtendo uma
+                             aplicação total de serviço
+                             Punho fora - posição que possibilita a
+                             retirada do punho do manipulador nas
+                             locomotivas comandadas, tornando-o
+                             inoperante
+
+
+                         7
+                                     Emergência - posição que possibilita
+                                     aplicações mais rápidas, além da
+                                     obtenção de maior pressão nos
+                                     cilindros de freio
+Manipulador independente SA-26
+
+
+
+
+                                     Controla a aplicação e alívio somente
+                                     dos freios das locomotivas
+
+
+
+
+                                     Marcha - posição de extrema
+                                     esquerda, que mantém soltos os
+                                     freios da locomotiva
+                                     Zona de aplicação - posição que
+                                     constitui a aplicação dos freios da
+                                     locomotiva. Aplicação esta que
+                                     aumenta gradualmente à medida que
+                                     o punho for levado para a extrema
+                                     direita
+                                     Alívio rápido - posição que alivia os
+                                     freios da locomotiva quando a
+                                     aplicação for originada pelo
+                                     manipulador automático (pressionar o
+                                     punho do manipulador para baixo)
+
+
+                                     Controla as aplicações e alívio do freio
+   Válvula de controle 26-F
+                                     da locomotiva, bem como
+                                     carregamento dos reservatórios
+
+
+
+                                 8
+Válvula de alívio rápido
+
+
+
+                               Permite um alívio rápido dos freios
+                               das locomotivas e é acionada pelo
+                               manipulador independente, após
+                               aplicação originada pelo manipulador
+                               automático e freio dinâmico
+
+
+
+
+    Válvula relé J.1
+
+
+                               Na locomotiva comandante repete no
+                               encanamento de equalização do
+                               cilindro de freio a pressão que recebe.
+                               Na locomotiva comandada funciona,
+                               porém o ar fica bloqueado na seletora
+                               F-1.
+
+
+
+
+                           9
+Válvula relé J-1.6-16
+
+
+
+
+                             Envia pressão para o cilindro de freio
+                             da locomotiva comandante e controla
+                             o desenvolvimento da pressão nos
+                             cilindros de freio da locomotiva
+                             quando a aplicação for feita pelo
+                             manipulador automático ou
+                             independente
+
+
+  Cilindro de freio
+
+
+
+
+                             Gera força para a frenagem das
+                             locomotivas
+
+
+
+Válvula de aplicação
+       P-2-A.
+
+
+                             Controla uma aplicação total de
+                             serviço quando iniciada pelos
+                             controles de segurança (pedal,
+                             controle sobre velocidade e ATC)
+
+
+
+
+                             Aparelho que se destina a medir a
+    Manômetro                pressão
+
+
+
+
+                        10
+                                      Volume de referência que serve para
+                                      orientar o maquinista nas reduções
+  Reservatório equilibrante           efetuadas no encanamento geral e
+                                      dar estabilidade à câmara “D” da
+                                      válvula relé do manipulador
+                                      automático
+Válvula piloto interruptora de
+     carregamento A-1
+
+
+                                      Válvula de proteção contra a quebra
+                                      do trem, que funciona sempre que
+                                      ocorre uma aplicação de emergência
+                                      originada pelo manipulador
+                                      automático ou por quebra de trem,
+                                      operando a chave de corte do motor
+                                      de tração e do freio dinâmico,
+                                      fazendo funcionar os areeiros
+
+
+Válvula transferência MU-2A
+
+
+
+                                      Comanda a válvula seletora F-1,
+                                      predispondo-a a uma tração múltipla
+
+
+
+
+    Válvula seletora F-1              Predispõe o equipamento de freio da
+                                      locomotiva para funcionar como
+                                      comandante ou comandada de acordo
+                                      com a válvula MU-2A, além de
+                                      proteger contra quebra entre
+                                      locomotivas
+
+
+
+
+                                 11
+                                D.P.C. - funciona como chave de
+                                corte de motores de tração e chave
+Chaves Eletropneumáticas        de corte do freio dinâmico
+                                D.B.I. - anula uma aplicação
+                                automática da locomotiva sempre que
+                                funcionar o freio dinâmico
+                                O.S.M. - provoca uma aplicação total
+                                de serviço toda vez que a velocidade
+                                máxima permitida for ultrapassada,
+                                fazendo funcionar a válvula de
+                                aplicação P-2-A
+                                VM-14 (ATC) - provoca uma aplicação
+                                total de serviço toda vez que forem
+                                desrespeitados os sinais de cabine
+                                (cabsinal)
+ Válvula descarga Nr. 8         Propaga o sinal de emergência para
+                                os vagões, quando da aplicação de
+                                emergência
+
+
+
+
+                           12
+     Válvula relé HB-5D
+
+
+
+
+                                     Evita que numa locomotiva
+                                     comandada, uma aplicação de freio
+                                     originada pelo manipulador, seja
+                                     acrescida
+
+
+      Válvula de pedal
+
+                                     Função de segurança do trem. Atua
+                                     se o maquinista venha a passar mal
+                                     com o trem em movimento
+
+
+
+Válvula de emergência de 1 ¼”
+
+
+
+
+                                     Aplica a emergência do trem
+
+
+
+
+                                13
+Equipamento de freio eletrônico CCBII
+Este equipamento é formado por elementos de construção e manutenção simples.
+São eles:
+   válvulas magnéticas;
+   transdutores;
+   pressostatos;
+   reguladores e limitadores de pressão;
+   válvulas piloto;
+   válvulas de retenção duplas;
+   reservatórios de volume.
+O equipamento de freio eletrônico CCBII é controlado por meio do sistema de
+funções integradas do computador da locomotiva. Esse sistema é muito simples e
+dividido em módulos, um para cada uma das funções normalmente executadas
+pelo equipamento de freio 26-L.
+O sistema inclui algumas funções que o tornam muito eficiente. São elas:
+     autoteste;
+     diagnose de problema;
+     registros de falhas (que são exibidas na tela do operador);
+     autocorreção de falhas considerada críticas.
+Caso um circuito crítico sofra uma pane, o sistema age da seguinte forma:
+     identifica a falha;
+     redireciona os circuitos de controle;
+     redistribui as funções;
+     cria um apoio (backup).
+O backup transfere as funções que apresentarem problemas críticos para os
+circuitos de apoio, que assumem as funções do circuito com problema, garantindo
+as aplicações de freio e permitindo que a locomotiva continue em operação até a
+próxima ida à oficina.
+
+
+
+
+                                          14
+FUNCIONAMENTO DO EQUIPAMENTO DE FREIO 26-L
+
+
+Veja a seguir como funciona o equipamento de freio 26-L.
+
+
+ESTÁGIOS                  DESCRIÇÃO                            COMENTÁRIO
+            A pressão do reservatório principal
+            deve ficar entre a pressão mínima de
+    E1      875 KPA (125 PSI) e a máxima de A pressão do reservatório
+            980     KPA   (140    PSI).     A    válvula principal é determinada pelo
+            reguladora deve estar regulada para regulador do compressor
+            630 KPA (90 PSI) em sua saída para
+            o encanamento geral
+            Com o equipamento carregado, o
+    E2      manômetro indicará 630 KPA (90 PSI)
+            tanto    no   reservatório    equilibrante
+            como no encanamento geral
+            Por meio do manipulador automático
+    E3      26-C, é efetuada a aplicação dos O princípio de funcionamento
+            freios pela redução da pressão no dos             freios   baseia-se   na
+            encanamento geral comandada pela diferença de pressão
+            câmara    “D”    da   válvula       relé   do
+            manipulador      automático         (ar    do
+            reservatório equilibrante). O alívio é
+            dado pelo incremento (crescimento)
+            da pressão no encanamento geral
+
+
+Aplicação de serviço do equipamento 26-L para locomotivas
+
+
+Operação que se realiza quando há o deslocamento do punho do manipulador
+automático em direção à zona de aplicação, estando o sistema de freio
+completamente abastecido, resultando em várias ligações.
+
+
+
+
+                                          15
+            FATO                                      CONSEQÜÊNCIA
+Quando         acontecer     o ... desligará a passagem 3 do principal e ao
+deslocamento do punho do mesmo tempo ligará para a atmosfera, como
+manipulador automático para também a passagem 33 da válvula aplicação P2-A
+a zona de aplicação...         através da válvula de supressão do manipulador
+                               26-C
+Quando a válvula interruptora ... a parte inferior da válvula de isolamento ficará
+estiver na posição de carga... ligada à atmosfera através da passagem 3 e
+                               válvula de supressão
+Quando a passagem 3 estiver ...      a      válvula   de      isolamento       do   reservatório
+descarregada...                equilibrante fechará o abastecimento, permitindo
+                               que o ar flua apenas em um sentido
+                               1º - a câmara “K” fluirá para a atmosfera
+                               2º - a pressão existente na câmara “D” da válvula
+                                    relé      do    manipulador         26-C    fluirá   para    a
+Quando a válvula de                 passagem 5 do suporte, deslocando-se até a
+descarga da válvula                 passagem 5 da válvula de aplicação P-2-A
+reguladora deslocar-se de      3º - a pressão vai da passagem 5 da válvula de
+sua sede, haverá, através de        aplicação P-2-A, para a passagem 15, através
+sua sede, a descarga das            do       encanamento           de     carregamento          do
+seguintes câmaras:                  reservatório           equilibrante     até     entrar      na
+                                    passagem 15 do manipulador, levantando a
+                                    retenção da válvula de isolamento, até alcançar
+                                    a       câmara    “K”     da   válvula     reguladora       do
+                                    manipulador e daí para a atmosfera
+Quando cair a pressão na ... a pressão do encanamento geral da câmara “E”
+câmara “D” da válvula relé do forçará o pistão, deslocando a válvula de descarga
+manipulador...                 da válvula relé de sua sede
+Quando     a      válvula   de ... o ar do encanamento geral, passagem 1, fluirá
+descarga deslocar-se de sua para a atmosfera, através do orifício “Y” da válvula
+sede...                        relé do manipulador
+                               1º       -   queda     de     pressão,     proporcional    à     do
+Quando cair a pressão do encanamento geral do reservatório de volume,
+
+
+                                              16
+encanamento        geral,   dois câmaras “D” e “E” da válvula piloto interruptora de
+fatos ocorrerão:                 carregamento A-1
+                                 2º - passagem um do suporte da válvula de
+                                 controle 26-F
+
+
+                                 1º - queda de pressão na câmara “J” da válvula
+                                 seletora, cortando o fluxo do reservatório de
+                                 controle e do seletor através do pistão
+                                 2º – liga o encanamento geral através da retenção
+                                 de refluxo, orifício “k”, para dentro do volume de
+                                 serviço rápido, e através do orifício “C” no suporte
+                                 de encanamento, para a válvula de carregamento,
+                                 e desta para a atmosfera, produzindo uma queda
+                                 de pressão no encanamento geral. Com a queda
+                                 da pressão do encanamento geral, o pistão da
+                                 válvula seletora ligará a câmara “L” e volume
+                                 seletor para a atmosfera, através de uma ligação
+                                 no carretel, fazendo com isso o serviço rápido
+                                 3º - queda da câmara “B”, em que o pistão de
+                                 aplicação    se   movimenta     tocando        a    sede    na
+                                 retenção de aplicação, desligando da atmosfera as
+                                 câmaras das relés J.1 e J.1.6.16, as passagens 10,
+                                 13, 12, 11 da válvula relé HB-5-D, a câmara do
+                                 pistão menor da válvula relé J.1.6.16, os dois
+                                 reservatórios de volume, as câmaras do pistão de
+Quando cair a pressão na carregamento,              a   câmara    “c”      do       pistão   de
+passagem 1 da válvula de aplicação, ao mesmo tempo em que o pistão se
+controle 26-F, ocorrerão os moverá           abrindo    a   válvula   de    retenção         de
+seguintes fatos:                 aplicação, permitindo que o ar do reservatório
+                                 auxiliar flua para a câmara “C” do pistão de
+                                 serviço, e daí para a câmara “G” da válvula de
+                                 carregamento, opondo-se à pressão da mola,
+                                 movimentando o pistão e cortando a ação do
+
+
+                                             17
+                              serviço rápido
+                              4º - o ar atuará em torno da válvula limitadora de
+                              serviço e também na sua parte inferior
+                              5º - o ar atuará na parte superior e inferior da
+                              válvula   limitadora   de   emergência,   passando
+                              através do pistão atuante e saindo na passagem
+                              16 do suporte
+
+
+
+
+                              1º - carregará o reservatório de volume
+                              2º - atuará na câmara “B” (lado da mola), na
+                              passagem 13 da válvula relé HB-5D, mantendo o
+                              pistão em cima
+                              3º - entrará na passagem 4 e sairá na passagem
+                              16 da válvula seletora F-1, passando pela retenção
+                              dupla 2 e atuando nas válvulas relés
+                              4º - na válvula relé J-1, entrará na passagem 16 e
+                              atuará na câmara “A”, movendo o pistão e
+                              desligando a câmara “B” e a passagem 30 da
+                              atmosfera. Abrirá a válvula de aplicação, fazendo
+                              com que o ar flua para a câmara “B” e saia na
+                              passagem 30 do suporte.
+Quando a pressão sair na Após entrar na passagem 30 da válvula seletora F-
+passagem 16 do suporte de 1, o ar sairá na passagem 14, e daí para o
+encanamento,     passará   a encanamento de equalização dos cilindros de freio
+atuar    em    seis   lugares 5º - na válvula relé J-1.6-16, entrará na passagem
+específicos:                  Ex., atuando na câmara “A”, movimentando o
+                              pistão e desligando a câmara “B” da atmosfera
+                              6º - abrirá a válvula de aplicação, fazendo com
+                              que o ar flua para a câmara “B” saindo na
+                              passagem 30
+
+
+
+
+                                        18
+                               ... atuará na retenção dupla nº3, deslocando-a.
+Quando a pressão sair na Entrará na passagem 26 da válvula de aplicação P-
+passagem 16 do suporte de 2-A, por uma passagem interna na válvula de
+encanamento...                 supressão, alimentará sua câmara externa “C”,
+                               desligando a passagem 30 da 3; seguindo, atuará
+                               no cilindro de freio e manômetro
+
+
+Quando      o    punho      do ... ocorrerá uma aplicação de freio semelhante
+manipulador se encontrar nas àquela descrita na posição de serviço, variando
+posições de redução mínima, apenas a intensidade da aplicação
+supressão e punho fora...
+
+
+
+
+Recobrimento do manipulador automático 26-C
+
+
+Posição assumida pelo manipulador, que ocorre quando a pressão do reservatório
+equilibrante deixa de fluir para a atmosfera. O manipulador automático 26-C é do
+tipo auto-recobridor.
+
+
+   ESTÁGIO                                  DESCRIÇÃO
+
+
+      E1         Dentro da zona de aplicação considera-se que, após uma
+                 aplicação, o punho tenha sido deixado em determinado ponto
+
+
+
+
+      E2         A haste do pistão da válvula de abastecimento ficará apoiada
+                 sobre o came da válvula reguladora
+
+
+
+
+                 A pressão da câmara “K” da válvula reguladora continua fluindo
+                 para a atmosfera. A pressão se torna ligeiramente inferior à
+      E3         pressão da mola, quando então o diafragma se desloca e desliga
+
+
+                                       19
+     a câmara “K” e a passagem 15 da atmosfera
+
+
+
+
+     Como a passagem 15 esta ligada à passagem 5, através do
+E4   pistão de aplicação da válvula de aplicação P-2-A, o reservatório
+     equilibrante e câmara “D” da válvula relé do manipulador ficam
+     também desligados da atmosfera
+
+
+
+
+     A   pressão   se   estabiliza   na câmara “D” no ato de      seu
+E5   desligamento da atmosfera e a câmara “E” da válvula relé
+     (encanamento geral ) continua fluindo para a atmosfera através
+     do orifício “Y”
+
+
+
+
+     Quando a pressão da câmara “D” for igual à da câmara E, a
+E6   pressão da mola da válvula de descarga fará o fechamento,
+     desligando também o encanamento geral da atmosfera
+
+
+
+
+     Estando estabilizada a pressão no encanamento geral na válvula
+     interruptora de carregamento A-1, gera-se estabilidade da
+E7   pressão no reservatório de volume (que havia sido reduzido a
+     proporção que encanamento geral restritamente, através do
+     pistão)
+
+
+     Na válvula seletora da válvula 26-F, a pressão do encanamento
+     geral (E.G.) se estabiliza na câmara “J” (E.G.), mas a câmara “L”
+E8   (volume seletor) continua fluindo para a atmosfera através do
+     pistão seletor, até que a mola da câmara “J” movimente o pistão
+     e desligue o volume seletor da atmosfera
+     Na válvula de controle 26-F, passagem 1,          a pressão se
+E9   estabilizará na câmara “B” entre os diafragmas. Entretanto, a
+
+
+                              20
+                    pressão do reservatório auxiliar, passagem 5 continuará fluindo
+                    para a câmara “C” através da válvula de aplicação
+                    Quando a somatória de pressão na câmara “C”, junto com a
+      E10           pressão da mola e mais a pressão da câmara “B” for igual à
+                    pressão da câmara “A”, a mola da válvula de abastecimento fará
+                    o fechamento, desligando o reservatório auxiliar da câmara “C”
+      E11           A estabilidade de pressão na câmara “C” provocará também a
+                    estabilidade de pressão no reservatório de volume
+      E12           Na válvula relé HB-5D, a pressão se estabilizará na câmara da
+                    mola
+                    Nas válvulas relés J-1 e J-1.6-16, a câmara “A” também ficará
+      E13           estabilizada, pois estava ligada ao reservatório de volume, pela
+                    passagem 4 e 16 da válvula seletora F-1
+      E14           Estabilizada    a     pressão   da   câmara   “A”,   a   pressão   do
+                    encanamento principal continuará fluindo para a câmara “B”,
+                    através da restrição
+                    Quando a pressão da câmara “B” for igual à pressão da câmara
+      E15           “A”, a mola da válvula de abastecimento fará o fechamento
+                    desta, desligando o encanamento principal da câmara “B”
+                    (cilindro de freio)
+      E16           Na válvula relé J.1 ocorrerá o mesmo que na válvula relé J.1.6-
+                    16, porém, a válvula relé J.1 desligará a pressão do principal
+                    para o encanamento de equalização dos cilindros de freio
+
+
+Alívio direto do equipamento de freio 26-L
+Quando há necessidade de que a válvula interruptora do manipulador esteja na
+posição de carga e o tampão de alívio da válvula de controle 26-F esteja na
+posição “direto”.
+
+
+                    FATO                                  CONSEQÜÊNCIA
+Quando      movimentar     o   punho       do ... será criada uma folga entre o came e a
+manipulador     automático         para     a válvula de supressão
+posição de “marcha”...
+
+
+                                              21
+                                       ... ar do reservatório principal moverá o
+                                       carretel da válvula de supressão e fluirá
+                                       através da passagem 3,         para a válvula
+                                       interruptora      de         isolamento      do
+                                       reservatório equilibrante, levantando-a e
+                                       abrindo a válvula de retenção
+                                       ... movimentará também o pistão da
+                                       válvula   de      abastecimento       (válvula
+                                       reguladora) que se encontra apoiado em
+Quando, através da folga, a mola se sua sede
+movimentar para a direita, a válvula
+de supressão...
+                                       ... a haste da válvula de abastecimento
+                                       encontrará     resistência    da   válvula   de
+                                       descarga da válvula reguladora que está
+                                       apoiada em sua sede no diafragma da
+                                       mola
+                                       ... a válvula de abastecimento se abrirá e
+                                       abastecerá:
+                                       1º - a câmara “K” do diafragma da
+                                       válvula reguladora
+                                       2º - a passagem interna do manipulador
+                                       26-C, através da válvula de retenção da
+                                       válvula de isolamento do reservatório
+Quando a válvula de abastecimento equilibrante, que se encontra aberto para
+encontrar resistência da válvula de a passagem 15 do suporte
+descarga da válvula reguladora...      3º - saindo na passagem 15 do suporte
+                                       do manipulador, abastecerá a entrada 15
+                                       da válvula de aplicação P-2-A, e através
+                                       da válvula de controle de alívio e pistão
+                                       de aplicação fluirá para a passagem 5 da
+                                       válvula de aplicação P-2-A, e desta para o
+                                       encanamento de controle do reservatório
+
+
+                                       22
+                                              equilibrante, reabastecendo o mesmo
+                                              4º   -    entretanto   na        passagem   5   do
+                                              suporte dos manipuladores, atuará no
+                                              manômetro através de um ramal e fluirá
+                                              para a câmara “D” da válvula relé do
+                                              manipulador 26-C.
+Quando     a    pressão    for   superior   à ... a haste do diafragma será forçada
+câmara “E” da mesma válvula...                para a direita, abrindo a válvula de
+                                              abastecimento
+                                              1º - para a câmara “E” da válvula relé do
+                                              manipular 26-C
+                                              2º - fluirá através da válvula interruptora
+                                              do encanamento geral e da câmara “B”,
+Quando     já se    encontrar aberta a ligada à atmosfera, através da passagem
+válvula de abastecimento do principal, 53A             e   da    válvula       interruptora   do
+o   ar     fluirá   para    as    seguintes manipulador 26-C
+passagens:                                    3º - passará em torno da válvula de
+                                              descarga do manipulador 26-C
+                                              4º - fluirá para a passagem 1 do suporte
+                                              de       manipuladores       e     daí   para   o
+                                              encanamento geral reabastecendo novos
+                                              lugares
+
+
+Quando o ar fluir da passagem 1 do ... entrará na passagem 1 da válvula
+suporte        de   encanamento         dos piloto interruptora de carregamento A-1,
+manipuladores para o encanamento através do pistão atuante, e reabastecerá
+geral...                                      o reservatório de volume, através de
+                                              restrição e da passagem 11
+
+
+                                              ... entrará na passagem 1 do suporte da
+                                              válvula 26-F, atuará na câmara “J” do
+                                              pistão        da         válvula         seletora,
+                                              movimentando-o, e através do tampão de
+
+
+                                              23
+                                           alívio fará a ligação do reservatório de
+                                           controle com o encanamento geral
+
+
+                                           ...   a    dissipação         do    reservatório    de
+                                           controle     para        o    encanamento       geral
+                                           facilitará o movimento do pistão, fazendo
+Quando o ar entrar na passagem 1 da com que a válvula tome a posição de
+válvula de controle 26-F...                alívio, ligando a câmara “C” e “G”, mais o
+                                           reservatório        de       volume,     através    da
+                                           passagem interna do pistão, saindo na
+                                           passagem 10 até chegar à atmosfera
+                                           ... fará a sua ligação com a câmara
+                                           através das passagens Ex., 16 e 4 da
+                                           válvula seletora F-1, 13 da válvula HB-
+Quando o ar fluir da relé J-1.6-16...      5D, através da passagem 16 da válvula
+                                           de controle e passando através do miolo
+                                           do pistão, saindo na passagem 10 do
+                                           suporte para a atmosfera
+                                           ... a câmara “A” ficará ligada para                  a
+Quando o ar fluir da relé J-1...           atmosfera,       através       da    passagem      16,
+                                           conservando, porém, o mesmo circuito J-
+                                           1.6-16
+                                           ...   o    pistão     se     deslocará    ligando    a
+                                           câmara “B”, o cilindro de freio (ligado
+Quando cair a pressão da câmara “A” através da passagem 30) e a câmara da
+da válvula relé J-1.6-16...                válvula de       supressão, pelo           miolo    do
+                                           pistão e passagem no suporte, para a
+                                           atmosfera
+                                           ... o encanamento de equalização do
+                                           cilindro    de      freio,    que      estava   ligado
+Quando o ar fluir da válvula relé J.1...   através da passagem 30 e 14 da válvula
+                                           seletora F-1 e 30 da válvula relé J-1,
+                                           mais a câmara, ficará ligado à atmosfera
+
+
+                                           24
+                                          através do miolo do pistão e passagem
+                                          no suporte
+
+
+Emergência do equipamento de freio 26-L
+Descarrega rapidamente a pressão do encanamento geral para a atmosfera, a fim
+de produzir uma aplicação de emergência. Somente é usada para salvar vidas
+humanas ou prevenir grandes danos materiais.
+A aplicação da emergência em um trem pode ocorrer das seguintes maneiras:
+
+
+   Colocando o punho do manipulador para a posição de emergência;
+   Quebra   do   trem    (quebra   de   engate     ou       simplesmente   desengate    da
+    mangueira);
+   Emergência indesejada (sem uma causa identificável).
+
+
+Ações imediatas do equipamento 26-L
+   Corte de tração;
+   Areeiro automático;
+   Interrupção do carregamento do encanamento geral;
+   Anulação do freio dinâmico.
+                  FATO                                       CONSEQÜÊNCIA
+
+
+                                          1º - o came da válvula de supressão
+                                          moverá esta válvula, fazendo com que
+                                          assuma         a    mesma   posição   que     nas
+                                          aplicações de serviço
+                                          2º - a válvula reguladora tomará a
+Quando o punho do manipulador for mesma posição que nas aplicações de
+levado   à   posição     de   emergência, serviço
+causará os seguintes efeitos:             3º - a válvula de emergência se moverá,
+                                          ligando o ar do principal para a passagem
+                                          12 e o reservatório equilibrante para a
+                                          atmosfera
+
+
+
+
+                                          25
+                                         1º - a ar atuará na retenção 1, através de
+                                         um ramal, deslocando-a e atuando na
+                                         chave de areeiros automáticos. Por outro
+                                         ramal, através das retenções 4 e 5,
+                                         atuará nas chaves de freio dinâmico e
+                                         motor de tração
+                                         2º - entrando na passagem 12, o ar
+                                         passará         pela      retenção      seletora,
+                                         deslocando-a de sua sede, comprimindo
+                                         sua mola e atuando na câmara “B” do
+                                         pistão     interruptor.    Através     de      uma
+                                         passagem, atuará na câmara da mola de
+                                         retenção interruptora, saindo a seguir na
+                                         passagem 53, e então atuará na câmara
+                                         “B”, fechando a válvula interruptora do
+                                         encanamento geral
+                                         3º - Com a queda rápida da câmara “D”
+                                         e da câmara da mola do pistão atuante
+                                         da       passagem 1 (encanamento geral),
+                                         este pistão se deslocará, pois a câmara
+Quando o ar vier da passagem 12 do “E” e o reservatório de volume estão
+manipulador   26-C,    e   o   came   da ligados restritamente para a atmosfera
+válvula de descarga se movimenta 4º - com o movimento do pistão atuante,
+abrindo-a,    então    ocorrerão      as o carretel fará a ligação da passagem 30
+seguintes situações:                     com a 9 e com a câmara externa do
+                                         pistão interruptor (que não se movimenta
+                                         porque existe pressão na câmara “B”, a
+                                         qual é recebida através da passagem 12)
+                                         5º - com a ligação do cano 30 com o 9, o
+                                         ar atuará na retenção 6, passará através
+                                         da passagem 5 e atuará na chave de
+                                         corte do freio dinâmico e motor de tração
+                                         6    -    com    a     queda   da    pressão    do
+
+
+
+                                         26
+                                      reservatório de volume, o pistão atuante
+                                      retornará à sua posição de alívio, ligando
+                                      a câmara externa do pistão interruptor e
+                                      o ar da passagem 9 para a atmosfera
+                                      7º - atingirá a passagem 12 da válvula
+                                      seletora F-1 (câmara da mola) do carretel
+                                      de transferência inferior
+                                      Com a abertura da válvula de descarga,
+                                      ligará o ar do encanamento geral para a
+Encanamento geral para atmosfera      atmosfera,         provocando         uma     queda
+                                      brusca do encanamento geral, que fará a
+                                      abertura da válvula de descarga nº 8
+                                      1º - a câmara “J” do pistão seletor cairá
+                                      rapidamente e o pistão se deslocará
+Quando acontecer uma queda rápida (função de serviço rápido) comprimindo a
+do encanamento geral                  mola, cortando o abastecimento para o
+                                      reservatório de controle e do volume
+                                      seletor e ligando, ao mesmo tempo, o
+                                      volume seletor para a atmosfera
+                                      2º   -     na     câmara   “B”       entre   os   dois
+                                      diafragmas, ocorrerá também uma queda
+                                      rápida e sob a ação do reservatório de
+                                      controle (câmara “A”), movimentando o
+                                      pistão e abrindo a válvula de aplicação
+                                      para possibilitar o fluxo de ar para a
+                                      câmara “C”
+                                      1º - a mola da válvula limitadora de
+                                      serviço provocará o seu fechamento ao
+                                      atingir a regulagem
+                                      2º - a válvula limitadora de emergência
+Quando o ar for atuar na câmara “C”   se       abrirá    quando        a     pressão     do
+                                      encanamento geral estiver entre 10 a 15
+                                      psi, permitindo um aumento de pressão
+
+
+                                      27
+                                        no cilindro de freio, aproximadamente 78
+                                        psi, e desta para a passagem 16
+                                        1º - atuará no reservatório de volume
+                                        2º - entrará na passagem 13 da válvula
+Quando o ar sair da passagem 16 do relé HB-5D e na passagem 4 da válvula
+suporte ou válvula controle 26-F        seletora f-1, saindo na passagem 16 e
+                                        deslocando a retenção 2. Então, atuará
+                                        nas câmaras da válvula relé J.1 ( através
+                                        da passagem 16) e da válvula relé J.1.6-
+                                        16
+                                        ...   movimentará          o    pistão      abrindo    a
+                                        válvula   de        aplicação,        alimentando      a
+Quando o ar atuar na câmara “A” da câmara         “B”       (que       fora    desligada      da
+válvula relé J.1...                     atmosfera) e saindo na passagem 30 da
+                                        válvula seletora F-1, e sairá na passagem
+                                        14,    indo    atuar      no     encanamento          de
+                                        equalização do cilindro de freio
+                                        ...   movimentará         o    pistão,      abrindo    a
+                                        válvula de aplicação e alimentando a
+                                        câmara    “B”       (que       fora    desligada      da
+Quando o ar atuar na câmara “A” da atmosfera) e saindo na passagem 30.
+válvula relé J.1.6-16...                Deslocará      a     retenção         3,   entrará    na
+                                        passagem 26 da válvula de aplicação P-2-
+                                        A e, através de uma passagem interna da
+                                        válvula de supressão, carregará a câmara
+                                        externa       por    um       ramal,       atuando    no
+                                        cilindro de freio e manômetro
+Quando     as   pressões   criadas   nas ... será repetida no encanamento de
+câmaras “A” das válvulas relés J-1 e J- equalização do cilindro de freio a mesma
+1.6-16 atingirem o valor de aplicação pressão, resultando no fechamento da
+de emergência...                        válvula de abastecimento
+                                        ... o pistão se movimentará porque o
+Quando a pressão do pistão atuante, reservatório de volume e passagem 11
+
+
+                                         28
+da câmara interna e da câmara de estará ligado restritamente à atmosfera,
+mola da válvula piloto interruptora de mantendo assim a mola comprimida, por
+carregamento A-1 caírem rapidamente um         tempo     de     aproximadamente        35
+para a atmosfera...                       segundos (tempo de acionamento dos
+                                          areeiros)
+
+
+Alívio pós-emergência do equipamento de freio 26-L
+Consiste em fazer o recarregamento do encanamento geral, após o punho do
+manipulador automático 26-C ter sido colocado na posição de alívio, preparando a
+locomotiva para tracionar.
+Toda vez que ocorrer uma emergência, após 1 minuto, o punho do manipulador
+deverá ser levado para a posição de supressão, predispondo assim o equipamento
+para o recarregamento (alívio).
+Tabela para predisposição do equipamento para alívio após emergência:
+
+
+               FATO                                   CONSEQÜÊNCIA
+Quando o punho do manipulador ... a válvula de supressão desligará o ar do
+for levado para a posição de principal da passagem 12 e do reservatório
+supressão...                       equilibrante da atmosfera, e ligará a passagem
+                                   12 para a atmosfera
+                                   ... ocorrerá desligamento da chave PC (chave
+Ocorrendo a ligação da passagem corte do motor de tração e freio dinâmico)
+12 para atmosfera...               ... corte do areamento
+                                   ... liga a câmara “B” da válvula interruptora
+                                   para a atmosfera
+
+
+O punho só poderá ser colocado na posição de alívio depois de cessado o aviso
+sonoro feito através da válvula interruptora do manipulador 26-C.
+Qualquer tentativa para recarregar o encanamento geral, antes que o aviso
+sonoro tenha cessado, será anulada pelo funcionamento da válvula piloto
+interruptora   de   carregamento   A-1,    mantendo     a     válvula   interruptora   do
+encanamento geral isolada.
+
+
+
+
+                                          29
+O equipamento de freio será aliviado da mesma maneira descrita na posição de
+alívio após aplicação de serviço.
+
+
+Freio independente do 26-L
+
+
+É aquele do tipo auto-recobridor. Suas funções específicas são:
+
+
+      Controlar as aplicações e alívio do freio da locomotiva;
+      Controlar o alívio rápido do freio da locomotiva após uma aplicação pelo
+       manipulador automático.
+
+
+O manipulador independente SA-26 possui três posições:
+      Marcha;
+      Aplicação;
+      Alívio rápido.
+   
+   TIPOS                                    DESCRIÇÃO
+   Marcha        posição que faz aliviar os freios da locomotiva
+                 posição em que se aplicam os freios da locomotiva, com pressão
+  Aplicação      proporcional ao avanço do punho do manipulador, para dentro do
+                 setor de aplicação
+                 posição em que se aliviam os freios da locomotiva, comprimindo o
+Alívio rápido punho para baixo, na posição de marcha quando os freios forem
+                 aplicados pelo manipulador automático
+
+
+Existe um setor de aplicação em que, quanto mais se avança o punho para a
+extrema direita, maior será a pressão obtida no cilindro de freio assim como do
+alívio. Também pode ser gradativo, recuando o punho em pequenos toques,
+observando-se o alívio gradativo da aplicação pelo independente.
+
+
+
+
+                                           30
+Aplicação do freio pelo independente
+
+
+              FATO                                CONSEQÜÊNCIA
+                                  ... o came desloca o pistão, devido ao avanço
+Quando o punho é avançado e       do   punho.   Este    deslocamento   provoca    a
+deixado em um ponto dentro do     retirada da válvula de abastecimento de sua
+setor de aplicação...             sede
+                                  ... a válvula de descarga ficará assentada em
+Quando a válvula de               sua sede, evitando o fluxo de ar para a
+abastecimento é deslocada de      atmosfera, admitindo com isso pressão do
+sua sede...                       principal através da passagem 30 para dentro
+                                  da câmara “L”
+                                  ... atuará nos lugares descritos sob a forma de
+                                  estágios
+                                  ESTÁGIOS                 DESCRIÇÃO
+                                                Entra na passagem 2 da válvula
+                                         01
+                                                MU-2A
+                                                Sai na passagem 20 do suporte
+                                                da válvula de transferência MU-
+                                         02
+                                                2A, deslocando a retenção n 2
+                                                Entra    na   passagem    Ex     do
+                                         03
+                                                suporte da válvula j-1.6-16
+                                                Atua na câmara “A”, levantando
+                                                o pistão e desligando a câmara
+                                         04     “B” da atmosfera. Abre a válvula
+                                                de abastecimento
+                                                O ar do principal atua na câmara
+                                         05
+                                                B, e sai através da passagem 6
+                                                O ar entra na passagem 16 do
+                                         06
+                                                suporte da válvula relé J-1
+
+
+
+
+                                         31
+                                       Atua na Câmara “A”, levantando
+                                       o pistão e desligando a câmara
+                                       “B” que estava ligada para a
+Quando o ar admitido na câmara         atmosfera. Abre a válvula de
+“L” fluir para a passagem 20 do        abastecimento e faz com que o
+                                  07
+suporte do manipulador e seguir        ar   do     principal,      através    da
+para o encanamento de aplicação        passagem 6, atue na câmara “B”
+                                  08   Sai na passagem 30 do suporte
+                                       Entra      na     passagem      30     do
+                                  09
+                                       suporte da válvula seletora F-1
+                                       Sai na passagem 14 indo para o
+                                       encanamento de equalização dos
+                                  10
+                                       cilindros de freio
+                                       O ar que sai da passagem 20 da
+                                       válvula MU-2A, através de um
+                                       ramal, entra na passagem 20 da
+                                  11   válvula     seletora     F-1,     ficando
+                                       retido no carretel n 3
+                                       Entra nas passagens 10 e 12 da
+                                       válvula         relé   HB-5D.         Pela
+                                       passagem 10, atua em cima do
+                                       pistão, comprimindo a mola e
+                                       ligando a passagem 12 com a
+                                       11, atuando então na câmara
+                                  12
+                                       inferior do pistão pequeno da
+                                       válvula      relé      J-1.6.16       pela
+                                       passagem         16.   Possibilita     um
+                                       esforço maior no cilindro de freio
+                                       e    por   um       ramal    carrega    o
+                                       reservatório de volume
+
+
+
+
+                                  32
+                                                        Na válvula relé J-1.6.16, o ar
+                                                        que está atuando na câmara “B”
+                                                        flui através da passagem 30,
+                                                        passa pela retenção 3 e entra na
+                                            13
+Quando o ar, admitido na câmara                         passagem 26 da válvula de
+“L” fluir para a passagem 20 do                         aplicação P-2-A
+suporte do manipulador e seguir                         Atua na câmara da válvula de
+                                            14
+para o encanamento de aplicação                         supressão, comprimindo a mola
+...                                                     Desliga a passagem 3 da câmara
+                                            15
+                                                        “A” do pistão de aplicação
+                                                        Atua no cilindro de freio através
+                                            16
+                                                        de um ramal
+
+
+
+Recobrimento pelo manipulador independente SA-26
+
+
+            FATO                       CONSEQÜÊNCIA                    COMENTÁRIO
+                                 ...    a    mola         será ...   interrompendo          o    fluxo
+Se     a        válvula      de comprimida, assentando a para a câmara “L”, cessará o
+abastecimento ficar aberta válvula de abastecimento fluxo para a passagem 20 e
+até   que   a     pressão    da em sua sede e cessando o conseqüentemente,                       para
+câmara      “L”     vença     a fluxo do ar do principal dentro do encanamento de
+pressão     da      mola     de para a câmara “L”...             aplicação        e     alívio     do
+regulagem...                                                     manipulador independente
+                                                                 Apesar da estabilidade da
+Interrompendo a pressão ... cessará a pressão na câmara “A” da válvula J.1, a
+para o encanamento de câmara “A” da válvula relé válvula                     de       abastecimento
+aplicação e alívio...           J-1                              continua aberta, fluindo para
+                                                                 a câmara “B”
+Quando      a     pressão    da ... a mola de retenção de Esta operação provocará o
+câmara “B” for          igual à aplicação        fará     esta desligamento            do   ar     do
+pressão da câmara “A”...        assentar-se em sua sede          principal com a câmara “A”
+Se as pressões da câmara ...            a   válvula         de
+“A” da válvula relé J-1.6- abastecimento           continuará
+
+                                            33
+16 e da câmara inferior do alimentando a câmara “B”
+diafragma              pequeno
+estiverem estabilizadas...
+Se a pressão que atua na ... a mola de retenção de Esta                         operação         causará
+câmara “B” for igual às aplicação           fará        com   que também o desligamento do
+pressões     que    atuam      na esta retenção se assente ar              do    principal       para   a
+câmara “A” e na câmara na sede                                       câmara “B”
+inferior     do      diafragma
+pequeno...
+
+
+Alívio após uma aplicação e posterior recobrimento pelo manipulador
+independente SA-26
+
+
+
+
+                     FATO                                         CONSEQÜÊNCIA
+                                                  ... surge uma folga entre o came e a
+                                                  unidade do manipulador SA-26. A pressão
+                                                  da mola que atua entre o came e o
+Quando      se     direciona    o   punho   do diafragma o deslocará para a esquerda,
+manipulador independente SA-26 para a desassentando a válvula de descarga de
+posição de alívio...                              sua sede e fazendo a ligação entre a
+                                                  câmara “L” e a passagem 20 para a
+                                                  atmosfera,      além     de    fazer     também       a
+                                                  ligação do encanamento de aplicação e
+                                                  alívio do independente
+                                                  ...   ficarão     ligadas     para   a     atmosfera,
+Quando for realizada a ligação entre o através das passagens 2 e 20 da válvula
+encanamento de aplicação e alívio para a de transferência MU-2A, a passagem 16, a
+atmosfera...                                      câmara      “A”     da    válvula      relé    J-1,   a
+                                                  passagem Ex., a câmara “A” da válvula
+                                                  relé J-1.6-16 e da passagem 10 da câmara
+                                                  superior da válvula relé HB-5D
+                                                  ...    a    mola     movimentará           o    pistão,
+
+
+                                             34
+Quando a câmara superior da HB-5D e desligando as passagens 12 da 11 e
+passagem    10   forem   ligadas    para   a ligando       a    câmara      inferior    do     pistão
+atmosfera...                                    pequeno        da   relé     J-1.6-16      para      a
+                                                atmosfera, através das passagens 11 e 20
+                                                ...   o   pistão    movimentará,        abrindo      a
+Quando acontecer a queda da pressão da passagem de alívio através de um orifício
+câmara “A” da válvula relé J-1...               no suporte e ligando a câmara “B” e o
+                                                encanamento         de     equalização       para    a
+                                                atmosfera
+                                                ... o pistão se movimentará e abrirá a
+Quando acontecer a queda de pressão da passagem de alívio, que liga a câmara “B”
+válvula relé J-1.6-16 com a queda da da válvula de supressão da válvula de
+câmara “A”...                                   aplicação P-2-A e o cilindro de freio para
+                                                atmosfera,      através     de   um     orifício    no
+                                                suporte
+
+
+Parada do trem pelo controle de segurança
+
+
+Paralisação do trem através de uma aplicação dos freios pelo sistema de
+segurança, envolvendo a válvula de aplicação P-2 ou P-2-A. Nessa operação são
+envolvidos os seguintes elementos:
+
+
+         Pedal de homem morto;
+         Controle de sobrevelocidade;
+         ATC.
+
+
+O pedal de homem morto, ao ser pressionado, conserva a passagem 3 desligada
+da atmosfera (em tráfego), porém, havendo necessidade de se retirar o pé, é
+preciso que se obtenha 30 PSI de pressão no cilindro de freio, pois desta forma a
+válvula de supressão da válvula P-2-A desliga a passagem 3 da câmara “A” do
+pistão de aplicação.
+
+
+
+
+                                           35
+Funcionamento do pedal do homem morto
+
+
+                     FATO                                       CONSEQÜÊNCIA
+Quando houver a retirada do pé ... a passagem 3 será ligada à atmosfera, por
+do     pedal    e    não    acontecer    o meio da válvula de apito do pedal, que ligará
+retorno num tempo de 6 a 8 também à atmosfera a câmara “A” do pistão de
+segundos...                                  aplicação da válvula P-2-A
+Quando acontecer a ligação da ...                causará       movimento   no     pistão,   que     ao
+câmara         “A”    do     pistão     de comprimir a mola, desligará a passagem 24 da
+aplicação da válvula P-2-A com a atmosfera e a passagem 5 da 15, além de ligar as
+passagem 3 para a atmosfera e passagens 5 e 25 com a 24. Também liga o
+quando ela se tornar inferior à principal para a passagem 8
+câmara         “B”    do     pistão     de
+aplicação...
+Quando ligar a passagem 25 com ... o ar do principal será ligado para atuar a chave
+a 24...                                      PC (corte tração e freio dinâmico)
+Ligando o principal na passagem ... o principal será ligado para a atmosfera pelo
+8...                                         manipulador automático
+                                             ocorrerão quatro efeitos descritos sob a formação
+                                             de estágios
+                                             ESTÁGIOS                    DESCRIÇÃO
+                                                           O    reservatório    equilibrante      será
+                                                 01        ligado ao volume de expansão e,
+                                                           depois, ligado à válvula F-3, e daí
+Quando acontecer a ligação da                              para a atmosfera
+passagem 5 com a 24                                        Caindo   a   pressão    do   reservatório
+                                                           equilibrante, cairá também a pressão
+                                                 02        na câmara “D” da válvula relé do
+                                                           manipulador         automático         26-C
+                                                           (passagem 5)
+
+
+
+
+                                                  36
+                                                   Com a queda da câmara “D” da
+                                                   válvula relé do manipulador
+                                                   automático 26-C, o pistão
+                                                   equilibrante se moverá, deslocando a
+                                                   válvula de descarga da válvula relé do
+                                                   manipulador automático de sua sede
+                                                   e ligando a câmara “E” à atmosfera,
+                                         03        através do orifício “Y”, fazendo com
+                                                   que a pressão do encanamento geral
+                                                   caia na mesma proporção do
+                                                   equilibrante
+                                                   Caindo a pressão do encanamento
+                                                   geral, ocorrerá uma aplicação dos
+                                         04
+                                                   freios
+
+
+Funcionamento do controle de sobrevelocidade
+
+
+ESTÁGIOS                  DESCRIÇÃO                                COMENTÁRIO
+            Sempre que a velocidade máxima de
+    01      tráfego adotada pela ferrovia não for
+            respeitada,    a   válvula    magnética
+            “OSM” será desenergizada
+                                                         Esta     operação    acarretará    a
+    02      A passagem 10, através da válvula de ligação da câmara “A” da válvula
+            apito   da    “OSM”,   será       ligada   à de     aplicação    P-2-A   para   a
+            atmosfera                                    atmosfera e ao reservatório de
+                                                         tempo
+            Ao ligar a câmara “A” do pistão de
+            aplicação da válvula P-2-A com a Esta ligação só será realizada
+            atmosfera, o pistão se movimentará, quando a pressão da câmara “A”
+    03      comprimindo a mola e desligando a se tornar inferior à câmara “B”
+            passagem 24 da atmosfera, além de do pistão de aplicação
+            desligar a passagem 15 da 5 e ligar a
+
+
+                                          37
+             5 com a 24 e a 25 com a 24
+             Na ligação da passagem 5 com a 24, Caindo a pressão do reservatório
+             o reservatório equilibrante será ligado equilibrante,          cairá    também       a
+    04       ao volume de expansão e daí para a pressão                da   câmara        “D”    da
+             válvula F-3, saindo deste ponto para válvula           relé     do     manipulador
+             a atmosfera                                   automático 26-C (passagem 5)
+                                                           O ar do principal atua na chave
+    05       Ligando a passagem 25 à 24                    PC (corte motor de tração e freio
+                                                           dinâmico)
+             Com a queda da pressão na câmara Caindo                    a        pressão         do
+             “D” da válvula relé do manipulador encanamento                     geral,    ocorrerá
+             automático, o pistão equilibrante se uma             aplicação         dos       freios
+             moverá e deslocará a válvula de semelhante                     à       posição      de
+    06       descarga       da    válvula     relé    do aplicação. Porém, causará uma
+             manipulador, ao mesmo tempo em aplicação total de serviço
+             que ligará a câmara “E” para a
+             atmosfera, através do orifício “Y”,
+             fazendo     com     que   a    pressão   do
+             encanamento geral caia na mesma
+             proporção           do         reservatório
+             equilibrante
+
+
+Sistema de freios ATC
+Sistema introduzido nas locomotivas que, em conjunto com a válvula de aplicação
+P-2-A, efetua uma aplicação de freios todas as vezes que os sinais de cabine não
+são respeitados.
+Promove uma aplicação de penalidade quando não são obedecidos os cuidados
+necessários na operação do trem ao longo da linha.
+O sistema ATC na locomotiva é composto de:
+         Válvula magnética VM-14;
+         Duas válvulas de transferência BD-1;
+         Válvula limitadora de pressão F-3;
+         Reservatório de controle de tempo.
+
+
+                                             38
+Funcionamento da aplicação dos freios pelo ATC:
+
+
+              DESCRIÇÃO                                   COMENTÁRIO
+Estão ligadas para a atmosfera as
+seguintes passagens:
+       Câmara “A” da válvula BD-1
+        superior, pela passagem “EX”
+        do suporte
+       Câmara       “B”   da    válvula
+        transferência BD-1 superior
+       câmara      “D”    da    válvula O ar flui para a atmosfera através da
+        transferência BD-1 inferior          válvula magnética
+       câmara      “C”    da    válvula
+        transferência BD-1       inferior,
+        reservatório de controle de
+        tempo (através de restrição)
+Volume de expansão passa pela
+passagem       24     da   válvula     de
+aplicação P-2-A, através do pistão
+de aplicação
+A   válvula    magnética,       que   em
+condições        normais        trabalha
+energizada, quando chega nesse
+ponto fica desenergizada
+O ar do reservatório principal fluirá
+para a câmara “B” da válvula BD-1 Por meio de uma restrição, o ar fluirá para a
+superior e para a câmara “D” da câmara “C” da válvula BD-1 inferior para
+válvula BD-1 inferior, desligando o reservatório de controle de tempo, pela
+volume de expansão da válvula passagem TR-2
+limitadora F-3
+
+
+
+
+                                               39
+O ar, atuando na câmara “B” da Com o crescimento de pressão na câmara
+válvula BD-1 superior, levantará o “B”, o pistão se deslocará da retenção,
+pistão, comprimindo a mola junto abrindo            uma   passagem           pelo     miolo    da
+com     o     pistão,   e   desligará    o mesma,   possibilitando       a     descarga        da
+reservatório de tempo, através da câmara            “A”   da   válvula       P-2-A      para    a
+passagem TR-1 da passagem 10 atmosfera
+(principal)
+Ao ligar a câmara “A” do pistão de
+aplicação da válvula P-2-A com a Esta ligação só será realizada quando a
+atmosfera, o pistão se movimentará pressão da câmara “A” se tornar inferior à
+comprimindo a mola e desligando a câmara “B” do pistão de aplicação
+passagem 24 da atmosfera, além
+de desligar a passagem 15 da 5 e
+ligar a 5 e a 25 com a 24
+Na ligação da passagem 5 com a Caindo               a     pressão    do             reservatório
+24, o reservatório equilibrante será equilibrante, cairá também a pressão da
+ligado ao volume de expansão, e câmara “D” da válvula relé do manipulador
+então para a válvula F-3, saindo automático 26-C (passagem 5)
+deste ponto para a atmosfera
+Após transcorridos 20 segundos,
+com o equilíbrio das câmaras “C” e
+“D” da válvula BD-1 inferior, o A quantidade de tempo (20 segundos)
+pistão se deslocará sob a ação da determina o carregamento do reservatório
+mola,       ligando     o   volume      de de controle de tempo e a câmara “C” da
+expansão à válvula limitadora de válvula BD-1 inferior, através da restrição
+pressão F-3 (regulada entre 58 a 64
+PSI), que passa a comandar a
+pressão do reservatório equilibrante
+
+
+
+
+                                             40
+A queda da pressão do reservatório Os resultados serão semelhantes aos de
+equilibrante,     pela     passagem       5 aplicação          de     serviço     efetuada          pelo
+produzirá uma queda de pressão na manipulador automático 26-C. A aplicação
+câmara “D” da           válvula   relé   do de serviço será total
+manipulador        automático        26-C,
+ligando o ar do encanamento geral
+à atmosfera
+
+
+ATENÇÃO: em toda a aplicação pelo controle de segurança, a passagem 30 será
+ligada à 25 da válvula P2-A, efetuando o corte do motor de tração e do freio
+dinâmico.
+
+
+Alívio após uma aplicação por penalidade
+                     FATO                                            CONSEQÜÊNCIA
+                                                     ... é necessário colocar o punho do
+Quando ocorrer uma aplicação originada manipulador                      automático           26-C     na
+pelos controles de segurança do trem posição de supressão, fazendo com que
+(pedal, sobrevelocidade, ATC)...                     haja   certas     ligações    da       válvula   de
+                                                     supressão do manipulador automático,
+                                                     para só depois obter-se o alívio
+Quando      o     punho     do    manipulador ... várias ligações serão realizadas a fim
+automático       estiver    na    posição      de de ocasionar uma aplicação total de
+supressão...                                         serviço
+Quando a ligação realizada é feita da
+passagem 3 do manipulador automático ... a pressão inferior da válvula de
+para a atmosfera, deslocando a válvula isolamento do equilibrante será ligada à
+de alívio da P-2-A para a direita sob a atmosfera,                    através      da       válvula   de
+ação da pressão da câmara do lado supressão
+esquerdo        (pressão    criada       com    o
+desligamento       da      passagem       8    da
+atmosfera)...
+Quando a passagem 26 receber pressão ... deslocará a válvula de supressão da
+do principal através da passagem 30 do válvula                      P-2-A   para        a     esquerda,
+
+
+                                                41
+manipulador automático...                     desfazendo a ligação da câmara “A”
+                                              (passagem 10) com a passagem 3
+Quando acontecer o desligamento da ... o resultado será a formação de
+passagem 8 da atmosfera, o pistão se pressão na câmara “A” do pistão de
+deslocará para a esquerda fazendo a aplicação da válvula P2-A e mudança de
+ligação da passagem 15 com a 5...             posição da válvula de controle de alívio
+                                              ... será necessário que seja reativado o
+Quando colocar o punho do manipulador elemento que ocasionou a penalidade,
+na posição de alívio...                       isto é, o desligamento da passagem 3
+                                              ou 10 da atmosfera
+Estando o punho do manipulador na ... ligará a passagem 8 para a atmosfera
+posição de alívio...                          no manipulador 26-C, ligando a câmara
+                                              esquerda da válvula de alívio da válvula
+                                              P-2-A para a atmosfera
+
+Quando for feita a ligação da passagem ... a válvula de alívio da P2-A se
+30 do manipulador automático, através deslocará para a esquerda, refazendo a
+da válvula de supressão com a passagem ligação da passagem 15 com a 5
+3, e desta com a 33 da válvula P2-A...
+Quando a pressão que atuar na válvula ... a mola movimentará o pistão da
+de supressão for ligada à atmosfera, válvula             de     supressão    e      ligará   a
+através da passagem 26 do pistão de passagem 30 com a 3, carregando o
+aplicação da P2-A...                          reservatório equilibrante e ligando para
+                                              a atmosfera a passagem 25 e a pressão
+                                              que atuava na chave de corte de tração
+                                              e freio dinâmico
+Estando a passagem 15 ligada com a 5... ... fará o carregamento o reservatório
+                                              equilibrante, ligando para a atmosfera a
+                                              passagem 25 e a pressão que atuava na
+                                              chave   de      corte   de   tração    e   freio
+                                              dinâmico
+
+
+      NOTA: toda vez que o freio dinâmico atuar, o freio automático será
+      anulado.
+
+                                         42
+Funcionamento do freio dinâmico
+                CONDIÇÃO                                                  RESULTADO
+                                                  ... será aberta uma passagem e a
+Se o freio dinâmico em ação energizar a ligação               do          ar    do   principal   com    o
+válvula magnética DBI...                          encanamento atuante (cano 13) será
+                                                  efetuada
+                                                  ... o ar entrará na passagem 13 do
+Se o fluxo de ar do principal entrar no suporte da válvula de controle 26-F e
+encanamento atuante (13)...                       atuará no pistão atuante da válvula de
+                                                  alívio rápido
+                                                  ... o ar moverá para cima o pistão
+                                                  atuante, comprimindo a mola e fazendo
+                                                  a ligação da câmara “A” das válvulas
+                                                  relés     J-1       e    J-1.6-16.      Passará   pela
+Se o ar atuar no pistão atuante da retenção 2, pelas passagens 4 e 16 da
+válvula   de   alívio   (parte   inferior   do válvula seletora F-1, pela câmara da
+carretel)...                                      mola da válvula HB-5D, passagem 13,
+                                                  pelo reservatório de volume, e pela
+                                                  passagem 16 da válvula controle 26-F,
+                                                  até atingir a atmosfera, através do
+                                                  pistão atuante e da descarga da válvula
+                                                  de alívio
+                                                  ...   o   pistão         se    moverá,     ligando    o
+                                                  encanamento de equalização do cilindro
+Se cair a pressão na câmara “A” da de freio para a atmosfera, através da
+válvula relé J.1...                               passagem 30 e descarga do suporte
+                                                  ... o pistão se moverá, ligando o cilindro
+Se cair a pressão na câmara “A” da de freio através da passagem 30 para a
+válvula relé J.1.6-16...                          atmosfera
+                                                  ... a pressão desta válvula se tornará
+                                                  superior        à       pressão    da    câmara      “D”
+                                                  (encanamento geral), movimentando-se
+                                                  para cima e permitindo que a câmara
+
+
+                                             43
+Se, ao mesmo tempo, através do pistão “A” da válvula de controle 26-F flua para
+atuante, o ar da câmara “A” da válvula a atmosfera até que haja equilíbrio
+controle 26-F (reservatório de controle) entre as câmaras “F” e “D” do pistão de
+atuar na câmara “F” do pistão de alívio... alívio. Movimentará o pistão e desligará
+                                             a câmara “A” da válvula de controle 26-
+                                             F para a atmosfera, impedindo assim a
+                                             reaplicação dos freios
+                                             ... o pistão se movimentará, ligando a
+                                             câmara “C” da válvula controle 26-F
+Se equilibrando as câmaras “F” e “D” da para a atmosfera, através da passagem
+parte de alívio e se houver também o 10 do suporte de encanamento, e atuará
+equilíbrio entre as câmaras “A” e “B” da na locomotiva somente o freio dinâmico,
+válvula de controle 26-F...                  enquanto que, nos vagões, a aplicação
+                                             será feita pelo manipulador automático
+
+
+CARREGAMENTO DE AR COMPRIMIDO
+
+
+O carregamento é feito a partir do ar comprimido do reservatório principal. Ocorre
+da seguinte maneira:
+
+
+      Atuação dos reservatórios principais;
+      Carregamento do reservatório equilibrante;
+      Carregamento do encanamento gera;
+      Carregamento da válvula de controle 26-F.
+
+
+Atuação do ar nos reservatórios principais
+                  FATO                                  CONSEQÜÊNCIA
+                                             1º - atuará na válvula de segurança e
+                                             dispositivos   auxiliares   (sino,   buzina,
+                                             areeiro, regulador do compressor etc.)
+
+
+
+
+                                        44
+                                                 2º - por um ramal passará por uma
+                                                 retenção com orifício de ¼” e carregará
+Com o ar do compressor carregando o o                 encanamento         de   equalização       do
+primeiro    reservatório,   o   ar   fará   o principal,     ficando      retido      no    carretel
+seguinte percurso:                               protetor da válvula seletora F-1
+                                                 3º - Por outro ramal passa pela retenção
+                                                 de sentido único carregando o segundo
+                                                 reservatório
+                                                 Passa através do filtro e torneira de
+Ar no segundo reservatório                       isolamento para dentro do encanamento
+                                                 principal, atingindo diversas passagens
+Atua no dispositivo locomotiva morta             Ficando preso na retenção
+Após atingir a passagem 30 da válvula Fica retido no carretel
+de transferência MU-2ª
+Após atingir a passagem 2 da válvula Fica retido na vedação
+magnética DBI
+Após atingir a passagem 6 da válvula Atua em cima da válvula de retenção de
+relé J-1                                         aplicação
+Após o ar atingir a passagem 6 da Atua em cima da válvula de retenção de
+válvula relé J-1.6-16                            aplicação
+                                                 1º - Atuará nas câmaras “A” e “B” do
+                                                 pistão de aplicação, por um ramal fica
+                                                 retido no pistão de aplicação
+                                                 2º   -   Sairá     através     de    ramal,     na
+Após atingir a passagem 30 da válvula passagem 10 do suporte
+de   aplicação   P-2-A, fará    o    seguinte 3º      -   Ficará    retido     na    vedação     da
+percurso:                                        passagem       1   da     válvula     magnética
+                                                 O.S.M.
+                                                 4º   -   Entrará    na      passagem       10   do
+                                                 conjunto       BD-26        (ATC),        passando
+                                                 através da válvula BD-1 superior, saindo
+                                                 na   passagem       TR-1 e         carregando    o
+                                                 reservatório de volume
+
+
+                                            45
+                                              5º - Atuará também na câmara atrás do
+                                              pistão      de       supressão,       saindo      na
+                                              passagem 3 do suporte da válvula P-2-A
+                                              e daí para a válvula de pedal
+Após atingir a passagem FV do conjunto Fica            retido     na    vedação     da    válvula
+BD-26:                                        magnética VM-14
+Após atingir a passagem 30 da válvula Passará por uma passagem interna do
+piloto interruptora de carregamento A-1: pistão          interruptor,         carregando        sua
+                                              câmara interna, e por um ramal ficará
+                                              retido em torno do pistão atuante
+O ar do principal atingirá, além do
+manômetro,    uma      das    partes   do
+fluxômetro
+                                              1º – passará por uma restrição e irá
+                                              para a outra parte do fluxômetro. Fluirá
+                                              para a unidade de abastecimento e
+                                              descarga e parte inferior da válvula de
+                                              alívio do manipulador independente
+                                              2º   -     fluirá        para    a    válvula     de
+                                              abastecimento da válvula reguladora
+                                              3º - através de um ramal, passará pela
+                                              retenção do principal, ficando retido no
+Após atingir a passagem 30 do suporte carretel da válvula interruptora
+dos   manipuladores,   fará   o   seguinte 4º - através de um ramal, ficará retido
+percurso:                                     na válvula de supressão e daí atingirá a
+                                              câmara      das      molas      das   válvulas    de
+                                              emergência e supressão
+                                              5º   -      fluirá       para     a   válvula     de
+                                              abastecimento            da     válvula    relé   do
+                                              manipulador automático
+                                              6º - saindo da válvula de supressão, o
+                                              ar passará por uma passagem interna
+                                              do manipulador e, por meio do carretel
+
+
+                                         46
+                                             da válvula interruptora, atuará na parte
+                                             inferior da válvula de isolamento do
+                                             reservatório      equilibrante,     mantendo-a
+                                             aberta
+                                             7º - sairá na passagem 3 do suporte dos
+                                             manipuladores,              passando         pelo
+                                             encanamento de controle até atingir a
+                                             passagem 33 da válvula de aplicação P-
+                                             2-A
+                                             8º - atuará no carretel de alívio, ligando
+                                             a passagem 5 com a 15
+
+
+Carregamento do reservatório equilibrante
+                    FATO                                  CONSEQÜÊNCIA
+Quando    iniciar   o   carregamento   do ...      deverá      regular     a   válvula    de
+reservatório equilibrante...                 alimentação        para       uma      pressão
+                                             predeterminada (90 PSI)
+                                             1º - fluirá, através da válvula de
+                                                abastecimento, para a câmara “K”
+                                                da    válvula       reguladora,     atuando
+                                                contra o diafragma
+                                             2º - sairá na passagem 15 do suporte
+                                                do    manipulador,        passando       pela
+                                                válvula        de        isolamento       do
+                                                equilibrante, que se encontra aberta
+Quando a válvula de alimentação estiver 3º - entrará na passagem 15 do
+regulada e sob determinada pressão, o           suporte da válvula P-2-A, atuando
+ar fará o seguinte percurso:                    em torno do carretel de alívio
+                                             4º - por uma passagem, atuará na
+                                                parte     da    mola      da   válvula    de
+                                                retenção de sobre-redução
+                                             5º - por outra passagem, através do
+                                                pistão de aplicação, atuará no outro
+
+
+                                        47
+                                                lado da válvula de retenção de
+                                                sobre-redução
+                                           6º - através do pistão de aplicação,
+                                                sairá na passagem 5 do suporte,
+                                                entrando       no        encanamento          de
+                                                controle            do              reservatório
+                                                equilibrante, carregando-o
+                                           7º    -   entrará    por       um         ramal,   na
+                                                passagem        5        do     suporte       do
+                                                manipulador         que       vai     atuar   no
+                                                manômetro,          ficando          retido   na
+                                                válvula de emergência, através de
+                                                um pequeno ramal
+                                           8º - seguirá para a câmara “D” da
+                                                válvula    relé          do         manipulador
+                                                automático, onde construirá uma
+                                                pressão    de       igual      valor      à   do
+                                                reservatório equilibrante
+
+
+     OBSERVAÇÃO: no carregamento do encanamento geral, a pressão
+     constituída na câmara “D” da válvula relé do manipulador automático
+     deslocará o pistão, que por sua vez deslocará a válvula de abastecimento
+     do encanamento geral, fazendo com que o ar do principal flua para
+     diferentes lugares.
+
+
+Carregamento do encanamento geral
+
+
+ESTÁGIOS              DESCRIÇÃO                            COMENTÁRIOS
+            O ar fluirá para a câmara “E” da
+   E1
+            válvula relé
+                                                 Como a câmara “B” desta válvula
+                                                 está ligada para a                  atmosfera,
+                                                 através da passagem 53 e a
+
+
+                                      48
+                                                    válvula        interruptora           do
+                                                    manipulador, esta se deslocará da
+                                                    sede permitindo a passagem do
+                                                    ar que irá atuar na válvula de
+     O   ar    fluirá        para    frente    da descarga que ficará mantida na
+E2   válvula         interruptora              do sede através da mola. Antes de
+     encanamento geral                              sair      na   passagem         1     do
+                                                    manipulador, passará pela válvula
+                                                    de     retenção     do    encanamento
+                                                    geral, ficando retido em torno do
+                                                    carretel da válvula interruptora do
+                                                    manipulador. Ao descer atuará no
+                                                    manômetro.         Daí seguirá para a
+                                                    passagem       1    do    suporte     dos
+                                                    manipuladores,           entrando     no
+                                                    encanamento geral
+     O ar fluirá do encanamento geral
+     e entrará na passagem 1 do Por                        uma     restrição,     atua    na
+E3   suporte      da          válvula      piloto câmara externa que sai para a
+     interruptora de carregamento A- passagem                      11,       carregando    o
+     1, atuando no pistão atuante, na reservatório de volume (controle
+     câmara interna e na câmara da do areeiro)
+     mola
+     O ar seguirá através de uma
+E4   ramificação que atua na válvula
+     de emergência
+E5   O ar fluirá para a válvula de
+     descarga n 8
+     Através    de       uma        torneira   de
+E6   isolamento,         o    ar    entrará    na
+     passagem        1       do     suporte    da
+     válvula de controle 26-F
+     O ar fluirá para o dispositivo de
+
+
+                                          49
+    E7      locomotiva morta (regulador de
+            pressão e torneira com orifício
+            de 1/8”
+
+
+    OBSERVAÇÃO: para realizar o carregamento na válvula de controle 26-F, o
+    ar do encanamento geral entra na passagem 1 do suporte desta válvula e flui
+    para diferentes câmaras e lugares.
+
+
+Carregamento na válvula de controle 26-F
+ESTÁGIOS                                 DESCRIÇÃO
+    E1      O ar vindo da passagem 1 do suporte da válvula de controle 26-F,
+            fluirá para a câmara “D” do pistão de alívio da válvula de alívio
+    E2      O ar fluirá para a câmara “J” da válvula seletora
+    E3      O ar fluirá para a câmara “B” entre os dois diafragmas do pistão de
+            serviço
+    E4      O ar fluirá para a válvula limitadora de emergência, opondo-se à
+            pressão da mola e mantendo-a fechada
+    E5      O ar fluirá para cima da válvula de dissipação do reservatório de
+            controle e através do bujão “J” atuará na parte inferior da mesma
+            Por meio de um ramal, o ar atuará em torno do pistão da válvula de
+    E6      carregamento, passando pelo tampão de alívio, que se encontra na
+            posição direta, e vai atuar no carretel da válvula seletora
+            Através do carretel da válvula seletora e do bujão “H”, carregará a
+    E7      câmara “A”, ficando retido no pistão atuante da válvula de alívio
+            rápido, saindo na passagem 7 e carregando o reservatório de
+            controle
+            Por um ramal, o ar do controle atuará na câmara de trás do carretel
+    E8      da válvula seletora e pela restrição “G” atuará em torno do pistão
+            seletor, e também na câmara “L”, saindo na passagem 9 do suporte,
+            carregará o volume seletor
+            Através do bujão “F”, o ar atuará na parte inferior da válvula de
+    E9      retenção de carregamento do reservatório auxiliar que, ao passar
+            por esta, atuará em cima da válvula de aplicação
+
+
+                                         50
+    E10      O ar passará através do orifício “D”, atuará em cima da retenção da
+             válvula de aplicação, saindo na passagem 5 do suporte, indo
+             abastecer o reservatório auxiliar
+             O ar fluindo das câmaras “A” das válvulas relés J-1 e J-1.6-16
+             percorrerá pela válvula seletora, passagem 16 e 4, câmara da mola
+    E11      da válvula relé HB-5D, passagem 13, reservatório de volume,
+             passagem 16 do suporte, câmara “C” do pistão de serviço, câmara
+             “G” da válvula de carregamento, ligadas à atmosfera através de
+             uma passagem de alívio no pistão de serviço da válvula 26-F, até
+             sair na passagem 10 do suporte
+
+
+Recobrimento após carregamento
+Posição em que o equipamento de freio assume quando carregado. Esta é uma
+das principais funções do equipamento de freio 26-L.
+
+
+
+
+ESTÁGIOS                                 DESCRIÇÃO
+
+
+             Quando a pressão do reservatório equilibrante se tornar igual à
+             pressão   de    regulagem        da   mola   da   válvula   reguladora,
+    E1       conseqüentemente igual à pressão da câmara “K”, a válvula de
+             abastecimento da válvula reguladora deslocar-se-á sob a ação da
+             mola, desligando o ar do principal da passagem 15
+
+
+
+
+             Cessando o aumento de pressão na passagem 15, cessará o
+             aumento de pressão na câmara “D” da válvula relé do manipulador.
+    E2       A pressão na câmara “E” continuará crescendo até que se equilibre
+             com a câmara “D”; havendo o equilíbrio, a mola da válvula de
+             abastecimento desligará o principal do encanamento geral
+
+
+
+
+                                         51
+TESTES NO EQUIPAMENTO DE FREIO 26-L
+
+
+Existem os seguintes testes a serem efetuados neste equipamento:
+      Teste de aplicação, alívio e vazamento;
+      Alívio pelo manipulador independente após aplicação pelo manipulador
+       automático;
+      Teste dos dispositivos de controle e segurança;
+      Controle de sobrevelocidade;
+      Travamento de freio dinâmico;
+      Válvula piloto de carregamento A-1.
+
+
+Teste de aplicação, alívio e vazamento
+   1. Coloque a válvula interruptora do manipulador automático na posição de
+       carga;
+   2. Leve o punho do manipulador para a posição de marcha e verifique se o
+       equipamento está carregando;
+   3. Movimente o punho do manipulador automático 26-C em direção à zona de
+       aplicação, fazendo uma redução no reservatório equilibrante de 56 a 84 KPA
+       (8 a 12 PSI);
+   4. Observe se a redução de 56 a 84 KPA também ocorreu no encanamento
+       geral;
+   5. Espere 01 minuto para efeito de temperatura;
+   6. Verifique se há aplicação nos cilindros de freio;
+   7. Coloque a válvula interruptora do manipulador 26-C na posição de fechada;
+   8. Observe durante 01 minuto se está havendo vazamento − nunca superior a
+       35 KPA/min (5 PSI/min) − na linha do encanamento geral;
+   9. Volte o punho para a posição de marcha;
+   10. Verifique se houve alívio nos cilindros;
+   11. Leve o punho gradativamente para dentro da zona de aplicação;
+   12. Verifique se cada avanço está sendo obtido em acréscimo de pressão no
+   cilindro de freio. Deve ser verificado se o recobrimento automático está sendo
+   feito.
+
+
+
+                                         52
+Alívio pelo manipulador independente após aplicação pelo manipulador
+automático
+  1. Faça uma redução de 10 PSI através do manipulador automático;
+  2. Pressione o punho do manipulador independente para baixo;
+  3. Observe se o cilindro de freio está aliviado.
+
+
+Teste dos dispositivos de controle de segurança
+  1. Verifique se o equipamento está totalmente carregado;
+  2. Observe se o punho do manipulador 26-C se encontra ma posição de
+     marcha;
+  3. Verifique se o punho do manipulador SA-26 se encontra na posição de
+     marcha;
+  4. Retire o pé do pedal;
+  5. Aguarde de 6 a 8 segundos até ouvir o apito de atenção;
+  6. Verifique se está havendo aplicação dos freios;
+  7. Coloque o punho do manipulador para a posição de supressão;
+  8. Conserve o punho nesta posição por 5 segundos;
+  9. Observe o restabelecimento do sistema percebendo se houve descarga
+     rápida de ar na válvula de aplicação P-2 –A;
+  10. Coloque o punho do manipulador para a posição de marcha.
+
+
+Teste de controle de sobrevelocidade
+  1. Desenergize a válvula magnética deste controle;
+  2. Aguarde de 6 a 9 segundos até ouvir o apito de atenção;
+  3. Verifique se está havendo aplicação os freios.
+
+
+Teste de travamento do freio dinâmico
+  1. Faça uma aplicação de freio;
+  2. Energize a válvula DBI;
+  3. Observe o cilindro de freio e verifique o alívio que indica o bloqueio.
+
+
+Válvula piloto de Carregamento A-1
+  1. Faça uma aplicação de emergência;
+
+
+
+                                        53
+   2. Observe através da chave de corte se está havendo redução de rotação do
+        motor diesel;
+   3. Observe a válvula interruptora de carregamento A-1 do encanamento geral,
+        verificando se está havendo interrupção repentina do ar do encanamento
+        geral para atmosfera;
+   4. Verifique, durante 35 segundos aproximadamente, se está havendo o
+        areamento automático;
+   5. Coloque o punho do manipulador automático para a posição de marcha.
+
+
+ACOPLAMENTO EM TRAÇÃO MÚLTIPLA
+
+
+É o funcionamento do freio através da operação do manipulador automático ou
+independente na locomotiva comandante, de modo que o seu freio e o das demais
+locomotivas (acopladas entre si em tração múltipla) sejam controlados como se
+fossem uma só locomotiva.
+Todas     as   locomotivas   deverão   ser    ligadas   adequadamente   para   que   o
+acoplamento em tração múltipla seja realizado satisfatoriamente.
+Observe a tabela que descreve os procedimentos a serem efetuados:
+ EM TODAS AS                 NA LOCOMOTIVA                   NAS LOCOMOTIVAS
+LOCOMOTIVAS                   COMANDANTE                         COMANDADAS
+Ligar o             Colocar a válvula transferência       Colocar a válvula
+encanamento         MU-2A na posição de                   transferência MU-2A na
+geral               “Comandante” ou “Morta” (LEAD         posição de “Comandada” 6
+                    OR DEAD)                              ou 26 (TRAIL 6 OR 26)
+Ligar o             Colocar a válvula interruptora do     Colocar a válvula
+encanamento de manipulador automático 26-C na             interruptora do
+equalização dos     posição de “CARGA” (FRT)              manipulador automático
+reservatórios                                             26-C na posição de
+principais                                                “INTERROMPIDA” (CUT-
+                                                          OUT)
+Ligar o                                                   Colocar o punho do
+encanamento de                                            manipulador automático
+ligação dos                                               26-C na posição “PUNHO
+
+
+
+                                             54
+cilindros de freio                                    FORA” e retirá-lo
+Abrir as                                              Colocar o punho do
+torneiras dos                                         manipulador independente
+encanamentos                                          na posição de “MARCHA”
+mencionados
+
+
+Teste de vazamento
+
+
+   1. Certifique-se de que a pressão no encanamento e no reservatório
+       equilibrante é a recomendada pela ferrovia (a pressão recomendada é de
+       90 lb/pol² na CVRD);
+   2. Verifique se o equipamento de freio está carregado, colocando a válvula
+       interruptora na posição desligada;
+   3. Faça uma redução entre 8 a 12 lb/pol² na pressão do encanamento geral
+       (esta operação é feita através de redução do reservatório equilibrante);
+   4. Aguarde um minuto para compensar os efeitos de temperatura;
+   5. Leia a pressão registrada no manômetro do encanamento geral;
+   6. Coloque o punho da válvula interruptora na posição de “DESLIGADO”
+       (OUT);
+   7. Feche a torneira do encanamento geral da locomotiva para os vagões          e
+       verifique o vazamento da tração;
+   8. Anote a queda de pressão verificada no manômetro do encanamento geral,
+       durante 1 (um) minuto. A operação deve ser feita após constatar que o
+       vazamento se encontra dentro dos limites;
+   9. Desloque o punho do manipulador automático para posição de “MARCHA”
+       assim que receber ordem de partida.
+
+
+
+
+Agora que você conheceu como funcionam os sistemas de equipamento de freio
+(6-SL e 26-L), está apto a aprender como são manipulados os freios em trens
+longos. Veja no próximo capítulo!
+
+
+
+
+                                          55
+        MANIPULAÇÃO DE FREIOS EM TRENS LONGOS
+
+
+          ORIENTAÇÕES                                   COMENTÁRIOS
+                                      Alguns maquinistas, antes da aplicação
+                                      dos     freios,    deslocam          o           punho     do
+1º - Enquanto não for desejado aplicar manipulador numa posição intermediária
+   os freios, o punho do manipulador entre marcha e redução mínima. Essa
+   automático deverá permanecer na operação é incorreta, porque provoca o
+   posição de “marcha”.     Somente corte do abastecimento de ar para o
+   retire o punho desta posição no equipamento de freio do trem. Assim,
+   momento da aplicação de freios     não     aplicam        e     nem         preparam           o
+                                      equipamento                 para                  aplicação.
+                                      Conseqüentemente deixam de recarregar
+                                      o     sistema     de       freios,       o       que     daria
+                                      segurança ao próprio trem
+                                      Em uma grande composição de vagões há
+                                      uma grande extensão de encanamento
+                                      geral e a aplicação incorreta realizada
+2º - No momento em que houver entre a posição de marcha e redução
+   necessidade   de   aplicação   dos mínima poderá provocar o choque dos
+   freios, deverá ser feita a redução últimos vagões contra os vagões iniciais
+   mínima de 10 psi                   que     sofreram       aplicação.            A    operação
+                                      correta é a seguinte:
+                                      levar o punho do manipulador automático
+                                      no mínimo até que se obtenha uma
+                                      redução mínima de 10 PSI
+3º - Ao se atingir a posição de A aplicação dos freios é realizada quando
+   redução mínima, é obrigatório um há descarga da pressão do encanamento
+   fluxo contínuo de ar na descarga geral do trem. O tempo insuficiente para
+   do manipulador automático. Caso o recarregamento do equipamento do
+   este fluxo não se verifique, avance freio é o resultado da não ocorrência da
+   o punho para dentro da zona de descarga,           apesar       de      o       manipulador
+   aplicação até que seja iniciada a automático estar em posição de redução
+
+
+                                      56
+   descarga contínua de ar                   mínima. A operação correta é a seguinte:
+                                             avançar o punho do manipulador de freio
+                                             até que pelo menos seja iniciada a
+                                             descarga do encanamento geral
+4º - É preciso aproveitar a aplicação Uma             nova       reaplicação     dos      freios,
+   dos freios ao máximo possível, isto decorrente do alívio de freios do domínio
+   é, manter os freios aplicados até total do trem, poderá provocar choques,
+   que     o   trem      esteja   totalmente esticões,      quebras      de    mandíbulas      e
+   freado      e    a     velocidade   esteja engates, devido à necessidade de uma
+   sendo reduzida                            grande         queda       de      pressão       do
+                                             encanamento geral
+5º - Se, após ter sido realizada uma O atrito das sapatas de freio contra as
+   redução         mínima,    o   maquinista rodas     diminui        consideravelmente,       à
+   notar que esta não foi suficiente medida              que     a    velocidade     do    trem
+   para reduzir a velocidade do seu aumenta. Se o maquinista deixar de
+   trem,       deverá        aumentar      a aumentar excessivamente a velocidade
+   aplicação, movendo o punho do do seu trem, haverá necessidade de se
+   manipulador para dentro da zona fazer uma grande aplicação dos freios
+   de aplicação antes de o trem para                  que   se    possa      obter   o   mesmo
+   aumentar             excessivamente     a rendimento de uma pequena aplicação,
+   velocidade                                com velocidade mais baixa. Dependendo
+                                             da velocidade alcançada, do trecho da
+                                             linha onde o trem está sendo operado e
+                                             outras      condições      desfavoráveis,       sua
+                                             velocidade aumentará gradativamente e
+                                             ocorrerá o tão indesejado disparo do trem
+                                             A colocação do punho do manipulador
+                                             automático entre a posição de marcha e
+                                             redução mínima não garante a aplicação
+                                             dos freios a uma parte dos vagões,
+6º - Ao aliviar os freios, é necessário enquanto ele reinicia o carregamento do
+   mover o punho do manipulador sistema. Esta operação é incorreta, pois
+   diretamente para a posição de o                reinício       do      carregamento         do
+
+
+                                             57
+   marcha                                 equipamento de freio só acontecerá a
+                                          partir do momento em que a válvula de
+                                          isolamento do reservatório equilibrante
+                                          se abrir. Isto ocorrerá somente quando o
+                                          punho do manipulador atingir a posição
+                                          de marcha
+                                          Com um tempo de 22 segundos depois
+7º - O trem não deve ser acelerado, que o punho do manipulador for colocado
+   tão logo o punho do manipulador na posição de marcha, e de mais 1
+   tenha sido colocado em posição de minuto para que os efeitos da aplicação
+   marcha, após uma aplicação dos do             freio    do       último     veículo    sejam
+   freios.   É   necessário   esperar   o reduzidos, será iniciado o alívio dos
+   alívio dos freios antes de iniciar a freios, em um trem de 150 vagões. A
+   aceleração                             ocorrência da aceleração do trem, antes
+                                          do tempo de 1 minuto e 30 segundos,
+                                          poderá resultar na quebra de mandíbulas
+                                          e    engates.       É    necessário     aguardar      2
+                                          minutos        para     que     horas   não    sejam
+                                          perdidas com a substituição de uma
+                                          mandíbula ou engate
+                                          Os     procedimentos            indicados     são    os
+                                          seguintes:
+                                           sentindo o seu trem pesado, faça uma
+8º - O trem não deve ser parado para          redução de 15 a 20 PSI
+   localizar e isolar veículos             aguarde       o       tempo     necessário        para
+                                              aplicação de todo o trem, indicado pela
+                                              estabilização          da       pressão          do
+                                              encanamento           geral     registrada       no
+                                              manômetro
+                                           alivie os freios. Não solucionado o
+                                              problema, localizar os vagões com o
+                                              “freio agarrado”
+9º - Quando houver necessidade de Com o objetivo de evitar aplicações de
+
+
+                                          58
+   separar as locomotivas do trem emergência                              desnecessária,       os
+   para      abastecê-las           ou        para manobreiros e operadores devem ser
+   acrescentar       ou   retirar    veículos, orientados da seguinte forma:
+   deve-se     realizar       uma    aplicação  É           necessário     fechar   apenas    as
+   total de serviço, evitando sempre                     torneiras entre os veículos a serem
+   que     possível       a    aplicação       de        desengatados
+   emergência                                           Deve-se abrir as torneiras lentamente,
+                                                         no sentido da locomotiva para a cauda
+                                                         e após o engate, evitando aplicações
+                                                         de emergência desnecessárias
+10º - Quando houver necessidade de
+   parar um trem, qualquer que seja Esta prática proporciona segurança na
+   o local desta parada, os freios parada do trem, além de evitar que o
+   devem permanecer aplicados, com freio fique agarrado após o alívio
+   redução de no mínimo 15 PSI, até
+   que seja autorizada a partida do
+   trem
+11º - Se, por qualquer eventualidade, Após o funcionamento dos controles de
+   entrarem em funcionamento os segurança ou de sobrevelocidade, ou
+   controles    de    segurança          ou    de ainda da aplicação pelo ATC, é necessário
+   sobrevelocidade, ou ainda houver colocar                   o   punho     do   manipulador   na
+   uma aplicação pelo ATC, o punho posição de supressão, para rearmar os
+   do manipulador automático deverá controles do equipamento, não sendo
+   ser    levado   para        a   posição     de necessária uma aplicação de emergência
+   supressão
+12º - Ao dar partida em um trem no
+   início de viagem ou nas paradas Conhecer as condições da pressão na
+   que se fizerem necessárias, ou se cauda e do vazamento do trem são
+   houver      pegada         de   veículos     e obrigações do maquinista que evitam
+   retirada de veículos do meio do sérias conseqüências durante a operação
+   trem, deverá ser efetuado o teste
+   de cauda do trem
+
+
+
+
+                                                    59
+                                                   A utilização do freio dinâmico poderá ser
+                                                   feita independente das aplicações do freio
+13º - O freio dinâmico deve ser a ar comprimido ou em conjunto com as
+      utilizado ao máximo                          mesmas.        O freio dinâmico deve ser
+                                                   usado     ao   máximo     possível,   pois   o
+                                                   desenvolvimento      do     trem      melhora
+                                                   consideravelmente, além de aumentar
+                                                   sua segurança
+                                                   Não é permitida a utilização do freio
+                                                   independente da locomotiva juntamente
+14º - Os freios da locomotiva devem com os freios do trem. Se a situação
+      ser aliviados quando os freios do exigir a aplicação simultânea dos freios
+      trem estiverem sendo aplicados               da locomotiva e do trem, esta deverá ser
+                                                   feita. Entretanto, os freios da locomotiva
+                                                   devem sempre ser aliviados durante uma
+                                                   parada do trem ou aplicação normal de
+                                                   serviço
+                                                   Todos os acessórios sobressalentes e de
+                                                   socorro devem ser inspecionados
+                                                   (mangueiras, mandíbulas,
+15º     -   É      necessário       conhecer     a encarrilhadeiras, bolsa de ferramentas,
+      localização         dos         acessórios chave de mangueira etc.), além de
+      sobressalentes       que      viajam     nas verificar se estão em seus respectivos
+      locomotiva      e    verificar     se     os lugares. O atraso em localizar o material
+      mesmos estão completos e em sobressalente ou de socorro atrasa a
+      condições de uso                             circulação do seu trem, o que acarreta
+                                                   em prejuízos a vários outros trens. A
+                                                   ausência de algum acessório deve ser
+                                                   registrada boletim de viagem
+16º - Em caso de rompimento de O maquinista deve providenciar a troca
+      mangueira do encanamento geral de mangueiras de encanamento geral.
+      de    equalização        do   reservatório Normalmente as locomotivas possuem
+      principal,    ou    da    mangueira       do em cada cabeceira duas mangueiras de
+
+
+                                                   60
+   encanamento          de    equalização do equalização do reservatório principal e
+   cilindro   de        freio     em       uma duas mangueiras de equalização do
+   locomotiva,      as         torneiras     do cilindro de freio. Somente uma
+   encanamento que dá acesso à mangueira de cada tipo é ligada,
+   mangueira       rompida       devem       ser enquanto as mangueiras sobressalentes
+   fechadas, e as mangueiras do lado são usadas quando há danificação nas
+   oposto, devem ser abertas                    primeiras mangueiras
+17º - Os testes de freio, realizados
+   antes da partida do trem, devem
+   ser        acompanhados                  pelo Conhecendo as condições do trem que
+   maquinista,      que       deve   procurar conduz, o maquinista poderá dominá-lo
+   conhecer        os        resultados      do com mais segurança. É importante
+   vazamento e gradiente, bem como também que saibam executar os testes
+   quantos veículos estão com os de vazamento e gradiente, pois nos
+   freios isolados.          Toda vez que o postos onde não existir pessoal
+   vazamento no teste de cauda for credenciado o maquinista deverá
+   superior    a        5     psi/minuto,     é proceder os testes
+   necessário fechar a torneira do
+   encanamento geral da locomotiva
+   para os vagões e, em seguida,
+   testar vazamento da tração
+                                                As    perdas   de     percurso     obrigam    os
+18º - É necessário conhecer o exato maquinistas a justificarem sua causa.                     É
+motivo do atraso de seu trem                    necessário que o maquinista aponte a
+                                                verdadeira causa do atraso do trem, a fim
+                                                de facilitar o trabalho da equipe de
+                                                manutenção
+                                                O sistema de ATC foi introduzido para
+                                                possibilitar o aumento do número de
+19º - Não se devem usar “artifícios” trens, com a máxima segurança possível,
+   para anular uma aplicação dos evitando                  o      risco    de   acidentes    que
+   freios pelo sistema ATC                      poderiam ocorrer por causa do sistema
+                                                de      licença       em        arco,   dando
+
+
+                                                 61
+                                    antecipadamente            ao     maquinista      a
+                                    condição do trecho onde deverá avançar.
+                                    Não se deve, sob hipótese alguma, anular
+                                    a aplicação de freios quando o sistema de
+                                    ATC     estiver           para     entrar        em
+                                    funcionamento, pois isso põe em risco
+                                    muitas vidas e a circulação dos trens
+                                    A válvula interruptora não deve ser posta
+                                    em    posição    de       desligado    durante    a
+                                    viagem, porque esse procedimento anula
+                                    o dispositivo mantenedor de pressão,
+                                    cuja finalidade é realimentar o sistema de
+                                    freio por pequenos vazamentos de ar
+                                    existentes no trem.
+20º - A válvula interruptora não deve Com o mantenedor de pressão anulado,
+ser posta em posição de desligado um pequeno vazamento no equipamento
+durante a viagem                    de freio do trem provocará a aplicação
+                                    dos freios em alguns veículos do trem.
+                                    Esta aplicação pode não ser aliviada por
+                                    não ter tido a intensidade suficiente de
+                                    aplicação.      Se isto ocorrer, o freio da
+                                    composição ficará agarrado, o que poderá
+                                    provocar calejamento de roda ou atrasos
+                                    de percurso por deficiências de operação.
+                                    Essa falha no procedimento ainda faz com
+                                    que o manipulador fique inoperante
+                                    1º - Toda vez que o trem carga geral
+21º - Quando ocorrer emergência em parar    devido        a    EMERGÊNCIA          NÃO
+   um trem, o maquinista deverá INTENCIONAL,              e     for   composto       de
+   adotar alguns procedimentos:     plataformas com produtos siderúrgicos,
+                                    contêineres     ou    blocos,      o   maquinista
+                                    deverá vistoriar toda a composição e sua
+                                    carga e em seguida comunicar ao CTC
+
+
+                                    62
+     para que sejam tomadas as devidas
+     providências
+     2º - Nos trens de minério que pararem
+     devido          a                EMERGÊNCIA                 NÃO
+     INTENCIONAL,                 o       maquinista           deverá
+     colocar    o    punho             para       a    posição    de
+     emergência             e,        após      transcorrido       1
+     minuto,        levá-lo            para           posição     de
+     supressão,         e        depois      de       rearmado     o
+     sistema,       o        punho           do       manipulador
+     automático deve ser posto na posição de
+     marcha.        Assim             que     a       pressão     do
+     encanamento geral atingir 90 psi, deve-
+     se virar a interruptora para posição de
+     fechada. Durante essa operação podem
+     ocorrer as seguintes situações:
+     1º - a pressão do encanamento geral
+     tender     a       zero.         O      maquinista         deve
+     vistoriar o trem e corrigir defeito e, em
+     seguida comunicar ao CTC
+     2º - a pressão do encanamento geral
+     permanece em 90 PSI. O maquinista
+     deve levar a interruptora para posição
+     CARGA e comunicar o procedimento ao
+     CTC (depois pode seguir viagem)
+ATENÇÃO: se o trem estiver em descida, é
+     necessário que o maquinista aperte o
+     freio manual de 50% dos vagões da
+     composição,            para          que         possa,     com
+     segurança, fazer as operações de alívio
+     do trem e verificar se o trem desengatou
+     ou apresentou outra anomalia
+
+
+
+
+     63
+
