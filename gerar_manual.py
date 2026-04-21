@@ -546,6 +546,10 @@ story.append(Paragraph(
 story.append(Paragraph("Agradecimentos especiais", H2))
 
 story.append(Paragraph(
+    "Em primeiro lugar, ao <b>Nosso Eterno Criador</b>, que nos deu forma e nos capacitou "
+    "para liderarmos sobre todas as espécies da terra.", P))
+
+story.append(Paragraph(
     "À <b>Coordenação</b>, na pessoa da <b>Jéssica</b>, pela confiança, pelo apoio e por "
     "acreditar que uma boa ideia pode vir de qualquer lugar — inclusive da cabine.", P))
 
