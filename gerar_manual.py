@@ -276,14 +276,31 @@ story.append(Paragraph(
     "de 4 dígitos. Pronto, está dentro.", P))
 
 story.append(Paragraph("2.3. O que cada botão do topo faz", H2))
+def badge(label, bg, fg=white):
+    s = ParagraphStyle("BG", parent=P, alignment=TA_CENTER, fontName="Helvetica-Bold",
+                       fontSize=10, textColor=fg, leading=12)
+    p = Paragraph("<b>"+label+"</b>", s)
+    t = Table([[p]], colWidths=[2.4*cm], rowHeights=[0.85*cm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,-1), bg),
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("LEFTPADDING", (0,0), (-1,-1), 0),
+        ("RIGHTPADDING", (0,0), (-1,-1), 0),
+        ("TOPPADDING", (0,0), (-1,-1), 0),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 0),
+        ("ROUNDEDCORNERS", [4,4,4,4]),
+    ]))
+    return t
+
 botoes = [
-    ["Botão", "O que faz"],
-    ["👑", "Abre o painel do administrador (só aparece para admins)."],
-    ["🔑", "Trocar a sua própria senha."],
-    ["🚪", "Sair (encerra a sessão neste celular)."],
-    ["🚂 Viriato", "Abre o assistente que tira dúvidas e ajuda em tudo."],
+    ["Botão (cor)", "O que faz"],
+    [badge("ADMIN", AMARELO, black), "Abre o painel do administrador (só aparece para as 4 pessoas habilitadas a aprovar). É o ícone de coroa amarela no topo do app."],
+    [badge("CHAVE", HexColor("#0ea5e9")), "Trocar a sua própria senha. É o ícone de chave azul no topo do app."],
+    [badge("SAIR", HexColor("#dc2626")), "Sair (encerra a sessão neste celular). É o ícone de porta vermelha no topo do app."],
+    [badge("VIRIATO", AZUL), "Abre o assistente inteligente. É o ícone do trenzinho verde, geralmente na lateral da tela."],
 ]
-tb = Table(botoes, colWidths=[2*cm, 13*cm])
+tb = Table(botoes, colWidths=[3*cm, 12*cm])
 tb.setStyle(TableStyle([
     ("BACKGROUND", (0,0), (-1,0), AZUL),
     ("TEXTCOLOR", (0,0), (-1,0), white),
@@ -293,8 +310,9 @@ tb.setStyle(TableStyle([
     ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
     ("GRID", (0,0), (-1,-1), 0.4, CINZA_CLARO),
     ("ROWBACKGROUNDS", (0,1), (-1,-1), [white, CINZA_CLARO]),
-    ("BOTTOMPADDING", (0,0), (-1,-1), 7),
-    ("TOPPADDING", (0,0), (-1,-1), 7),
+    ("BOTTOMPADDING", (0,0), (-1,-1), 8),
+    ("TOPPADDING", (0,0), (-1,-1), 8),
+    ("LEFTPADDING", (1,0), (1,-1), 10),
 ]))
 story.append(tb)
 story.append(PageBreak())
