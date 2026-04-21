@@ -247,8 +247,9 @@ story.append(Paragraph(
     "para responder, porque ele conversa com um servidor na nuvem. Sem sinal, o restante do app "
     "continua funcionando — só o Viriato fica em silêncio até a internet voltar.", P))
 story.append(Paragraph(
-    "O app não tem propaganda, não vende seus dados e a única pessoa que aprova novos cadastros "
-    "é o administrador da turma (Angelo Silva).", P))
+    "O app não tem propaganda, não vende seus dados, e os novos cadastros só são liberados "
+    "pelas <b>4 pessoas habilitadas</b> da turma (o administrador principal e até 3 aprovadores "
+    "indicados por ele).", P))
 story.append(nota("Se você está com pressa, pule direto para o capítulo 2 e siga o passo a passo. "
                   "O resto pode ler aos poucos, na hora do cafezinho."))
 
@@ -262,8 +263,10 @@ story.append(li("<b>Nome completo:</b> exatamente como está no crachá."))
 story.append(li("<b>Matrícula:</b> seus 6 dígitos da ferrovia."))
 story.append(li("<b>Senha:</b> 4 dígitos que só você sabe (evite 1234, 0000, sua data de nascimento)."))
 story.append(Paragraph(
-    "Depois de enviar, o cadastro fica <b>aguardando aprovação</b> do Angelo. Assim que ele "
-    "aprovar (geralmente no mesmo dia), você já pode entrar normalmente.", P))
+    "Depois de enviar, o cadastro fica <b>aguardando aprovação</b>. Apenas as <b>4 pessoas "
+    "habilitadas</b> da turma (o admin principal e até 3 aprovadores indicados por ele) "
+    "podem liberar novos usuários. Assim que uma delas aprovar (geralmente no mesmo dia), "
+    "você já pode entrar normalmente.", P))
 story.append(aviso("Não compartilhe sua senha com ninguém. Se desconfiar que alguém descobriu, "
                    "use o botão 🔑 no topo do app para trocar imediatamente."))
 
@@ -416,11 +419,12 @@ story.append(nota("O Viriato não inventa: se ele não souber, vai dizer que nã
 # 9. Painel admin
 story.append(Paragraph("9. Painel do administrador", H1))
 story.append(Paragraph(
-    "Esta seção interessa <b>apenas ao administrador principal</b> (Angelo Silva) e aos até "
-    "<b>3 aprovadores extras</b> que ele pode promover.", P))
-story.append(Paragraph("9.1. O que o admin pode fazer", H2))
+    "Esta seção interessa <b>apenas às 4 pessoas habilitadas</b> da turma: o "
+    "<b>administrador principal</b> (Angelo Silva) e até <b>3 aprovadores</b> indicados por "
+    "ele. Somente estes 4 podem aprovar novos usuários — ninguém mais.", P))
+story.append(Paragraph("9.1. O que essas 4 pessoas podem fazer", H2))
 story.append(li("<b>Aprovar</b> ou <b>Negar</b> novos cadastros (aparecem com badge no 👑)."))
-story.append(li("<b>Promover</b> outro usuário a aprovador (até 3 ao mesmo tempo)."))
+story.append(li("<b>Promover</b> outro usuário a aprovador (somente o admin principal pode fazer isso, e o limite é 3)."))
 story.append(li("<b>Resetar a senha</b> de qualquer colega — aparece um código temporário de 4 dígitos para você passar pelo WhatsApp ou pessoalmente."))
 story.append(li("<b>Remover</b> usuários que saíram da turma."))
 story.append(Paragraph("9.2. Aprovação de cadastros", H2))
@@ -476,7 +480,8 @@ faqs = [
      "Os dados pessoais (cadastro, eventos seus) ficam no servidor da Turma A. "
      "Senhas são guardadas embaralhadas — nem o Angelo consegue ver a sua."),
     ("Quantas pessoas podem usar?",
-     "A turma toda. O Angelo aprova cada cadastro, e até 3 aprovadores extras podem ajudar."),
+     "A turma toda. As aprovações de novos cadastros ficam restritas a 4 pessoas habilitadas: "
+     "o admin principal (Angelo) e até 3 aprovadores indicados por ele."),
     ("Esqueci a senha e o Angelo tá viajando, e agora?",
      "Use o Viriato (capítulo 10, caminho 1). Ele gera uma senha temporária na hora, "
      "sem precisar do admin."),
@@ -504,7 +509,7 @@ gloss = [
     ["Escala 2x2", "Dois dias de trabalho seguidos por dois de folga, sem parar."],
     ["ASO", "Atestado de Saúde Ocupacional — exame periódico obrigatório."],
     ["NR-11", "Norma regulamentadora de transporte e movimentação de cargas."],
-    ["Aprovador", "Colega que o admin promoveu para aprovar cadastros (até 3)."],
+    ["Aprovador", "Colega indicado pelo admin para aprovar cadastros. São no máximo 3, totalizando 4 pessoas habilitadas com o admin."],
     ["Senha temporária", "Senha de 4 dígitos gerada pelo Viriato ou pelo admin, válida só até você trocar."],
     ["Viriato", "O trenzinho assistente que ajuda dentro do app."],
 ]
