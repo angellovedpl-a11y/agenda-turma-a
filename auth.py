@@ -10,6 +10,12 @@ import os, json, hashlib, secrets, time, re
 from functools import wraps
 from flask import request, jsonify
 
+EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+
+
+def validar_email(e: str) -> bool:
+    return bool(e and len(e) <= 120 and EMAIL_RE.match(e))
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 USERS_PATH = os.path.join(DATA_DIR, 'users.json')
 SESSIONS_PATH = os.path.join(DATA_DIR, 'sessions.json')
@@ -195,6 +201,12 @@ def handle_registrar(data):
     }
     users[matricula] = novo
     users_save(users)
+    if not primeiro:
+        try:
+            import notify
+            notify.notificar_novo_cadastro(matricula, nome)
+        except Exception as e:
+            print(f'[auth] falha ao notificar aprovadores: {e}')
     if primeiro:
         token = session_create(matricula)
         return jsonify({'ok': True, 'admin': True, 'token': token,
@@ -248,7 +260,25 @@ def handle_me():
         'pode_aprovar': can_approve(u),
         'pendentes': pendentes,
         'senha_temp': bool(u.get('senha_temp')),
+        'email': u.get('email', ''),
     })
+
+
+def handle_set_email(data, user):
+    email = (data.get('email') or '').strip().lower()
+    users = users_load()
+    u = users.get(user['matricula'])
+    if not u:
+        return jsonify({'error': 'Usuário não encontrado'}), 404
+    if email == '':
+        u.pop('email', None)
+        users_save(users)
+        return jsonify({'ok': True, 'mensagem': 'E-mail removido. Você não receberá mais notificações.', 'email': ''})
+    if not validar_email(email):
+        return jsonify({'error': 'E-mail inválido. Use o formato nome@dominio.com'}), 400
+    u['email'] = email
+    users_save(users)
+    return jsonify({'ok': True, 'mensagem': 'E-mail salvo com sucesso!', 'email': email})
 
 
 def handle_pendentes():

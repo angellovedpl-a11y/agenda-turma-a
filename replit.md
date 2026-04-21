@@ -58,6 +58,15 @@ Endpoints:
 - `GET /api/diag/health` — status do servidor (data dir, pdfplumber, claude, helpdesk)
 - `GET /api/diag/biblioteca` — estatísticas da biblioteca (totais, categorias, tamanho)
 
+## Notificação por e-mail (novos cadastros)
+
+- Integração SendGrid (Replit connector) — credenciais buscadas em runtime via `REPLIT_CONNECTORS_HOSTNAME` + `REPL_IDENTITY`/`WEB_REPL_RENEWAL`, sem cache.
+- Módulo `notify.py`: `notificar_novo_cadastro(matricula, nome)` envia em background thread (não bloqueia o registro). HTML é escapado (`html.escape`). E-mails de log são mascarados.
+- Cada admin/aprovador cadastra seu próprio e-mail em `POST /api/auth/email` (campo `email` salvo em `users.json`); endpoint protegido por `@require_approver`.
+- `handle_registrar` chama `notify.notificar_novo_cadastro` (em try/except) somente para cadastros não-primeiros. Falha silenciosa se SendGrid não estiver configurado.
+- UI: nova aba "E-mail" no painel admin/aprovador (`renderAdminPanel` em `index.html`), com input + botões Salvar/Remover e indicador de status.
+- `handle_me` retorna `email` do próprio usuário (escopo individual, não vaza para listagem).
+
 Botão **🩺 Diagnóstico** no header do Viriato abre modal com checklist visual de saúde (verde/vermelho).
 
 ## Deployment

@@ -422,15 +422,16 @@ const S={events:{},docs:{},auditorias:[],checklist:[...DOCS_OBRIGATORIOS_DEFAULT
   authView:"login",authMat:"",authSenha:"",authNome:"",authMsg:"",authBusy:false,
   authRecMode:false,authRecNome:"",authRecResultado:null,
   trocarSenhaOpen:false,trocarSenhaAtual:"",trocarSenhaNova:"",trocarSenhaMsg:"",
-  adminOpen:false,adminTab:"pendentes",adminUsuarios:[],adminPendentes:[],adminBusy:false,adminMsg:""
+  adminOpen:false,adminTab:"pendentes",adminUsuarios:[],adminPendentes:[],adminBusy:false,adminMsg:"",adminEmail:"",adminEmailMsg:""
 };
 
 /* ===== AUTH ===== */
 function authToken(){return S.auth.token||"";}
 function authFetch(url,opts){opts=opts||{};opts.headers=Object.assign({},opts.headers||{});const t=authToken();if(t)opts.headers["Authorization"]="Bearer "+t;if(opts.body&&!opts.headers["Content-Type"])opts.headers["Content-Type"]="application/json";return fetch(url,opts).then(async r=>{if(r.status===401){authClear();render();}return r;});}
 function authClear(){S.auth={ready:true,token:"",user:null,pendentes:0};try{localStorage.removeItem("turmaA_authToken");}catch(e){}}
-async function authBoot(){try{const t=localStorage.getItem("turmaA_authToken")||"";S.auth.token=t;const r=await fetch("/api/auth/me",{headers:t?{"Authorization":"Bearer "+t}:{}});const d=await r.json();if(d.authenticated){S.auth={ready:true,token:t,user:{matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar,senha_temp:!!d.senha_temp},pendentes:d.pendentes||0};}else{authClear();}}catch(e){authClear();}render();}
-async function authRefresh(){try{const r=await fetch("/api/auth/me",{headers:{"Authorization":"Bearer "+authToken()}});const d=await r.json();if(d.authenticated){S.auth.user={matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar,senha_temp:!!d.senha_temp};S.auth.pendentes=d.pendentes||0;render();}}catch(e){}}
+async function authBoot(){try{const t=localStorage.getItem("turmaA_authToken")||"";S.auth.token=t;const r=await fetch("/api/auth/me",{headers:t?{"Authorization":"Bearer "+t}:{}});const d=await r.json();if(d.authenticated){S.auth={ready:true,token:t,user:{matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar,senha_temp:!!d.senha_temp,email:d.email||""},pendentes:d.pendentes||0};S.adminEmail=d.email||"";}else{authClear();}}catch(e){authClear();}render();}
+async function authRefresh(){try{const r=await fetch("/api/auth/me",{headers:{"Authorization":"Bearer "+authToken()}});const d=await r.json();if(d.authenticated){S.auth.user={matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar,senha_temp:!!d.senha_temp,email:d.email||""};S.auth.pendentes=d.pendentes||0;S.adminEmail=d.email||"";render();}}catch(e){}}
+async function adminSalvarEmail(){const e=(S.adminEmail||"").trim();S.adminEmailMsg="";S.adminBusy=true;render();try{const r=await authFetch("/api/auth/email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:e})});const d=await r.json();S.adminBusy=false;if(!r.ok){S.adminEmailMsg="🚦 "+(d.error||"Falha");render();return;}S.adminEmailMsg="✅ "+(d.mensagem||"Salvo");S.adminEmail=d.email||"";if(S.auth.user)S.auth.user.email=d.email||"";render();}catch(err){S.adminBusy=false;S.adminEmailMsg="🚦 "+err.message;render();}}
 async function authLogin(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Matrícula deve ter 6 dígitos.";render();return;}if(!/^\d{4}$/.test(S.authSenha)){S.authMsg="Senha deve ter 4 dígitos.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,senha:S.authSenha})});const d=await r.json();if(!r.ok){S.authMsg="🚦 "+(d.error||"Falha no login");S.authBusy=false;render();return;}localStorage.setItem("turmaA_authToken",d.token);S.auth={ready:true,token:d.token,user:Object.assign({pode_aprovar:d.user.role!=="user"},d.user),pendentes:0};S.authMat="";S.authSenha="";S.authMsg="";S.authBusy=false;S.userName=S.userName||(d.user.nome||"").split(" ")[0];try{localStorage.setItem("turmaA_userName",S.userName);}catch(e){}render();authRefresh();}catch(e){S.authMsg="🚦 Erro de conexão: "+e.message;S.authBusy=false;render();}}
 async function authRegistrar(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Matrícula deve ter 6 dígitos.";render();return;}if(!/^\d{4}$/.test(S.authSenha)){S.authMsg="Senha deve ter 4 dígitos.";render();return;}if(!S.authNome||S.authNome.trim().length<2){S.authMsg="Informe seu nome completo.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/registrar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,senha:S.authSenha,nome:S.authNome.trim()})});const d=await r.json();S.authBusy=false;if(!r.ok){S.authMsg="🚦 "+(d.error||"Falha no cadastro");render();return;}if(d.admin&&d.token){localStorage.setItem("turmaA_authToken",d.token);S.auth={ready:true,token:d.token,user:Object.assign({pode_aprovar:true},d.user),pendentes:0};S.authMat="";S.authSenha="";S.authNome="";S.authMsg="";S.userName=(d.user.nome||"").split(" ")[0];try{localStorage.setItem("turmaA_userName",S.userName);}catch(e){}render();return;}S.authView="login";S.authMsg="✅ "+d.mensagem;S.authNome="";S.authSenha="";render();}catch(e){S.authBusy=false;S.authMsg="🚦 Erro de conexão: "+e.message;render();}}
 async function authLogout(){try{await fetch("/api/auth/logout",{method:"POST",headers:{"Authorization":"Bearer "+authToken()}});}catch(e){}authClear();render();}
@@ -633,6 +634,21 @@ function renderAdminPanel(){
         ])
       ]));
     });
+  }else if(S.adminTab==="email"){
+    const emailMsg=S.adminEmailMsg?el("div",{style:{padding:"8px 12px",borderRadius:"8px",fontSize:"12px",margin:"0 0 10px",background:S.adminEmailMsg.startsWith("✅")?"#4ade8014":"#ef444414",color:S.adminEmailMsg.startsWith("✅")?"#4ade80":"#fca5a5"}},S.adminEmailMsg):null;
+    const atual=(S.auth.user&&S.auth.user.email)||"";
+    linhas.push(el("div",{style:{padding:"4px 2px"}},[
+      el("div",{style:{fontSize:"13px",color:"var(--text2)",fontWeight:600,marginBottom:"6px"}},"📧 Notificação de novos cadastros"),
+      el("div",{style:{fontSize:"12px",color:"var(--muted)",lineHeight:"1.5",marginBottom:"12px"}},"Cadastre seu e-mail pessoal para receber um aviso sempre que alguém pedir aprovação. Deixe em branco e salve para parar de receber."),
+      atual?el("div",{style:{padding:"8px 12px",background:"#4ade8014",border:"1px solid #4ade8055",borderRadius:"8px",marginBottom:"10px",fontSize:"12px",color:"#4ade80"}},["✓ Recebendo em: ",el("b",null,atual)]):el("div",{style:{padding:"8px 12px",background:"#f59e0b14",border:"1px solid #f59e0b55",borderRadius:"8px",marginBottom:"10px",fontSize:"12px",color:"#fbbf24"}},"⚠️ Nenhum e-mail cadastrado. Você não recebe notificações."),
+      emailMsg,
+      el("input",{type:"email",placeholder:"seu.email@exemplo.com",value:S.adminEmail||"",style:{width:"100%",padding:"10px 12px",background:"var(--card)",border:"1px solid var(--border)",borderRadius:"8px",color:"var(--text2)",fontSize:"14px",boxSizing:"border-box"},onInput:ev=>{S.adminEmail=ev.target.value;}}),
+      el("div",{style:{display:"flex",gap:"8px",marginTop:"10px"}},[
+        el("button",{style:{flex:1,padding:"10px",background:"#008f83",color:"#fff",fontWeight:700,border:"none",borderRadius:"8px",fontSize:"13px",cursor:"pointer"},onClick:adminSalvarEmail},"Salvar"),
+        atual?el("button",{style:{padding:"10px 14px",background:"transparent",color:"#ef4444",fontWeight:600,border:"1px solid #ef444466",borderRadius:"8px",fontSize:"12px",cursor:"pointer"},onClick:()=>{if(confirm("Parar de receber notificações por e-mail?")){S.adminEmail="";adminSalvarEmail();}}},"Remover"):null
+      ]),
+      el("div",{style:{fontSize:"11px",color:"var(--muted)",marginTop:"14px",lineHeight:"1.5"}},"💡 Dica: o e-mail chega no seu Gmail/Outlook do celular e já te avisa com som ou vibração, igual notificação normal.")
+    ]));
   }else{
     const aprovs=S.adminUsuarios.filter(x=>x.role==="aprovador").length;
     if(isAdmin)linhas.push(el("div",{style:{padding:"8px 12px",background:"#0ea5e911",border:"1px solid #0ea5e955",borderRadius:"8px",marginBottom:"10px",fontSize:"12px",color:"var(--text2)"}},"Aprovadores extras: "+aprovs+"/3 (você é o admin principal)"));
@@ -661,7 +677,7 @@ function renderAdminPanel(){
       el("div",{style:{fontWeight:700,color:"var(--text2)",fontSize:"16px"}},"🛡️ Painel "+(isAdmin?"Admin":"Aprovador")),
       el("button",{class:"close-btn",onClick:()=>{S.adminOpen=false;render();authRefresh();}},"x")
     ]),
-    el("div",{style:{display:"flex",borderBottom:"1px solid var(--border)"}},[tab("pendentes","Pendentes",S.adminPendentes.length),tab("usuarios","Usuários",0)]),
+    el("div",{style:{display:"flex",borderBottom:"1px solid var(--border)"}},[tab("pendentes","Pendentes",S.adminPendentes.length),tab("usuarios","Usuários",0),tab("email","E-mail",0)]),
     el("div",{style:{padding:"14px",maxHeight:"60vh",overflowY:"auto"}},[msg].concat(linhas))
   ]);
   return el("div",{class:"overlay",onClick:()=>{S.adminOpen=false;render();authRefresh();}},[el("div",{onClick:e=>e.stopPropagation()},[box])]);
