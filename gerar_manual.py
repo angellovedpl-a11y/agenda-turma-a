@@ -579,6 +579,10 @@ story.append(Paragraph(
     "para liderarmos sobre todas as espécies da terra.", P))
 
 story.append(Paragraph(
+    "Ao meu filho <b>Angelo Guilherme</b>, que despertou em mim o interesse pela programação "
+    "e pelo <i>vibe coding</i> — sem ele, este aplicativo simplesmente não existiria.", P))
+
+story.append(Paragraph(
     "À <b>Coordenação</b>, na pessoa da <b>Jéssica</b>, pela confiança, pelo apoio e por "
     "acreditar que uma boa ideia pode vir de qualquer lugar — inclusive da cabine.", P))
 
