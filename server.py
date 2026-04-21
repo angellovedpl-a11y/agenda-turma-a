@@ -220,6 +220,20 @@ def api_promover(matricula):
 def api_despromover(matricula):
     return auth.handle_despromover(matricula, request.current_user)
 
+@app.route('/api/auth/recuperar', methods=['POST'])
+def api_recuperar():
+    return auth.handle_recuperar_senha(request.json or {})
+
+@app.route('/api/auth/trocar-senha', methods=['POST'])
+@auth.require_auth
+def api_trocar_senha():
+    return auth.handle_trocar_senha(request.json or {}, request.current_user)
+
+@app.route('/api/admin/reset-senha/<matricula>', methods=['POST'])
+@auth.require_admin
+def api_reset_senha(matricula):
+    return auth.handle_admin_reset_senha(matricula, request.current_user)
+
 
 @app.route('/api/claude', methods=['POST'])
 @auth.require_auth

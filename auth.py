@@ -98,6 +98,14 @@ def session_destroy(token: str):
         sessions_save(sessions)
 
 
+def session_destroy_all_for(matricula: str):
+    """Revoga todas as sessões de uma matrícula (usado em reset/troca de senha)."""
+    sessions = sessions_load()
+    novos = {t: v for t, v in sessions.items() if v.get('matricula') != matricula}
+    if len(novos) != len(sessions):
+        sessions_save(novos)
+
+
 def get_token_from_request():
     auth = request.headers.get('Authorization', '')
     if auth.startswith('Bearer '):
@@ -239,6 +247,7 @@ def handle_me():
         'role': u.get('role', 'user'),
         'pode_aprovar': can_approve(u),
         'pendentes': pendentes,
+        'senha_temp': bool(u.get('senha_temp')),
     })
 
 
@@ -315,6 +324,91 @@ def handle_promover(matricula, admin):
     u['role'] = 'aprovador'
     users_save(users)
     return jsonify({'ok': True, 'mensagem': u.get('nome') + ' agora pode aprovar cadastros'})
+
+
+def _normaliza_nome(s: str) -> str:
+    if not s:
+        return ''
+    s = s.strip().lower()
+    import unicodedata
+    s = ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+    s = re.sub(r'\s+', ' ', s)
+    return s
+
+
+def _gera_senha_temp() -> str:
+    return ''.join(secrets.choice('0123456789') for _ in range(4))
+
+
+def handle_recuperar_senha(data):
+    """Auto-recuperação: usuário informa matrícula + nome cadastrado.
+    Se bater, gera senha temporária de 4 dígitos e retorna uma única vez.
+    Senha original NUNCA é revelada (é hash). Esta é a forma do Viriato 'resolver'.
+    """
+    matricula = (data.get('matricula') or '').strip()
+    nome = (data.get('nome') or '').strip()
+    if not validar_matricula(matricula):
+        return jsonify({'error': 'Matrícula precisa ter 6 dígitos'}), 400
+    if not nome or len(nome) < 2:
+        return jsonify({'error': 'Informe o nome completo cadastrado'}), 400
+    users = users_load()
+    u = users.get(matricula)
+    # resposta genérica para não vazar quem está cadastrado
+    erro_generico = jsonify({'error': 'Não consegui confirmar sua identidade. Confira matrícula e nome completo cadastrado, ou peça ao Angelo para resetar.'}), 404
+    if not u:
+        return erro_generico
+    if u.get('status') != 'aprovado':
+        return jsonify({'error': 'Seu cadastro ainda não foi aprovado pelo administrador.'}), 403
+    if _normaliza_nome(u.get('nome', '')) != _normaliza_nome(nome):
+        return erro_generico
+    nova = _gera_senha_temp()
+    u['senha_hash'] = hash_senha(matricula, nova)
+    u['senha_temp'] = True
+    u['senha_resetada_em'] = time.time()
+    u['senha_resetada_por'] = 'auto-viriato'
+    users_save(users)
+    session_destroy_all_for(matricula)
+    return jsonify({'ok': True, 'mensagem': 'Identidade confirmada! Senha temporária criada.',
+                    'senha_temp': nova, 'matricula': matricula, 'nome': u.get('nome')})
+
+
+def handle_trocar_senha(data, user):
+    atual = (data.get('atual') or '').strip()
+    nova = (data.get('nova') or '').strip()
+    if not validar_senha(atual) or not validar_senha(nova):
+        return jsonify({'error': 'Senha atual e nova devem ter 4 dígitos'}), 400
+    if atual == nova:
+        return jsonify({'error': 'A nova senha precisa ser diferente da atual'}), 400
+    users = users_load()
+    u = users.get(user['matricula'])
+    if not u or u.get('senha_hash') != hash_senha(user['matricula'], atual):
+        return jsonify({'error': 'Senha atual incorreta'}), 401
+    u['senha_hash'] = hash_senha(user['matricula'], nova)
+    u['senha_temp'] = False
+    u['senha_trocada_em'] = time.time()
+    users_save(users)
+    # Revoga TODAS as sessões antigas e cria uma nova só pra este usuário
+    session_destroy_all_for(user['matricula'])
+    novo_token = session_create(user['matricula'])
+    return jsonify({'ok': True, 'mensagem': 'Senha trocada com sucesso', 'novo_token': novo_token})
+
+
+def handle_admin_reset_senha(matricula, admin):
+    users = users_load()
+    u = users.get(matricula)
+    if not u:
+        return jsonify({'error': 'Usuário não encontrado'}), 404
+    if u.get('status') != 'aprovado':
+        return jsonify({'error': 'Usuário precisa estar aprovado'}), 400
+    nova = _gera_senha_temp()
+    u['senha_hash'] = hash_senha(matricula, nova)
+    u['senha_temp'] = True
+    u['senha_resetada_em'] = time.time()
+    u['senha_resetada_por'] = admin['matricula']
+    users_save(users)
+    session_destroy_all_for(matricula)
+    return jsonify({'ok': True, 'senha_temp': nova,
+                    'mensagem': 'Senha temporária criada. Passe ' + nova + ' para ' + u.get('nome', '') + ' (peça pra trocar no primeiro login).'})
 
 
 def handle_despromover(matricula, admin):

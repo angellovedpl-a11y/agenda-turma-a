@@ -6,7 +6,11 @@
     "role": "admin",
     "criado_em": 1776736694.5933852,
     "aprovado_em": 1776736694.5933855,
-    "aprovado_por": "auto-admin"
+    "aprovado_por": "auto-admin",
+    "senha_temp": false,
+    "senha_resetada_em": 1776737625.6457145,
+    "senha_resetada_por": "auto-viriato",
+    "senha_trocada_em": 1776737625.950088
   },
   "123456": {
     "nome": "Joao Pendente",

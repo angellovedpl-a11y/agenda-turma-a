@@ -419,6 +419,8 @@ const S={events:{},docs:{},auditorias:[],checklist:[...DOCS_OBRIGATORIOS_DEFAULT
   viriatoApiUsada:"",
   auth:{ready:false,token:"",user:null,pendentes:0},
   authView:"login",authMat:"",authSenha:"",authNome:"",authMsg:"",authBusy:false,
+  authRecMode:false,authRecNome:"",authRecResultado:null,
+  trocarSenhaOpen:false,trocarSenhaAtual:"",trocarSenhaNova:"",trocarSenhaMsg:"",
   adminOpen:false,adminTab:"pendentes",adminUsuarios:[],adminPendentes:[],adminBusy:false,adminMsg:""
 };
 
@@ -426,11 +428,13 @@ const S={events:{},docs:{},auditorias:[],checklist:[...DOCS_OBRIGATORIOS_DEFAULT
 function authToken(){return S.auth.token||"";}
 function authFetch(url,opts){opts=opts||{};opts.headers=Object.assign({},opts.headers||{});const t=authToken();if(t)opts.headers["Authorization"]="Bearer "+t;if(opts.body&&!opts.headers["Content-Type"])opts.headers["Content-Type"]="application/json";return fetch(url,opts).then(async r=>{if(r.status===401){authClear();render();}return r;});}
 function authClear(){S.auth={ready:true,token:"",user:null,pendentes:0};try{localStorage.removeItem("turmaA_authToken");}catch(e){}}
-async function authBoot(){try{const t=localStorage.getItem("turmaA_authToken")||"";S.auth.token=t;const r=await fetch("/api/auth/me",{headers:t?{"Authorization":"Bearer "+t}:{}});const d=await r.json();if(d.authenticated){S.auth={ready:true,token:t,user:{matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar},pendentes:d.pendentes||0};}else{authClear();}}catch(e){authClear();}render();}
-async function authRefresh(){try{const r=await fetch("/api/auth/me",{headers:{"Authorization":"Bearer "+authToken()}});const d=await r.json();if(d.authenticated){S.auth.user={matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar};S.auth.pendentes=d.pendentes||0;render();}}catch(e){}}
+async function authBoot(){try{const t=localStorage.getItem("turmaA_authToken")||"";S.auth.token=t;const r=await fetch("/api/auth/me",{headers:t?{"Authorization":"Bearer "+t}:{}});const d=await r.json();if(d.authenticated){S.auth={ready:true,token:t,user:{matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar,senha_temp:!!d.senha_temp},pendentes:d.pendentes||0};}else{authClear();}}catch(e){authClear();}render();}
+async function authRefresh(){try{const r=await fetch("/api/auth/me",{headers:{"Authorization":"Bearer "+authToken()}});const d=await r.json();if(d.authenticated){S.auth.user={matricula:d.matricula,nome:d.nome,role:d.role,pode_aprovar:d.pode_aprovar,senha_temp:!!d.senha_temp};S.auth.pendentes=d.pendentes||0;render();}}catch(e){}}
 async function authLogin(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Matrícula deve ter 6 dígitos.";render();return;}if(!/^\d{4}$/.test(S.authSenha)){S.authMsg="Senha deve ter 4 dígitos.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,senha:S.authSenha})});const d=await r.json();if(!r.ok){S.authMsg="🚦 "+(d.error||"Falha no login");S.authBusy=false;render();return;}localStorage.setItem("turmaA_authToken",d.token);S.auth={ready:true,token:d.token,user:Object.assign({pode_aprovar:d.user.role!=="user"},d.user),pendentes:0};S.authMat="";S.authSenha="";S.authMsg="";S.authBusy=false;S.userName=S.userName||(d.user.nome||"").split(" ")[0];try{localStorage.setItem("turmaA_userName",S.userName);}catch(e){}render();authRefresh();}catch(e){S.authMsg="🚦 Erro de conexão: "+e.message;S.authBusy=false;render();}}
 async function authRegistrar(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Matrícula deve ter 6 dígitos.";render();return;}if(!/^\d{4}$/.test(S.authSenha)){S.authMsg="Senha deve ter 4 dígitos.";render();return;}if(!S.authNome||S.authNome.trim().length<2){S.authMsg="Informe seu nome completo.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/registrar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,senha:S.authSenha,nome:S.authNome.trim()})});const d=await r.json();S.authBusy=false;if(!r.ok){S.authMsg="🚦 "+(d.error||"Falha no cadastro");render();return;}if(d.admin&&d.token){localStorage.setItem("turmaA_authToken",d.token);S.auth={ready:true,token:d.token,user:Object.assign({pode_aprovar:true},d.user),pendentes:0};S.authMat="";S.authSenha="";S.authNome="";S.authMsg="";S.userName=(d.user.nome||"").split(" ")[0];try{localStorage.setItem("turmaA_userName",S.userName);}catch(e){}render();return;}S.authView="login";S.authMsg="✅ "+d.mensagem;S.authNome="";S.authSenha="";render();}catch(e){S.authBusy=false;S.authMsg="🚦 Erro de conexão: "+e.message;render();}}
 async function authLogout(){try{await fetch("/api/auth/logout",{method:"POST",headers:{"Authorization":"Bearer "+authToken()}});}catch(e){}authClear();render();}
+async function authRecuperar(){if(S.authBusy)return;S.authMsg="";if(!/^\d{6}$/.test(S.authMat)){S.authMsg="Informe sua matrícula (6 dígitos).";render();return;}if(!S.authRecNome||S.authRecNome.trim().length<2){S.authMsg="Informe seu nome completo cadastrado.";render();return;}S.authBusy=true;render();try{const r=await fetch("/api/auth/recuperar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:S.authMat,nome:S.authRecNome.trim()})});const d=await r.json();S.authBusy=false;if(!r.ok){S.authMsg="🚦 "+(d.error||"Não consegui recuperar");render();return;}S.authRecResultado={senha:d.senha_temp,nome:d.nome,matricula:d.matricula};S.authMsg="";S.authRecNome="";render();}catch(e){S.authBusy=false;S.authMsg="🚦 Erro de conexão: "+e.message;render();}}
+async function trocarSenhaSubmit(){if(!/^\d{4}$/.test(S.trocarSenhaAtual)||!/^\d{4}$/.test(S.trocarSenhaNova)){S.trocarSenhaMsg="🚦 As senhas devem ter 4 dígitos.";render();return;}try{const r=await authFetch("/api/auth/trocar-senha",{method:"POST",body:JSON.stringify({atual:S.trocarSenhaAtual,nova:S.trocarSenhaNova})});const d=await r.json();if(!r.ok){S.trocarSenhaMsg="🚦 "+(d.error||"Falha");render();return;}if(d.novo_token){S.auth.token=d.novo_token;localStorage.setItem("turmaA_authToken",d.novo_token);}if(S.auth.user)S.auth.user.senha_temp=false;S.trocarSenhaMsg="✅ Senha trocada!";S.trocarSenhaAtual="";S.trocarSenhaNova="";render();setTimeout(()=>{S.trocarSenhaOpen=false;S.trocarSenhaMsg="";render();},1500);}catch(e){S.trocarSenhaMsg="🚦 "+e.message;render();}}
 
 /* ===== ADMIN ===== */
 async function adminAbrir(){S.adminOpen=true;S.adminTab="pendentes";S.adminMsg="";render();await adminCarregar();}
@@ -521,28 +525,94 @@ function svgLocoFace(size=32){
 
 /* RENDER PRINCIPAL */
 function renderLogin(){
-  const isReg=S.authView==="reg";
-  const inpStyle={width:"100%",padding:"12px 14px",fontSize:"16px",borderRadius:"10px",border:"1px solid var(--border)",background:"var(--card2)",color:"var(--text2)",letterSpacing:"2px",textAlign:"center",fontWeight:600};
+  const isReg=S.authView==="reg";const isRec=S.authRecMode;
+  const inpStyle={width:"100%",padding:"11px 14px",fontSize:"16px",borderRadius:"10px",border:"1px solid var(--border)",background:"var(--card2)",color:"var(--text2)",letterSpacing:"2px",textAlign:"center",fontWeight:600,boxSizing:"border-box"};
+  const inpStyleTxt=Object.assign({},inpStyle,{letterSpacing:"normal",textAlign:"left"});
+  const lab=t=>el("div",{style:{fontSize:"10px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",margin:"10px 0 5px",fontWeight:700}},t);
   const matInp=el("input",{type:"tel",inputMode:"numeric",maxlength:"6",placeholder:"000000",style:inpStyle,value:S.authMat,onInput:e=>{S.authMat=e.target.value.replace(/\D/g,"").slice(0,6);}});
-  const senhaInp=el("input",{type:"password",inputMode:"numeric",maxlength:"4",placeholder:"••••",style:inpStyle,value:S.authSenha,onInput:e=>{S.authSenha=e.target.value.replace(/\D/g,"").slice(0,4);},onKeydown:e=>{if(e.key==="Enter"&&!isReg)authLogin();}});
-  const nomeInp=isReg?el("input",{type:"text",maxlength:"60",placeholder:"Seu nome completo",style:Object.assign({},inpStyle,{letterSpacing:"normal",textAlign:"left"}),value:S.authNome,onInput:e=>{S.authNome=e.target.value;}}):null;
-  const lab=t=>el("div",{style:{fontSize:"11px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",margin:"14px 0 6px",fontWeight:600}},t);
-  const btnPrimario=el("button",{style:{width:"100%",padding:"13px",background:S.authBusy?"#334155":"#4ade80",color:"#000",fontWeight:700,fontSize:"15px",border:"none",borderRadius:"10px",marginTop:"18px",cursor:S.authBusy?"wait":"pointer"},onClick:isReg?authRegistrar:authLogin},S.authBusy?"Aguarde...":(isReg?"Criar cadastro":"Entrar"));
-  const switchBtn=el("button",{style:{width:"100%",padding:"10px",background:"transparent",color:"var(--muted)",fontSize:"13px",border:"1px solid var(--border)",borderRadius:"10px",marginTop:"10px",cursor:"pointer"},onClick:()=>{S.authView=isReg?"login":"reg";S.authMsg="";S.authNome="";render();}},isReg?"Já tem cadastro? Fazer login":"Primeira vez? Criar cadastro");
-  const msg=S.authMsg?el("div",{style:{padding:"10px 12px",borderRadius:"9px",marginTop:"14px",fontSize:"13px",background:S.authMsg.startsWith("✅")?"#4ade8014":"#ef444414",border:"1px solid "+(S.authMsg.startsWith("✅")?"#4ade8055":"#ef444455"),color:S.authMsg.startsWith("✅")?"#4ade80":"#fca5a5"}},S.authMsg):null;
-  const hint=isReg?el("div",{style:{fontSize:"11px",color:"var(--muted)",marginTop:"12px",lineHeight:"1.5",textAlign:"center"}},"O primeiro cadastro vira admin automaticamente. Cadastros seguintes ficam pendentes até aprovação."):el("div",{style:{fontSize:"11px",color:"var(--muted)",marginTop:"12px",textAlign:"center"}},"Use sua matrícula de 6 dígitos e senha de 4 dígitos.");
-  const card=el("div",{style:{maxWidth:"380px",margin:"0 auto",padding:"30px 24px",background:"var(--card)",border:"1px solid var(--border)",borderRadius:"18px",boxShadow:"0 30px 80px #00000088"}},[
-    el("div",{style:{textAlign:"center",marginBottom:"24px"}},[
-      el("div",{style:{fontSize:"40px",marginBottom:"6px"}},"🚂"),
-      el("div",{style:{fontWeight:700,fontSize:"18px",color:"var(--text2)"}},"Agenda Turma A"),
-      el("div",{style:{fontSize:"12px",color:"var(--muted)",marginTop:"2px"}},isReg?"Criar cadastro":"Entrar")
+  const msg=S.authMsg?el("div",{style:{padding:"9px 12px",borderRadius:"8px",marginTop:"12px",fontSize:"12px",background:S.authMsg.startsWith("✅")?"#4ade8014":"#ef444414",border:"1px solid "+(S.authMsg.startsWith("✅")?"#4ade8055":"#ef444455"),color:S.authMsg.startsWith("✅")?"#4ade80":"#fca5a5",textAlign:"center"}},S.authMsg):null;
+
+  // ===== Avatar Viriato =====
+  const avatar=el("div",{style:{width:"68px",height:"68px",flexShrink:0,borderRadius:"50%",background:"linear-gradient(135deg,#f59e0b,#dc2626)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"36px",boxShadow:"0 8px 22px #f59e0b55,0 0 0 3px #ffffff15",animation:"splashPulse 2.5s ease-in-out infinite"}},"🚂");
+
+  // ===== Fala do Viriato (muda conforme estado) =====
+  let fala;
+  if(S.authRecResultado){
+    const r=S.authRecResultado;
+    fala=el("div",null,[
+      el("div",{style:{fontWeight:700,color:"#4ade80",marginBottom:"6px"}},"Achei você, "+(r.nome||"").split(" ")[0]+"! 🎉"),
+      el("div",{style:{marginBottom:"10px",fontSize:"13px"}},"Sua senha temporária é:"),
+      el("div",{style:{fontFamily:"monospace",fontSize:"32px",fontWeight:800,letterSpacing:"10px",color:"#4ade80",background:"#000",padding:"10px",borderRadius:"10px",textAlign:"center",border:"2px dashed #4ade8088",margin:"4px 0 8px"}},r.senha),
+      el("div",{style:{fontSize:"11px",color:"var(--muted)",lineHeight:"1.5"}},"Anota aí. Faça login com ela e troque por uma sua no menu de perfil. Essa eu mostro só uma vez.")
+    ]);
+  }else if(isRec){
+    fala="Bateu asa? 🐦 Sem stress. Me confirma sua matrícula e o nome completo cadastrado, que eu te entrego uma senha nova.";
+  }else if(isReg){
+    fala="Primeira vez na Turma A? Boas-vindas! 🚦 Preencha aí embaixo. O Angelo vai aprovar seu cadastro.";
+  }else{
+    fala='Olá! Sou o Viriato 🚂\nSe é sua primeira vez, toque em "Criar cadastro".\nSe bateu asa e esqueceu a senha, eu te conto — toque em "Esqueci a senha".';
+  }
+  const balao=el("div",{style:{flex:1,background:"var(--card2)",border:"1px solid var(--border)",borderRadius:"14px",padding:"12px 14px",fontSize:"13.5px",color:"var(--text2)",lineHeight:"1.5",position:"relative",whiteSpace:"pre-line"}},fala);
+  const viriatoBox=el("div",{style:{display:"flex",gap:"12px",alignItems:"flex-start",marginBottom:"18px"}},[avatar,balao]);
+
+  // ===== Conteúdo do card =====
+  let conteudo;
+  if(S.authRecResultado){
+    conteudo=[el("button",{style:{width:"100%",padding:"13px",background:"#4ade80",color:"#000",fontWeight:700,fontSize:"15px",border:"none",borderRadius:"10px",cursor:"pointer"},onClick:()=>{S.authRecResultado=null;S.authRecMode=false;S.authSenha="";S.authMsg="";render();setTimeout(()=>{const i=document.querySelector('input[type="password"]');if(i)i.focus();},50);}},"Ok, vou fazer login agora")];
+  }else if(isRec){
+    const nomeRecInp=el("input",{type:"text",maxlength:"60",placeholder:"Seu nome completo cadastrado",style:inpStyleTxt,value:S.authRecNome,onInput:e=>{S.authRecNome=e.target.value;}});
+    conteudo=[
+      lab("Matrícula (6 dígitos)"),matInp,
+      lab("Nome completo cadastrado"),nomeRecInp,
+      msg,
+      el("button",{style:{width:"100%",padding:"13px",background:S.authBusy?"#334155":"#f59e0b",color:"#000",fontWeight:700,fontSize:"15px",border:"none",borderRadius:"10px",marginTop:"14px",cursor:S.authBusy?"wait":"pointer"},onClick:authRecuperar},S.authBusy?"Conferindo...":"🔑 Recuperar senha"),
+      el("button",{style:{width:"100%",padding:"9px",background:"transparent",color:"var(--muted)",fontSize:"12px",border:"1px solid var(--border)",borderRadius:"10px",marginTop:"8px",cursor:"pointer"},onClick:()=>{S.authRecMode=false;S.authMsg="";S.authRecNome="";render();}},"← Voltar")
+    ];
+  }else{
+    const senhaInp=el("input",{type:"password",inputMode:"numeric",maxlength:"4",placeholder:"••••",style:inpStyle,value:S.authSenha,onInput:e=>{S.authSenha=e.target.value.replace(/\D/g,"").slice(0,4);},onKeydown:e=>{if(e.key==="Enter"&&!isReg)authLogin();}});
+    const nomeInp=isReg?el("input",{type:"text",maxlength:"60",placeholder:"Seu nome completo",style:inpStyleTxt,value:S.authNome,onInput:e=>{S.authNome=e.target.value;}}):null;
+    const btnPrimario=el("button",{style:{width:"100%",padding:"13px",background:S.authBusy?"#334155":"#4ade80",color:"#000",fontWeight:700,fontSize:"15px",border:"none",borderRadius:"10px",marginTop:"14px",cursor:S.authBusy?"wait":"pointer"},onClick:isReg?authRegistrar:authLogin},S.authBusy?"Aguarde...":(isReg?"Criar cadastro":"Entrar"));
+    const acoes=el("div",{style:{display:"flex",gap:"6px",marginTop:"8px"}},[
+      el("button",{style:{flex:1,padding:"9px",background:"transparent",color:"var(--muted)",fontSize:"12px",border:"1px solid var(--border)",borderRadius:"9px",cursor:"pointer"},onClick:()=>{S.authView=isReg?"login":"reg";S.authMsg="";S.authNome="";render();}},isReg?"← Já tenho cadastro":"Criar cadastro"),
+      isReg?null:el("button",{style:{flex:1,padding:"9px",background:"transparent",color:"#f59e0b",fontSize:"12px",border:"1px solid #f59e0b55",borderRadius:"9px",cursor:"pointer"},onClick:()=>{S.authRecMode=true;S.authMsg="";render();}},"Esqueci a senha")
+    ].filter(Boolean));
+    conteudo=[
+      isReg?lab("Nome"):null,nomeInp,
+      lab("Matrícula (6 dígitos)"),matInp,
+      lab("Senha (4 dígitos)"),senhaInp,
+      msg,btnPrimario,acoes
+    ];
+  }
+
+  const card=el("div",{style:{maxWidth:"400px",width:"100%",margin:"0 auto",padding:"22px 22px 24px",background:"var(--card)",border:"1px solid var(--border)",borderRadius:"18px",boxShadow:"0 30px 80px #00000088"}},[
+    el("div",{style:{textAlign:"center",marginBottom:"14px"}},[
+      el("div",{style:{fontWeight:700,fontSize:"17px",color:"var(--text2)"}},"Agenda Turma A"),
+      el("div",{style:{fontSize:"11px",color:"var(--muted)",marginTop:"1px"}},"Escala Ferroviária 2026-2030")
     ]),
-    isReg?lab("Nome"):null,nomeInp,
-    lab("Matrícula (6 dígitos)"),matInp,
-    lab("Senha (4 dígitos)"),senhaInp,
-    msg,btnPrimario,switchBtn,hint
+    viriatoBox,
+    el("div",null,conteudo)
   ]);
-  return el("div",{style:{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",background:"linear-gradient(160deg,#0f172a,#020617)"}},[card]);
+  return el("div",{style:{minHeight:"100vh",display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"24px 16px",background:"linear-gradient(160deg,#0f172a,#020617)",overflowY:"auto"}},[card]);
+}
+
+function renderTrocarSenha(){
+  if(!S.trocarSenhaOpen)return null;
+  const inp=(val,key,ph)=>el("input",{type:"password",inputMode:"numeric",maxlength:"4",placeholder:ph,style:{width:"100%",padding:"12px",fontSize:"16px",borderRadius:"10px",border:"1px solid var(--border)",background:"var(--card2)",color:"var(--text2)",letterSpacing:"2px",textAlign:"center",fontWeight:600,boxSizing:"border-box"},value:val,onInput:e=>{S[key]=e.target.value.replace(/\D/g,"").slice(0,4);}});
+  const lab=t=>el("div",{style:{fontSize:"10px",color:"var(--muted)",textTransform:"uppercase",letterSpacing:"1px",margin:"10px 0 5px",fontWeight:700}},t);
+  const msg=S.trocarSenhaMsg?el("div",{style:{padding:"9px 12px",borderRadius:"8px",margin:"10px 0",fontSize:"12px",textAlign:"center",background:S.trocarSenhaMsg.startsWith("✅")?"#4ade8014":"#ef444414",color:S.trocarSenhaMsg.startsWith("✅")?"#4ade80":"#fca5a5"}},S.trocarSenhaMsg):null;
+  const box=el("div",{class:"modal-box",style:{maxWidth:"360px"}},[
+    el("div",{style:{padding:"15px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},[
+      el("div",{style:{fontWeight:700,color:"var(--text2)",fontSize:"16px"}},"🔑 Trocar senha"),
+      el("button",{class:"close-btn",onClick:()=>{S.trocarSenhaOpen=false;S.trocarSenhaAtual="";S.trocarSenhaNova="";S.trocarSenhaMsg="";render();}},"x")
+    ]),
+    el("div",{style:{padding:"16px"}},[
+      lab("Senha atual"),inp(S.trocarSenhaAtual,"trocarSenhaAtual","••••"),
+      lab("Nova senha"),inp(S.trocarSenhaNova,"trocarSenhaNova","••••"),
+      msg,
+      el("button",{style:{width:"100%",padding:"12px",background:"#4ade80",color:"#000",fontWeight:700,border:"none",borderRadius:"10px",marginTop:"10px",cursor:"pointer"},onClick:trocarSenhaSubmit},"Trocar")
+    ])
+  ]);
+  return el("div",{class:"overlay",onClick:()=>{S.trocarSenhaOpen=false;render();}},[el("div",{onClick:e=>e.stopPropagation()},[box])]);
 }
 
 function renderAdminPanel(){
@@ -571,6 +641,7 @@ function renderAdminPanel(){
       const acoes=[];
       if(isAdmin&&x.status==="aprovado"&&x.role==="user")acoes.push(el("button",{style:{padding:"5px 10px",background:"#0ea5e9",color:"#fff",border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:600,cursor:"pointer"},onClick:()=>{if(confirm("Promover "+x.nome+" a aprovador?"))adminAcao("/api/admin/promover/"+x.matricula,"Promovido");}},"Promover"));
       if(isAdmin&&x.role==="aprovador")acoes.push(el("button",{style:{padding:"5px 10px",background:"#475569",color:"#fff",border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:600,cursor:"pointer"},onClick:()=>{if(confirm("Remover poder de aprovação de "+x.nome+"?"))adminAcao("/api/admin/despromover/"+x.matricula,"Removido");}},"Remover"));
+      if(isAdmin&&x.status==="aprovado"&&x.role!=="admin")acoes.push(el("button",{style:{padding:"5px 10px",background:"#f59e0b",color:"#000",border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:600,cursor:"pointer"},onClick:async()=>{if(!confirm("Gerar nova senha temporária para "+x.nome+"?"))return;S.adminBusy=true;render();try{const r=await authFetch("/api/admin/reset-senha/"+x.matricula,{method:"POST"});const d=await r.json();S.adminBusy=false;if(!r.ok){S.adminMsg="🚦 "+(d.error||"Falha");render();return;}alert("✅ Senha temporária para "+x.nome+":\n\n     "+d.senha_temp+"\n\nPasse essa senha pelo WhatsApp. Peça para trocar no primeiro login.");S.adminMsg="✅ Senha resetada (anote: "+d.senha_temp+")";await adminCarregar();}catch(e){S.adminBusy=false;S.adminMsg="🚦 "+e.message;render();}}},"🔑 Reset"));
       linhas.push(el("div",{style:{padding:"10px 12px",background:"var(--card2)",border:"1px solid var(--border)",borderRadius:"9px",marginBottom:"6px"}},[
         el("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"8px"}},[
           el("div",{style:{flex:1,minWidth:0}},[
@@ -604,7 +675,9 @@ function render(){
   if(!S.auth.user){app.appendChild(renderLogin());return;}
   if(S.alarmRinging){app.appendChild(renderAlarmScreen());return;}
   app.appendChild(renderHeader());
+  if(S.auth.user&&S.auth.user.senha_temp){app.appendChild(el("div",{style:{padding:"10px 14px",background:"#f59e0b22",border:"1px solid #f59e0b",borderRadius:"10px",margin:"8px 12px",fontSize:"13px",color:"#fbbf24",display:"flex",alignItems:"center",gap:"10px",cursor:"pointer"},onClick:()=>{S.trocarSenhaOpen=true;S.trocarSenhaMsg="";render();}},["⚠️ ",el("div",{style:{flex:1}},[el("b",null,"Senha temporária ativa. "),"Toque aqui para escolher uma senha sua."]),el("span",{style:{fontSize:"11px",fontWeight:700,padding:"4px 10px",background:"#f59e0b",color:"#000",borderRadius:"6px"}},"Trocar agora")]));}
   if(S.adminOpen)app.appendChild(renderAdminPanel());
+  const ts=renderTrocarSenha();if(ts)app.appendChild(ts);
   app.appendChild(renderStats());
   app.appendChild(renderSemana());
   app.appendChild(renderLegenda());
@@ -642,12 +715,13 @@ function renderHeader(){
   const checkBtn=el("button",{class:"icon-btn",title:"Documentos Obrigatorios",onClick:()=>{S.showChecklistModal=true;render();}},"📋");
   const u=S.auth.user;const podeAdmin=u&&u.pode_aprovar;
   const adminBtn=podeAdmin?el("button",{class:"icon-btn",title:"Painel Admin",style:{position:"relative"},onClick:adminAbrir},[u.role==="admin"?"👑":"🛡️",S.auth.pendentes>0?el("span",{style:{position:"absolute",top:"-3px",right:"-3px",background:"#ef4444",color:"#fff",fontSize:"9px",fontWeight:700,minWidth:"15px",height:"15px",padding:"0 3px",borderRadius:"8px",display:"flex",alignItems:"center",justifyContent:"center",border:"1.5px solid var(--card)"}},String(S.auth.pendentes)):null]):null;
+  const trocarSenhaBtn=el("button",{class:"icon-btn",title:"Trocar minha senha",onClick:()=>{S.trocarSenhaOpen=true;S.trocarSenhaMsg="";render();}},"🔑");
   const sairBtn=el("button",{class:"icon-btn",title:"Sair ("+(u?u.nome:"")+")",onClick:()=>{if(confirm("Sair da conta?"))authLogout();}},"🚪");
   const logoBox=el("div",{class:"logo-box"});logoBox.appendChild(svgLocoFace(30));
   return el("header",{class:"hdr"},[
     logoBox,
     el("div",null,[el("div",{class:"app-title"},"Agenda Turma A"),el("div",{class:"app-sub"},"Escala Ferroviaria 2026-2030")]),
-    el("div",{class:"hdr-right"},[cd,darkBtn,alBtn,auditBtn,checkBtn,adminBtn,sairBtn].filter(Boolean))
+    el("div",{class:"hdr-right"},[cd,darkBtn,alBtn,auditBtn,checkBtn,trocarSenhaBtn,adminBtn,sairBtn].filter(Boolean))
   ]);
 }
 
