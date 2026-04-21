@@ -1,0 +1,3517 @@
+# Sistema Freios Trilha Operacao v2
+
+> Arquivo original: `Sistema_Freios_Trilha_Operacao_v2.pdf`
+> Extraído em: 2026-04-21 15:51
+> Caracteres: 204281
+
+---
+
+Sistema de Locomotivas e
+Vagões I - Módulo
+Sistema de Freios
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO
+
+Sistema de
+Locomotivas e
+Vagões I - Módulo
+Sistema de Freios
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO
+Colaboradores:
+Leonardo Mendonça Corrêa
+Ronilson Cândido Vieira
+Mauro Antônio Bergantini
+José Luiz Borba
+
+Lista de Figuras
+Figura 1 - Sistema de frenagem ...........................................................................................13
+Figura 2 - Componentes .......................................................................................................15
+Figura 3 - George Westinghouse ..........................................................................................17
+Figura 4 - Componentes .......................................................................................................17
+Figura 5 - Carregamento ......................................................................................................18
+Figura 6 - Aplicação .............................................................................................................19
+Figura 7 - Alívio e recarregamento .......................................................................................19
+Figura 8 - Código de cores ...................................................................................................22
+Figura 9 - Componentes do sistema .....................................................................................27
+Figura 10 - Diagrama ...........................................................................................................28
+Figura 11 - Sistema de alimentação .....................................................................................29
+Figura 12 - Compressor - Vista 1 ..........................................................................................29
+Figura 13 - Compressor - Vista 2 ..........................................................................................30
+Figura 14 - Compressor por eixo ..........................................................................................30
+Figura 15 - Compressor com motor elétrico ..........................................................................30
+Figura 16 - Compressor resfriado a água .............................................................................31
+Figura 17 - Compressor resfriado a ar ..................................................................................32
+Figura 18 - Válvula de segurança .........................................................................................32
+Figura 19 - Reservatório Principal ........................................................................................33
+Figura 20 - Dreno automático ...............................................................................................35
+Figura 21 - Dreno automático ...............................................................................................35
+Figura 22 - Dreno automático ...............................................................................................35
+Figura 23 - Válvula de segurança - Modelos ........................................................................36
+Figura 24 - Válvula de retenção ............................................................................................36
+Figura 25 - Diagrama do armazenamento ............................................................................37
+Figura 26 - Chave pressostática CCS ..................................................................................38
+Figura 27 - Válvula magnética CGS .....................................................................................38
+Figura 28 - Posição da torneira ............................................................................................39
+Figura 29 - Conjunto de manômetros ...................................................................................40
+Figura 30 - Fluxômetro .........................................................................................................40
+Figura 31 - Filtro ...................................................................................................................41
+Figura 32 - Secador ..............................................................................................................42
+Figura 33 - Conexões ...........................................................................................................43
+Figura 34 - Válvula B3A ........................................................................................................44
+Figura 35 - Válvulas de descarga - Modelos .........................................................................44
+Figura 36 - Válvula de descarga - Desenho ..........................................................................45
+Figura 37 - Válvula de retenção dos RPs .............................................................................46
+Figura 38 - Torneiras das extremidades ...............................................................................47
+Figura 39 - Mangotes da locomotiva.....................................................................................48
+Figura 40 - Elementos do mangote.......................................................................................49
+Figura 41 - Suporte cego ......................................................................................................49
+Figura 42 - Tipos de manipuladores .....................................................................................51
+Figura 43 - Diagrama do manipulador automático ................................................................52
+Figura 44 - Manipulador automático .....................................................................................52
+Figura 45 - Posições do MFA ...............................................................................................53
+
+Figura 46 - Punho da válvula interruptora .............................................................................55
+Figura 47 - Válvula reguladora .............................................................................................56
+Figura 48 - Manipulador independente SA-26 ......................................................................59
+Figura 49 - Posições do MFI ................................................................................................60
+Figura 50 - Diagrama do MFI SA-26 .....................................................................................61
+Figura 51 - Válvula de controle e alívio rápido ......................................................................61
+Figura 52 - Diagrama da válvula 26-F ..................................................................................62
+Figura 53 - Válvula 26-F .......................................................................................................62
+Figura 54 - Válvula de alívio rápido ......................................................................................65
+Figura 55 - Válvula relé J-1 ..................................................................................................71
+Figura 56 - Relé J-1 - Diagrama 01 ......................................................................................72
+Figura 57 - Relé J-1 - Diagrama 02 ......................................................................................72
+Figura 58 - Relé J-1 - Diagrama 03 ......................................................................................73
+Figura 59 - Relé J-1 - Diagrama 04 ......................................................................................73
+Figura 60 - Válvula relé J-1.6-16 ..........................................................................................74
+Figura 61 - Relé J-1.6-16 - Diagrama 01 ..............................................................................74
+Figura 62 - Relé J-1.6-16 - Diagrama 02 ..............................................................................75
+Figura 63 - Válvula relé HB-5D .............................................................................................75
+Figura 64 - Relé HB-5D - Diagrama......................................................................................76
+Figura 65 - Válvula de transferência MU-2A .........................................................................76
+Figura 66 - MU-2A - Comandante ou Morta ..........................................................................77
+Figura 67 - MU-2A - Comandada 26L ou 6-SL .....................................................................77
+Figura 68 - MU-2A - Comandada por 24-RL .........................................................................78
+Figura 69 - Válvula Seletora F-1 ...........................................................................................78
+Figura 70 - Válvula Seletora F-1 - Comandante ou Morta .....................................................79
+Figura 71 - Válvula Seletora F-1 - Comandada por 26-L ou 6-SL .........................................80
+Figura 72 - Seletora F-1 - Comandada por 24-RL ................................................................80
+Figura 73 - Válvula Seletora F-1 - Posição de proteção........................................................81
+Figura 74 - Válvula Magnética FA-4 .....................................................................................83
+Figura 75 - Diagrama Válvula P-2-A com a FA-4 ..................................................................83
+Figura 76 - Conjunto BD-26 ..................................................................................................84
+Figura 77 - Válvula de Aplicação P-2-A ................................................................................84
+Figura 78 - Válvula de Aplicação P-2-A ................................................................................85
+Figura 79 - Válvula P-2-A - Diagrama 01 ..............................................................................86
+Figura 80 - Válvula P-2-A - Diagrama 02 ..............................................................................87
+Figura 81 - Válvula P-2-A - Diagrama 03 ..............................................................................88
+Figura 82 - Válvula Interruptora de Carregamento A-1 .........................................................91
+Figura 83 - Válvula Interruptora A-1 - Diagrama ...................................................................91
+Figura 84 - Válvula Interruptora A-1 - Diagrama 01 ..............................................................92
+Figura 85 - Válvula Interruptora A-1 - Diagrama 02 ..............................................................92
+Figura 86 - Válvula Interruptora A-1 - Diagrama 03 ..............................................................93
+Figura 87 - Válvula Interruptora A-1 - Diagrama 04 ..............................................................93
+Figura 88 - Válvula Interruptora A-1 - Diagrama 05 ..............................................................93
+Figura 89 - Válvula Interruptora A-1 - Diagrama 06 ..............................................................94
+Figura 90 - Válvula Interruptora A-1 - Diagrama 07 ..............................................................95
+Figura 91 - Dispositivo locomotiva Morta ..............................................................................98
+Figura 92 - Componentes ................................................................................................... 101
+Figura 93 - Cilindro de freio ................................................................................................ 102
+Figura 94 - Cilindro de freio 02 ........................................................................................... 102
+
+Figura 95 - Ajustador Manual ............................................................................................. 104
+Figura 96 - Ajustador Automático ....................................................................................... 104
+Figura 97 - Sapata ferro fundido ......................................................................................... 105
+Figura 98 - Sapata não metálica ......................................................................................... 105
+Figura 99 - Componentes da sapata .................................................................................. 106
+Figura 100 - Freio Manual de alavanca .............................................................................. 108
+Figura 101 - Corrente do freio manual ................................................................................ 108
+Figura 102 - Sistema do vagão ........................................................................................... 112
+Figura 103 - Conexões ....................................................................................................... 112
+Figura 104 - Tê de ramal .................................................................................................... 113
+Figura 105 - Torneira angular - Punho fixo ......................................................................... 113
+Figura 106 - Torneira reta - Punho fixo e removivel ............................................................ 114
+Figura 107 - Mangote ......................................................................................................... 115
+Figura 108 - Válvula de descarga ....................................................................................... 116
+Figura 109 - Válvula AB ...................................................................................................... 117
+Figura 110 - Porções da válvula ......................................................................................... 118
+Figura 111 - Válvula ABD ................................................................................................... 120
+Figura 112 - Válvula ABDW ................................................................................................ 121
+Figura 113 - Válvula DB-60 ................................................................................................ 122
+Figura 114 - Válvulas sem a porção de emergência (ABS) ................................................ 123
+Figura 115 - Reservatório Combinado ................................................................................ 123
+Figura 116 - Coletor de pó com torneira de isolamento ...................................................... 125
+Figura 117 - Retentor ......................................................................................................... 125
+Figura 118 - Retentor em Restrito ...................................................................................... 126
+Figura 119 - Retentor em Direto ......................................................................................... 126
+Figura 120 - Timoneria de freio .......................................................................................... 128
+Figura 121 - Timoneria de freio no vagão ........................................................................... 129
+Figura 122 - Alavancas....................................................................................................... 129
+Figura 123 - Comutador em VAZIO .................................................................................... 130
+Figura 124 - Comutador em CARGA .................................................................................. 131
+Figura 125 - Cilindro de freio, Comutador e Tirante ............................................................ 131
+Figura 126 - Cilindro Diferencial ......................................................................................... 132
+Figura 127 - Cilindro diferencial - Condição de VAZIO ....................................................... 133
+Figura 128 - Cilindro diferencial - Condição de CARGA ..................................................... 133
+Figura 129 - Válvula de mudança AB-5 .............................................................................. 133
+Figura 130 - Punho e placa da válvula AB-5 ....................................................................... 134
+Figura 131 - Válvula VTA ................................................................................................... 134
+Figura 132 - VTA no vagão ................................................................................................ 135
+Figura 133 - Válvula VTA - Condição VAZIO ...................................................................... 135
+Figura 134 - Válvula VTA - Condição CARGA .................................................................... 136
+Figura 135 - Válvula EL-X instalada ................................................................................... 136
+Figura 136 - EL-60 e EL-X .................................................................................................. 137
+Figura 137 - Posições da EL-60: CARGA - VAZIO - INTERMEDIÁRIO .............................. 137
+Figura 138 - Ajustador pneumático ..................................................................................... 138
+Figura 139 - Ajustadores mecânicos .................................................................................. 138
+Figura 140 - Ajustador mecânico ........................................................................................ 139
+Figura 141 - Freio manual .................................................................................................. 139
+Figura 142 - Módulo E-IPM ................................................................................................ 143
+Figura 143 - E-IPM - Visão frontal ...................................................................................... 144
+
+Figura 144 - Unidade de Controle Eletropneumático - EPCU ............................................. 147
+Figura 145 - EPCU na locomotiva ...................................................................................... 149
+Figura 146 - EPCU - Parte traseira ..................................................................................... 149
+Figura 147 - Módulo RIM .................................................................................................... 149
+Figura 148 - EBV vertical .................................................................................................... 151
+Figura 149 - EBV horizontal ............................................................................................... 151
+Figura 150 - EBV com display ............................................................................................ 152
+Figura 151 - Computador IFC ............................................................................................. 152
+Figura 152 - OIM - Módulo de interface do operador .......................................................... 153
+
+Sumário
+1 INTRODUÇÃO ................................................................................ XI
+2 HISTÓRIA DO SISTEMA DE FREIOS ........................................... 14
+2.1 O Sistema de Freio a Ar Direto (ou Ar Comprimido) ..................................... 15
+2.2 O Sistema de Freio a Ar Automático ............................................................. 17
+3 EQUIPAMENTO DE FREIO 26-L E PADRONIZAÇÃO DO SISTEMA
+DE FREIOS ........................................................................................... 20
+3.1 Equipamento de Freio 26-L .......................................................................... 21
+3.2 Padronização do Sistema de Freios ............................................................. 21
+3.3 Código de Cores ........................................................................................... 22
+3.4 Números de Identificação dos Encanamentos .............................................. 22
+4 EQUIPAMENTOS DAS LOCOMOTIVAS RELACIONADOS COM O
+FREIO 26-L ........................................................................................... 24
+4.1 Configuração das Locomotivas no Trem ...................................................... 25
+4.2 Equipamentos das Locomotivas ................................................................... 27
+4.3 Sistema de Alimentação de Ar Comprimido ................................................. 28
+4.3.1 Produção de ar comprimido ...................................................................... 29
+4.3.2 Funcionamento do compressor ................................................................ 31
+4.3.3 Armazenamento do ar comprimido ........................................................... 33
+4.3.4 Válvula de dreno automático .................................................................... 34
+4.3.5 Torneira de isolamento do reservatório principal ...................................... 35
+4.3.6 Válvula de segurança E7-C ...................................................................... 36
+4.3.7 Válvula de retenção do reservatório principal ........................................... 36
+4.3.8 Condicionamento do ar comprimido ......................................................... 37
+4.3.9 Regulador do compressor ........................................................................ 38
+4.3.10 Torneira de sobrecarga do compressor .................................................... 39
+4.3.11 Manômetros duplos de ar ......................................................................... 39
+4.3.12 Fluxômetro ................................................................................................ 40
+4.3.13 Filtros e secador de ar .............................................................................. 41
+4.4 Sistema de Distribuição de Ar Comprimido .................................................. 42
+4.4.1 Encanamento geral ................................................................................... 43
+4.4.2 Válvula de freio de emergência ................................................................ 43
+
+4.4.3 Válvula de Descarga ................................................................................. 44
+4.4.4 Encanamento de equalização dos reservatórios principais ...................... 46
+4.4.5 Válvula de retenção do encanamento de equalização dos reservatórios
+principais 46
+4.4.6 Encanamento de equalização dos cilindros de freio ................................. 47
+4.4.7 Torneiras extremas ................................................................................... 47
+4.4.8 Mangueiras de freio .................................................................................. 48
+5 CONTROLE DO SISTEMA DE FREIO 26-L ................................ 50
+5.1 Manipuladores .............................................................................................. 51
+5.2 Manipulador Automático 26-C ...................................................................... 51
+5.2.1 Manipulador Automático ........................................................................... 51
+5.2.2 Manipulador Independente ....................................................................... 52
+5.2.3 Punho do manipulador automático ........................................................... 53
+5.2.4 Válvula Interruptora do Manipulador Automático ...................................... 54
+5.2.5 Válvula Reguladora .................................................................................. 56
+5.2.6 Válvula Relé C-2 ....................................................................................... 57
+5.2.7 Válvula Interruptora do Encanamento Geral ............................................. 57
+5.2.8 Válvula de descarga ................................................................................. 57
+5.2.9 Válvula de emergência ............................................................................. 58
+5.2.10 Válvula de supressão ............................................................................... 58
+5.2.11 Reservatório equilibrante .......................................................................... 58
+5.2.12 Válvula Interruptora do reservatório equilibrante ...................................... 58
+5.3 Manipulador independente SA-26................................................................. 59
+5.3.1 Punho do manipulador independente SA-26 ............................................ 60
+5.4 Válvula de controle 26-F ............................................................................... 61
+5.4.1 Componentes da válvula 26-F .................................................................. 62
+5.4.2 Válvula de alívio ........................................................................................ 65
+5.4.3 Funcionamento da válvula de controle 26-F ............................................. 66
+5.5 Válvula relé J-1 ............................................................................................. 71
+5.5.1 Funcionamento da válvula relé J-1 ........................................................... 72
+5.6 Válvula relé J-1.6.16 ou Válvula relé J-1.4.14 ............................................... 74
+5.7 Válvula relé HB-5D ....................................................................................... 75
+5.8 Válvula de transferência MU-2A ................................................................... 76
+5.9 Válvula seletora F-1 ...................................................................................... 78
+
+6 CONTROLES DE SEGURANÇA DO TREM .................................. 82
+6.1 Controle de excesso de velocidade do trem ................................................. 83
+6.2 Controle de segurança do trem .................................................................... 83
+6.2.1 Alertor (Sistema de Controle de Vigilância) .............................................. 83
+6.2.2 ATC (Automatic Train Control).................................................................. 84
+6.2.3 Válvula de aplicação de freio P-2-A .......................................................... 84
+7 7. DISPOSITIVO DE PROTEÇÃO CONTRA FRACIONAMENTO DE
+TREM .................................................................................................... 90
+7.1 Funcionamento da válvula interruptora de carregamento A-1 ...................... 92
+8 OUTROS SISTEMAS .................................................................... 96
+8.1 Dispositivo de Intertravamento do Freio Dinâmico........................................ 97
+8.2 Dispositivo de Locomotiva Morta .................................................................. 97
+9 APLICAÇÃO DO SISTEMA DE FREIO 26-L ................................ 100
+9.1 Aplicação .................................................................................................... 101
+9.2 Cilindro de Freio.......................................................................................... 101
+9.2.1 Criação de pressão no cilindro de freio da locomotiva ........................... 103
+9.3 Ajustador de Folga ...................................................................................... 103
+9.4 Sapatas de Freio......................................................................................... 104
+9.5 Freio Manual da Locomotiva ....................................................................... 107
+9.6 Diagrama do Sistema 26-L ......................................................................... 109
+10 EQUIPAMENTOS DOS VAGÕES RELACIONADOS COM O FREIO
+26-L 110
+10.1 Principais Componentes ............................................................................. 111
+10.2 Distribuição ................................................................................................. 112
+10.2.1 Tê de ramal ............................................................................................ 113
+10.2.2 Torneiras extremas ................................................................................. 113
+10.2.3 Mangueiras de freio ................................................................................ 114
+10.2.4 Válvula de descarga ............................................................................... 115
+10.3 Controle ...................................................................................................... 116
+10.3.1 Válvula de controle AB ........................................................................... 117
+10.3.2 Válvula de controle ABD ......................................................................... 119
+10.3.3 Válvula de controle ABDW ..................................................................... 121
+10.3.4 Válvula de controle DB-60 ...................................................................... 122
+10.3.5 Válvula de Controle Simplificada (ABS) .................................................. 122
+
+10.3.6 Reservatório combinado ......................................................................... 123
+10.3.7 Coletor de pó combinado com torneira de isolamento ............................ 124
+10.3.8 Retentor de controle de alívio ................................................................. 125
+10.4 Aplicação .................................................................................................... 127
+10.4.1 Cilindro de Freio ..................................................................................... 127
+10.4.2 Timoneria de freio ................................................................................... 128
+10.4.3 Equipamento vazio/carregado ................................................................ 129
+10.4.4 Ajustador automático de folga ................................................................ 138
+10.5 Freio Manual dos Vagões ........................................................................... 139
+11 SISTEMA DE FREIO A AR CONTROLADO POR COMPUTADOR
+140
+11.1 Principais Características ........................................................................... 141
+11.2 Módulo de Processador Integrado - IPM .................................................... 143
+11.3 Unidade de Controle Eletropneumático – EPCU ........................................ 146
+11.4 Módulo de Interligação dos Relés – RIM .................................................... 149
+11.5 Válvula de Freio Eletrônico – EBV .............................................................. 150
+11.6 Módulo de Interface com o Operador ou Display – OIM ............................. 152
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO XI
+1
+1 Introdução
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 12
+Aumentar a capacidade de transporte de um trem não é simplesmente uma questão
+de colocar mais vagões na composição.
+Três fatores são determinantes para o aumento do volume de carga transportado:
+• Velocidade do trem;
+• Carga útil por vagão;
+• Quantidade de vagões no trem.
+No entanto, os fatores acima podem acarretar problemas técnicos em outros
+aspectos da operação, como capacidade de tração das locomotivas, capacidade dos
+trilhos, controle do tráfego de composições longas e mais velozes, sinalização,
+traçados de vias, pátios e linhas auxiliares, frenagem das composições etc. Assim,
+todos esses elementos devem ser contemplados para possibilitar o aumento da carga
+útil.
+Diferentemente do que você possa pensar, frear um trem não é uma tarefa simples.
+O que possibilita isso é um sistema composto de compressores, tubulações,
+mangueiras, reservatórios, válvulas, cilindros etc.
+Cada unidade de uma composição (locomotivas e vagões) tem seu próprio
+equipamento de freios. No entanto, esses equipamentos têm que trabalhar de forma
+sincronizada para que a composição possa frear de maneira uniforme e segura, até
+parar.
+E como esses sistemas foram aprimorados?
+Os sistemas de freio dos trens evoluíram através dos tempos junto com outros
+desenvolvimentos técnicos motivados pela necessidade de acompanhar o
+desenvolvimento do transporte de carga nas ferrovias.
+Nos primórdios da operação ferroviária, havia muita limitação da velocidade das
+composições em decorrência da falta de um sistema de frenagem eficaz, pois, em
+uma composição, somente a locomotiva possuía capacidade de frear.
+As pequenas composições da época podiam ser paradas somente com o peso
+aderente da locomotiva, e a frenagem era feita pela aplicação de contravapor e pelo
+acionamento manual do freio mecânico, composto por alavancas. Esse sistema antigo
+provocava a pressão de sapatas de madeira contra as rodas.
+E foi exatamente a necessidade de se aumentar o número de vagões em uma
+composição que levou ao desenvolvimento do sistema de freios e à incorporação dos
+equipamentos de frenagem nos vagões, além da locomotiva.
+O grande desafio, entretanto, não é somente instalar equipamentos desse tipo nos
+vagões, mas também fazê-los trabalhar em sincronia.
+Como o sistema de freios atual funciona?
+A frenagem dos trens atuais é produzida por um sistema de freio pneumático, que
+possui como atuador final um dispositivo mecânico, acionado por um Cilindro de Freio,
+cujo êmbolo é deslocado de forma que sua haste (por meio de um conjunto de
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 13
+alavancas denominado Timoneria), aplique esforço numa peça (Sapata de Freio), que
+atrita diretamente com a superfície de rolamento da roda.
+Figura 1 - Sistema de frenagem
+A força total exercida pela sapata de material não metálico sobre a superfície de
+rolamento da roda, na direção radial, é originada pela aplicação de ar comprimido
+sobre o êmbolo do cilindro de freio.
+Durante o contato deslizante entre a sapata de freio e a roda, surge uma força de
+atrito diretamente proporcional à força aplicada pela sapata de freio. Essa força de
+atrito produz o conjugado retardador responsável pela redução da velocidade do trem.
+Por esse motivo, o sistema de freio pneumático também é denominado Sistema de
+Freio de Atrito.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 14
+2
+2 HISTÓRIA DO
+SISTEMA DE
+FREIOS
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 15
+Nesta unidade, serão apresentadas as seguintes lições:
+• O Sistema de Freio a Ar Direto (ou Ar Comprimido)
+• O Sistema de Freio a Ar Automático
+2.1 O Sistema de Freio a Ar Direto (ou Ar
+Comprimido)
+No sistema de freio a ar direto, o acionamento dos freios era feito diretamente do
+reservatório de ar comprimido nos cilindros de freio. Para isso, havia nas locomotivas
+um equipamento formado por diversos componentes, como mostra a figura a seguir:
+Figura 2 - Componentes
+Entenda a função de cada componente:
+• Compressor – fornece o ar comprimido para o reservatório principal.
+• Reservatório principal – consiste em um vaso de armazenamento do ar
+comprimido.
+• Válvula alimentadora – controla a liberação do ar comprimido (armazenado no
+reservatório principal) para o encanamento geral, por meio do manipulador de
+freio.
+• Encanamento geral – é um encanamento composto por um conjunto de tubos
+ligados entre si por torneiras e mangueiras flexíveis. Ele atravessa
+longitudinalmente cada veículo, levando o ar comprimido ao longo da
+composição.
+• Cilindro de freio – tem acionamento simples com retorno por mola. Seu êmbolo
+com haste é deslocado devido à força produzida pela introdução do ar
+comprimido, através de uma derivação do encanamento geral, na sua câmara
+interna.
+• Timoneria de freio – consiste em um conjunto de alavancas e tirantes
+conectado à haste do cilindro de freio. É responsável pela transferência de
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 16
+esforços, a partir do avanço da haste, para as sapatas de freio (dispositivos que
+atritam diretamente com a superfície de rolamento da roda).
+Agora que você já conhece o funcionamento de cada componente, veja como eles
+atuam em conjunto:
+• Na aplicação dos freios, o ar comprimido armazenado no reservatório
+principal é liberado pela válvula de controle para o encanamento geral.
+• Em seguida, o ar pressuriza diretamente a câmara dos cilindros de
+freio.
+• Como consequência, a haste do cilindro de freio avança e aplica uma
+força na timoneria de freio.
+• A timoneria de freio a transforma numa força radial da sapata de freio,
+incidindo sobre a roda do veículo.
+Esse é, resumidamente, o processo de aplicação do freio.
+E para que o veículo volte a se movimentar?
+É simples: o alívio dos freios é feito esgotando-se o ar comprimido do encanamento
+geral e dos cilindros de freio para a atmosfera, através da válvula de controle.
+A invenção do sistema de freio a ar direto foi um grande avanço para a época. Seu
+uso tornou-se rapidamente habitual, tanto nos trens de carga como nos trens de
+passageiros, e mais comum na Europa, onde as composições eram pequenas e com
+vagões variados.
+Apesar disso, esse sistema teve que ser abandonado por apresentar uma série de
+inconveniências. Uma delas é que os primeiros vagões tinham o freio acionado antes
+daqueles que ficavam no final da composição. Como resultado, os vagões localizados
+mais para trás, nos quais os freios ainda não estavam totalmente aplicados,
+empurravam os primeiros vagões e a locomotiva.
+Mas havia ainda outras questões. Veja:
+• Tamanho excessivo dos componentes necessários para sua aplicação;
+• Eficiência comprometida em composições com mais de 12 vagões;
+• Perda de rendimento em grandes altitudes;
+• Dificuldade de manutenção;
+• Não ser automático (os freios deixariam de ser aplicados em caso de
+fracionamento do trem ou de ruptura na mangueira do encanamento geral).
+Essa última deficiência – o fato de o sistema de freio a ar direto não ser automático –
+instigou George Westinghouse a uma nova invenção. Resultado: ele desenvolveu um
+novo equipamento e, em 1872, patenteou o sistema de freio a ar automático.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 17
+Figura 3 - George Westinghouse
+2.2 O Sistema de Freio a Ar Automático
+Qual a grande e importante vantagem trazida pelo sistema de freio a ar automático?
+O novo sistema aplicava os freios automaticamente em todos os vagões da
+composição, sem a interferência do maquinista, caso houvesse um vazamento ou
+uma mangueira se partisse. Veja como era estruturado o sistema de freio a ar
+automático:
+Figura 4 - Componentes
+Observando o esquema apresentado e comparando-o com o anterior, quais são as
+diferenças?
+Como se pode perceber, o novo sistema de freio a ar automático conta com mais dois
+componentes, além dos já utilizados. São eles:
+• O reservatório auxiliar – um vaso armazenador do ar comprimido, presente
+nos vagões, que aciona os cilindros de freio;
+• A válvula de comando (ou de controle) – responsável pela aplicação ou pelo
+alívio dos freios, comandada pelo diferencial de pressão entre o encanamento
+geral e o reservatório auxiliar.
+A válvula de comando é um componente muito importante nesse sistema. Ela é
+conhecida como válvula tríplice, devido às suas três funções básicas:
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 18
+1ª – Carregamento do sistema
+2ª – Aplicação do freio
+3ª – Alívio do freio
+Saiba como ocorrem esses processos a seguir.
+Função 1: carregamento do sistema de freio
+Nesta função, a válvula direciona o ar vindo do reservatório principal da locomotiva,
+através do encanamento geral, para o carregamento do reservatório auxiliar. Veja
+esse processo esquematizado:
+Figura 5 - Carregamento
+Isso é feito até a equalização das pressões, mantendo o reservatório auxiliar sempre
+pronto para o acionamento dos freios.
+Função 2: aplicação do freio
+Com esta função, a válvula de controle propicia a aplicação do freio na composição.
+Isso ocorre mediante uma redução da pressão no encanamento geral, da seguinte
+forma:
+• A válvula de controle interrompe o fluxo de ar do encanamento geral;
+• O ar armazenado no reservatório auxiliar (durante o carregamento do
+sistema) é direcionado ao cilindro de freio, pressurizando sua câmara.
+Entenda melhor observando o caminho por onde passa o ar armazenado, sinalizado
+em verde:
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 19
+Figura 6 - Aplicação
+A válvula de controle também atua efetuando a aplicação dos freios
+automaticamente, sem interferência do maquinista, quando ocorre vazamento ou
+avaria do sistema.
+Função 3: alívio do freio
+Nesta função, quando é preciso soltar o freio da composição, a válvula de comando
+atua descarregando para a atmosfera o ar que estava contido no cilindro de freio. Isso
+provoca um alívio das sapatas de freio.
+Durante essa operação, ocorre um aumento da pressão no encanamento geral, que
+volta a carregar o reservatório auxiliar. Assim, ele está pronto para um novo
+acionamento. Veja os dois processos esquematizados abaixo:
+Figura 7 - Alívio e recarregamento
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 20
+3
+3 Equipamento de
+Freio 26-L e
+Padronização do
+Sistema de Freios
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 21
+Nesta unidade, serão apresentadas as seguintes lições:
+• Equipamento de Freio 26-L
+• Padronização do Sistema de Freios
+• Código de Cores
+• Números de Identificação dos Encanamentos
+3.1 Equipamento de Freio 26-L
+Considerando os trens que operam com freio a ar automático, o equipamento de freio
+26-L é a parte do sistema de freios que tem seus componentes instalados na
+locomotiva e em todos os vagões da composição.
+Possui todas as particularidades requeridas para o serviço de locomotivas de linha,
+inclusive controle de segurança, controle de sobrevelocidade, intertravamento com o
+freio dinâmico e proteção contra fracionamento do trem.
+É adequado para operação em tração múltipla com as locomotivas equipadas com
+os sistemas de freio anteriores 6-SL e 24-RL.
+Seus principais componentes são:
+• Manipulador de freio 26-C
+• Válvula de controle 26-F
+3.2 Padronização do Sistema de Freios
+Como no sistema de freios existem muitas particularidades, algumas regras foram
+convencionadas, como por exemplo:
+• Código de cores representativos do específico ar que circula em uma válvula;
+• Uso de números que identifica o circuito a que pertence determinado orifício
+ou encanamento, facilitando na representação diagramática a leitura mais
+eficiente do seu funcionamento.
+• Configurações das locomotivas, podendo ser:
+¤ Comandante
+¤ Comandada
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 22
+¤ Líder (locotrol)
+¤ Remota (locotrol)
+¤ Rebocada morta
+3.3 Código de Cores
+Por ser impossível mostrar em um só corte todos os orifícios e as passagens de ar
+das válvulas, foi implementado um código de cores para o sistema de freio de
+locomotivas.
+Para facilitar a compreensão do funcionamento, os desenhos mostram as válvulas de
+maneira diagramática, empregando cores para representar os circuitos.
+Figura 8 - Código de cores
+3.4 Números de Identificação dos
+Encanamentos
+Estes números servem de referência ao analista do sistema. Assim, eles fornecem
+uma orientação facilitada quanto à localização do circuito e aos encanamentos de
+alimentação e saída.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 23
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 24
+4
+4 Equipamentos das
+Locomotivas
+Relacionados com
+o Freio 26-L
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 25
+Nesta unidade, serão apresentadas as seguintes lições:
+• Configuração das Locomotivas no Trem
+• Equipamentos das Locomotivas
+• Sistema de Alimentação de Ar Comprimido
+• Sistema de Distribuição de Ar Comprimido
+4.1 Configuração das Locomotivas no Trem
+Existem até seis formas diferentes de configurar uma locomotiva, de acordo com a
+posição e a função em um trem.
+• Comandante
+• Comandada
+• Morta
+• Líder
+• Remota
+• Isolada
+Comandante
+A locomotiva comandante é aquela equipada com qualquer equipamento de freio
+para locomotivas, com os controles elétricos e pneumáticos ativos, configurados para
+comunicar-se, via cabo jumper e via encanamento do cilindro de freio, com outras
+locomotivas comandadas, executando e transmitindo os comandos de tração,
+frenagem dinâmica e de frenagem do freio independente, de forma síncrona.
+Uma locomotiva, estando restrita a funcionar somente como comandante, não deverá
+operar em outras funções, exceto em casos de avaria, podendo seguir como rebocada
+morta.
+Comandada
+A locomotiva comandada é aquela que está equipada com qualquer equipamento de
+freio para locomotivas, com os controles elétricos e pneumáticos configurados para
+comunicar-se, via cabo jumper e via encanamento do cilindro de freio, com uma
+locomotiva comandante. Assim, ela recebe e executa os comandos de tração,
+frenagem dinâmica e de frenagem do freio independente, de forma síncrona.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 26
+Morta
+É a locomotiva equipada com qualquer equipamento de freio para locomotivas com
+DLM (Dispositivo de Locomotiva Morta), que permita o abastecimento do reservatório
+principal pelo encanamento geral. Ela possui ainda comando pneumático configurado
+para aplicação e alívio dos freios automáticos, via variação de pressão do
+encanamento geral, com funcionamento idêntico ao de um vagão, podendo, inclusive,
+circular em qualquer posição na composição, exceto na frente de locomotivas dos
+tipos comandante ou comandada.
+Nessa configuração, a locomotiva não deve receber comandos elétricos.
+Líder
+A locomotiva líder é aquela equipada com freio eletrônico e sistema de tração
+distribuída com os controles eletrônicos, elétricos e pneumáticos ativos, configurados
+para comunicar-se via rádio e encanamento geral com outras locomotivas remotas.
+Dessa forma, ela executa e transmite os comandos de tração e frenagem dinâmica
+(de forma síncrona ou independente) e de frenagem pneumática (de forma síncrona).
+Ainda, estando na direção de ré, ela pode transmitir os comandos de tração e
+frenagem dinâmica, via cabo jumper e de forma síncrona, para outras locomotivas
+comandadas. Em qualquer direção (frente ou ré), via encanamento do cilindro de freio,
+ela pode transmitir os comandos pneumáticos do freio independente.
+Remotas
+São locomotivas equipadas com freio eletrônico e sistema de tração distribuída, com
+os controles eletrônicos, elétricos e pneumáticos configurados para comunicar-se via
+rádio e encanamento geral com uma locomotiva líder. Dessa forma, ela recebe e
+executa os comandos de tração e frenagem dinâmica (de forma síncrona ou
+independente) e de frenagem pneumática (de forma síncrona). Ela também pode
+retransmitir os comandos de tração e frenagem dinâmica de forma síncrona para
+outras locomotivas comandadas, via cabo jumper, em qualquer direção, frente ou ré.
+Via encanamento do cilindro de freio, pode retransmitir os comandos pneumáticos do
+freio independente.
+Uma locomotiva, estando restrita a funcionar somente como remota, poderá operar
+como comandada ou como rebocada morta. Não deverá operar em outras funções.
+Isolada
+É a locomotiva equipada com qualquer equipamento de freio para locomotivas, com
+bancada do freio isolada, com o sistema de freio pneumático totalmente inoperante,
+por meio do fechamento da torneira do comando geral.
+Nessa configuração, a locomotiva não deve receber comandos elétricos.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 27
+4.2 Equipamentos das Locomotivas
+A aplicação do freio automático é feita a partir da locomotiva cujo equipamento, além
+do seu próprio freio, controla também a frenagem dos vagões.
+A figura mostra a configuração do equipamento de freio 26-L numa locomotiva, dando
+destaque a alguns de seus principais componentes.
+Figura 9 - Componentes do sistema
+O sistema de freio da locomotiva é composto das seguintes unidades:
+• Alimentação;
+¤ Produção;
+¤ Armazenamento;
+¤ Condicionamento;
+• Distribuição;
+• Controle;
+• Aplicação.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 28
+Fique atento ao esquema que representa a localização das unidades nos sistemas
+do freio. Nele, as áreas de cada unidade estão demarcadas com cores distintas.
+Figura 10 - Diagrama
+4.3 Sistema de Alimentação de Ar Comprimido
+O sistema de alimentação de ar comprimido é composto das seguintes unidades:
+• Produção;
+• Armazenamento;
+• Condicionamento.
+Fique atento ao esquema que representa a localização das unidades no sistema de
+alimentação de ar comprimido. Nele, as áreas de cada unidade estão demarcadas
+com cores distintas.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 29
+Figura 11 - Sistema de alimentação
+4.3.1 Produção de ar comprimido
+A produção de ar comprimido é realizada por um compressor de ar do tipo alternativo,
+de duplo estágio de compressão, composto de:
+• Dois cilindros de baixa pressão (de diâmetro maior, dispostos lateralmente no
+cárter);
+• Um cilindro de alta pressão (disposto no centro dos dois cilindros de baixa, no
+topo do cárter);
+• Um resfriador intermediário que atua entre os dois cilindros de baixa e o
+cilindro de alta.
+Figura 12 - Compressor - Vista 1
+Observe que os pistões dos três cilindros são movimentados por um único munhão
+do eixo virabrequim.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 30
+Figura 13 - Compressor - Vista 2
+Ele pode ser acionado:
+• Pelo eixo virabrequim do motor diesel, por acoplamento;
+Figura 14 - Compressor por eixo
+• Por um motor elétrico;
+Figura 15 - Compressor com motor elétrico
+Observação:
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 31
+Tenha sempre em mente que:
+• O sistema de lubrificação do compressor é do tipo forçado, com bomba
+própria.
+• O nível de óleo de lubrificação deve ser verificado por meio do visor ou da
+vareta.
+4.3.2 Funcionamento do compressor
+O ar livre da atmosfera, a pressão atmosférica, é constantemente aspirado através
+de um filtro seco, montado no tubo coletor de entrada, e comprimido nos cilindros de
+baixa pressão (55psi).
+Ao sair dos cilindros de baixa pressão, o ar comprimido passa pelo resfriador de ar
+intermediário, que tem a função básica de retirar parte do calor gerado durante a
+compressão. Mas não é só isso, pois a retirada de calor do ar no resfriador
+intermediário também pode ser realizada de duas formas:
+• Pela circulação da água do sistema de arrefecimento do motor diesel por
+passagens no corpo do resfriador;
+Figura 16 - Compressor resfriado a água
+• Pela passagem de ar pelo corpo do resfriador, forçada por um soprador
+acionado pelo próprio eixo do compressor.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 32
+Figura 17 - Compressor resfriado a ar
+No resfriador intermediário, está instalada uma válvula de segurança que atuará caso
+a pressão ultrapasse o limite estabelecido de 60psi.
+Figura 18 - Válvula de segurança
+Você certamente se perguntou o porquê deste resfriamento. Então veja a resposta
+logo adiante!
+Após o resfriamento, as moléculas do ar ocupam um menor volume, de modo que o
+ar fica mais denso, isto é, uma maior quantidade de moléculas por unidade de volume
+é introduzida no cilindro de alta pressão. Isso torna mais eficiente a operação do
+cilindro de alta pressão e aumenta a capacidade volumétrica do compressor.
+O cilindro de alta pressão se encarrega de comprimir esse volume de ar a uma
+pressão maior (125 a 140psi).
+O ar comprimido deixa o compressor a uma temperatura muito alta (270°C),
+necessitando sofrer mais um resfriamento antes de atingir os reservatórios principais.
+Por isso, ele passa por uma serpentina de resfriamento com tubos aletados, que
+serve para reduzir sua temperatura e provocar a condensação da umidade nele
+existente.
+A quantidade de umidade contida no ar livre da atmosfera praticamente dobra, na
+medida em que a temperatura ambiente cresce 10°C.
+Assim, haverá duas vezes mais umidade no ar quando a temperatura ambiente
+estiver em 30°C do que a 20°C, e assim sucessivamente.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 33
+Devemos ficar atentos a isso, porque a umidade que é levada pelo compressor causa
+corrosão nas superfícies metálicas dos componentes do sistema pneumático da
+locomotiva.
+Assim, as partículas sólidas desprendidas pela corrosão são colocadas no fluxo de
+alta velocidade do ar e agem como um jato de areia, corroendo os componentes.
+Além disso, o óleo de lubrificação que passa pelos anéis dos pistões do compressor
+mantém os orifícios das válvulas obstruídos.
+4.3.3 Armazenamento do ar comprimido
+O armazenamento do ar comprimido é feito em dois reservatórios, denominados
+reservatórios principais, que têm por finalidade armazenar o ar comprimido produzido
+pelo compressor e ajudar tanto no resfriamento como na retenção das impurezas e
+da água resultante da condensação, a fim de permitir que um ar limpo e seco abasteça
+o sistema.
+O sistema pneumático da locomotiva é composto por:
+• Sistema de freio a ar, na operação dos freios da locomotiva e da composição;
+• Sistema dos equipamentos auxiliares da locomotiva – ar de controle, sino,
+buzina, válvulas e injetores de areia, campainhas, limpadores de para-brisas,
+contatores elétricos etc.
+Figura 19 - Reservatório Principal
+Os dois reservatórios, por sua vez, são identificados como:
+¤ Reservatório principal nº 1 → abastece o sistema dos equipamentos
+auxiliares;
+¤ Reservatório principal nº 2 → abastece o sistema de freio a ar da locomotiva.
+A parcela de contribuição de cada compressor em uma tração múltipla é
+aproximadamente o percentual abaixo:
+TRAÇÃO DUPLA
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 34
+1ª locomotiva (comandante) → 70%;
+2ª locomotiva (comandada) → 30%;
+TRAÇÃO TRIPLA
+1ª locomotiva (comandante) → 65%;
+2ª locomotiva (comandada) → 20%;
+3ª locomotiva (comandada) → 15%.
+4.3.4 Válvula de dreno automático
+A tubulação da serpentina de resfriamento tem uma pequena inclinação que faz com
+que a água condensada flua para o reservatório nº 1. Assim, quando o ar entra no
+reservatório principal nº 1, a sua temperatura é reduzida mais ainda, e a condensação
+é mais efetiva.
+Por essa razão, a maior quantidade de água é encontrada no reservatório principal
+nº 1.
+Os reservatórios principais da locomotiva são instalados com uma leve inclinação
+para forçar o acúmulo de condensação no lado mais baixo. Nesse lado, normalmente,
+são instaladas válvulas de dreno automático, que servem para expurgar a água
+proveniente da condensação do ar e as impurezas do reservatório, pois a água pode
+ser considerada o maior veneno para o sistema de freio pneumático.
+As válvulas de dreno automático expurgam automaticamente a água condensada
+toda vez que a pressão do reservatório principal atinge 140psi e param de eliminá-la
+quando essa pressão atinge o limite mínimo de 125psi. Mas elas também podem ser
+acionadas manualmente.
+Observação importante:
+A drenagem manual dos reservatórios principais e dos filtros deve ser uma prática
+constante, tanto pelos responsáveis pela operação quanto pelos responsáveis pela
+manutenção, pois os drenos automáticos não conseguem eliminar toda a água desses
+equipamentos, mesmo funcionando perfeitamente.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 35
+Figura 20 - Dreno automático
+A válvula de dreno automático e manual 580-H possui três posições, reguladas no
+próprio punho:
+• Posição drenagem automática (Norma);
+• Posição drenagem manual;
+• Posição isolamento (fechado).
+Figura 21 - Dreno automático
+A válvula de dreno automático D-1 não permite o isolamento, e o dreno manual é
+realizado por uma torneira. É importante ressaltar que, toda vez que o parafuso está
+exposto ou saliente, devemos entender que a válvula se encontra no modo
+automático.
+Figura 22 - Dreno automático
+4.3.5 Torneira de isolamento do reservatório principal
+Para a reparação do sistema de freio, essa torneira deve ser fechada, a fim de isolar
+o reservatório principal e descarregar totalmente a pressão do sistema de freio através
+de um orifício de descarga.
+Caso essa torneira seja fechada, os ponteiros dos manômetros na cabine da
+locomotiva registrarão pressão zero.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 36
+4.3.6 Válvula de segurança E7-C
+A válvula de segurança E7-C evita a sobrecarga de pressão no sistema pneumático,
+descarregando a pressão do reservatório principal para a atmosfera, toda vez que ela
+se tornar excessiva.
+Figura 23 - Válvula de segurança - Modelos
+Alguns tipos de locomotivas possuem duas válvulas: a válvula de segurança,
+instalada logo após o reservatório principal nº 1 (calibrada em 150psi), e outra válvula
+instalada perto do compressor (calibrada com 175psi).
+4.3.7 Válvula de retenção do reservatório principal
+Instalada no encanamento que liga o reservatório principal nº 1 ao reservatório
+principal nº 2, a válvula de retenção com orifício de 1” permite fluxo total de ar do
+reservatório principal nº 1 para o reservatório principal nº 2, mas impede o fluxo no
+sentido inverso.
+Figura 24 - Válvula de retenção
+Note que ela funciona como uma proteção, pois seu fechamento impedirá a perda da
+pressão do reservatório principal nº 2 (por meio de uma abertura para a atmosfera,
+antes da válvula de retenção), possivelmente originada por:
+¤ Problemas no compressor;
+¤ Ruptura das tubulações de resfriamento;
+¤ Danos ao reservatório principal nº 1;
+¤ Ruptura do encanamento equilibrante dos reservatórios principais, causada por
+uma eventual separação entre as locomotivas e por consequente
+desacoplamento das mangueiras.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 37
+Figura 25 - Diagrama do armazenamento
+Pelas normas da Federal Railroad Administration – FRA, em caso de avaria no
+sistema dos reservatórios principais, a locomotiva deve reter ar suficiente para, no
+mínimo, três aplicações e alívios dos freios e acionamento dos contatores e das
+chaves reversoras.
+A válvula de retenção também serve para reduzir o tempo de carregamento do
+sistema de reservatórios principais de uma locomotiva rebocada morta, porque
+permite que se carregue somente o reservatório principal nº 2.
+A verificação do perfeito funcionamento da válvula de retenção do reservatório
+principal nº 2 se dá pelo teste de fracionamento.
+4.3.8 Condicionamento do ar comprimido
+Após passar por todo o processo de produção, o ar comprimido deve sofrer um
+condicionamento antes de ser colocado para trabalhar.
+Para que haja funcionamento regular de qualquer componente no sistema, três
+fatores são primordiais:
+• Regulagem da pressão;
+• Drenagem;
+¤ Para que a drenagem seja feita, devem ser instalados drenos (purgadores),
+que podem ser manuais ou automáticos, com preferência para o último tipo.
+• Filtragem;
+¤ Após a eliminação do condensado, restará no ar comprimido uma
+pequena quantidade de vapor de água em suspensão, que os pontos de
+drenagem comuns não conseguirão remover ou eliminar.
+¤ A filtragem do ar consiste na aplicação de dispositivos capazes de reter as
+impurezas suspensas no fluxo de ar e de suprimir a umidade ainda
+presente.
+¤ O equipamento normalmente utilizado para este fim é o filtro de ar, que
+atua de duas formas distintas:
+▪ Pela ação da força centrífuga;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 38
+▪ Pela passagem do ar através de um elemento filtrante.
+4.3.9 Regulador do compressor
+O regulador do compressor compreende:
+• Chave pressostática CCS (Compressor Control Switch) - É uma chave elétrica
+atuada por uma face sensível à pressão, que, por sua vez, é atuada por uma
+mola de carga.
+Figura 26 - Chave pressostática CCS
+• Válvula magnética CGS (Compressor Governor Switch) – Injetaou retira a
+pressão no circuito das válvulas de admissão dos cabeçotes dos cilindros do
+compressor para mantê-las:
+¤ Abertas → quando a pressão atinge o limite máximo;
+¤ Trabalhando → quando a pressão atinge o limite mínimo.
+Figura 27 - Válvula magnética CGS
+Mas, enfim, onde atua o compressor?
+O compressor carrega os reservatórios principais até que a pressão atinja o limite
+máximo de regulagem da chave pressostática CCS.
+Quando os reservatórios já estão carregados, a chave pressostática CCS
+desenergiza a válvula magnética CGS, que mantém as válvulas de admissão dos
+cabeçotes dos cilindros do compressor abertas, fazendo com que ele passe a
+trabalhar em vazio.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 39
+Se a pressão nos reservatórios principais cair abaixo do limite mínimo ajustado na
+chave pressostática CCS, a chave energizará a válvula magnética CGS, que mantém
+as válvulas de admissão dos cabeçotes dos cilindros do compressor fechadas,
+permitindo que ele carregue os reservatórios principais. Simultaneamente, abrirá as
+válvulas de dreno automático.
+A pressão do ar nos reservatórios principais é regulada entre limites prefixados
+conforme instruções da Ferrovia, normalmente:
+▪ 125 psi → pressão mínima;
+▪ 140 psi → pressão máxima.
+4.3.10 Torneira de sobrecarga do compressor
+Essa torneira possui descarga lateral e, nos casos de avaria, em que o compressor
+não comprime, ela deve ser fechada.
+Esse procedimento fará com que o compressor trabalhe em sobrecarga, ou seja,
+comprimindo direto, sem entrar na condição de vazio.
+Figura 28 - Posição da torneira
+Atenção!
+Quando se coloca um compressor em sobrecarga, deve-se observar, rigorosamente,
+a atuação da válvula de segurança do reservatório principal.
+4.3.11 Manômetros duplos de ar
+O manômetro é um instrumento utilizado para medir a pressão de fluidos contidos em
+recipientes fechados.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 40
+As locomotivas são equipadas com dois manômetros duplos de ar, com dois
+ponteiros cada, e escalas conforme a figura.
+Figura 29 - Conjunto de manômetros
+Esses instrumentos ficam localizados na parte superior do pedestal de comando e
+devem ser monitorados durante todas as etapas inerentes às atividades de condução
+de trens, desde as manobras até as viagens na via de circulação.
+A unidade de pressão utilizadas em nossas locomotivas é o PSI.
+¤ Libra-força por polegadas quadrada - (PSI ou lbf/in²)
+Observação:
+O valor de 01psi equivale a uma força de 0,070307kgf/cm², porém é usualmente
+adotado a área em polegadas quadradas para que o valor fique mais “amigável”.
+Neste modelo o valor de 01psi equivale a uma força de 0,453kgf/pol².
+4.3.12 Fluxômetro
+O fluxômetro é um instrumento ou mecanismo utilizado na medição da velocidade de
+determinado fluido.
+Figura 30 - Fluxômetro
+As unidades de vazão utilizadas em nossas locomotivas são:
+¤ Litros por minutos - (l/min)
+¤ Pés cúbicos por minuto “CFM” - (ft³/min)
+Observação:
+O valor de 01 CFM equivale a 28,32 litros por minuto.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 41
+4.3.13 Filtros e secador de ar
+Em uma locomotiva, podem ser usados vários tipos de filtros. Eles normalmente estão
+localizados na tubulação, após o reservatório principal nº 2, e servem para purificar o
+ar que vai atuar no sistema pneumático, conforme a seguir:
+• Filtro centrífugo:
+O filtro centrífugo geralmente tem um vórtice (redemoinho) pelo qual os detritos são
+centrifugados e depositados no fundo da câmara, juntamente com a água condensada
+pelo resfriamento do ar.
+Figura 31 - Filtro
+• Filtro coalescente:
+Esse tipo de filtro inclui dois elementos:
+¤ Elemento filtrante;
+¤ Elemento coalescente.
+O elemento coalescente contém uma substância que provoca a coalescência, isto é,
+a aglomeração das gotículas de água.
+A água é, então, depositada no fundo da câmara do filtro, sendo expelida
+posteriormente através do dreno.
+• Secador de ar:
+O desempenho dos sistemas Freio Eletrônico CCBII e Locotrol não serão satisfatórios
+se o sistema pneumático da locomotiva não for mantido totalmente seco e limpo.
+Portanto, é altamente recomendável a instalação de secadores de ar nas locomotivas
+para prover ar seco, limpo, livre de óleo e de partículas de sólidos para o sistema
+pneumático.
+O tipo mais comum de secador de ar é o secador por adsorção, que utiliza como
+elemento dissecante uma substância formada por pérolas à base de silicato de
+alumínio. A estrutura molecular dessa substância é extremamente higroscópica, ou
+seja, capaz de absorver ou adsorver o vapor de água existente no ar, assim como
+outras substâncias.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 42
+O secador por adsorção é composto por duas câmaras de secagem, interligadas por
+um dispositivo pré-coalescedor, que operam alternadamente, controladas por um
+temporizador eletrônico.
+Enquanto uma das câmaras está processando a secagem do ar, a outra recebe, por
+meio de um estrangulador, uma pequena parcela de ar para que seja feita a
+regeneração.
+No ciclo seguinte, a situação é invertida.
+A fim de deixar o sistema com capacidade de secagem praticamente ilimitada, utiliza-
+se o processo de regeneração depois de determinados intervalos, efetuado com ar
+seco e expandido.
+Figura 32 - Secador
+4.4 Sistema de Distribuição de Ar Comprimido
+A distribuição do ar comprimido na locomotiva se dá através do:
+• Encanamento geral;
+• Encanamento de equalização dos reservatórios principais;
+• Encanamento de equalização do cilindro de freio.
+Normalmente os encanamentos são feitos de tubo extrapesado (Schedule 80),
+especificação ASTM-A-53 grau A, raios mínimos segundo folha E-7 da AAR.
+Para evitar a oxidação, eles também são pintados externamente e fosfatizados
+internamente.
+Os encanamentos não devem possuir conexões soldadas. Para isso, todas as
+ligações e conexões devem possuir juntas do tipo WABCOSEAL, que utilizam o
+princípio de flange, sendo este fixado ao dispositivo por parafusos e vedado contra
+vazamento por um anel de borracha.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 43
+Figura 33 - Conexões
+4.4.1 Encanamento geral
+O encanamento geral é um dos principais componentes do sistema de freio
+automático.
+É considerado uma tubulação contínua que parte da locomotiva e percorre os vagões
+em toda a extensão do trem, conduzindo o ar comprimido da locomotiva a cada
+reservatório auxiliar e de emergência dos vagões a uma pressão predeterminada de
+90psi (+/-2psi).
+Por meio da variação da pressão do encanamento geral, os freios de todos os
+veículos do trem são controlados nas suas três funções básicas:
+¤ Carregamento;
+¤ Aplicação;
+¤ Alívio.
+Se houver ruptura desse encanamento, em qualquer ponto da composição, haverá
+aplicação de emergência dos freios automáticos do trem.
+4.4.2 Válvula de freio de emergência
+A válvula de freio de emergência é uma válvula de operação manual sob carga de
+mola que está ligada ao encanamento geral.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 44
+Figura 34 - Válvula B3A
+A válvula de emergência, também é conhecida como torneira de 1 ¼” ou B3A, quando
+acionada inicia uma queda brusca de pressão no encanamento geral, provocando
+aplicação de emergência na locomotiva ou no trem.
+É utilizada para obter aplicação de freio de emergência quando o operador está
+impossibilitado de aplicar o freio da maneira normal.
+Em geral, sua instalação é próxima do banco do auxiliar, buscando fácil acesso em
+caso de mal súbito do maquinista ou pelo próprio maquinista que, por algum motivo,
+não consiga o acionamento da emergência pelo manipulador.
+Atenção:
+Em uma locomotiva escoteira, ou seja, sozinha, e com a válvula MU-2A posicionada
+para comandada, seu acionamento não provoca aplicação dos freios.
+4.4.3 Válvula de Descarga
+As válvulas de controle de locomotivas não possuem uma parte de emergência
+responsável pela chamada ação rápida nas aplicações de emergência.
+Para a função de ação rápida, usa-se a válvula de descarga, podendo ser do modelo
+Nº 8, VX ou KM-2.
+Figura 35 - Válvulas de descarga - Modelos
+Sua função é proporcionar descarga local rápida da pressão do encanamento geral
+para a atmosfera, a fim de garantir condição de propagação de aplicação de
+emergência dos freios, quando o punho do manipulador automático é levado para a
+posição de emergência, e, principalmente, naquelas originadas num trem longo,
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 45
+quando são usadas várias locomotivas operando em tração múltipla. Isso porque a
+capacidade total dos compressores é tal, que, muitas vezes, uma ruptura de
+mangueira de um vagão de cauda do trem pode não ser sentida pela locomotiva, o
+que impossibilita a aplicação de emergência.
+Quando a válvula de descarga nº 8 de uma locomotiva opera, a queda brusca de
+pressão provoca o funcionamento das outras válvulas de descarga das outras
+locomotivas em tração múltipla, assim como das válvulas de controle de toda a
+composição.
+Normalmente ela está localizada sob a plataforma da locomotiva, em derivação do
+encanamento geral, e é composta de:
+• Câmara;
+• Passagem calibrada;
+• Diafragma.
+Mas, afinal, como as válvulas de descarga atuam?
+O ar do encanamento geral enche a câmara por meio do orifício da passagem
+calibrada, ficando o diafragma com pressão idêntica em ambos os lados.
+Toda vez que é feita uma aplicação de serviço, o ar da câmara flui através do orifício
+da passagem calibrada para o encanamento geral, no mesmo ritmo em que ocorre a
+redução de serviço, mantendo, assim, pressão idêntica nos dois lados do diafragma.
+Em uma aplicação de emergência, o ar da câmara não pode fluir pela passagem
+calibrada no mesmo ritmo de queda de pressão do encanamento geral, que é muito
+rápido.
+Cria-se, assim, um diferencial de pressão entre as duas faces do diafragma, o que
+faz com que a válvula de descarga estabeleça comunicação do encanamento geral
+com a atmosfera, ajudando a acelerar a aplicação de emergência.
+Figura 36 - Válvula de descarga - Desenho
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 46
+4.4.4 Encanamento de equalização dos reservatórios
+principais
+Esse encanamento percorre a locomotiva em toda sua extensão, a fim de possibilitar
+o carregamento uniforme dos reservatórios principais de todas as locomotivas
+acopladas em tração múltipla, mantendo-os com pressões equilibradas.
+Num conjunto de locomotivas operando em tração múltipla, é comum a locomotiva
+comandante consumir mais ar que as locomotivas comandadas.
+Por meio do encanamento de equalização dos reservatórios principais, os
+compressores das locomotivas comandadas auxiliam o compressor da locomotiva
+comandante a suprir o ar comprimido consumido nas locomotivas e na composição.
+Esse ar chega aos reservatórios principais passando através da válvula de retenção,
+ou seja, há uma passagem ampla, de fora para dentro da locomotiva, e restrita, de
+dentro para fora.
+Desse modo, caso haja ruptura desse encanamento, o ar vai escapar para a
+atmosfera em menor intensidade que a capacidade de produção do compressor,
+evitando que toda a pressão do reservatório principal seja perdida.
+4.4.5 Válvula de retenção do encanamento de
+equalização dos reservatórios principais
+O carregamento é feito por meio de uma válvula de retenção de 1” e um orifício de
+5/16”, que permite ampla passagem de ar, desse encanamento para os reservatórios
+principais, e restrita, desses reservatórios para o encanamento.
+Figura 37 - Válvula de retenção dos RPs
+Importante!
+A válvula de retenção serve como proteção caso haja ruptura de mangueira entre
+locomotivas, mantendo uma pressão segura nos reservatórios principais de todas as
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 47
+locomotivas, pois a fuga de ar através do orifício da válvula é menor que a da vazão
+do compressor.
+4.4.6 Encanamento de equalização dos cilindros de
+freio
+O encanamento de equalização dos cilindros de freio percorre a locomotiva em toda
+a sua extensão, a fim de repetir nas locomotivas comandadas a pressão de aplicação
+e de alívio dos freios, automático ou independente, criada na locomotiva comandante.
+Nesse caso, as válvulas de controle das locomotivas comandadas devem ser
+isoladas.
+Quando do acoplamento das locomotivas em tração múltipla, deve-se observar se as
+torneiras do encanamento de equalização dos cilindros de freio, entre uma locomotiva
+e outra, foram abertas. Se estiverem fechadas, não haverá condições de se fazer o
+controle de freio das locomotivas comandadas.
+4.4.7 Torneiras extremas
+A abertura e o fechamento das extremidades dos encanamentos da locomotiva são
+realizados pelas torneiras reta e angular.
+Figura 38 - Torneiras das extremidades
+O tipo de torneira utilizado em cada encanamento da locomotiva está especificado a
+seguir:
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 48
+4.4.8 Mangueiras de freio
+Para garantir a continuidade dos encanamentos da locomotiva, quando estão
+acopladas em outros veículos, locomotiva e vagão, é instalada em cada uma de suas
+terminações uma mangueira flexível de acoplamento, denominada de mangueira de
+freio.
+Figura 39 - Mangotes da locomotiva
+As mangueiras de freios são elementos flexíveis formados por:
+• Um elemento de mangueira (tubo de borracha vulcanizada, com camadas
+internas de reforço);
+• Um nipple, fixado ao tubo de borracha por uma braçadeira metálica;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 49
+• Um bocal com junta, fixado ao tubo de borracha por uma braçadeira metálica;
+• Duas braçadeiras metálicas com parafuso e porca.
+Figura 40 - Elementos do mangote
+O acoplamento das mangueiras deve ser feito com o máximo de cuidado para evitar
+acidentes.
+Quando a locomotiva for separada de outra locomotiva ou dos vagões, como
+acontece nas manobras, as mangueiras deverão ser desacopladas preferencialmente
+pelo método do estouro (separação).
+Quando não estiverem sendo utilizadas (acopladas) as mangueiras devem ter seus
+bocais mantidas acoplados aos suportes (engate cego) para evitar a entrada de poeira
+ou outras impurezas que podem danificar o equipamento de freio.
+Figura 41 - Suporte cego
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 50
+5
+5 Controle do
+sistema de freio
+26-L
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 51
+5.1 Manipuladores
+O controle do sistema de freio da locomotiva e do trem é realizado através do
+manipulador automático de freio, localizado no pedestal de controle da locomotiva.
+Ele é apresentado nas seguintes versões:
+Figura 42 - Tipos de manipuladores
+5.2 Manipulador Automático 26-C
+O manipulador 26-C é projetado para montagem em painel, num suporte dos
+encanamentos, onde são feitas todas as conexões dos tubos, identificadas
+numericamente.
+Podemos descrevê-lo como uma válvula do tipo autorecobridor, operada por cames,
+que funciona para controlar a pressão do reservatório equilibrante, em proporção ao
+deslocamento do punho do manipulador.
+Por sua vez, a pressão do encanamento geral é controlada por uma válvula relé, do
+tipo autorecobridor, pilotada pela pressão do reservatório equilibrante, que mantém
+no encanamento geral a mesma condição de pressão existente no reservatório
+equilibrante.
+Além de exercer essas funções, o manipulador ainda fornece ar para os dispositivos
+de segurança, como homem morto, sobrevelocidade, corte de tração e etc.
+O manipulador 26-C consiste de duas partes principais, montadas num mesmo corpo:
+5.2.1 Manipulador Automático
+¤ Punho do manipulador automático
+¤ Válvula interruptora do manipulador automático
+¤ Punho da válvula interruptora do manipulador automático
+¤ Válvula relé C-2
+¤ Válvula reguladora
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 52
+¤ Válvula interruptora do encanamento geral
+¤ Válvula da descarga;
+¤ Válvula de emergência;
+¤ Válvula de supressão;
+¤ Válvula interruptora do reservatório equilibrante;
+5.2.2 Manipulador Independente
+¤ Punho do manipulador independente
+¤ Válvula reguladora
+Figura 43 - Diagrama do manipulador automático
+Os punhos do manipulador automático, do manipulador independente e da válvula
+piloto interruptora estão localizados na face dianteira do painel.
+Figura 44 - Manipulador automático
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 53
+5.2.3 Punho do manipulador automático
+A aplicação do freio automático é feita por meio do punho do manipulador automático,
+que está localizado no pedestal de controle.
+Movimentando o punho do manipulador automático por suas 6 (seis) posições,
+conforme indicado, o maquinista controla os freios da própria locomotiva e de todo o
+trem, por meio de variações da pressão no encanamento geral.
+Figura 45 - Posições do MFA
+ALÍVIO
+▪ Está localizada na extremidade esquerda do quadrante do manipulador.
+▪ Esta posição é utilizada para carregar o encanamento geral e,
+simultaneamente, aliviar os freios da locomotiva e do trem.
+▪ É a posição em que o punho deve ser mantido sempre que o trem estiver em
+movimento.
+REDUÇÃO MÍNIMA
+▪ É localizada com o punho do manipulador encostado na primeira parte elevada
+do quadrante, à direita da posição Alívio.
+▪ Nesta posição, é obtida uma ligeira aplicação, resultante da redução na
+pressão do reservatório equilibrante, que, por sua vez, a reproduz no
+encanamento geral da locomotiva e do trem, resultando na aplicação nos
+cilindros de freio da locomotiva e dos vagões.
+ZONA DE SERVIÇO
+▪ Movendo-se o punho na Zona de Aplicação, para a direita do entalhe da
+posição de Redução Mínima, aumenta-se a pressão de ar no reservatório
+equilibrante, que por sua vez a reproduz no encanamento geral através da
+válvula-relé, resultando no aumento da intensidade da aplicação dos freios na
+locomotiva e nos vagões.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 54
+▪ O ponto de aplicação máxima (Serviço Total) é atingido pouco antes do
+ressalto limitador da posição de Serviço, quando sentir-se resistência do punho.
+SUPRESSÃO
+▪ Posição localizada com o punho do manipulador encostado na segunda parte
+elevada do quadrante, imediatamente à direita da posição aplicação de Serviço
+Total.
+▪ Além de prover uma aplicação Total de Serviço, da mesma forma que quando
+o punho está na posição de Serviço, serve para anular uma aplicação de freio
+originada pelo Controle de Segurança do Maquinista (Homem Morto ou Sobre
+Velocidade), através do recondicionamento da válvula de aplicação P-2-A.
+PUNHO FORA
+▪ Posição localizada no primeiro ponto de entalhe do quadrante, a direita da
+posição de Supressão.
+▪ Esta posição coloca todas as válvulas do manipulador em posição inoperante.
+▪ Quando a locomotiva estiver em um trem sendo “Comandada” por outra
+locomotiva em tração múltipla ou for Rebocada Morta, o punho deve
+permanecer na posição ou pode ser retirado do manipulador, tornando-o
+inoperante, conforme norma da Ferrovia.
+▪ Pode ser usada para reduzir a zero a pressão do encanamento geral, além da
+redução efetuada com o punho do manipulador na posição de Serviço Total.
+EMERGÊNCIA
+▪ É a posição localizada na extrema direita do quadrante do manipulador
+automático, no último entalhe, a direita da posição Punho Fora.
+▪ Permite uma queda rápida na pressão do encanamento geral a fim de encurtar
+a distância de parada, causando simultaneamente o funcionamento automático
+de todos os areeiros das locomotivas e a redução do motor diesel para marcha
+lenta.
+▪ Esta posição deve ser utilizada para rearmar o sistema quando houver uma
+quebra do trem, que provoca uma aplicação de Emergência.
+▪ Após a aplicação de Emergência o punho do manipulador automático deve
+permanecer nesta posição até que a pressão indicada no manômetro do
+reservatório equilibrante caia a zero.
+5.2.4 Válvula Interruptora do Manipulador Automático
+A válvula interruptora é usada para isolar ou preparar o manipulador de freio
+automático para funcionamento com equipamento de trem com alívio direto ou com
+alívio gradual.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 55
+Quando operada, aciona internamente a válvula interruptora do encanamento geral,
+que corta o fluxo de ar da válvula-relé para o encanamento geral.
+Figura 46 - Punho da válvula interruptora
+O punho da válvula interruptora fica em cada uma de suas três posições por pressão
+de mola.
+É necessário comprimir o punho para movê-lo de uma posição para outra.
+Cada uma das três posições do punho da válvula interruptora condiciona o
+manipulador automático para um dos tipos de trabalho:
+• FRT - Posição de Carga
+Condiciona o manipulador para Alívio Direto, isto é, só se inicia o alívio após o punho
+do manipulador ter atingido a posição de Alívio ou Marcha.
+Posição usada nos trens de carga onde as válvulas dos vagões estão condicionadas
+a promoverem o alívio do sistema de freio com um pequeno incremento de ar no
+encanamento geral.
+• OUT - Posição Desligado
+Isola o manipulador permitindo que se faça por ele apenas as aplicações de
+Emergência.
+É utilizada para:
+¤ Verificar vazamento no encanamento geral;
+¤ Estando o manipulador automático desligado pela válvula interruptora, é
+possível fazer um teste de vazamento do encanamento geral.
+¤ Quando a locomotiva está sendo usada como unidade comandada em
+tração múltipla.
+¤ Numa locomotiva comandada, o fechamento da válvula interruptora do
+encanamento geral permite que o abastecimento e redução do
+encanamento geral sejam feitos a partir da locomotiva comandante.
+¤ Quando a locomotiva está sendo usada como unidade rebocada morta.
+• PASS - Posição Passageiro
+Condiciona o manipulador para Alívio Gradual, isto é, o alívio se faz
+proporcionalmente ao deslocamento do punho do manipulador para a esquerda,
+dentro da Zona de Aplicação em direção à posição de Alívio.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 56
+Esta posição dever ser isolada quando em trens de carga, pois se a mesma for
+utilizada, um pequeno deslocamento do punho para trás, dentro da Zona de Aplicação,
+provoca um Alívio Total nos freios dos vagões, embora o manômetro na cabina do
+maquinista ainda esteja registrando que os freios estão aplicados.
+Para todas as operações normais da locomotiva como unidade comandante, o punho
+da válvula interruptora deve ser colocado na posição FRT ou PASS, dependendo do
+serviço pretendido para a locomotiva.
+As aberturas da válvula interruptora incluem também duas válvulas de retenção que
+ligam a pressão do encanamento geral ou do reservatório principal à válvula
+interruptora do encanamento geral, dependendo de qual seja a pressão mais elevada.
+5.2.5 Válvula Reguladora
+A válvula reguladora é composta por uma válvula de admissão e outra de descarga.
+Sua função é regular manualmente o carregamento e a pressão no reservatório
+equilibrante e, através da repetição dessa pressão na válvula-relé, obtém-se a
+regulagem no encanamento geral.
+Figura 47 - Válvula reguladora
+A função de auto recobrimento da válvula reguladora mantém automaticamente a
+pressão do reservatório equilibrante, independente da sobrecarga e contra
+vazamentos.
+Essa válvula é operada por um excêntrico fixo ao eixo do manipulador, comandado
+pelo punho.
+Regula a formação de pressão no encanamento (15) de carregamento do reservatório
+equilibrante.
+Essa pressão é canalizada diretamente pela passagem (5) do manipulador ou através
+de uma válvula P-2A de aplicação de freio, para fora do manipulador.
+Em seguida, é conduzida através da passagem (5) do manipulador para a face
+externa do diafragma da válvula-relé.
+O deslocamento do punho do manipulador automático da posição Alívio para a Zona
+de Aplicação faz a válvula reguladora diminuir a pressão no reservatório equilibrante
+em proporção à extensão do deslocamento até que, na posição Serviço Total, a
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 57
+pressão do reservatório equilibrante seja reduzida o suficiente para produzir uma
+aplicação de serviço total.
+A ajustagem da pressão do reservatório equilibrante na posição Alívio pode ser feita
+atuando-se no parafuso de ajuste (A) da extremidade de válvula reguladora.
+5.2.6 Válvula Relé C-2
+Esta parte do manipulador consiste de uma válvula operada por diafragma, que
+repete a pressão do reservatório equilibrante no encanamento geral, isto é, estabelece
+uma pressão no encanamento geral igual à pressão do reservatório equilibrante.
+Ele é capaz de fornecer ou descarregar a pressão do encanamento geral.
+Com o punho do manipulador automático na posição Alívio, ela atua como válvula
+alimentadora para carregar o encanamento geral da locomotiva e do trem,
+Com o punho do manipulador automático nas posições de Aplicação, de Supressão,
+de Punho Fora e de Emergência, a redução da pressão do reservatório equilibrante
+pela válvula reguladora faz com que a válvula relé C-2 reduza de modo
+correspondente a pressão do encanamento geral.
+A válvula relé C-2 manterá a pressão do encanamento geral contra os vazamentos
+do mesmo.
+5.2.7 Válvula Interruptora do Encanamento Geral
+A válvula interruptora do encanamento geral interrompe o fluxo de ar da válvula-relé
+para o encanamento geral, na eventualidade de que:
+• Ocorra uma aplicação de emergência;
+• A válvula interruptora piloto seja operada para a posição OUT;
+Seja operado qualquer dispositivo auxiliar ligado ao manipulador que exija a
+interrupção do fluxo de ar para o encanamento geral, para as finalidades da proteção
+contra fracionamento do trem.
+5.2.8 Válvula de descarga
+Quando o punho do manipulador automático estiver na posição Emergência, a válvula
+de descarga é operada por um excêntrico existente em seu eixo, para produzir uma
+queda rápida da pressão do encanamento geral.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 58
+5.2.9 Válvula de emergência
+Quando o punho do manipulador automático estiver na posição Emergência, a válvula
+de emergência é operada por um excêntrico existente em seu eixo, para executar as
+duas funções:
+• Fornecer um fluxo de ar do reservatório principal para o encanamento (12),
+destinado à operação das chaves interruptoras PCS (Power Cut-off Switch),
+que atua no corte dos motores de tração, e outras funções auxiliares que
+possam ser exigidas.
+• Descarregar rapidamente a pressão do reservatório equilibrante, de modo a
+assegurar o descarregamento do encanamento geral.
+5.2.10 Válvula de supressão
+A válvula de supressão é operada por um excêntrico existente no eixo do punho do
+manipulador automático, para:
+• Fornecer ar do reservatório principal ao orifício (26), para operação dos
+dispositivos auxiliares, nas posições Supressão, Punho Fora e Emergência.
+• Bloquear o encanamento (8), de modo a restabelecer a válvula de aplicação de
+freio P-2-A antes de aliviar estas aplicações de freio auxiliar.
+• Fornecer ar do reservatório principal ao orifício (3), com o punho do
+manipulador na posição Alívio, de modo a manter aberta a válvula interruptora
+do reservatório equilibrante e a válvula-carretel da válvula interruptora do
+manipulador, via orifício (7).
+5.2.11 Reservatório equilibrante
+Fornece um volume adicional de 3,6 litros de ar para a câmara do pistão da válvula-
+relé do manipulador automático, a fim de evitar o alívio dos primeiros vagões, o que
+proporciona estabilidade ao sistema de freio a ar.
+Também permite ao maquinista efetuar reduções controladas no encanamento geral.
+5.2.12 Válvula Interruptora do reservatório equilibrante
+Esta válvula serve para permitir a operação de trens que utilizam equipamentos do
+tipo de alívio direto ou graduado nos vagões:
+• Em CARGA
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 59
+Com o punho da válvula interruptora do manipulador na posição FRT, a válvula
+interruptora do reservatório equilibrante somente fica aberta com o punho do
+manipulador automático na posição Alívio, e somente nesta posição podem ser feitos
+os alívios de freio.
+• Em PASSAGEIRO
+Com o punho da válvula interruptora do manipulador na posição PASS, a válvula
+interruptora do reservatório equilibrante é mantida aberta em todas as posições do
+punho do manipulador automático e os freios podem ser completamente aliviados na
+posição Alívio ou podem ser aliviados gradualmente pelo punho do manipulador
+automático.
+5.3 Manipulador independente SA-26
+O manipulador de freio independente SA-26, montado na frente do suporte dos
+encanamentos, é destinado a:
+• Aplicar e aliviar os freios da locomotiva, ou do conjunto de locomotivas,
+quando se trata de tração múltipla, em separado dos freios da composição.
+• Aliviar uma aplicação do freio automático da locomotiva em separado dos
+freios da composição.
+A aplicação do freio independente é feita através do punho do manipulador
+independente, que está localizado no pedestal de controle, abaixo do punho do
+manipulador automático.
+Figura 48 - Manipulador independente SA-26
+O movimento do punho do manipulador independente possui 4 (quatro) posições,
+conforme indicado na figura abaixo.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 60
+Figura 49 - Posições do MFI
+5.3.1 Punho do manipulador independente SA-26
+Alívio (Marcha)
+É a posição mais à esquerda do quadrante do manipulador, que faz aliviar os freios
+da locomotiva após uma aplicação independente.
+O punho do manipulador normalmente fica nesta posição quando a locomotiva está
+trafegando em condições normais ou quando está em tração múltipla, na condição de
+Comandada ou Morta, mantendo soltos os freios da locomotiva.
+Alívio Rápido
+Quando está na posição de Alívio, se o punho do manipulador da locomotiva
+comandante for pressionado para baixo, ocorrerá a Supressão ou o Alívio Rápido de
+uma aplicação de serviço do freio automático das locomotivas, sem afetar a aplicação
+do freio automático do trem.
+Zona de Aplicação
+É a posição onde se aplicam os freios da locomotiva.
+O grau de aplicação do freio é determinado pela distância em que o punho do
+manipulador é movimentado em direção à posição de aplicação total.
+Aplicação Total
+É a posição mais à direita do quadrante do manipulador.
+Proporciona a aplicação máxima disponível do freio para a frenagem da locomotiva.
+O movimento do punho do manipulador independente da posição de Alívio para a
+posição Aplicação Total aciona um excêntrico; este, por sua vez, posiciona um
+conjunto de válvula de alimentação e exaustão para primeiramente assentar a válvula
+de exaustão e, em seguida, desassentar a válvula alimentadora.
+O ar do reservatório principal flui por meio da válvula alimentadora desassentada, do
+orifício (30) para o orifício (20).
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 61
+O orifício (20) do suporte dos encanamentos do manipulador é ligado ao orifício de
+controle (16) da válvula relé da locomotiva.
+Portanto, a pressão criada no orifício (20) acionará a válvula relé para criar pressão
+nos cilindros de freio da locomotiva.
+Ao aumento da pressão contra o diafragma, opõe-se a pressão de mola no lado
+oposto e, quando ocorre o equilíbrio entre a pressão do ar e a pressão da mola, o
+conjunto da válvula é movido para a sua posição Recobrimento.
+Nessa posição, a válvula alimentadora fica fechada, interrompendo o fluxo de ar do
+reservatório principal para o orifício (20).
+Figura 50 - Diagrama do MFI SA-26
+A compressão do punho do manipulador independente, sempre que o mesmo estiver
+na posição Alívio, provocará o alívio de qualquer aplicação de freio automático
+existente na locomotiva.
+O ar do reservatório principal fluirá para o orifício (13), o qual é ligado à parte de alívio
+rápido da válvula de controle 26-F, que funciona para aliviar os freios da locomotiva.
+O abaixamento do punho do manipulador independente, em um ponto na zona de
+aplicação, aliviará a aplicação automática apenas pelo valor correspondente à sua
+posição nessa zona.
+5.4 Válvula de controle 26-F
+A válvula de controle 26-F pode ser considerada o cérebro do sistema de freio.
+Ela é uma válvula automática, composta de um suporte de encanamentos, onde são
+fixados todos os encanamentos, uma parte de serviço e uma parte de alívio rápido.
+Figura 51 - Válvula de controle e alívio rápido
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 62
+As conexões dos encanamentos até o suporte são designadas numericamente e
+assim são identificadas no diagrama a seguir:
+Figura 52 - Diagrama da válvula 26-F
+5.4.1 Componentes da válvula 26-F
+A parte de serviço da válvula de controle 26-F é comandada por variações de pressão
+no encanamento geral, tendo como referência a pressão do reservatório de controle,
+em ritmo de serviço ou de emergência, causadas pelas posições do manipulador
+automático ou por penalidades ou, ainda, originadas no trem.
+Figura 53 - Válvula 26-F
+Quatro reservatórios são controlados pela parte de serviço:
+• Reservatório Auxiliar (16,4 litros) - Destinado a armazenar o ar para aplicar os
+freios por meio da válvula relé.
+• Reservatório de Controle (14,7 litros) - Serve como volume de referência para
+movimentar e manter a válvula de controle na posição de aplicação de freio de
+serviço ou de emergência.
+• Reservatório de Volume Seletor (8,2 litros) - Serve como volume de referência
+para movimentar a válvula de controle para a posição de Serviço Rápido, assim
+como para efetuar o alívio gradual dos freios quando a válvula de controle é
+condicionada para Alívio Gradual.
+• Reservatório de Volume (1,5 litros) - Também é conhecido como reservatório
+de falso volume do cilindro de freio.
+• Sempre que há aplicação do freio automático, o ar do reservatório auxiliar flui
+por meio da válvula de controle 26-F para o reservatório de volume,
+proporcionalmente à redução de pressão do encanamento geral.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 63
+• A pressão criada nesse reservatório é reproduzida nos cilindros de freio pela
+válvula relé.
+• Esse reservatório poderá ser suprimido se o volume da tubulação e das
+câmaras internas das válvulas relés for suficiente para o equilíbrio.
+A válvula é composta pelas seguintes partes:
+Válvula de serviço
+A válvula de serviço é uma válvula carretel composta de dois pistões com diafragmas
+e um sistema de molas comandadas pela redução de pressão do encanamento geral
+(com referência à pressão mantida no reservatório de controle).
+Os dois diafragmas, selecionados para referência correta de pressão do manipulador,
+em conjunto com a mola da parte de serviço, permitem a operação estável do freio
+automático e a criação adequada de pressão no cilindro de freio, a fim de funcionar
+satisfatoriamente em conjunto com outros sistemas de freio automático.
+Sempre que ocorrer redução na pressão do encanamento geral, o conjunto da válvula
+carretel irá se mover para cima, fechando-se a válvula de alívio e, em seguida, abrindo
+a válvula de aplicação.
+O carretel da válvula de serviço também servirá para descarregar o ar que controla a
+válvula relé, sempre que a pressão do encanamento geral for aumentada.
+Válvula de carregamento
+A válvula de carregamento tem duas funções:
+¤ Interromper o fluxo de ar do volume do serviço rápido para a atmosfera, após
+iniciada a aplicação de freio.
+¤ Interromper a dissipação do ar do reservatório de controle para o encanamento
+geral durante a operação de alívio gradual da válvula de controle.
+Tampão de alívio gradual ou direto
+O tampão de alívio gradual ou direto fica na parte de serviço, e sua posição é
+determinada pelo tipo de serviço no qual a locomotiva vai ser usada:
+¤ Alívio direto - (DIR REL) → Serviço de carga;
+¤ Alívio gradual - (GRAD REL) → Serviço de passageiro.
+Válvula seletora
+A válvula seletora é uma válvula carretel de operação por diafragma.
+A pressão do ar do volume seletor fica aplicada na face externa do diafragma, em
+oposição à pressão do encanamento geral sobre o lado da mola do diafragma.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 64
+Ela funciona de modo semelhante a uma válvula tríplice no início de uma redução no
+encanamento geral, para produzir a função de serviço rápido.
+Contém uma característica que permite que a válvula de controle seja incluída de
+modo satisfatório em trens com equipamento de freio D-22.
+Ela também exerce a função de alívio gradual quando o tampão de alívio gradual está
+na posição de Alívio Gradual (GRAD REL) e ainda fornece um alívio direto quando o
+tampão de alívio gradual está na posição de Alívio Direto (DIR REL).
+Válvula de retenção de sobrecarga da válvula seletora
+A válvula de retenção de sobrecarga da válvula seletora, localizada na passagem de
+exaustão da válvula seletora, é uma válvula de retenção por pressão de mola e
+protetor de descarga que retém aproximadamente 35 a 45psi de pressão do volume
+seletor sobre a face externa do diafragma da válvula seletora durante a aplicação de
+emergência.
+Isso faz com que seja necessário aumentar, primeiramente, a pressão do
+encanamento geral até o valor da pressão do volume seletor, antes que se possa
+realizar o alívio de aplicação de freio de emergência.
+Válvula de retenção de carregamento do reservatório auxiliar
+Controla o carregamento do reservatório auxiliar a partir do encanamento geral.
+Válvula de retenção de dissipação do reservatório de controle
+Controla a dissipação do ar do reservatório de controle para o encanamento geral
+durante o alívio direto da válvula de controle.
+Válvula de retenção do refluxo
+Controla a dissipação do ar do encanamento geral da câmara da mola da válvula
+seletora para o volume de serviço rápido, durante os estágios iniciais de uma
+aplicação de freio.
+Válvulas limitadoras de pressão
+A parte de serviço também contém duas válvulas limitadoras de pressão do cilindro
+de freio, dispostas em paralelo:
+• Válvula limitadora de pressão no cilindro de freio nas aplicações de serviço
+• Limita a pressão máxima dos cilindros de freio durante as aplicações de
+serviço;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 65
+• Sua calibração é realizada em um banco de provas; em seguida, ela é
+lacrada com arame e lacre de chumbo. Esse lacre não deve ser quebrado,
+exceto quando houver autorização do pessoal credenciado da ferrovia.
+• Válvula limitadora de pressão no cilindro de freio nas aplicações de
+emergência
+• Limita a pressão máxima obtida durante as aplicações de emergência;
+• É mantida fechada por uma pressão predeterminada do encanamento geral e
+é aberta para limitar a pressão dos cilindros de freio somente depois que a
+pressão do encanamento geral cai abaixo daquele valor, como ocorre durante
+as aplicações de emergência;
+• É calibrada durante a fabricação e não requer ajustes.
+5.4.2 Válvula de alívio
+A parte de alívio rápido é projetada para permitir o alívio dos freios da locomotiva em
+separado de uma aplicação do freio automático da locomotiva, pela parte de serviço.
+Isso acontece sempre que o maquinista comprime o punho do manipulador
+independente na posição de Alívio ou, automaticamente, quando a válvula magnética
+de intertravamento do freio dinâmico for energizada, isto é, quando a locomotiva entrar
+em frenagem dinâmica.
+Figura 54 - Válvula de alívio rápido
+Quando se abaixa o punho do manipulador independente, a pressão do ar criada no
+encanamento atuante (13) do manipulador flui para o orifício (13) da válvula de
+controle, provocando a operação do conjunto válvula carretel e do diafragma pequeno
+da parte da válvula de alívio rápido.
+O movimento desse diafragma e da válvula carretel para, descarregando para a
+atmosfera a pressão de ar do encanamento de aplicação de serviço para a válvula
+relé.
+A operação do diafragma pequeno na válvula de alívio rápido inicia a operação da
+válvula carretel, e o diafragma grande permite a descarga do ar do reservatório de
+controle para a atmosfera em uma quantidade suficiente para equilibrar a pressão do
+reservatório de controle com a pressão do encanamento geral.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 66
+Isso evita a reaplicação dos freios ao se soltar o punho do manipulador independente.
+Para evitar a descarga completa da pressão do reservatório de controle após uma
+aplicação de emergência e para assegurar uma reaplicação de freio automático
+imediatamente, mesmo após uma aplicação de emergência, há, no orifício de
+exaustão do reservatório de controle, uma válvula de retenção (que também tem um
+protetor de descarga) que mantém aproximadamente 20psi de pressão nesse
+reservatório.
+5.4.3 Funcionamento da válvula de controle 26-F
+Carregamento
+Com o manipulador automático na posição de Alívio, o ar do encanamento geral entra
+pelo orifício (1) da válvula de controle. Da passagem (1), o ar flui para as seguintes
+passagens e câmaras:
+¤ Para a câmara situada acima da válvula de alívio rápido;
+¤ Para a câmara de mola da válvula seletora;
+¤ Para a câmara do encanamento geral entre os dois diafragmas da válvula de
+serviço;
+¤ Para a válvula limitadora de emergência dos cilindros de freio, onde a pressão
+do encanamento geral se opõe à força da mola e desloca a válvula carretel
+para a sua posição inferior, ou fechada;
+¤ Para a câmara acima da válvula de retenção de dissipação do reservatório de
+controle, orifício de carregamento (J), passagem (1b), válvula carretel da
+válvula de carregamento, passagem (7b) e por meio da válvula carretel da
+válvula seletora e do bujão (H);
+¤ Neste caso, continua, por meio da passagem (7), para a câmara inferior do
+diafragma da válvula de serviço e para o reservatório de controle. Estando o
+tampão de alívio gradual na posição de Alívio Direto (DIR REL) a passagem
+(1b) é ligada diretamente à passagem (7a) por meio do tampão.
+¤ Para a válvula de retenção de recarregamento do reservatório auxiliar, por meio
+do bujão (F), pelo qual o reservatório auxiliar é carregado.
+O ar do encanamento geral, passando por (7b), vindo da válvula carretel da válvula
+seletora, passa para a câmara da válvula carretel da válvula seletora fluindo pelo bujão
+(G) e pelo orifício (9) para o volume da válvula seletora e para a câmara externa do
+diafragma da válvula seletora.
+O pistão da válvula de serviço e o diafragma são mantidos em sua posição inferior
+pela mola de alívio, que atua contra o diafragma.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 67
+A extremidade da haste do diafragma da válvula de serviço se afasta da válvula de
+retenção de alívio e aplicação, de modo a permitir que os orifícios (16 a 16a) sejam
+descarregados para a atmosfera.
+Posição de serviço
+Quando o punho do manipulador automático é movido para a posição Serviço, a
+pressão do encanamento geral no orifício (1) é reduzida para um nível determinado
+pelo deslocamento do punho do manipulador.
+Essa redução da pressão do encanamento geral ocorrerá na câmara superior do
+diafragma grande da válvula de serviço.
+O diferencial de pressão causado pela pressão mais elevada do reservatório de
+controle, atuando contra esse diafragma, iniciará o movimento ascendente do
+conjunto do diafragma da válvula de serviço e da haste do pistão para, primeiro, fechar
+a válvula de alívio e, em seguida, abrir a válvula de aplicação.
+A redução da pressão do encanamento geral ocorre, também, na câmara de mola da
+válvula seletora.
+O diferencial de pressão resultante, estabelecido no diafragma da válvula seletora,
+desloca o diafragma e a válvula carretel para permitir que aconteça o seguinte:
+1. O carregamento do volume seletor, com ar do reservatório de controle via
+orifício (G), é interrompido pela válvula carretel.
+2. A ação de serviço rápido ocorre logo que a pressão do ar do encanamento
+geral na câmara da mola é reduzida o suficiente para criar um diferencial no
+diafragma da válvula seletora capaz de mover a válvula carretel para dentro,
+até uma posição em que o orifício (1c) fica ligado com a câmara da mola.
+3. Então, o ar do encanamento geral passa por orifício (1c), orifício (K), válvula de
+retenção do refluxo e orifício (6a) para o volume de serviço rápido no suporte
+dos encanamentos.
+4. O ar do volume de serviço rápido é dissipado pelo orifício (C) e orifício (6) para
+a atmosfera, por meio da extremidade da válvula carretel da válvula de
+carregamento.
+5. Quando o conjunto do diafragma da válvula seletora e da válvula carretel tiver
+se deslocado para dentro, até a posição de Serviço (válvula seletora contra o
+corpo), a pressão do volume seletor no orifício (9) atuará contra a face externa
+do diafragma da válvula seletora.
+6. Então, é descarregada para a atmosfera, via passagem de exaustão e válvula
+de retenção de sobrecarga do volume seletor, até que a pressão do volume
+seletor tenha caído o suficiente para equilibrar as forças no diafragma, por meio
+da válvula e do orifício (L), para a atmosfera.
+7. O conjunto do diafragma e da válvula carretel é deslocado pela tensão da mola
+para uma posição de Recobrimento, terminando a redução da pressão do
+volume seletor.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 68
+8. Quando a válvula de aplicação for aberta, o ar do reservatório auxiliar no orifício
+(5) fluirá por meio da válvula de aplicação e da válvula limitadora nos cilindros
+de freio nas aplicações de serviço para as seguintes câmaras:
+a) Para a face externa do diafragma da válvula de carregamento, iniciando o
+movimento da válvula carretel, o qual interrompe a descarga do ar do
+encanamento geral, via volume do serviço rápido, para a atmosfera;
+b) Para o orifício (16), existente no suporte dos encanamentos, via válvula
+carretel do diafragma menor da válvula de alívio rápido e daí, por meio do
+encanamento (16) de aplicação dos cilindros de freio, para a válvula relé;
+c) Para a câmara da mola existente na válvula de serviço, onde a pressão
+continuará a aumentar até que as forças combinadas (mola, pressão do ar
+na câmara da mola e pressão do encanamento geral) equilibrem-se com a
+força resultante da pressão do reservatório de controle, que atua em
+oposição ao diafragma maior.
+9. A pressão do ar nos orifícios (16 e 16a) aumenta no lado de baixo da válvula
+limitadora dos cilindros de freio em serviço até atingir um ponto em que excede
+a força da mola da válvula limitadora.
+10. Quando isso ocorre, a válvula carretel é deslocada para cima, para uma
+posição em que há interrupção do fluxo de ar da válvula de aplicação para o
+orifício (16);
+11. A tensão da válvula limitadora limita a pressão máxima entregue à válvula relé
+durante uma aplicação dos freios de serviço.
+Sempre que forem empregadas pressões mais elevadas do encanamento geral, será
+possível obter uma sobreredução com a válvula de controle 26-F.
+Não obstante, a sobreredução não apresentará qualquer efeito na pressão dos
+cilindros de freio, pois essa pressão é determinada pelas válvulas limitadoras dos
+cilindros de freio de emergência e de serviço.
+Posição de emergência
+Quando ocorre uma aplicação de emergência, a válvula de controle 26-F funciona de
+modo semelhante ao descrito acima. Todavia, várias funções adicionais são
+desenvolvidas na válvula de controle, como descrito a seguir.
+• No caso de uma aplicação de serviço, a pressão do volume seletor é reduzida
+pelo orifício (9) da válvula carretel da válvula seletora para a atmosfera, via
+válvula de retenção de sobrecarga do volume seletor;
+• Entretanto, a pressão do volume seletor é impedida de descarregar por causa
+da mola da válvula de retenção de sobrecarga do volume seletor, que mantém
+aproximadamente 35 a 45psi.
+• O ar do reservatório auxiliar flui por meio da válvula de aplicação, passa para
+as válvulas limitadoras dos cilindros de freio e para os orifícios (16a e 16) e
+para a válvula relé.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 69
+• Existe uma câmara para o ar do encanamento geral na válvula limitadora de
+emergência, e é esta pressão que normalmente retém para baixo o carretel da
+válvula limitadora dos cilindros de freio de emergência.
+• Durante os estágios iniciais de uma aplicação de emergência, a válvula
+limitadora de emergência permanece fechada.
+• Quando a pressão do encanamento geral cair para um valor entre 10 e 15 psi,
+a força da mola da válvula limitadora de emergência vencerá a força resultante
+da pressão do encanamento geral sobre a válvula carretel.
+• A válvula carretel é, então, movida para cima, abrindo a válvula de retenção e
+proporcionando uma passagem alternativa ao ar do reservatório auxiliar para o
+orifício (16) e a válvula relé.
+• Durante as aplicações de emergência, a queda da pressão do encanamento
+geral é tão rápida que, no instante em que a válvula limitadora de emergência
+abre a válvula de retenção, a válvula limitadora de serviço ainda está aberta.
+• A válvula de retenção da válvula limitadora do freio de emergência
+permanecerá aberta para permitir a continuação do fluxo de ar para a válvula
+relé.
+• A pressão do ar admitido à válvula relé aumenta, e a válvula limitadora de
+serviço se fechará quando for atingida a sua pressão calibrada.
+• O continuado aumento da pressão aplica, também, uma força contra a válvula
+carretel da válvula limitadora do freio de emergência.
+• Quando esta pressão atinge um ponto ligeiramente superior ao valor da mola
+da válvula carretel, a válvula carretel é forçada a descer, permitindo que a
+válvula de retenção seja assentada, cessando o prosseguimento da descarga
+do ar do reservatório auxiliar para a válvula relé.
+Posição de alívio
+Quando o punho do manipulador automático é movido para a posição Alívio, o
+aumento da pressão do encanamento geral provoca um aumento semelhante na
+câmara do encanamento acima do diafragma grande da válvula de serviço.
+As forças combinadas da pressão no orifício (16), da pressão do encanamento geral
+e da mola de alívio grande, atuando contra a pressão do reservatório de controle,
+fazem descer o diafragma de serviço e a haste do pistão, puxando a válvula de alívio.
+Isso permite que o ar do orifício (16) descarregue para a atmosfera a válvula relé, por
+meio da haste do pistão da válvula de serviço para o orifício (10) no suporte dos
+encanamentos.
+A mesma pressão do orifício (16) é também descarregada da face externa do
+diafragma da válvula de carregamento, e a força da mola retornará à válvula carretel
+da válvula de carregamento, e o diafragma, para a sua posição normal ou de
+carregamento.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 70
+O carregamento do encanamento geral para o reservatório de controle será
+restabelecido, especialmente, se o tampão de alívio gradual estiver posicionado para
+operação de Alívio gradual (GRAD REL).
+A queda continuada da pressão dos cilindros de freio nas válvulas limitadoras permite
+que a mola da válvula limitadora de freio de serviço faça descer a válvula e, devido ao
+aumento da pressão do encanamento geral, fica, também, posicionada para baixo a
+válvula carretel da válvula limitadora do freio de emergência.
+Estando ambas as válvulas na posição normal (inferior), todo o ar do orifício (16) flui
+rapidamente para a atmosfera.
+O aumento da pressão do encanamento geral na câmara da mola da válvula seletora,
+até o valor da pressão do volume seletor, moverá o conjunto de diafragma e carretel
+da válvula seletora para a sua posição normal, restabelecendo o carregamento do
+reservatório de controle e do reservatório de volume seletor até a pressão do
+encanamento geral.
+Alívio Independente de uma Aplicação Automática
+Para aliviar os freios da locomotiva, independentemente dos freios do trem, o punho
+do manipulador independente SA-26 deve ser abaixado na posição Alívio.
+O ar do reservatório principal passará para o orifício (13) na válvula de controle, por
+meio do encanamento atuante.
+Esse ar é descarregado pelo orifício (13), para o lado de baixo do diafragma menor
+da válvula de alívio rápido, onde tal força vence a força da mola que atua contra a face
+externa do diafragma, e o conjunto de diafragma e válvula carretel é movido para sua
+posição mais alta.
+O ar do reservatório de controle pode então fluir por meio da válvula carretel para o
+lado inferior do diafragma maior da parte de alívio rápido.
+A pressão do reservatório de controle, sendo mais alta que a pressão do
+encanamento geral contra a face oposta do diafragma, posiciona o conjunto do
+diafragma e da válvula carretel na sua posição mais alta.
+Estando ambas as válvulas carretel nesta posição, o ar do orifício (16), que é ligado
+à válvula relé, é descarregado para a atmosfera, assim como o ar do reservatório de
+controle e do orifício (7).
+O reservatório de controle continuará a ser descarregado para a atmosfera até que a
+sua pressão tenha sido reduzida para, aproximadamente, a pressão do encanamento
+geral; então, o diferencial de pressão no diafragma maior será contrabalançado, e o
+conjunto de diafragma maior e válvula carretel será forçado para baixo.
+Isso faz cessar a exaustão para a atmosfera do reservatório de controle.
+A redução da pressão do ar do reservatório de controle é necessária, porque ela deve
+ser equilibrada com a do encanamento geral, evitando, assim a reaplicação dos freios
+da locomotiva, quando o alívio do punho manipulador independente for solto.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 71
+Entretanto, para impedir a descarga total da pressão do reservatório de controle
+quando se alivia o freio da locomotiva (após uma aplicação de emergência), uma
+válvula de retenção da pressão do reservatório de controle a mantém em
+aproximadamente 20psi no reservatório de controle, que é o valor da pressão de sua
+mola.
+A finalidade da manutenção dessa pressão no reservatório de controle é tornar
+possível uma reaplicação automática na locomotiva após o alívio do seu freio, mesmo
+depois de uma aplicação de emergência.
+5.5 Válvula relé J-1
+A válvula relé J-1 é uma válvula de alta capacidade, do tipo autorecobridor e
+mantenedor de pressão, operada por diafragma.
+Controla o desenvolvimento da pressão no encanamento de equalização dos cilindros
+de freio da locomotiva durante as aplicações e o alívio dos freios da locomotiva, seja
+pelo manipulador automático ou pelo manipulador independente.
+Essa pressão será destinada para a aplicação dos freios das locomotivas
+comandadas no caso de operação em tração múltipla.
+Figura 55 - Válvula relé J-1
+Ela é formada por uma haste de pistão com anéis “O” e uma válvula de retenção de
+borracha de sede dupla.
+Por meio do encanamento de equalização e da seletora F-1, ela transfere para o
+cilindro de freio da locomotiva comandada a mesma pressão recebida na locomotiva
+comandante, durante a aplicação dos freios.
+A parte operativa está montada em um suporte de encanamentos em que são feitas
+todas as conexões dos encanamentos até o suporte, que são designadas
+numericamente e identificadas no diagrama abaixo.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 72
+Figura 56 - Relé J-1 - Diagrama 01
+Suas finalidades são:
+• Fornecer e descarregar a pressão de ar dos cilindros de freio e do encanamento
+equilibrante dos cilindros de freio, durante as aplicações ou o alívio dos freios
+das locomotivas, quando opera sozinha, sem a presença da válvula relé J-1.6-
+16.
+• Fornecer e descarregar a pressão de ar apenas do encanamento equilibrante
+dos cilindros de freio, durante as aplicações ou o alívio dos freios das
+locomotivas, quando opera em conjunto com a válvula relé J-1.6-16.
+5.5.1 Funcionamento da válvula relé J-1
+Esta válvula de autorecobrimento, operada por diafragma, é projetada para
+desenvolver, nos cilindros de freio, uma pressão equivalente à pressão gerada no
+encanamento que a controla.
+Durante as aplicações de freio, o ar de controle cria uma pressão na tubulação (16)
+do suporte dos encanamentos até a válvula relé.
+Essa pressão de ar é também criada na câmara inferior do pistão e da face do
+diafragma grande da válvula relé, fazendo subir o conjunto do diafragma e da haste.
+Durante esse movimento ascendente, a extremidade da haste do pistão, que contém
+uma sede da válvula de exaustão, encosta e veda o lado inferior da válvula de
+retenção de borracha, para fechar a conexão de exaustão, por meio da haste do pistão
+contra o orifício (30), que é ligado aos cilindros de freio.
+O prosseguimento do movimento ascendente faz com que a válvula de retenção de
+borracha seja movida para fora da sede da válvula alimentadora, e o ar do reservatório
+principal flui por meio da válvula de retenção de borracha para o orifício (30) e para os
+cilindros de freio.
+Figura 57 - Relé J-1 - Diagrama 02
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 73
+O orifício (30) é também ligado, por meio do orifício estabilizador, à câmara da mola
+da face interna do diafragma da válvula relé, de modo que, à medida que estiver sendo
+criada uma pressão nos cilindros de freio, uma pressão igual estará sendo criada na
+câmara de mola.
+Conforme o diafragma vai ficando equilibrado, ele é movido para baixo, para a
+posição de Recobrimento (LAP), na qual a válvula de retenção de borracha fica
+assentada contra a sede da válvula alimentadora, de modo a cessar o fluxo de ar para
+o cilindro de freio, e a válvula de exaustão permanece assentada.
+Figura 58 - Relé J-1 - Diagrama 03
+A válvula relé voltará a funcionar para manter a pressão da tubulação de entrega
+sempre que ocorrer um vazamento dos cilindros de freio.
+A pressão na câmara da mola diminuirá, e o diafragma e a haste serão novamente
+deslocados para cima, pela pressão de controle mais alta, que atua contra sua face
+externa.
+Assim, a válvula de retenção de borracha será forçada a sair de sua sede, na válvula
+alimentadora, e o ar do reservatório principal fluirá para os cilindros de freio, a fim de
+restabelecer a pressão perdida pelo vazamento.
+Quando for novamente atingido o equilíbrio com a pressão de controle, o diafragma
+e a haste serão abaixados para a posição de Recobrimento, interrompendo o fluxo de
+ar do reservatório principal para os cilindros de freio.
+Quando houver alívios de freio, uma redução na pressão do ar de controle que atua
+contra a face externa do diafragma da válvula relé fará com que a pressão mais alta
+dos cilindros de freios desloque para baixo o diafragma e a haste, fazendo a válvula
+de exaustão abrir a válvula de retenção de borracha.
+O ar do cilindro de freio é então descarregado por meio da sede da válvula de
+retenção e da haste do orifício de descarga e, daí, para a atmosfera.
+Figura 59 - Relé J-1 - Diagrama 04
+Pode-se, também, obter um alívio gradual da pressão de ar dos cilindros de freio
+sempre que a pressão de ar controlada for aliviada gradualmente.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 74
+Quando isso ocorre, a pressão mais alta dos cilindros de freio faz o diafragma operar
+para abrir a descarga até o diafragma ficar novamente em equilíbrio, após o que ele
+retornará para sua posição de Recobrimento.
+5.6 Válvula relé J-1.6.16 ou Válvula relé J-1.4.14
+A válvula relé J-1.6.16, ou a válvula relé J-1.4.14, é uma válvula de alta capacidade
+do tipo autorecobridor e mantenedor de pressão, operada por dois diafragmas.
+Figura 60 - Válvula relé J-1.6-16
+A parte operativa está montada em um suporte de encanamentos, no qual são feitas
+todas as conexões dos encanamentos até o suporte, que são designadas
+numericamente e assim são identificadas no diagrama abaixo.
+Figura 61 - Relé J-1.6-16 - Diagrama 01
+Esse tipo de válvula controla o desenvolvimento da pressão no cilindro de freio da
+locomotiva comandante durante as aplicações e o alívio dos freios da locomotiva,
+feitos pelo manipulador automático ou pelo manipulador independente.
+É utilizada em locomotivas com truques projetados para a utilização de sapata de
+freio de composição de alta fricção, que aplicam uma força de retardamento que
+depende menos da velocidade da locomotiva do que as de ferro fundido.
+Para atender à solicitação dos operadores, de uma maior força de retardamento a
+baixas velocidades, foi projetado um sistema de freio de dois níveis.
+Assim, todas as aplicações de sapatas de freio de composição são feitas para
+produzir uma pressão mais alta no freio independente do que nas aplicações do freio
+automático.
+Quando a aplicação dos freios é originada pelo manipulador independente, essas
+válvulas transferem para o cilindro de freio da locomotiva comandada, por meio do
+encanamento de equalização dos cilindros de freio e da chave seletora F-1, a pressão
+recebida da locomotiva comandante, acrescida de um percentual, de acordo com a
+sua especificação.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 75
+Figura 62 - Relé J-1.6-16 - Diagrama 02
+5.7 Válvula relé HB-5D
+A válvula relé HB-5D é uma válvula pilotada pneumaticamente por um diafragma que,
+nas aplicações de freio feitas por intermédio do manipulador automático, interrompe o
+fluxo de ar admitido no diafragma menor da válvula J-1.6.16, evitando assim que a
+aplicação de freio automático na locomotiva comandante seja multiplicada nas
+locomotivas comandadas, que possuem a válvula relé J-1.6.16 ou J-1.4.14.
+Figura 63 - Válvula relé HB-5D
+Entretanto, nas aplicações de freio pelo manipulador independente, ela permite o
+fluxo de ar admitido no diafragma menor da válvula J-1.6.16, que aumenta o nível da
+aplicação dos freios nas locomotivas comandadas, por meio da ativação da segunda
+câmara da válvula relé J-1.6-16 ou J-1.4.14.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 76
+Figura 64 - Relé HB-5D - Diagrama
+5.8 Válvula de transferência MU-2A
+A válvula de transferência MU-2A pilota a válvula seletora F-1 para permitir que o
+equipamento das locomotivas comandadas equipadas com sistema 26-L possa operar
+em tração múltipla com uma locomotiva comandante equipada não somente com o
+equipamento tipo 6-SL ou 26-L, como também com o sistema 24-RL.
+Figura 65 - Válvula de transferência MU-2A
+É montada em um suporte de encanamentos e composta por uma válvula de carretel
+de três posições operada por um excêntrico existente no eixo do punho.
+As três posições são indicadas em uma placa (escudo) afixada ao corpo da válvula,
+como segue:
+LEAD or DEAD (Comandante ou Morta)
+Posição usada sempre que a locomotiva trafegar Escoteira, comandando um trem,
+ou como comandante de um grupo de locomotivas em tração múltipla.
+A válvula MU-2A deverá ser deixada também nesta posição se a locomotiva estiver
+trafegando “Morta” em uma composição, isto é, sem tração, e apenas com o
+encanamento geral ligado.
+Na posição Comandante ou Morta, a pressão do reservatório principal no orifício (30)
+é bloqueada, e os orifícios (53 e 63) são ligados para a atmosfera.
+A pressão de aplicação independente, que vem do manipulador independente (orifício
+(20)), é ligada ao orifício (2) da válvula MU-2A e passa por meio da válvula carretel
+para o orifício (20).
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 77
+O orifício (20) da válvula MU-2A é ligado, não apenas no orifício (20) da válvula
+seletora F-1, onde o ar fica bloqueado, como também, ao orifício (16), da válvula relé
+J-1 da locomotiva, para permitir aplicações de freio independente na locomotiva.
+O encanamento atuante do manipulador (orifício (13)) é ligado ao orifício (3) da
+válvula MU-2A e passa por meio da válvula carretel para o orifício (13) da válvula MU-
+2A e para o encanamento atuante na válvula de controle 26-F e, também, para o
+encanamento atuante, se o mesmo existir na locomotiva.
+Figura 66 - MU-2A - Comandante ou Morta
+TRAIL 6 or 26 (Comandada - 6 ou 26)
+Esta posição é usada para preparar a locomotiva para operar em tração múltipla, na
+condição de “Comandada”, por outra locomotiva dotada de equipamento 6-SL ou 26-
+L.
+Quando uma locomotiva equipada com equipamento 26-L é comandada por uma
+locomotiva que usa equipamento nº 6 ou 26, a válvula MU-2A é colocada na posição
+Comandada 6 ou 26.
+A válvula carretel veda os orifícios (2, 3, 13 e 20).
+O orifício (30), que é ligado ao encanamento atuante (13) do manipulador, é
+descarregado pelo manipulador independente quando seu punho está na posição
+Alívio.
+A pressão do reservatório principal é ligada por meio da válvula carretel aos orifícios
+(53 e 63) da válvula seletora F-1.
+Figura 67 - MU-2A - Comandada 26L ou 6-SL
+Isto posiciona a válvula F-1 para permitir que o ar do encanamento equilibrante dos
+cilindros de freios, orifício (14), seja ligado aos orifícios (16 e 20), os quais são ligados
+por meio da válvula de retenção dupla e, assim, ao orifício (16) da válvula relé da
+locomotiva, durante uma aplicação de freio proveniente da locomotiva comandante.
+TRAIL 24 (Comandante 24)
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 78
+Esta posição é usada para preparar a locomotiva para operar em tração múltipla, na
+condição de comandada, por outra locomotiva dotada de equipamento 24-RL. O
+punho deve ser posicionado com a seta apontando para a posição escolhida.
+Para mover o punho de uma posição para outra, force-o manualmente para baixo
+contra a mola para permitir o seu movimento.
+Quando a locomotiva equipada com 26-L é comandada por uma locomotiva com
+sistema 24-RL, a válvula MU-2A é colocada na posição Comandada 24. Os orifícios
+(2, 3 13 e 20) são bloqueados, e o orifício (53) é ligado para a atmosfera, como no
+caso da posição Comandada - 6 ou 26.
+O orifício (3) será descarregado pelo manipulador independente, quando seu punho
+estiver na posição Alívio.
+A pressão do reservatório principal é ligada ao orifício (63), o qual, por sua vez, é
+ligado à válvula seletora F-1.
+Isso posiciona a válvula F-1 para permitir que o ar do encanamento equilibrante dos
+cilindros de freios descarregue para os orifícios (14) e (20), na válvula seletora F-1,
+daí para válvula de retenção dupla e, para o orifício (16), da válvula relé da locomotiva,
+durante uma aplicação de freio iniciada pela locomotiva comandante.
+Figura 68 - MU-2A - Comandada por 24-RL
+5.9 Válvula seletora F-1
+A válvula seletora F-1 é imprescindível em comando múltiplo com outras locomotivas
+dotadas de equipamentos de freio diferentes.
+Figura 69 - Válvula Seletora F-1
+Pilotada pela válvula de transferência MU-2A, prepara o equipamento de freio da
+locomotiva para comandar, trafegar “morta”, ou ser comandada por outros tipos de
+equipamentos de freio.
+Ela também desempenha a função de proteger o equipamento de freio de uma
+locomotiva comandada, mediante a reposição automática do equipamento de freio
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 79
+para a posição de Comandante, na eventualidade de uma separação (fracionamento)
+entre as locomotivas em tração múltipla.
+Havendo ruptura das mangueiras, a válvula seletora F-1 é acionada pela
+despressurização do encanamento de equalização dos reservatórios principais,
+restabelecendo a comunicação entre a válvula de controle e a válvula relé J-1,
+permitindo a aplicação do freio dessa locomotiva.
+A válvula seletora F-1 consiste de três partes, cada qual consistindo de uma válvula
+carretel.
+Uma delas, a válvula de proteção, é controlada pela pressão de ar do encanamento
+equilibrante dos reservatórios principais e, na eventualidade de um funcionamento de
+um fracionamento, esta válvula carretel é posicionada automaticamente para permitir
+as condições de frenagem de unidade comandante.
+As outras duas, que são as partes de transferência, são controladas pela pressão do
+ar de controle da unidade múltipla e pelo encanamento de intertravamento de unidade
+múltipla.
+A válvula seletora é montada em um suporte de encanamentos onde são feitas todas
+as conexões dos encanamentos, identificados como mostra o diagrama esquemático
+abaixo:
+Posição Comandante ou Morta
+Quando uma locomotiva equipada com sistema 26-L está comandando uma
+locomotiva com equipamento 6-SL ou 26-L, a pressão do ar nos orifícios (53 e 63) da
+válvula seletora F-1 é descarregada na válvula MU-2A.
+O ar da válvula de controle, saindo do orifício (16) da válvula de controle 26-F, passa
+para o orifício (4) da válvula seletora, em seguida passa no orifício (16), e daí para a
+válvula relé para criar pressão nos cilindros de freio da locomotiva comandante.
+O ar dos cilindros de freio da locomotiva comandante, vindo do orifício (30) da válvula
+relé, é levado ao orifício (30) da válvula seletora, passando pela válvula carretel ao
+orifício (14) para o encanamento equilibrante dos cilindros de freio para controlar os
+freios da locomotiva comandada.
+Figura 70 - Válvula Seletora F-1 - Comandante ou Morta
+Posição Comandada – 6 ou 26
+Quando uma locomotiva com equipamento 26-L é comandada por uma locomotiva
+com equipamento 6-SL ou 26-L, a pressão do ar do reservatório principal passa pelos
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 80
+orifícios (53 e 63) da válvula MU-2A para posicionar as válvulas de carretel da válvula
+seletora, conforme mostra o diagrama.
+Nessa posição, o ar vindo do encanamento equilibrante dos cilindros de freio é
+comunicado ao orifício (16) da válvula relé, para criar pressão nos cilindros de freio.
+O ar do encanamento equilibrante dos cilindros de freio é levado ao orifício (20) e ao
+encanamento de alívio e aplicação independente, que se encontra fechado na válvula
+MU-2A.
+Assim, os freios são aplicados na unidade comandada, da mesma forma que na
+unidade comandante.
+Figura 71 - Válvula Seletora F-1 - Comandada por 26-L ou 6-SL
+Posição Comandada – 24
+Quando uma locomotiva com equipamento 26-L é comandada por uma locomotiva
+com equipamento 24-RL, a pressão do ar do reservatório principal é levada à conexão
+(63) da válvula MU-2A, para posicionar a válvula carretel da válvula seletora F-1.
+Nessa posição, o ar que flui da conexão (16) da válvula de controle 26-F passa para
+a conexão (4) da válvula seletora F-1, onde é levado à conexão (16) e à válvula relé
+da locomotiva, para criar pressão nos cilindros de freio.
+A pressão do ar também entra na conexão (14) da válvula seletora, vinda do
+encanamento equilibrante dos cilindros de freio, e flui por meio da válvula carretel para
+a conexão (20). Esta pressão de ar atua, também, na válvula relé da locomotiva.
+Os freios da locomotiva comandada são atuados ou por uma aplicação de freio ou
+por uma aplicação de freio independente, iniciada na locomotiva comandante,
+equipada com sistema 24-RL.
+Figura 72 - Seletora F-1 - Comandada por 24-RL
+Posição de fracionamento (separação entre locomotivas)
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 81
+Se ocorrer uma separação entre locomotivas e for perdida pressão no encanamento
+equilibrante dos reservatórios principais, o ar será descarregado do orifício (15) da
+válvula seletora F-1 e da câmara inferior da válvula carretel de proteção.
+A válvula carretel é, então, forçada para a sua posição inferior pela tensão da mola.
+Em uma locomotiva comandante, a descarga do ar do cilindro de freio para o
+encanamento equilibrante (conexão 14) é interrompida pela válvula carretel de
+proteção.
+Em uma locomotiva comandada, quando a válvula seletora F-1 estiver na posição
+Comandada – 6 ou 26, a válvula carretel descarregará o ar da câmara inferior da
+válvula carretel direita, a qual será forçada para a sua posição inferior, como no caso
+da posição Comandante, para voltar a conectar os orifícios (4 e 16).
+A conexão é interrompida na válvula carretel de proteção, orifício (14), para o orifício
+(16) e orifício (20).
+Se a válvula seletora F-1 for colocada na posição Comandada - 24, a conexão do
+orifício (14) para o orifício (20) é interrompida pela válvula carretel de proteção.
+Em cada caso, a pressão do ar de controle gerada pela válvula de controle 26-F é
+transferida para o encanamento de controle da válvula relé, como no caso de uma
+locomotiva comandante.
+Figura 73 - Válvula Seletora F-1 - Posição de proteção
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 82
+6
+6 Controles de
+segurança do trem
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 83
+6.1 Controle de excesso de velocidade do trem
+O controle do excesso de velocidade é feito pela válvula magnética FA-4.
+Figura 74 - Válvula Magnética FA-4
+A válvula magnética FA-4 fica normalmente energizada.
+Sempre que for excedido o limite de velocidade máxima autorizada do trem, a válvula
+magnética FA-4 é desenergizada para descarregar a pressão da câmara da mola da
+válvula de aplicação de freio P-2A, que produz uma aplicação de Serviço Total.
+Figura 75 - Diagrama Válvula P-2-A com a FA-4
+6.2 Controle de segurança do trem
+6.2.1 Alertor (Sistema de Controle de Vigilância)
+O alertor proporciona uma operação segura na operação do trem, por meio do
+monitoramento dos vários movimentos do operador, para comprovar a vigilância.
+Se nenhuma movimentação esperada for detectada dentro de um tempo
+preestabelecido, é iniciado um alarme audiovisual, solicitando o reconhecimento.
+Se isso não for feito durante o tempo preestabelecido, o sistema iniciará uma
+aplicação de penalidade dos freios, para desenergizar a válvula magnética do alertor.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 84
+Isso causará uma aplicação dos freios em ritmo de aplicação de serviço, causando a
+parada do trem.
+Os movimentos que se esperam do operador para comprovar a vigilância são:
+• Comprimir a botoeira de reconhecimento do alertor;
+• Acionar a buzina ou o sino;
+• Movimentar o manípulo de aceleração ou o manípulo de reversão.
+6.2.2 ATC (Automatic Train Control)
+O controle do ATC é composto de duas válvulas sobrepostas:
+• Uma válvula promove a descarga da câmara “A” da válvula P-2-A;
+• Outra válvula promove a descarga do reservatório equilibrante durante as
+aplicações de penalidades.
+Figura 76 - Conjunto BD-26
+6.2.3 Válvula de aplicação de freio P-2-A
+A válvula de aplicação de freio P2-A controla uma aplicação total de serviço quando
+iniciada pelos controles de segurança (Homem Morto ou Alertor, Sobrevelocidade e
+ATC).
+Figura 77 - Válvula de Aplicação P-2-A
+Se o maquinista deixar de comprovar que está vigilante, ou em caso de atuação do
+sistema de proteção contra excesso de velocidade da locomotiva, a válvula de
+aplicação de freio P2-A primeiro dará um aviso sonoro (apito); se mesmo assim o
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 85
+maquinista não corrigir a falha que causou o aviso, a válvula de aplicação P2-A
+provocará o seguinte:
+• Interrompe o abastecimento do encanamento de carregamento do reservatório
+equilibrante, isolando o manipulador de freio automático.
+• Começa a descarregar o ar do reservatório equilibrante para a atmosfera,
+causando uma Aplicação de Penalidade, equivalente em ritmo e pressão a uma
+Aplicação de Serviço Total.
+• Corta a tração por meio de um sinal de ar comprimido na chave de corte de
+tração – PCS (Power Cut-off Switch).
+• Mantém os freios bloqueados na posição de Aplicação.
+Os freios somente serão aliviados se o punho do manipulador de freio automático for
+movimentado para a posição de Supressão, deixado nessa posição por algum tempo
+e logo após retornar para a posição de Alívio ou Marcha.
+O punho na posição de Supressão anula o controle de segurança, mas provoca uma
+aplicação total dos freios.
+Esta válvula proporciona ainda as seguintes funções:
+• Supressão da aplicação iniciada pelo controle de vigilância (homem morto).
+• Intertravamento de segurança durante a aplicação por penalidade que impede
+o recarregamento do reservatório equilibrante de qualquer fonte até que a
+válvula de aplicação seja reposicionada e o punho do manipulador automático
+tenha voltado à posição de Alívio (tendo antes sido colocado em uma das
+seguintes posições: Supressão, Punho Fora ou Emergência).
+• Permite uma sobreredução, quando desejado, durante uma aplicação por
+penalidade.
+A válvula é montada no suporte dos encanamentos, onde são feitas as conexões dos
+encanamentos, identificados como mostra o diagrama esquemático a seguir.
+Figura 78 - Válvula de Aplicação P-2-A
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 86
+A válvula de aplicação de freio P2-A consiste de:
+• Válvula de aplicação, constituída de uma válvula carretel controlada por
+diafragma;
+• Válvula de retenção de sobreredução; Válvula de controle de alívio;
+• Válvula de supressão.
+6.2.3.1 Funcionamento da válvula de aplicação de freio P-2-A
+Estando o equipamento da locomotiva carregado e operando normalmente, o ar do
+reservatório principal entra no orifício (30) do suporte, passa para o lado inferior do
+diafragma e atravessa o orifício (10a) para a câmara da mola na parte superior do
+diafragma, fluindo também para o orifício (10), para o volume do reservatório de tempo
+e para a válvula magnética de controle de sobrevelocidade, que está em sua posição
+fechada (energizada).
+O ar do reservatório principal vindo do orifício (10) passa pela extremidade inferior da
+válvula de supressão para o orifício (3) e para a válvula pedal, que é mantida fechada
+sobre o pedal.
+Estando a câmara carregada com a pressão do reservatório principal, em ambos os
+lados do diafragma, a mola do diafragma posicionará o diafragma e a válvula carretel
+a ele fixada na sua posição normal ou de alívio.
+Figura 79 - Válvula P-2-A - Diagrama 01
+Nesta posição, a válvula carretel estabelece as seguintes conexões:
+• O reservatório limitador de redução (se usado) é esgotado para a atmosfera via
+orifício (24), e a chave de corte de potência (PCS) é descarregada via orifício
+(25).
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 87
+• O orifício (5) do reservatório equilibrante é ligado à válvula de controle de alívio,
+para permitir o carregamento do reservatório equilibrante, e à válvula relé do
+manipulador, pelo orifício (15) de carregamento do reservatório equilibrante.
+Estando o manipulador de freio automático na posição Alívio, o orifício (33) e a
+câmara superior da válvula de controle de alívio são carregados com a pressão do
+reservatório principal.
+As câmaras que ficam por baixo da válvula de controle de alívio e da válvula carretel
+de aplicação são descarregadas por meio do orifício (8) pela válvula de supressão do
+manipulador.
+A válvula de controle de alívio é mantida em sua posição inferior para ligar o orifício
+(5) ao orifício (15), permitindo o carregamento do reservatório equilibrante.
+Durante uma aplicação de freio de penalidade, que pode ser iniciada pelo
+descarregamento do encanamento (3), por meio da válvula pedal, ou
+descarregamento do encanamento (10), por meio da válvula magnética de
+sobrevelocidade, a pressão do ar é descarregada da câmara da mola, do diafragma,
+mais rapidamente do que pode ser restabelecida por meio do orifício (10a).
+Consequentemente, é criado um diferencial de pressão no diafragma, suficiente para
+que a válvula carretel assuma a posição de Aplicação.
+Figura 80 - Válvula P-2-A - Diagrama 02
+Nesta posição, a válvula carretel estabelece as seguintes conexões:
+• O ar do reservatório principal no orifício (30) e na câmara inferior do diafragma
+é levado ao orifício (25) e chave de corte de potência (PCS) e chave de corte
+de freio dinâmico (DBI - Dynamic Brake Interlock), que interrompe o circuito de
+freio dinâmico, caso este esteja em funcionamento.
+• O ar do reservatório principal, que normalmente passa por meio do orifício
+(10a), é levado ao orifício (8).
+¤ Portanto, a câmara da mola do diafragma, assim como o volume do
+reservatório de tempo, que é ligado ao orifício (10), fica ligada ao orifício (8).
+• O orifício (8) é ligado ao encanamento de travamento (8) do manipulador.
+¤ Esse encanamento é normalmente descarregado no manipulador pela
+válvula carretel da válvula de supressão, quando o punho do manipulador
+automático está na posição Alívio.
+• O carregamento do reservatório equilibrante (orifício 15) é interrompido.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 88
+• O ar do reservatório equilibrante, no orifício (5), é ligado por meio da válvula
+carretel ao orifício (24a), por meio de um orifício calibrado, e, por meio do
+orifício (24), para o reservatório limitador de redução (se usado) ou para a
+atmosfera.
+• O ar do reservatório equilibrante flui em ritmo controlado para o reservatório
+limitador de redução (ou para a atmosfera), de modo a produzir uma redução
+de Serviço Total na pressão do reservatório equilibrante.
+Uma aplicação de freio pelo controle de segurança pode ser suprimida movendo-se
+o punho do manipulador automático para a posição Supressão antes do término do
+período de retardamento de tempo predeterminado, enquanto durar o apito de aviso.
+Estando o punho do manipulador na posição de Supressão, a válvula carretel da
+válvula de supressão do manipulador é posicionada para fechar o descarregamento
+do encanamento de travamento (8) e, assim, impedir o descarregamento do ar da
+câmara da mola, por meio desse cano.
+O ar do reservatório principal, fornecido pela válvula de supressão, passa pelo orifício
+(26) e pelo encanamento de ligação para a válvula de aplicação de freio P-2-A, fluindo
+por meio do orifício (26) para a face do pistão da válvula de supressão, forçando o
+pistão a descer e fazendo a válvula carretel interromper a conexão entre os orifícios
+(3 e 10).
+A câmara da mola do diafragma é isolada do orifício (3) e da válvula pedal.
+O ar do reservatório principal flui continuamente por meio do orifício (10a) e seu bujão
+para a câmara da mola do diafragma, mantendo o diafragma e a válvula carretel na
+posição Alívio.
+Figura 81 - Válvula P-2-A - Diagrama 03
+Em outras palavras, o controle de segurança não provocará o funcionamento da
+válvula de aplicação sempre que o punho do manipulador automático estiver na
+posição de Supressão.
+Em algumas versões do equipamento 26-L, uma aplicação de freio de
+sobrevelocidade somente pode ser suprimida reduzindo-se a velocidade da
+locomotiva a um valor abaixo do limite máximo autorizado, antes do término do
+período de tempo predeterminado, após o início do apito de aviso.
+Tal ação evita a descarga do encanamento (10), por meio do dispositivo de descarga
+de sobrevelocidade (válvula magnética).
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 89
+Para restabelecer e aliviar uma aplicação de freio causada pelo controle de
+sobrevelocidade, ou pelo controle de segurança, o maquinista deve primeiramente
+mover o punho do manipulador automático para a posição de Supressão.
+Isso causa o fechamento do encanamento (8), que é descarregado no manipulador.
+A câmara da mola da válvula de aplicação de freio será, então, recarregada por meio
+do orifício (10a) até a pressão do reservatório principal.
+Logo que a pressão dessa câmara atingir um valor determinado, o conjunto do
+diafragma e sua válvula carretel voltarão à posição normal ou de Alívio.
+Estando o punho do manipulador na posição Supressão, o orifício (33) e a câmara
+que fica acima da válvula de controle de alívio são descarregados por meio do
+manipulador.
+Estando fechada a descarga do encanamento (8), o ar do reservatório principal que
+está fluindo para o orifício (10) passa a fluir por meio da válvula carretel da válvula de
+aplicação para a câmara inferior da válvula de controle de alívio.
+A válvula de controle de alívio é atuada para interromper o carregamento do orifício
+(5 para 15).
+Depois que a válvula de aplicação é restabelecida, é necessário mover o punho do
+manipulador automático para a posição Alívio, para restabelecer a válvula de controle
+de alívio; e só assim é possível restabelecer o recarregamento do reservatório
+equilibrante e aliviar os freios.
+Se o maquinista quiser, poderá fazer uma sobreredução, depois de uma aplicação de
+freio de penalidade.
+A válvula de sobreredução, existente na válvula de aplicação de freio P-2-A, será
+aberta para permitir que o ar do reservatório equilibrante passe do orifício (5) para o
+orifício (15) e para o manipulador.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 90
+7
+7 7. Dispositivo de
+Proteção Contra
+Fracionamento de
+Trem
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 91
+O dispositivo de proteção contra a separação entre veículos da composição (fracionamento
+de trem) utiliza uma válvula interruptora de carregamento A-1.
+Figura 82 - Válvula Interruptora de Carregamento A-1
+Sempre que ocorrer uma aplicação de emergência originada pelo manipulador
+automático ou por fracionamento do trem, a válvula interruptora de carregamento A-1
+realizará as seguintes funções:
+• Interrompe o carregamento do encanamento geral, acelerando a aplicação de
+Emergência, poupando o compressor e economizando ar do reservatório
+principal.
+• Opera a chave de corte de tração e do freio dinâmico, reduzindo a rotação do
+motor diesel para a condição de Marcha Lenta (Idle).
+• Faz funcionar automaticamente os areeiros durante 30 a 40 segundos.
+É montada em um suporte de encanamentos, no qual são feitas todas as conexões
+dos encanamentos, identificados como mostra o diagrama esquemático da figura
+abaixo.
+Figura 83 - Válvula Interruptora A-1 - Diagrama
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 92
+7.1 Funcionamento da válvula interruptora de
+carregamento A-1
+Durante a operação normal, a válvula interruptora de carregamento A-1 permanece
+na posição normal de Alívio, e o ar do reservatório principal fica presente na câmara
+(A) por baixo do pistão interruptor, de modo a mantê-lo em sua posição superior, como
+mostrado abaixo.
+Figura 84 - Válvula Interruptora A-1 - Diagrama 01
+A câmara (B), que fica por baixo da válvula carretel do pistão interruptor, está ligada
+à exaustão, por meio do orifício (53), e à exaustão da válvula interruptora do
+manipulador 26-C nas unidades comandantes.
+Nas unidades comandadas, em que a válvula interruptora do manipulador está em
+sua posição Fechado (Out), esta câmara é carregada com ar do reservatório principal.
+A câmara (C), que fica acima do pistão interruptor e do orifício 9, é ligada à exaustão
+por meio da válvula carretel do pistão atuante e do orifício de tempo do areeiro
+automático geral.
+O ar do encanamento geral passa pelo orifício (1) para a câmara (D), na parte traseira
+do pistão atuante, e segue por meio do orifício, existente no pistão, para a câmara (E)
+na face externa do pistão e por meio do orifício (11), para carregar o reservatório de
+volume de 90 pol³ e para ambos os lados do pistão atuante, à mesma pressão do
+encanamento geral.
+Figura 85 - Válvula Interruptora A-1 - Diagrama 02
+Esse pistão é mantido em sua posição inferior pela mola, conforme mostrado.
+O orifício (35) é descarregado por meio do pistão interruptor.
+Se ocorrer uma separação entre veículos do trem, a pressão do ar do encanamento
+geral cairá mais depressa na câmara (D) do que na câmara (E), via bujão de orifício.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 93
+O resultante diferencial de pressão no pistão atuante fará com que ele e sua válvula
+carretel sejam deslocados para cima, contra a tensão da mola, como mostrado na
+figura abaixo.
+Figura 86 - Válvula Interruptora A-1 - Diagrama 03
+Nessa posição, o ar do reservatório principal flui por meio da válvula carretel do pistão
+atuante para a câmara (C) da face externa do pistão interruptor e para o orifício (9).
+Estando normalmente esgotada a câmara (B), que fica embaixo da válvula carretel
+do pistão interruptor, o ar do reservatório principal na câmara (C), na face externa do
+pistão interruptor, fará com que o pistão, com válvula carretel, vá para sua posição
+inferior, onde a câmara (A), por baixo do pistão interruptor, é descarregada.
+Figura 87 - Válvula Interruptora A-1 - Diagrama 04
+Nessa posição, o ar do reservatório principal flui por meio da válvula carretel do pistão
+interruptor para o orifício (35) e, passando à válvula de retenção interruptora, que se
+encontra aberta, passa para o orifício (53) e para a válvula interruptora do
+encanamento geral, existente no manipulador 26-C.
+A pressão do ar do reservatório de volume de 90 pol³, ligado ao orifício (11), e da
+câmara (E), que fica na parte inferior da câmara atuante, continuará a cair até zero,
+por meio do bujão de orifício do pistão e por meio do orifício (1), escapando pelo
+encanamento geral.
+Quando essa pressão tiver caído para um valor predeterminado, a tensão da mola
+deslocará o pistão atuante e sua válvula carretel para a posição inferior, conforme
+mostrado abaixo.
+Figura 88 - Válvula Interruptora A-1 - Diagrama 05
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 94
+A pressão do ar na chave de corte de tração será, em seguida, descarregada por
+meio do orifício de tempo do areeiro automático, por meio do orifício (9) e da válvula
+carretel do pistão atuante.
+Da mesma forma, a pressão do ar é descarregada da câmara (C) na face externa do
+pistão interruptor.
+Para restabelecer o sistema, o maquinista deve mover o manipulador de freio
+automático para a posição Emergência.
+O ar do reservatório principal é levado ao orifício (12), saindo do manipulador, e passa
+pela válvula de retenção seletora, para a câmara (B) e a parte inferior do pistão
+interruptor, obrigando o pistão interruptor, com sua válvula carretel, a assumir a
+posição normal de Alívio.
+Figura 89 - Válvula Interruptora A-1 - Diagrama 06
+O ar do encanamento (53), fluindo do orifício (12), não pode ser descarregado por
+meio da válvula piloto interruptora do manipulador.
+O punho do manipulador deve ser movido para a posição Alívio, para que a pressão
+do ar do encanamento (53) possa ser descarregada, e os freios, aliviados.
+Em uma unidade comandada, o ar do reservatório principal presente no orifício (53),
+por meio da válvula piloto interruptora do manipulador, que se encontra na posição
+OUT e a câmara (B), sob a válvula carretel do pistão interruptor, é carregada à pressão
+do reservatório principal.
+Estando ambas as câmaras (A e B) carregadas à pressão do reservatório principal, a
+presença dessa pressão na câmara (C), fornecida por meio da válvula carretel do
+pistão atuante, fica impedida de mover o pistão interruptor para dentro, conforme
+descrito no caso de fracionamento em uma unidade comandante.
+A chave PC é atuada pelo ar do reservatório principal, fornecido ao orifício (9).
+Durante uma aplicação intencional do freio de emergência em uma unidade
+comandante, a câmara (B) sob a válvula carretel do pistão interruptor é carregada à
+pressão do reservatório principal, via orifício (12) e encanamento (12), pelo
+manipulador automático.
+Dessa maneira, estando todas as câmaras (A, B e C) carregadas com pressão do
+reservatório principal, a válvula carretel e o pistão interruptor permanecem em sua
+posição superior, mostrada abaixo.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 95
+Figura 90 - Válvula Interruptora A-1 - Diagrama 07
+A chave PC é acionada pelo ar do reservatório principal, que flui pelo orifício (9).
+Quando for desejado aliviar os freios, o punho do manipulador deverá ser movido
+para a posição Alívio.
+Haverá um retardamento determinado pelo tempo necessário para esgotar o
+encanamento (53), por meio da válvula piloto interruptora, do manipulador, antes que
+seja aberta a válvula interruptora do encanamento geral, para permitir o
+recarregamento do sistema e o alívio dos freios.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 96
+8
+8 Outros Sistemas
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 97
+8.1 Dispositivo de Intertravamento do Freio
+Dinâmico
+O dispositivo de intertravamento do freio dinâmico funciona durante a frenagem
+dinâmica para aliviar ou evitar uma aplicação do freio automático de serviço da
+locomotiva.
+Ele é formado por uma válvula magnética FB-4 (OSV) ou DBI, instalada no
+encanamento do reservatório principal para o orifício (13) do encanamento atuante
+para a válvula de controle 26-F, constituída por duas válvulas de retenção opostas,
+uma bobina e uma armadura.
+Sua bobina fica ligada ao circuito elétrico do freio dinâmico. Assim que a frenagem
+dinâmica se inicia, o circuito de frenagem dinâmica energiza a bobina da válvula
+magnética.
+A armadura da bobina abre a válvula para permitir que o ar do reservatório principal
+flua para a parte de alívio rápido da válvula de controle 26-F, via encanamento atuante.
+Isso provoca o alívio do freio automático ou impede a aplicação do freio automático
+da locomotiva, enquanto estiver atuando o freio dinâmico.
+Durante uma aplicação de freio dinâmico, o manipulador do freio independente pode
+ser operado pelo maquinista.
+O sistema inclui um pressostato de ação pneumática, para desenergizar a válvula
+magnética de freio durante as aplicações de emergência, controle de segurança e
+controle de sobrevelocidade, de modo a anular o freio dinâmico.
+8.2 Dispositivo de Locomotiva Morta
+O dispositivo de locomotiva Morta permite que uma locomotiva seja rebocada inativa,
+isto é, seja rebocada “Morta” no meio de uma composição, fazendo com que seu
+sistema de freios opere como o de um vagão.
+Estando apenas o encanamento geral ligado, a única forma de a locomotiva morta
+receber ar comprimido é por meio do encanamento geral.
+Esse dispositivo normalmente é composto de:
+• Torneira de isolamento;
+• Válvula de retenção.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 98
+Figura 91 - Dispositivo locomotiva Morta
+Antes de abrir a torneira de isolamento do dispositivo, é necessário certificar-se de
+que o reservatório principal esteja sem pressão.
+Como válvula de retenção, é comum o uso da válvula C-1-40-8, que é composta de:
+• Válvula de retenção simples de 3/8” com filtro;
+• Mola de restrição, regulada para manter o diferencial de pressão entre 40 a
+45psi;
+• Orifício de controle do fluxo de ar, com 1/8” de diâmetro.
+Sendo o encanamento geral carregado com 90psi, a válvula deixa passar a pressão
+do encanamento geral menos a pressão da mola, isto é, o reservatório principal nº 2
+da locomotiva é carregado com uma pressão de 90 - 40 = 50psi, que é a pressão
+normalmente usada no cilindro de freio de um vagão numa aplicação de serviço,
+porém menor do que a usada numa aplicação de emergência (60psi).
+Tal medida serve para proteger as rodas das locomotivas, evitando arrastamento e
+problemas térmicos com as rodas. Ainda assim, o uso de sapatas fenólicas e de
+pressões maiores no encanamento geral da locomotiva Morta tem colocado essa
+válvula em fase de obsolescência.
+A tendência moderna é para o uso de uma válvula redutora de pressão, que é
+normalmente calibrada com 12 a 20psi.
+A prática determina que uma locomotiva Morta deva trafegar junto das locomotivas
+ativas e ter todos os seus encanamentos de ar interligados, além de condicionar o seu
+sistema de freios como se fosse o de uma locomotiva comandada.
+Essa prática é altamente recomendável por várias razões, como seguem:
+• O operador mantém a locomotiva Morta em constante observação.
+• Os freios automático e independente são controlados pela locomotiva
+comandante, atuando em conjunto com ela.
+• Sempre que o freio dinâmico for operado, o freio desta locomotiva também será
+aliviado, evitando o arrastamento de rodas.
+• Como a taxa de retardamento de uma locomotiva pode ser aproximadamente
+três vezes maior que a dos vagões, o maquinista tem meios de evitar que suas
+rodas sejam sobrecarregadas pelo freio.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 99
+• Reservatório principal nº 1 é abastecido pelo encanamento equilibrante do
+reservatório principal, aumentando a capacidade do conjunto.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 100
+9
+9 Aplicação do
+Sistema de Freio
+26-L
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 101
+9.1 Aplicação
+O atuador final do sistema de freio pneumático da locomotiva é um dispositivo
+mecânico que funcionalmente realiza a frenagem dos rodeiros e reduz sua velocidade.
+Ele é constituído dos seguintes componentes:
+• Cilindro de freios;
+• Conjunto de alavancas, denominado de timoneria;
+• Contrassapatas;
+• Sapatas;
+• Ajustador de folga.
+Esses componentes são todos montados diretamente na estrutura do truque da locomotiva.
+Em funcionamento com os demais componentes do truque, contribuem para a segurança e
+o desempenho da locomotiva.
+Figura 92 - Componentes
+9.2 Cilindro de Freio
+O cilindro de freio é o componente responsável por produzir uma força mecânica na
+timoneria de freio.
+Essa força faz com que as sapatas de freio sejam aplicadas na superfície das rodas,
+em resposta a um comando de pressão oriundo do sistema de freio automático e/ou
+independente.
+Ele é composto por um cilindro (corpo) de metal fundido com um pistão conectado a
+uma haste de acionamento ligada às alavancas da timoneria de freio.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 102
+Figura 93 - Cilindro de freio
+A haste de acionamento se movimenta dentro de uma haste oca que facilita sua
+inserção.
+Figura 94 - Cilindro de freio 02
+Quando ocorre a aplicação de freio, há aumento da pressão interna no cilindro que
+empurra o pistão e faz avançar a haste de acionamento, produzindo uma força
+mecânica na timoneria de freio.
+Quanto maior for a pressão interna, maior será o esforço de frenagem.
+Quando os freios são aliviados, o ar comprimido interno ao cilindro é direcionado para
+a atmosfera, e a mola de retorno move o pistão de volta, liberando as sapatas de freio.
+O curso do pistão do cilindro de freio deverá propiciar folga entre as sapatas de freio
+e as rodas, quando os freios estiverem aliviados. Já quando os freios estiverem
+aplicados, ele deverá manter a pressão de regulagem das sapatas.
+Observação: Os cursos dos cilindros de freio são calculados. Note que devemos
+usar, no máximo, ¾ do seu valor de deslocamento máximo.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 103
+9.2.1 Criação de pressão no cilindro de freio da
+locomotiva
+Existem várias fórmulas para se calcular a pressão do ar comprimido no cilindro de
+freio da locomotiva, mas, para facilitar a compreensão, vamos utilizar a fórmula prática
+utilizada pelas ferrovias norte-americanas, que é a seguinte:
+R é a redução de pressão no encanamento geral.
+Desse modo, aplicando a fórmula, uma redução de 10psi no encanamento geral
+representa 25psi no cilindro de freio. Igualmente, uma redução de 20psi representa
+50psi, e assim por diante.
+A válvula de controle é preparada de forma a estabelecer entre 62 a 65psi de pressão
+máxima nos cilindros de freio da locomotiva em aplicação máxima de serviço.
+Quando se utiliza o manipulador de freio independente, a válvula relé se incumbe de
+repetir a pressão enviada até ela pelo manipulador independente nos cilindros de freio
+das locomotivas.
+A pressão máxima no cilindro de freio é regulada, no próprio manipulador
+independente, para aproximadamente 45 a 50psi.
+9.3 Ajustador de Folga
+O ajustador de folga do freio é um dispositivo que pode ser montado entre as
+alavancas da timoneria de freio ou como tirante de freio.
+Sua finalidade básica é manter constante o curso do cilindro de freio,
+independentemente dos desgastes normais causados pelo atrito durante o processo
+de frenagem dos veículos ferroviários.
+Esses desgastes provocam aumento do distanciamento entre as sapatas e as rodas.
+Ao encolherem, os ajustadores de folga mantêm o curso do cilindro e puxam as
+alavancas da timoneria de ambos os lados do sistema.
+O ajustador de folga se apresenta em duas formas:
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 104
+Ajustador manual
+O ajustador manual de folga do freio é um dispositivo constituído de barras com rosca,
+ou furações equidistantes, ajustadas manualmente.
+Figura 95 - Ajustador Manual
+Ajustador automático
+Já o ajustador automático de folga do freio possui um sistema de catraca que atua de
+forma automática sempre que o freio é aplicado.
+Figura 96 - Ajustador Automático
+9.4 Sapatas de Freio
+A sapata de freio é o componente do sistema que transmite diretamente a força de
+frenagem para as rodas, produzindo o retardamento ou a parada das locomotivas e
+dos vagões.
+As principais características de uma boa sapata de freio são:
+• Apresenta coeficiente de atrito adequado sob as várias condições de trabalho,
+como velocidade, temperatura e umidade;
+• Possuir durabilidade;
+• Não causa agressão excessiva às rodas;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 105
+• Não produz ruídos excessivos;
+• Não gera odores ofensivos;
+• Não contém compostos nocivos à saúde.
+Há dois tipos de sapatas de freio:
+Ferro fundido
+Entre as desvantagens das sapatas de freio de ferro fundido, estão incluídos o
+faiscamento e o desgaste desigual das rodas.
+Figura 97 - Sapata ferro fundido
+De composição não metálica
+As sapatas de composição não metálica são assim chamadas por apresentarem, em
+sua composição, uma matriz polimérica composta de borrachas e resinas com cargas
+inertes, modificadores de atrito e fibras.
+Figura 98 - Sapata não metálica
+As sapatas de composição não metálica foram desenvolvidas em 1997 como uma
+alternativa econômica para substituir as sapatas de ferro fundido.
+Mas, devido a sua maior capacidade de frenagem, não são diretamente
+intercambiáveis com as sapatas de ferro fundido.
+Observação:
+A Circular C-9736 adicional ao AAR Field Manual Rule 12 estabelece que a aplicação
+de sapatas de freio de ferro fundido fica proibida a partir de 01/01/05.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 106
+Os componentes de uma sapata de composição não metálica são mostrados a
+seguir:
+Figura 99 - Componentes da sapata
+• Material de atrito - Parte não metálica que atua sobre a superfície de
+rolamento da roda e pode ser fornecida com coeficiente de atrito baixo, médio
+e alto.
+• Patim - Reforço metálico sobre o qual é assentado o material de atrito.
+• Caixilho - Parte da sapata na qual atua a chaveta de fixação da sapata na
+contrassapata.
+• Trava - Parte saliente do patim que serve como batente para encaixe na
+contrassapata.
+Atualmente, as sapatas de composição não metálicas são as mais utilizadas por
+oferecerem várias vantagens, como as seguintes:
+• Alto coeficiente de atrito, exigindo menor esforço de frenagem;
+• Menor esforço requerido no sentido axial;
+• Curva atrito-velocidade paralela à curva de aderência, diminuindo os riscos de
+deslizamento;
+• Insensibilidade às condições atmosféricas (frio, calor, água);
+• Supressão da poeira metálica;
+¤ A causa de inúmeros defeitos dos rotativos elétricos e dos equipamentos
+de controle da locomotiva pode ser a poeira metálica, que, devido à
+aspiração de ar de ventilação e ao campo magnético, é atraída para o
+interior deles.
+• Menor resistência à tração – menor ruído;
+¤ As sapatas de composição garantem um fino polimento à superfície das
+rodas, que reduz sensivelmente o ruído e a resistência de rolamento,
+aumenta a aderência ao trilho e ainda reduz consideravelmente o esforço
+de tração.
+• Melhor ajuste à curvatura da roda;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 107
+¤ Devido ao melhor ajuste à curvatura da roda, faz com que as sapatas de
+composição desgastem as rodas de maneira que a conicidade da superfície
+de rolamento e o formato do friso sejam preservados durante quase toda a
+vida da roda, minimizando, assim, uma das maiores causas de rejeição das
+rodas nas ferrovias – frisos finos – responsável por cerca de 50% das
+rejeições.
+• Maior vida útil.
+E como essas vantagens podem ser traduzidas?
+Todas essas vantagens resultam em menor custo de manutenção e de operação
+devido a:
+• Menor consumo de sapatas;
+• Menos mão de obra e redução de paralisação de veículos para substituição
+de sapatas e ajustamento da timoneria;
+• Menor consumo de rodas e de mão de obra e menos paralisação de veículos
+para retorneamento e substituição, fatos de essencial importância nas
+locomotivas elétricas, diesel-elétricas e nos carros elétricos, nos quais a
+substituição de rodas exige a desmontagem dos motores, rolamentos etc.;
+• Timoneria mais econômica e menos sujeita a avarias, devido aos menores
+esforços envolvidos;
+• Menos avarias nos motores elétricos de tração e equipamentos de controle;
+• Economia de tração e melhor aproveitamento das locomotivas.
+9.5 Freio Manual da Locomotiva
+A Air Brake Association – ABA define o freio manual da locomotiva como um
+dispositivo que possibilita a aplicação dos freios da locomotiva manualmente.
+Na realidade, o freio manual é um freio de estacionamento, isto é, deverá ser aplicado
+somente quando a locomotiva ficar estacionada (parada) por tempo determinado.
+Ele é um dispositivo mecânico individual composto de volante (ou alavanca) e
+catraca, que aciona uma corrente ligada à haste de apenas um dos cilindros de freio,
+que opera duas sapatas de freio de um mesmo truque da locomotiva.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 108
+Figura 100 - Freio Manual de alavanca
+Durante a aplicação do freio manual, o movimento da corrente aciona um dispositivo
+que aplica os freios. Em seguida, um mecanismo de desengate com contrapeso libera
+a tensão no freio.
+Vale notar que ele pode proporcionar uma força igual ou até maior que a do freio de
+serviço a ar.
+Figura 101 - Corrente do freio manual
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 109
+9.6 Diagrama do Sistema 26-L
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 110
+10
+10 EQUIPAMENTOS
+DOS VAGÕES
+RELACIONADOS
+COM O FREIO 26-L
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 111
+10.1 Principais Componentes
+Na figura abaixo é apresentado um modelo de configuração do sistema de freio do
+vagão, dando destaque a alguns de seus principais componentes.
+Todos estes componentes do sistema de freios são agrupados em unidades:
+• Distribuição;
+• Controle;
+• Aplicação.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 112
+Figura 102 - Sistema do vagão
+10.2 Distribuição
+A distribuição do ar comprimido nos vagões é realizada pelo encanamento geral.
+Normalmente, esse encanamento é feito de tubo extrapesado (Schedule 80),
+especificação ASTM-A-53 grau A e raios mínimos, segundo folha E-7 da AAR.
+Possui pintura externa e é fosfatizado internamente para evitar a oxidação.
+O encanamento também não deve possuir conexões soldadas e, para isso, todas as
+ligações e conexões devem possuir juntas do tipo WABCOSEAL, que utilizam o
+princípio de flange, que é fixado ao dispositivo por parafusos e vedado por um anel de
+borracha para evitar vazamento.
+Figura 103 - Conexões
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 113
+10.2.1 Tê de ramal
+O encanamento geral possui uma derivação, denominada tê de ramal, usada para
+ligar o cano ramal da válvula de controle ao encanamento geral, a fim de alimentar a
+válvula de controle.
+Figura 104 - Tê de ramal
+O interior do tê de ramal é construído de tal forma que a passagem que leva ao cano
+ramal sai da parte superior do encanamento geral. Dessa forma, o ar é obrigado a
+subir quando passa ao cano ramal, enquanto a umidade e as partículas de pó mais
+pesadas continuam pelo encanamento geral.
+10.2.2 Torneiras extremas
+Torneira angular
+Em cada uma das extremidades do encanamento geral dos vagões, é instalada uma
+torneira angular. Ela permite abrir ou fechar o fluxo de ar quando há acoplamento com
+outros veículos, locomotivas e vagões.
+Figura 105 - Torneira angular - Punho fixo
+Condição da torneira angular:
+• Aberta - Punho alinhado com a tubulação
+• Fechada – Punho forma um ângulo de 90° com a tubulação
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 114
+Para movimentar o punho, é necessário levantá-lo primeiro. Como ele é autotravante,
+fica assegurada a impossibilidade de a torneira abrir ou fechar acidentalmente.
+Torneira reta
+As torneiras retas são instaladas em cada extremidade dos vagões de carga tipo
+GDT, que possuem descarregamento em car dumper e que operam com mangueira
+de 34”.
+Elas podem ser fornecidas com punho autotravante ou punho removível.
+Figura 106 - Torneira reta - Punho fixo e removivel
+IMPORTANTE!
+A torneira do encanamento geral não deve ser aberta e fechada com o intuito de
+verificar a pressão do ar ou na tentativa de realizar maior aperto nos freios na
+composição.
+Se a torneira do encanamento geral for aberta, não se deve fechá-la enquanto estiver
+ocorrendo o fluxo de ar para a atmosfera, pois isso pode ocasionar um alívio
+indesejado dos freios da composição.
+Essa torneira só deve ser aberta ou fechada com a devida autorização do maquinista
+que estiver na condução do trem.
+10.2.3 Mangueiras de freio
+As mangueiras de freio são elementos flexíveis que garantem a continuidade do
+encanamento geral quando estão acoplados a outros veículos, locomotivas e vagões.
+As mangueiras de freio são compostas por:
+• Niple;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 115
+• Elemento de mangueira (tubo de borracha vulcanizada com camadas internas
+de reforço);
+• Bocal com junta (FP-5);
+• Duas braçadeiras metálicas com parafuso e porca.
+Figura 107 - Mangote
+10.2.4 Válvula de descarga
+As válvulas de controle de locomotivas não possuem uma parte de emergência,
+responsável pela chamada "ação rápida" nas aplicações de Emergência.
+Então, fique atento, pois, para a função de ação rápida, usa-se a válvula de descarga
+nº 8 ou similar.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 116
+Figura 108 - Válvula de descarga
+Sua função é proporcionar uma descarga local rápida da pressão do encanamento
+geral para a atmosfera, a fim de garantir uma condição de propagação de aplicação
+de Emergência dos freios, principalmente naquelas originadas num trem longo,
+quando são usadas várias locomotivas operando em tração múltipla. Nessas
+operações, a capacidade total dos compressores é tal, que, muitas vezes, uma ruptura
+de mangueira de um vagão de cauda do trem pode não ser "percebida" pela
+locomotiva, o que impossibilita a aplicação de Emergência.
+Quando a válvula de descarga nº 8 opera, há queda brusca de pressão, que provoca
+o funcionamento das outras válvulas de descarga dos outros vagões, assim como das
+válvulas de controle de toda a composição.
+Ela está normalmente localizada na extremidade oposta à da válvula de controle, em
+uma derivação do encanamento geral.
+10.3 Controle
+Quando o maquinista inicia uma aplicação, ou seja, utiliza o manipulador automático
+da locomotiva para redução da pressão do encanamento geral, uma válvula de
+controle sente a menor pressão do encanamento geral (em relação à pressão do
+reservatório de ar) e aplica os freios do vagão, enviando ar comprimido do reservatório
+de ar para o cilindro de freio.
+No momento em que o maquinista posiciona o manipulador na posição de alívio,
+elevando a pressão do encanamento geral, a válvula de controle assume nova
+posição, liberando o ar do cilindro de freio para a atmosfera.
+No início, as válvulas de controle eram constituídas de diafragmas e anéis de
+borracha tipo K. Logo, os diafragmas de borracha foram substituídos por pistões
+metálicos com anéis de vedação, por questões de manutenção dos equipamentos.
+Além disso, a manutenção em locais de difícil acesso e com poucos recursos fez com
+que se buscasse robustez e simplicidade na manutenção.
+Importante!
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 117
+Normalmente, existe uma válvula de controle para cada vagão, exceto nos casos de
+sistema dual (vagões GDT), em que uma única válvula comanda os freios de uma
+dupla de vagões.
+10.3.1 Válvula de controle AB
+Este modelo foi introduzido no mercado em 1933, mas é encontrado atualmente em
+menos de 10% da frota de vagões de carga. Introduziu o recurso de serviço rápido,
+que permite que a pressão no encanamento de freio seja aliviada localmente em cada
+vagão durante a aplicação inicial de serviço. Como resultado, os freios são aplicados
+uniformemente e levemente em todo o trem.
+Figura 109 - Válvula AB
+As válvulas AB apresentam as seguintes características:
+FUNÇÕES
+Executa as seguintes funções básicas:
+• Carregamento;
+• Aplicação;
+• Alívio;
+• Emergência.
+TECNOLOGIA
+A válvula AB utiliza a tecnologia da válvula de gaveta, com as seguintes
+características:
+• Controle preciso;
+• Autolimpante;
+• Tempo de serviço longo.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 118
+SERVIÇO RÁPIDO INICIAL
+• Três minutos para aplicação do freio no último vagão de uma composição de
+150 vagões;
+• Pressão: 6psi de redução do encanamento geral resultam em 10psi de
+pressão mínima no cilindro de freio.
+ALÍVIO DIRETO
+• Longos tempos para alívio: 60s para transmitir ao último vagão de uma
+composição de 150 vagões;
+• Resulta em restrição de operação.
+VAZAMENTO PELOS ANÉIS DE SEGMENTO
+• Não tem ajuste;
+• Freios agarrados;
+• Requer manutenção especializada.
+COMPONENTES BÁSICOS
+Figura 110 - Porções da válvula
+A válvula de controle AB possui três componentes básicos:
+1. Suporte dos encanamentos
+O suporte dos encanamentos tem as seguintes funções:
+¤ Anexar ao vagão e conectar vários encanamentos para os componentes;
+¤ Filtrar o fornecimento de ar usando seu filtro interno;
+¤ Conectar a parte de serviço e a parte de emergência.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 119
+2. Porção de serviço
+A porção de serviço inclui:
+¤ Pistão de serviço;
+¤ Slide;
+¤ Válvula de graduação.
+Executa as seguintes funções:
+• Permitir o carregamento dos reservatórios de emergência e auxiliar;
+• Executar todos os serviços de frenagem.
+3. Porção de emergência
+Similar à parte de serviço, a porção de emergência também inclui:
+• Pistão de serviço;
+• Slide;
+• Válvula de graduação.
+Quando a porção de emergência detecta que o ar do encanamento de freio é reduzido
+para um valor maior que a taxa de serviço, há um alívio do ar do encanamento de freio
+diretamente para a atmosfera, e a pressão do ar do reservatório de emergência é
+direcionada para o cilindro de freio.
+IMPORTANTE!
+Uma aplicação do freio de emergência é um resultado de uma rápida queda na
+pressão no encanamento de freio.
+A aplicação do freio de emergência aplicará os freios rapidamente e uniformemente
+em todo o trem.
+10.3.2 Válvula de controle ABD
+Devido às crescentes necessidades das ferrovias, as válvulas de controle ABD foram
+desenvolvidas, em 1963/64, para desempenhar todas as funções da válvula de
+controle AB num padrão maior de flexibilidade e confiabilidade, aliadas a um menor
+custo de manutenção.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 120
+Figura 111 - Válvula ABD
+As principais características das válvulas de controle ABD são:
+PISTÕES DE SERVIÇO E EMERGÊNCIA OPERADOS POR DIAFRAGMA
+Apresentam as seguintes vantagens:
+• Eliminação de vazamento e atrito provocados por anéis;
+• Resposta pronta e positiva a pequenos diferenciais de pressão;
+• Diferenciais operacionais mantidos constantes por eliminação do atrito e
+vazamentos variáveis;
+• Pistões montados verticalmente – desta forma, são menos suscetíveis às
+vibrações provenientes da operação dos vagões.
+SERVIÇO RÁPIDO
+O recurso de serviço rápido permite:
+• Pressão de 4 a 6psi de ar no encanamento de freio, para aliviar para a
+atmosfera, em cada vagão;
+• Alívio rápido somente quando a válvula de controle se move de Alívio para
+Serviço (o serviço rápido não permite alívio local após a redução inicial ser
+realizada, ou quando a válvula de controle se move da posição de
+Recobrimento para a posição de Serviço durante novas reduções);
+• Válvula que limita a pressão do cilindro de freio para 10 a 12psi.
+VÁLVULA DE ALÍVIO ACELERADO
+A válvula de alívio acelerado ajuda a recarregar o encanamento de freio a partir do
+reservatório de emergência de cada vagão e transmite rapidamente o alívio através
+do trem. Tal reação produz as seguintes vantagens:
+• Elimina freios agarrados;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 121
+• É disparado pelo alívio de 10psi ou uma redução maior no encanamento de
+freios;
+• Transmite rapidamente o alívio dos freios serialmente ao longo do trem, o que
+reduz o tempo de alívio do trem em 50%;
+• Reduz as forças no trem e permite um alívio a baixas velocidades em trens
+longos, devido ao alívio mais rápido dos freios;
+• Acelera o recarregamento dos vagões adjacentes.
+VÁLVULA DE ALÍVIO MANUAL
+Um só punho controla o alívio dos cilindros de freio, mantendo os reservatórios
+carregados ou, se desejado, proporciona a descarga de um ou ambos, juntamente
+com a pressão do cilindro de freio.
+CARREGAMENTO UNIFORME
+Uma das principais características das válvulas de controle ABD é o carregamento
+uniforme.
+Por "carregamento uniforme" entende-se o carregamento (ou recarregamento)
+retardado dos equipamentos de freio dos vagões mais próximos da locomotiva e mais
+rápido dos vagões da cauda do trem.
+A seguir, você conhecerá outro tipo de válvula. Fique atento às diferenças entre cada
+uma delas!
+10.3.3 Válvula de controle ABDW
+Introduzida em 1974, a válvula de controle ABDW mantém as principais
+características das válvulas de controle ABD: serviço rápido e serviço de alívio
+acelerado.
+Figura 112 - Válvula ABDW
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 122
+A principal função introduzida nessa válvula foi o recurso da aplicação acelerada de
+serviço.
+Apesar de ser uma função relacionada às aplicações dos freios de serviço dos
+vagões, a válvula de aplicação acelerada de serviço foi incorporada na porção de
+emergência da válvula de controle.
+O recurso de aplicação de serviço acelerada:
+• Permite uma quantidade de ar adicional no encanamento de freio para aliviar
+cada vagão durante cada aplicação de freio de serviço;
+• Resulta em aplicações de serviço mais rápidas;
+• Reduz as forças no trem;
+• Encurta as distâncias de parada.
+10.3.4 Válvula de controle DB-60
+Apesar de a válvula DB-60 ser mais moderna, possui as mesmas funções das
+válvulas da família AB.
+Figura 113 - Válvula DB-60
+A grande diferença da válvula DB-60 para as válvulas da família AB é a função W,
+presente no seu corpo.
+A válvula DB-60 utiliza o mesmo suporte de encanamento, podendo trafegar em
+vagões com válvulas da família AB.
+10.3.5 Válvula de Controle Simplificada (ABS)
+Algumas válvulas têm sua porção de emergência retirada e em seu lugar é instalada
+uma placa especial de vedação.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 123
+Quando essa configuração de montagem da válvula de controle é adotada a válvula
+é denominada com ABS (Air Brake – Simplified / Freio a Ar - Simplificado).
+Com a utilização dessa configuração os recursos afetados são:
+• Não execução de frenagem de emergência nesse vagão, ficando limitado a
+pressão máxima de frenagem igual a aplicação TOTAL DE SERVIÇO;
+• Perda da função de SERVIÇO RÁPIDO CONTÍNUO;
+• Perda da propagação do sinal de frenagem de EMERGÊNCIA ao longo da
+composição caso vagões com válvulas ABS formem bloco de mais de 3 vagões
+juntos. Vagões com o sistema de freio pneumático isolado também impedem a
+propagação do sinal de frenagem de EMERGÊNCIA caso estejam formando
+bloco com mais de 3 vagões isolados ou com válvulas ABS.
+Figura 114 - Válvulas sem a porção de emergência (ABS)
+10.3.6 Reservatório combinado
+O reservatório combinado armazena o ar que vem através da válvula de controle em
+dois compartimentos, que são destinados às funções de:
+• Reservatório auxiliar - sua pressão é usada em uma aplicação de serviço ou
+de emergência;
+• Reservatório de emergência - sua pressão é usada em uma aplicação de
+emergência.
+Figura 115 - Reservatório Combinado
+Nos vagões das ferrovias brasileiras, são utilizados dois tipos de reservatórios
+combinados, conforme mostrado a seguir.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 124
+Todos os reservatórios são dotados de flanges ou conexões roscadas para ligar o ar
+que neles é armazenado, pintados internamente e testados hidrostaticamente com
+220psi.
+Esse reservatório é carregado por meio da válvula de controle, até atingir pressão
+igual ao encanamento geral, liberando ar comprimido para o cilindro de freio no
+momento da aplicação de freio do vagão.
+10.3.7 Coletor de pó combinado com torneira de
+isolamento
+• Coletor de pó centrífugo
+¤ Tipo padrão, com válvula de retenção e câmara de pó removível;
+¤ Realiza uma pré-filtragem, a fim de evitar que o pó e/ou as partículas
+de sujeira depositadas no encanamento geral passem para a válvula
+de controle, o que poderia prejudicar o bom funcionamento do
+equipamento.
+• Torneira interruptora
+¤ Abre ou fecha a comunicação entre a válvula de controle e o
+encanamento geral;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 125
+¤ Permite o isolamento da válvula de controle, caso seja necessário
+isolar um vagão com mau funcionamento no sistema de freio.
+Figura 116 - Coletor de pó com torneira de isolamento
+O dispositivo contém flanges para parafusos, destinados a ambas as conexões.
+O flange na extremidade do coletor de pó é preso por parafusos diretamente ao
+suporte de encanamentos "AB"; enquanto o flange na extremidade da torneira é
+destinado a uma conexão também do tipo de flange.
+10.3.8 Retentor de controle de alívio
+O retentor de controle de alívio é um dispositivo de operação manual, localizado no
+final “B” do vagão ou no lado próximo da válvula de controle de retenção.
+O retentor de controle de alívio é utilizado para controlar o tempo de descarga do ar
+dos cilindros de freio. É apropriado para operar em vagões rebocados em trens que
+trafegam em terreno muito acidentado, como descida de serra.
+Figura 117 - Retentor
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 126
+O retentor de controle de alívio tem a função de proporcionar dois tipos de alívio dos
+freios:
+• Restrito
+Nos pontos onde as descidas de serra iniciam, os punhos dos retentores de controle
+de alívio de todos os veículos da composição devem ser movidos para a posição
+horizontal.
+Figura 118 - Retentor em Restrito
+A pressão do cilindro de freio cairá de 50 para 5psi, em 65 segundos, dando tempo
+suficiente tanto para que os compressores da locomotiva restabeleçam a pressão de
+ar nos reservatórios dos veículos, como também para o recarregamento do sistema,
+antes de uma nova aplicação.
+• Direto
+Na primeira parada após a descida de serra, os punhos dos retentores de controle de
+alívio devem ser movidos para a posição vertical.
+Figura 119 - Retentor em Direto
+A pressão do cilindro de freio cairá de 50psi para 5psi, em 25 segundos.
+Consequentemente, o alívio da pressão de ar nos cilindros de freio será muito mais
+rápido.
+Os retentores de controle de alívio atuais já dispõem de uma terceira posição – o
+punho a 45°, que proporciona um alívio restrito em menor tempo, ou seja, de 50 para
+5psi, em 45 segundos.
+Observação:
+Quando se coloca o punho do retentor de controle de alívio de um veículo na posição
+de descida de serra, é necessário que se faça o mesmo em todos os veículos da
+composição.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 127
+Numa mesma composição, não podem trafegar veículos com o punho em posições
+diversas.
+Nas ferrovias do Brasil, são utilizados dois tipos de retentores de controle de alívio:
+• De duas posições (direto / restrito);
+• De três posições (direto / restrito / super-restrito);
+Nas ferrovias americanas e nos países andinos, os retentores de controle de alívio
+utilizados têm 3 (três) posições (direto / restrito / com retenção).
+10.4 Aplicação
+10.4.1 Cilindro de Freio
+O cilindro de freio, instalado no estrado dos vagões, é o componente responsável
+pelo acionamento mecânico do sistema de freio, pois recebe o ar comprimido oriundo
+do reservatório auxiliar através da válvula de controle e, com o aumento da pressão
+interna, sua haste de acionamento avança movimentando a timoneria de freio e,
+consequentemente, pressionando as sapatas de freio contra as rodas.
+Quanto maior a pressão, maior será o esforço de frenagem.
+Quando os freios são aliviados, o ar comprimido interno é direcionado para a
+atmosfera, e a mola interna promove o retorno da haste de acionamento, afastando a
+sapata de freio da roda.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 128
+Os cursos dos cilindros de freio são calculados e o limite máximo de deslocamento é
+de ¾ do seu valor total de deslocamento.
+10.4.2 Timoneria de freio
+O sistema de freio dos vagões de carga tem a força gerada pela pressão dos cilindros
+de freio. Essa força é transmitida às sapatas de freio por meio de um conjunto de
+tirantes e alavancas, chamado de timoneria de freio.
+Figura 120 - Timoneria de freio
+As timonerias de freio usadas em vagões têm os cilindros de freio instalados no
+estrado dos vagões. Elas se dividem em duas partes:
+• Timoneria do corpo;
+• Timoneria do truque.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 129
+Figura 121 - Timoneria de freio no vagão
+Analisando separadamente a timoneria dos truques, vemos que nos vagões de bitola
+métrica da EFVM e VLI, os truques possuem alavancas de força do tipo vertical, ou
+seja, alinhadas com o tirante que vem das alavancas da caixa.
+Figura 122 - Alavancas
+Essas alavancas têm furação maior e menor, para que possam multiplicar os esforços
+até que cheguem aos triângulos e, consequentemente, às sapatas de freio.
+A timoneria pode incluir dois equipamentos adicionais:
+• Dispositivo vazio/carregado;
+• Ajustador de folga.
+10.4.3 Equipamento vazio/carregado
+Para um bom manejo do trem, é desejável que o sistema de freio seja capaz de
+produzir uma força de frenagem suficiente para parar o trem quando os vagões
+estiverem carregados. No entanto, ao mesmo tempo, não deve produzir uma força de
+frenagem, quando os vagões estiverem vazios, capaz de provocar o travamento das
+rodas, o que causa calos nas rodas.
+Para isso, devemos considerar o limite superior das recomendações da AAR – S 401
+ao projetar a taxa de frenagem para o vagão carregado. Isto é:
+Vagão novo → 11% a 14%;
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 130
+Vagão usado → 8,5% a 14%.
+Taxas de frenagem muito altas para o vagão carregado podem fazer com que a taxa
+de frenagem para o vagão vazio exceda o limite proposto pela AAR, que é de 35% a
+40% (previstos para o vagão carregado).
+O dispositivo utilizado para determinar a condição do vagão é o equipamento vazio/
+carregado, que, de uma forma geral, é usado quando:
+O equipamento vazio/carregado pode ser acionado das seguintes formas:
+• Com dispositivo mecânico que muda o ponto de apoio da alavanca do cilindro
+de freio;
+• Com equipamento ABEL (Air Brake Empty/Loaded) dotado de cilindro de freio
+com pistão diferencial (7 5/8” x 12 x 9”) e uma válvula de mudança, manual ou
+automática;
+• Por meio de mudança automática com a válvula VTA;
+• Com válvula automática EL-60 / EL-X e volume adicional.
+A seguir, detalharemos cada uma dessas maneiras.
+10.4.3.1 Com dispositivo mecânico que muda o ponto de apoio
+da alavanca do cilindro de freio
+➢ Condição de vagão vazio:
+A trava interna do comutador de freio não é liberada, e o ponto de apoio da alavanca
+do cilindro de freio é estabelecido na extremidade do comutador de freio, liberando o
+tirante de freio carregado, de modo que:
+Figura 123 - Comutador em VAZIO
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 131
+➢ Condição de vagão carregado:
+O ponto de apoio da alavanca do cilindro de freio é estabelecido na extremidade do
+tirante de freio carregado, de modo que:
+Figura 124 - Comutador em CARGA
+Como podemos observar nas imagens anteriores:
+Logo,
+Figura 125 - Cilindro de freio, Comutador e Tirante
+O comutador de freio pode ser do tipo:
+➢ Manual
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 132
+➢ Automático
+10.4.3.2 Com equipamento ABEL (A B Empty/Loaded) dotado
+de cilindro de freio com pistão diferencial (7 5/8” x 12
+x 9”) e uma válvula de mudança, manual ou
+automática
+O cilindro de freio diferencial possui duas câmaras, que abastecem, respectivamente:
+➢ Face maior do pistão → Diâmetro de 12”;
+➢ Face menor do pistão → Diâmetro de 7 5/8”.
+Figura 126 - Cilindro Diferencial
+Condição de vagão vazio
+Válvula de mudança permitirá que haja pressão em ambas as câmaras do pistão do
+cilindro de freio diferencial, resultando num esforço de frenagem menor.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 133
+Figura 127 - Cilindro diferencial - Condição de VAZIO
+Condição de vagão carregado:
+A válvula de mudança permitirá passagem de ar apenas para a câmara da face maior
+do pistão, enquanto a câmara da face menor fica em comunicação com a atmosfera,
+resultando num esforço maior de frenagem.
+Figura 128 - Cilindro diferencial - Condição de CARGA
+A válvula utilizada como válvula de mudança é a AB-5, que é acionada manualmente.
+Figura 129 - Válvula de mudança AB-5
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 134
+A mudança do regime de frenagem é efetuada no disco seletor, posicionando o punho
+operante nas posições da placa indicadora:
+VAZIO → quando o vagão transportar menos de meia carga;
+CARGA → quando o vagão tiver mais de meia carga.
+Figura 130 - Punho e placa da válvula AB-5
+10.4.3.3 Mudança automática com a válvula VTA
+A válvula de mudança VTA é utilizada para acionar o dispositivo vazio/carregado, que
+muda, de forma automática, o regime de frenagem.
+Figura 131 - Válvula VTA
+A válvula VTA é instalada na travessa do truque.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 135
+Figura 132 - VTA no vagão
+➢ Condição de vagão vazio:
+Quando o vagão está vazio, as molas do truque estão distendidas, e o sensor da
+válvula VTA não toca no batente, bloqueando a passagem do ar do encanamento
+geral para acionar o pistão de liberação do ferrolho.
+Figura 133 - Válvula VTA - Condição VAZIO
+➢ Condição de vagão carregado:
+Quando o vagão é carregado, as molas do truque se comprimem, e o sensor toca no
+batente, acionando a válvula VTA para a posição de carga.
+Com isso, a passagem do ar do encanamento geral é liberada para acionar o pistão
+de liberação do ferrolho, fazendo com que a força seja transmitida por meio do
+tirante/barra de carga.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 136
+Figura 134 - Válvula VTA - Condição CARGA
+Durante as aplicações de freio, na condição de vagão vazio, as válvulas de carga
+proporcionais direcionam a pressão do reservatório auxiliar para o cilindro de freio e
+para um reservatório adicional, com um pequeno volume, que fica em comunicação
+com o cilindro de freio na posição Vazio.
+10.4.3.4 Com a válvula EL-60 / EL-X
+Durante as aplicações de freio, na condição de vagão vazio, as válvulas de carga
+proporcionais direcionam a pressão do reservatório auxiliar para o cilindro de freio e
+para um reservatório adicional, com um pequeno volume, que fica em comunicação
+com o cilindro de freio na posição Vazio.
+O dispositivo vazio/carregado é instalado na caixa do vagão, acima da lateral do
+truque.
+Figura 135 - Válvula EL-X instalada
+Pela Lei de Boyle Mariote, em virtude desse volume adicional, podemos afirmar que
+a pressão final no cilindro de freio será menor, o que reduz a possibilidade de
+travamento das rodas.
+Na condição de vagão carregado, a válvula EL-60 ou a válvula EL-X, do dispositivo
+vazio/ carregado de comutação automática, interrompe a comunicação entre o
+reservatório auxiliar e o reservatório adicional, de modo que a pressão do reservatório
+auxiliar flui apenas para o cilindro de freio, aumentando a pressão no seu interior.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 137
+Figura 136 - EL-60 e EL-X
+A válvula EL-60 ou a válvula EL-X determina a condição de carga do vagão ao medir
+quanto movimento do braço sensor da válvula é necessário para que o braço se
+encoste à travessa lateral do truque.
+Figura 137 - Posições da EL-60: CARGA - VAZIO - INTERMEDIÁRIO
+Uma relação estabelecida entre a posição do braço sensor e a válvula proporcional
+do dispositivo vazio/carregado resulta na proporção vazio/carregado (30%, 40%, 50%
+ou 60%).
+Se o vagão estiver carregado com 30% da sua capacidade ou mais, o movimento do
+braço sensor será restringido ao fazer contato com a travessa lateral do truque,
+mantendo assim o ajuste da válvula para uma frenagem de vagão carregado.
+Se o vagão estiver carregado com menos que 30% de sua capacidade, e a pressão
+do cilindro for superior a 10psi, o braço sensor poderá se mover além do ponto de
+comutação, ajustando a válvula para uma frenagem de vagão vazio.
+Se o vagão estiver totalmente vazio, o braço sensor ficará com uma folga de 1/4” da
+travessa lateral do truque.
+Nos processos de carregamento do vagão, quando houver aplicação de freio, o braço
+sensor será pressionado para cima e ajustará a válvula para a condição de carga
+intermediária.
+A válvula de comutação automática possui um visor do lado oposto da alavanca
+sensora, que nos permite visualizar a condição de Vazio, quando o pino vermelho
+aparece no visor, e Carga, quando o pino não aparece no visor.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 138
+10.4.4 Ajustador automático de folga
+Sua função é ajustar automaticamente as folgas na timoneria de freio decorrentes do
+desgaste das sapatas e rodas e, assim, manter o curso padrão do cilindro de freio.
+Conforme o tipo de acionamento, os ajustadores automáticos de folga são
+classificados em:
+• Pneumático
+Os ajustadores pneumáticos funcionam em um só sentido, só diminuem a folga.
+Figura 138 - Ajustador pneumático
+• Mecânico
+Os ajustadores mecânicos são caracterizados por duplo sentido, diminuem e
+aumentam a folga.
+Figura 139 - Ajustadores mecânicos
+Como a ação do ajustador se realiza nos dois sentidos, quando as sapatas que estão
+gastas são substituídas por outras novas, o mecanismo automaticamente ajusta a
+timoneria para as novas condições.
+O ajustador restabelece em, no máximo, três aplicações o curso normal do pistão do
+cilindro de freio, após a troca de todas as oito sapatas de vagão.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 139
+Figura 140 - Ajustador mecânico
+10.5 Freio Manual dos Vagões
+É um dispositivo mecânico, geralmente localizado em uma das testeiras ou na lateral
+do vagão, que fica ligado à timoneria de freio e tem a função de aplicar de forma
+mecânica o freio no vagão, sem o auxílio do sistema de freio automático.
+Há vários tipos de freio manual, porém os mais usados são os de volante com catraca.
+Figura 141 - Freio manual
+O freio manual dos vagões é acionado para:
+• Segurar os vagões contra movimentos indesejados;
+• Controlar e parar vagões em movimento quando eles não estão acoplados num
+trem ou são parte de um movimento de manobra;
+• No caso em que a composição fique estacionada por mais de seis horas, com
+ou sem a locomotiva acoplada;
+• No caso de estacionamento da composição em que a locomotiva fique
+desacoplada.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 140
+11
+11 Sistema de Freio
+a Ar Controlado por
+Computador
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 141
+11.1 Principais Características
+O Sistema de Freio a Ar Controlado por Computador de Segunda Geração – CCB II
+é um sistema de controle de freio eletropneumático baseado em microprocessador,
+projetado para ser compatível com os equipamentos de freio automático 26-L e CCB
+de primeira geração (CCB I).
+Esse sistema executa diversas funções de diagnóstico:
+• Autoteste;
+• Calibragens;
+• Sinalização de defeitos.
+O sistema CCB II é composto pelos seguintes módulos eletrônicos:
+• IPM (Integrated Processor Module – Módulo de Processador Integrado);
+• EPCU (Electro Pneumatic Control Unit – Unidade de Controle
+Eletropneumática);
+• EBV (Electronic Brake Valve – Válvula de Freio Eletrônico);
+• RIM (Relay Interface Module);
+• ILC (Integrated Locomotive Computer – Computador Integrado da Locomotiva).
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 142
+Esses módulos formam uma eletrônica distribuída que é interligada por uma rede
+operacional LonWorks, da Echelon Corporation, permitindo que toda lógica seja
+controlada por computador.
+Uma exceção é a inicialização de uma aplicação de freio de emergência, que é
+propagada mecanicamente por meio de uma válvula de descarga, colocando-se o
+punho do manipulador automático na posição de Emergência.
+O sistema CCB II apresenta as seguintes características:
+• Muitas das funções efetuadas por meio de válvulas pneumáticas (A1, P-2A,
+MU-2A, sobrevelocidade e chave seletora, do sistema de freio 26-L) são
+simuladas pelo software do CCB II em conjunto com o IPM e o IFC.
+• Não existe substituição ou equivalência direta entre a maioria das válvulas ou
+funções pneumáticas existentes no sistema de freio 26L.
+• O uso de tecnologia modular LRU (unidade modularizada de linha substituível)
+permite o diagnóstico preciso e um serviço rápido com um mínimo de
+ferramentas.
+• Existe a possibilidade de alteração da configuração existente, por meio de
+software, permitindo flexibilidade e facilidade de adaptação a futuras exigências
+de mercado.
+• Os módulos da EPCU (unidade de controle eletropneumática), o manipulador
+de freio (EBV), o módulo RIM (Relay Interface Module) e o computador (IPM)
+estão ligados entre si por uma rede operacional (LonWorks), o que permite o
+monitoramento constante de todas as funções eletrônicas e pneumáticas.
+• Existe alternativa pneumática (backup) das principais funções de segurança.
+• O controle das funções de Principal/Rebocado e o controle de acionamento e
+corte do encanamento de freio são realizados por meio da seleção de menu do
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 143
+ILC (Integrated Locomotive Computer – Computador Integrado na Locomotiva),
+localizado no console do operador.
+Em caso de avaria, o computador decide qual a melhor alternativa para o backup.
+Após a seleção, o operador é informado por uma mensagem enviada para o IFC (crew
+message).
+11.2 Módulo de Processador Integrado - IPM
+O computador principal do sistema CCB II é o Módulo de Processador Integrado –
+IPM.
+Figura 142 - Módulo E-IPM
+De modo geral, esse módulo é montado no nariz da cabina da locomotiva e executa
+todas as interfaces com o computador da locomotiva (ILC).
+O IPM comunica-se com:
+➢ O ILC, por meio da linha de controle de link de dados de alto nível (HDLC);
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 144
+➢ O EPCU e o EBV, pela rede LonWorks.
+Além de gerenciar, executar todas as tarefas de interfaces com o ILC e transmitir os
+comandos de freio ao EPCU, o IPM comunica-se com o ILC, a fim de transmitir as
+mensagens para exibição nas telas da locomotiva:
+➢ De alerta;
+➢ À equipe;
+➢ De defeitos detectados por diagnóstico.
+Essas mensagens são fornecidas para auxiliar o operador na operação do sistema
+de freio, mas não têm o objetivo de serem instruções de manutenção.
+O IPM tem espaço para até oito entradas e oito saídas discretas. As saídas binárias
+direcionam os relés eletromecânicos para interface e podem ser configuradas, quando
+necessário, para suportar as opções no nível do sistema da locomotiva.
+O sistema CCB II pode ser fornecido como parte de um pacote integrado que combina
+a funcionalidade da tração distribuída com o freio pneumático eletrônico.
+Este é um produto da GE-Harris Railway Electronics, vendido sob o nome comercial
+LOCOTROL-EB.
+Quando fornecido, como parte do LOCOTROL-EB, o IPM contém software que
+fornece toda a funcionalidade da tração distribuída.
+E como é feita a configuração do freio no IPM?
+A configuração do freio pneumático é feita pelo computador integrado da locomotiva
+(ILC).
+No painel frontal do IPM, existe um conjunto de luzes. Veja, no quadro a seguir, o que
+cada luz indica:
+Figura 143 - E-IPM - Visão frontal
+Indicação propiciada pelo conjunto de luzes na frente do computador IPM
+➢ POWER
+¤ Esta luz verde indica que o IPM está ligado.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 145
+¤ Se o disjuntor do IPM estiver ligado e esta luz não estiver acesa, existem
+fortes possibilidades de a fonte de alimentação do IPM estar avariada.
+➢ CPU OK
+¤ Esta luz verde indica que o processador do IPM está ok, com base na
+informação interna fornecida pelo WATCHDOG.
+¤ Esta luz indica também que o IPM passou no autoteste inicial, o qual é
+efetuado de 15 em 15 minutos.
+➢ DP LEAD
+¤ Esta luz verde indica que a locomotiva está em COMANDO, com o sistema
+de potência distribuída ativado.
+➢ DP REMOTE
+¤ Esta luz verde indica que a locomotiva está funcionando com o sistema de
+potência distribuída remota ativado.
+➢ DP TX A
+¤ Esta luz amarela indica que a locomotiva está transmitindo mensagens de
+potência distribuída por meio do rádio A.
+➢ DP TX B
+¤ Esta luz amarela indica que a locomotiva está transmitindo mensagens de
+potência distribuída pelo rádio B.
+➢ DP RX
+¤ Esta luz verde indica que a locomotiva está recebendo mensagens de
+potência distribuída via rádio.
+➢ DP COM INT
+¤ Esta luz vermelha indica que a locomotiva está com uma avaria no sistema
+de comunicação de rádio em P.D.
+➢ DATALINK FA
+¤ Esta luz vermelha indica que o IPM está impossibilitado de se comunicar
+com o computador da locomotiva (ILC, IFC, ICE, etc.) via LSI por meio da
+porta RS-422 (HDLC) em P.D. ou EAB.
+➢ NETWORK FA
+¤ Esta luz vermelha indica que existem dificuldades nas comunicações
+internas nos sistemas LOCOTROL EB ou CCB II (entre o IPM, EPCU e EBV)
+por meio da rede LON.
+➢ EBV FAIL
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 146
+¤ Esta luz vermelha indica que há avaria na válvula eletrônica de freio (EBV),
+do sistema LOCOTROL EB/CCB II.
+¤ Esta avaria específica pode ser eletrônica, pneumática ou ambas.
+➢ EPCU FAIL
+¤ Esta luz vermelha indica que há avaria na unidade de controle
+eletropneumática (EPCU), do sistema LOCOTROL EB/CCB II.
+¤ Esta avaria específica pode ser eletrônica, pneumática ou ambas.
+➢ EAB BACKUP
+¤ Esta luz amarela indica que o sistema LOCOTROL EB / CCB II ativou um
+dos modos de operação alternativos (backup) de forma que o freio
+eletrônico continue as suas funções.
+¤ Por exemplo: se o transdutor primário do reservatório principal (MRT) sofreu
+avaria e o sistema comutou para o transdutor secundário (MRT).
+11.3 Unidade de Controle Eletropneumático –
+EPCU
+A Unidade de Controle Eletropneumático (EPCU) contém válvulas pneumáticas que
+controlam as linhas pneumáticas do trem da locomotiva.
+Ela é constituída pelas unidades substituíveis de linha modularizadas (LRUs):
+13CP → Porção de controle 13;
+16CP → Porção de controle 16;
+20CP → Porção de controle 20;
+BCCP → Porção de controle do cilindro de freio;
+BPCP → Porção de controle do encanamento geral;
+ERCP → Porção de controle do reservatório de equilibrante;
+DBTV → Válvula tripla DB;
+PSJB → Caixa de junção da fonte de alimentação;
+MR FILTER.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 147
+Figura 144 - Unidade de Controle Eletropneumático - EPCU
+A EPCU contém filtros para o reservatório principal de ar, bem como para o ar do
+controle independente e controle das LRUs.
+O fornecimento de ar ao relé do encanamento de freio está condicionado por um
+elemento de tela.
+Adicionalmente, a EPCU também contém um Regulador de Motor Morto (DER), que
+permite ao reservatório principal ser carregado pelo encanamento de freio em uma
+locomotiva morta.
+As funções dos módulos que compõem a unidade de controle eletropneumático estão
+descritas abaixo.
+➢ 13CP
+¤ Simula a função de alívio da válvula 26-F.
+¤ Fornece a pressão do encanamento de aplicação.
+➢ 16CP
+¤ Fornece a pressão de controle do cilindro do freio.
+➢ 20CP
+¤ Simula a função do independente.
+¤ Fornece a aplicação independente e a pressão do encanamento de alívio.
+➢ 16CP e 20CP
+¤ Simulam em conjunto as funções das válvulas H5, F1 e J-1.6-16 .
+¤ Estas funções são auxiliadas pelo software do freio instalado no IPM e em
+cada módulo.
+➢ BCCP
+¤ Simula a função da válvula relé J1, mas também trabalha em conjunto com
+os módulos 16CP e 20CP.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 148
+¤ Contém o relé do encanamento de freio e fornece acionamento e corte do
+encanamento de freio, bem como a aplicação de emergência.
+➢ BPCP
+¤ Simula as funções de emergência e carregamento da válvula 26-C.
+¤ Abriga o relé do cilindro do freio.
+➢ DBTV
+¤ Simula a função de aplicação de serviço da válvula 26-F, mas a sua principal
+função é de backup do sistema de freio CCBII.
+¤ Fornece suporte pneumático na hipótese de falha eletrônica.
+➢ 16CP, 13CP e DBTV
+¤ Auxiliam o freio dinâmico.
+➢ 16CP, BCCP e DBTV
+¤ Simulam em conjunto as funções da válvula 26-F.
+➢ ERCP
+¤ Simula as funções da válvula reguladora e da válvula de comunicação com
+o EG da válvula 26-C.
+¤ Fornece pressão de controle encanamento de freio.
+➢ BPCP e ERCP
+¤ A válvula KR5 (instalada no BPCP) e o ERCP são responsáveis pelo
+recobrimento do sistema de freio da locomotiva.
+➢ PSJB
+¤ Contém o fornecimento de energia.
+Cinco destas LRUs (13CP, 16CP, 20CP, BCCP e ERCP) são "inteligentes" e se
+comunicam pela rede.
+A EPCU é instalada no compartimento de controle do freio da locomotiva.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 149
+Figura 145 - EPCU na locomotiva
+Também faz parte da EPCU um reservatório equilibrante, que está instalado na parte
+traseira do painel.
+Figura 146 - EPCU - Parte traseira
+11.4 Módulo de Interligação dos Relés – RIM
+O Módulo de Interface dos Relés – RIM é um compartimento padrão LSI em que
+estão fisicamente montados até sete relés eletromecânicos.
+Esses relés são direcionados pelo IPM para comutar as linhas elétricas do trem.
+De modo geral, o RIM está montado no nariz da cabina, próximo do IPM. Ele contém
+seis relés operacionais, cujas funções estão especificadas a seguir.
+Figura 147 - Módulo RIM
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 150
+➢ PCS
+¤ O relé power knockdown switch liga/desliga o relé PCR no sistema de
+controle elétrico da locomotiva.
+➢ ALR
+¤ O alarm relay ativa o sistema de alarme em caso de avaria no freio.
+➢ ESR
+¤ O emergency sand relay, quando ligado, ativa o areeiro.
+➢ IBR
+¤ A uma pressão de 13 psi nos cilindros, o independent brake relay ativa o
+sinal de freio independente, reduzindo a escala de aplicação do freio
+dinâmico.
+➢ DBCO
+¤ O dynamic brake cut out ativa/desativa o freio dinâmico.
+➢ SPARE
+¤ Suplente (não usado).
+11.5 Válvula de Freio Eletrônico – EBV
+A interface homem-máquina (Man Machine Interface – MMI) para o sistema de freio
+CCB II é a válvula do freio eletrônico (Electronic Brake Valve – EBV) do tipo 26, que é
+montada no lugar da válvula de freio pneumático 26-C.
+A EBV encontra-se disponível em duas versões:
+Vertical ou lateral
+Adequada para instalação no pedestal de controle de tipo AAR.
+A EBV vertical foi projetada para ser encaixada na mesma abertura que a válvula de
+freio pneumático 26C.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 151
+Figura 148 - EBV vertical
+Horizontal ou frontal (Desktop)
+Figura 149 - EBV horizontal
+De maneira geral, o EBV contém:
+• Os manipuladores para operação dos freios automático e independente;
+• O manipulador do freio automático com as mesmas posições relativas à válvula
+26-C: Alívio (REL), Aplicação Mínima (MIN), Aplicação de serviço (FS),
+Supressão (SUP), Punho Fora (HO/CS) e Emergência (EMER), cujas posições
+são definidas por encaixes;
+• O manipulador do freio independente, que é contínuo da posição Release para
+Full;
+• Um mecanismo para ativar o alívio rápido;
+• Uma válvula pneumática, atuada a came, que propaga mecanicamente a
+inicialização de uma aplicação de freio de emergência, sob diversos modos de
+falha (como falha do computador e perda de alimentação da bateria), quando
+o manipulador é movimentado para a posição EMERGENCY;
+• A válvula pneumática, que abre a passagem 21, atuando, assim, a válvula tripla
+DM, montada no distribuidor, que fornece um controle de cilindro de freio
+pneumático;
+• Conexão com a rede Lon distribuída e comunica-se em tempo real com os cinco
+(5) módulos eletrônicos inteligentes da Unidade de Controle Eletropneumáticos
+(EPCU);
+• Um LCD que exibe a pressão do reservatório de equalização.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 152
+A pressão ER exibida no ILC será a pressão real no reservatório de equalização, que
+diminuirá a taxa de serviço e, eventualmente, estabelecerá o valor alvo de ER.
+O display dá ao operador a indicação imediata da quantidade de redução do
+encanamento de freio solicitada, sem os atrasos inerentes ao display ILC.
+Figura 150 - EBV com display
+11.6 Módulo de Interface com o Operador ou
+Display – OIM
+O sistema de freio eletrônico possui uma interface homem-máquina em que as
+informações de pressão e de falhas do sistema são apresentadas.
+Essa interface, em algumas frotas, é o módulo OIM; em outras, é o próprio
+computador IFC (Integrated Function Computer – Computador de Funções
+Integradas) da locomotiva e, por consequência, os seus displays (IDU).
+Figura 151 - Computador IFC
+O dispositivo de interface para o sistema Locotrol – EB é um display gráfico com
+comandos executados por teclas.
+Ele é dividido em duas telas planas monocromáticas, na cor âmbar, com iluminação
+fluorescente, que mostram informações do freio e do Locotrol.
+
+TRILHA TÉCNICA: FERROVIA | OPERAÇÃO 153
+Figura 152 - OIM - Módulo de interface do operador
+O sistema do Locotrol é controlado por dois grupos de teclas iluminadas tipo push-
+buttons no painel frontal do display, abaixo das telas de indicação.
+Teclas de up-down controlam a luminosidade das duas telas, e uma chave de
+liga/desliga é posicionada na parte traseira do display.
