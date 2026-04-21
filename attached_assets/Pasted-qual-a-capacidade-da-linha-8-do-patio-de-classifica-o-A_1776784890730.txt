@@ -1,0 +1,63 @@
+qual a capacidade da linha 8 do patio de classificação ?
+Angelo, essa informação específica sobre a capacidade da linha 8 do pátio de classificação não está nos documentos que tenho acesso no app.
+
+Os manuais e normas carregados focam em:
+• Operação geral de trens (ROF)
+
+• Sistemas técnicos das locomotivas (freios, eletricidade, etc.)
+
+• Procedimentos de manobra
+
+
+Para dados de infraestrutura específica de pátios (capacidades de linhas, layout, limites de comprimento/peso), você precisa consultar:
+
+1. Documentação do pátio de classificação (plantas, especificações técnicas)
+2. Sistema de licenciamento (que contém restrições por linha)
+3. CCO (Centro de Controle Operacional) — eles têm esses dados em tempo real
+
+Se tiver esse documento, pode anexar aqui que eu leio e extrai a informação. Ou, se precisar dessa capacidade para planejar uma operação, o CCO consegue informar na hora.
+
+Tem mais algo que posso ajudar? 🚦
+na livraria existe um documento chamado layout dos patios la tem a informação de capacidade das linhas, vc pode extratificar
+Angelo, revisei a Biblioteca do app (todos os documentos indexados) e não encontro um documento com nome "Layout dos Pátios" ou similar nela.
+
+Os documentos que tenho disponíveis são:
+
+📚 Manuais técnicos:
+• Básico de Locomotivas
+
+• Sistema de Freios (2 versões)
+
+• Eletricidade da Locomotiva
+
+• Sistema de Vagões
+
+• Elementos de Via Permanente
+
+• Transporte de Produtos Perigosos
+
+• Inspeção de Vagões
+
+• Manobras Ferroviárias
+
+• Tração Distribuída
+
+• Sistema de Freio 26-L
+
+
+📋 Normas:
+• ROF — Regulamento de Operação Ferroviária
+
+• Manual Técnico de Vagões e Carros de Passageiros
+
+
+📜 Acordo Coletivo:
+• ACT Vale x STEFEM 2025-2027
+
+
+Possibilidades:
+1. O documento ainda não foi anexado ao app
+2. Está em outro local (servidor, pen drive, e-mail)
+3. Tem outro nome na biblioteca
+
+Você consegue anexar o PDF do Layout dos Pátios agora? Aí eu leio e extrai a capacidade da linha 8 na hora! 📎

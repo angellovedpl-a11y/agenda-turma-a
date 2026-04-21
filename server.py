@@ -92,12 +92,47 @@ def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str) -> str:
         try:
             import zipfile
             with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                if len(z.infolist()) > 500 or sum(i.file_size for i in z.infolist()) > 50*1024*1024:
+                    return ''
+                info = z.getinfo('word/document.xml')
+                if info.file_size > 10*1024*1024:
+                    return ''
                 xml = z.read('word/document.xml').decode('utf-8', errors='ignore')
             xml = re.sub(r'</w:p>', '\n', xml)
             xml = re.sub(r'<[^>]+>', ' ', xml)
             xml = re.sub(r'[ \t]+', ' ', xml)
             xml = re.sub(r'\n\s*\n+', '\n\n', xml)
             return xml.strip()
+        except Exception:
+            return ''
+    if nome_lower.endswith('.pptx') or 'officedocument.presentationml' in (mimetype or ''):
+        try:
+            import zipfile
+            partes = []
+            with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                if len(z.infolist()) > 1000 or sum(i.file_size for i in z.infolist()) > 100*1024*1024:
+                    return ''
+                slide_infos = [i for i in z.infolist() if i.filename.startswith('ppt/slides/slide') and i.filename.endswith('.xml')]
+                slide_infos.sort(key=lambda i: int(re.search(r'slide(\d+)', i.filename).group(1)) if re.search(r'slide(\d+)', i.filename) else 0)
+                slide_infos = slide_infos[:300]
+                texto_total = 0
+                for si in slide_infos:
+                    if si.file_size > 5*1024*1024 or texto_total > 5*1024*1024:
+                        break
+                    try:
+                        xml = z.read(si.filename).decode('utf-8', errors='ignore')
+                        texto_total += len(xml)
+                        sn = si.filename
+                        xml = re.sub(r'</a:p>', '\n', xml)
+                        xml = re.sub(r'</a:t>', ' ', xml)
+                        xml = re.sub(r'<[^>]+>', ' ', xml)
+                        xml = re.sub(r'[ \t]+', ' ', xml).strip()
+                        if xml:
+                            num = re.search(r'slide(\d+)', sn)
+                            partes.append('--- Slide ' + (num.group(1) if num else '?') + ' ---\n' + xml)
+                    except Exception:
+                        continue
+            return '\n\n'.join(partes).strip()
         except Exception:
             return ''
     if (mimetype and 'text' in mimetype) or nome_lower.endswith('.txt') or nome_lower.endswith('.md'):
@@ -371,8 +406,8 @@ def biblioteca_upload():
         is_temp = bool(data.get('temp'))
         if not nome or not b64:
             return jsonify({'error': 'Nome e dados sao obrigatorios'}), 400
-        if len(b64) > 8 * 1024 * 1024:
-            return jsonify({'error': 'Arquivo muito grande (max 5MB)'}), 413
+        if len(b64) > 14 * 1024 * 1024:
+            return jsonify({'error': 'Arquivo muito grande (max 10MB)'}), 413
 
         texto = extrair_texto_arquivo(b64, mimetype, nome)
         if not texto or len(texto.strip()) < 30:
