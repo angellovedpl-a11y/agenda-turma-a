@@ -9,12 +9,17 @@ import os
 
 CAPA_IMG = "attached_assets/imagem_2_1776741704206.jpeg"
 ANGELO_IMG = "attached_assets/angelo_imagem_1_1776741704207.jpeg"
+VALE_LOGO = "attached_assets/vale.png"
+
+VERDE_VALE = HexColor("#008f83")
+VERDE_ESCURO = HexColor("#00564f")
+AMARELO_VALE = HexColor("#fdb913")
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
 
 OUT = "manual_agenda_turma_a.pdf"
 
-AZUL = HexColor("#1e3a8a")
-AMARELO = HexColor("#f59e0b")
+AZUL = HexColor("#008f83")  # Verde Vale (rebatizado pra nao quebrar refs)
+AMARELO = HexColor("#fdb913")  # Amarelo Vale
 CINZA = HexColor("#374151")
 CINZA_CLARO = HexColor("#f3f4f6")
 VERDE = HexColor("#059669")
@@ -51,45 +56,106 @@ def header_footer(canvas, doc):
     canvas.restoreState()
 
 def capa_canvas(canvas, doc):
+    W, H = A4
     canvas.saveState()
-    # fundo azul
-    canvas.setFillColor(AZUL)
-    canvas.rect(0, 0, A4[0], A4[1], fill=1, stroke=0)
 
-    # foto da turma centralizada
+    # 1) Foto da turma cobrindo a pagina inteira (plano de fundo)
     if os.path.exists(CAPA_IMG):
         img = ImageReader(CAPA_IMG)
         iw, ih = img.getSize()
-        max_w = A4[0] - 4*cm
-        max_h = 12*cm
-        ratio = min(max_w/iw, max_h/ih)
+        ratio = max(W/iw, H/ih)  # cobre toda a area
         w, h = iw*ratio, ih*ratio
-        x = (A4[0]-w)/2
-        y = A4[1]/2 - h/2 + 1*cm
-        # moldura amarela
-        canvas.setFillColor(AMARELO)
-        canvas.rect(x-0.2*cm, y-0.2*cm, w+0.4*cm, h+0.4*cm, fill=1, stroke=0)
-        canvas.drawImage(img, x, y, width=w, height=h, preserveAspectRatio=True, mask='auto')
+        x = (W-w)/2
+        y = (H-h)/2
+        canvas.drawImage(img, x, y, width=w, height=h, mask='auto')
+    else:
+        canvas.setFillColor(VERDE_ESCURO)
+        canvas.rect(0, 0, W, H, fill=1, stroke=0)
 
-    # faixas amarelas topo e rodape
-    canvas.setFillColor(AMARELO)
-    canvas.rect(0, A4[1]-2.2*cm, A4[0], 0.35*cm, fill=1, stroke=0)
-    canvas.rect(0, 2.4*cm, A4[0], 0.35*cm, fill=1, stroke=0)
+    # 2) Veu verde escuro semi-transparente para legibilidade
+    canvas.setFillColor(VERDE_ESCURO)
+    canvas.setFillAlpha(0.55)
+    canvas.rect(0, 0, W, H, fill=1, stroke=0)
+    canvas.setFillAlpha(1)
 
-    # titulo no topo
+    # 3) Faixa superior (verde Vale) com logo
+    faixa_top_h = 3.2*cm
+    canvas.setFillColor(VERDE_VALE)
+    canvas.rect(0, H-faixa_top_h, W, faixa_top_h, fill=1, stroke=0)
+    # micro-faixa amarela abaixo
+    canvas.setFillColor(AMARELO_VALE)
+    canvas.rect(0, H-faixa_top_h-0.18*cm, W, 0.18*cm, fill=1, stroke=0)
+
+    # logo Vale na faixa superior
+    if os.path.exists(VALE_LOGO):
+        logo = ImageReader(VALE_LOGO)
+        liw, lih = logo.getSize()
+        target_h = 1.6*cm
+        target_w = target_h * (liw/lih)
+        canvas.drawImage(logo, 1.5*cm, H-faixa_top_h+0.8*cm,
+                         width=target_w, height=target_h,
+                         preserveAspectRatio=True, mask='auto')
+
+    # texto "PARCERIA DE QUEM ROLA NOS TRILHOS" no topo direito
     canvas.setFillColor(white)
-    canvas.setFont("Helvetica-Bold", 26)
-    canvas.drawCentredString(A4[0]/2, A4[1]-3.5*cm, "Agenda Turma A")
+    canvas.setFont("Helvetica", 9)
+    canvas.drawRightString(W-1.5*cm, H-faixa_top_h+1.7*cm, "TURMA A  —  ESCALA FERROVIÁRIA 2x2")
+    canvas.setFont("Helvetica-Bold", 10)
+    canvas.setFillColor(AMARELO_VALE)
+    canvas.drawRightString(W-1.5*cm, H-faixa_top_h+1.0*cm, "CICLO 2026 — 2030")
+
+    # 4) Bloco central com titulo elegante
+    centro_y = H/2 + 1.5*cm
+    # caixa preta translucida
+    box_w = W - 4*cm
+    box_h = 6.5*cm
+    canvas.setFillColor(black)
+    canvas.setFillAlpha(0.35)
+    canvas.roundRect(2*cm, centro_y - box_h/2, box_w, box_h, 0.3*cm, fill=1, stroke=0)
+    canvas.setFillAlpha(1)
+    # borda amarela fina
+    canvas.setStrokeColor(AMARELO_VALE)
+    canvas.setLineWidth(1.2)
+    canvas.roundRect(2*cm, centro_y - box_h/2, box_w, box_h, 0.3*cm, fill=0, stroke=1)
+
+    # texto AGENDA
+    canvas.setFillColor(AMARELO_VALE)
+    canvas.setFont("Helvetica-Bold", 14)
+    canvas.drawCentredString(W/2, centro_y + 2.0*cm, "M A N U A L   D E   I N S T R U Ç Õ E S")
+
+    # divisor
+    canvas.setStrokeColor(AMARELO_VALE)
+    canvas.setLineWidth(0.5)
+    canvas.line(W/2 - 3*cm, centro_y + 1.4*cm, W/2 + 3*cm, centro_y + 1.4*cm)
+
+    # nome do app grande
+    canvas.setFillColor(white)
+    canvas.setFont("Helvetica-Bold", 38)
+    canvas.drawCentredString(W/2, centro_y + 0.1*cm, "Agenda Turma A")
+
     canvas.setFont("Helvetica", 13)
-    canvas.drawCentredString(A4[0]/2, A4[1]-4.3*cm, "Escala Ferroviária 2x2  •  2026 — 2030")
+    canvas.setFillColor(HexColor("#e8f4f3"))
+    canvas.drawCentredString(W/2, centro_y - 0.9*cm, "Escala ferroviária 2x2  •  2026 a 2030")
 
-    # rodape
-    canvas.setFillColor(AMARELO)
-    canvas.setFont("Helvetica-Bold", 16)
-    canvas.drawCentredString(A4[0]/2, 1.6*cm, "MANUAL DE INSTRUÇÕES")
+    # selo amarelo
+    canvas.setFillColor(AMARELO_VALE)
+    canvas.setFont("Helvetica-Bold", 10)
+    canvas.drawCentredString(W/2, centro_y - 2.0*cm, "DE MAQUINISTA  PARA  MAQUINISTAS")
+
+    # 5) Rodape elegante (verde com nota de autoria)
+    rodape_h = 2.5*cm
+    canvas.setFillColor(VERDE_VALE)
+    canvas.rect(0, 0, W, rodape_h, fill=1, stroke=0)
+    canvas.setFillColor(AMARELO_VALE)
+    canvas.rect(0, rodape_h, W, 0.18*cm, fill=1, stroke=0)
+
     canvas.setFillColor(white)
-    canvas.setFont("Helvetica", 10)
-    canvas.drawCentredString(A4[0]/2, 1.0*cm, "Versão 1.0  •  Abril de 2026  •  Criado por Angelo Silva (Turma A)")
+    canvas.setFont("Helvetica-Bold", 11)
+    canvas.drawCentredString(W/2, rodape_h - 1.0*cm, "Criado por Angelo Silva")
+    canvas.setFont("Helvetica", 9)
+    canvas.setFillColor(HexColor("#e8f4f3"))
+    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 1.0   •   Abril de 2026")
+
     canvas.restoreState()
 
 def li(txt):
