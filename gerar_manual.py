@@ -452,6 +452,26 @@ story.append(Paragraph(
 story.append(nota("O Viriato não inventa: se ele não souber, vai dizer que não sabe e sugerir falar "
                   "com o Angelo."))
 
+story.append(Paragraph("8.1. Anexar documentos para o Viriato ler", H2))
+story.append(Paragraph(
+    "Na barra de baixo da tela do Viriato existem botões de anexo. Cada um tem uma função "
+    "diferente — todos colocam o arquivo na <b>biblioteca</b>, que é o cérebro de consulta do Viriato:", P))
+story.append(li("<b>📎 Anexar documento</b> — para arquivos <b>permanentes</b>: regulamentos, "
+                "manuais técnicos, acordos coletivos, normas de segurança. Coisas que mudam pouco "
+                "ou nunca."))
+story.append(li("<b>📌 Marcar como TEMP</b> — para arquivos que <b>mudam com frequência</b>: "
+                "boletins da semana, escalas reajustadas, avisos do mês, comunicados rápidos. "
+                "Toque no 📌 antes de anexar — ele acende em <b>laranja</b>. Em seguida toque no 📎 e "
+                "escolha o arquivo: ele vai para uma pasta separada chamada <b>TEMP</b>, com a "
+                "categoria <i>temp</i>. Depois do envio, o 📌 desliga sozinho para o próximo "
+                "anexo voltar a ser permanente."))
+story.append(li("<b>🖼️ Anexar imagem</b> e <b>📷 Tirar foto</b> — para o Viriato analisar a imagem "
+                "junto com a sua pergunta (ex.: foto de um defeito, de um boletim impresso, de um "
+                "trecho de norma). A imagem <b>não</b> entra na biblioteca; serve só para aquela "
+                "conversa."))
+story.append(nota("A pasta TEMP existe para você não misturar boletim da semana com manual "
+                  "definitivo. Quando o boletim vencer, é só apagar dali sem mexer no resto."))
+
 # 9. Painel admin
 story.append(Paragraph("9. Painel do administrador", H1))
 story.append(Paragraph(
@@ -549,6 +569,7 @@ gloss = [
     ["Função Administrativa", "Quem trabalha no escritório, coordenação ou suporte. Não faz Prontos."],
     ["Aprovador", "Colega indicado pelo admin para aprovar cadastros. São no máximo 3, totalizando 4 pessoas habilitadas com o admin."],
     ["Senha temporária", "Senha de 4 dígitos gerada pelo Viriato ou pelo admin, válida só até você trocar."],
+    ["TEMP (📌)", "Pasta separada da biblioteca para arquivos que mudam com frequência (boletins, escalas reajustadas, avisos). Marque com 📌 antes de anexar com 📎."],
     ["Viriato", "O trenzinho assistente que ajuda dentro do app."],
 ]
 tg = Table(gloss, colWidths=[4*cm, 11*cm])
