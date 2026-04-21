@@ -187,7 +187,7 @@ sumario = [
     ("3.", "A tela inicial e o que cada coisa faz", "5"),
     ("4.", "A escala 2x2: como ler", "6"),
     ("5.", "Eventos: marcar exames, férias, folgas e trocas", "7"),
-    ("6.", "Documentos: ASO, NR-11 e outros vencimentos", "8"),
+    ("6.", "Função na ferrovia: Operacional ou Administrativa", "8"),
     ("7.", "Checklist Pré-Jornada", "9"),
     ("8.", "Viriato — o ajudante de bordo", "10"),
     ("9.", "Painel do administrador", "11"),
@@ -260,6 +260,7 @@ story.append(Paragraph(
     "Quando você abre o app pela primeira vez, aparece a tela do <b>Viriato</b> (o trenzinho "
     "que conversa com você). Toque em <b>Criar cadastro</b> e preencha:", P))
 story.append(li("<b>Nome completo:</b> exatamente como está no crachá."))
+story.append(li("<b>Função na ferrovia:</b> escolha entre <b>Função Operacional</b> (quem cumpre escala 2x2 de campo, faz Prontos 1 e 2) ou <b>Função Administrativa</b> (escritório, coordenação, suporte)."))
 story.append(li("<b>Matrícula:</b> seus 6 dígitos da ferrovia."))
 story.append(li("<b>Senha:</b> 4 dígitos que só você sabe (evite 1234, 0000, sua data de nascimento)."))
 story.append(Paragraph(
@@ -294,11 +295,15 @@ def badge(label, bg, fg=white):
     return t
 
 botoes = [
-    ["Botão (cor)", "O que faz"],
-    [badge("ADMIN", AMARELO, black), "Abre o painel do administrador (só aparece para as 4 pessoas habilitadas a aprovar). É o ícone de coroa amarela no topo do app."],
-    [badge("CHAVE", HexColor("#0ea5e9")), "Trocar a sua própria senha. É o ícone de chave azul no topo do app."],
-    [badge("SAIR", HexColor("#dc2626")), "Sair (encerra a sessão neste celular). É o ícone de porta vermelha no topo do app."],
-    [badge("VIRIATO", AZUL), "Abre o assistente inteligente. É o ícone do trenzinho verde, geralmente na lateral da tela."],
+    ["Botão (ícone)", "O que faz"],
+    [badge("TEMA", HexColor("#64748b")), "Alterna entre modo claro ☀️ e escuro 🌙. Fica no canto esquerdo do topo."],
+    [badge("ALARME", HexColor("#f59e0b"), black), "Configura um alarme para acordar nos dias de serviço. É o relógio ⏰ no topo."],
+    [badge("AUDITORIA", HexColor("#dc2626")), "Marca períodos de auditoria — o Viriato te lembra de manter os documentos em dia. É o sinal 🛑 no topo."],
+    [badge("CHECKLIST", HexColor("#22d48a"), black), "Abre o Checklist Pré-Jornada (ASO, Prontos 1 e 2 para quem é da função operacional). É a prancheta 📋 no topo."],
+    [badge("ADMIN", AMARELO, black), "Abre o painel do administrador (só aparece para as 4 pessoas habilitadas a aprovar). É a coroa 👑 (admin) ou escudo 🛡️ (aprovador) no topo."],
+    [badge("CHAVE", HexColor("#0ea5e9")), "Troca a sua própria senha. É a chave 🔑 no topo."],
+    [badge("SAIR", HexColor("#dc2626")), "Sai (encerra a sessão neste celular). É a porta 🚪 no canto direito do topo."],
+    [badge("VIRIATO", AZUL), "Abre o assistente inteligente. É o trenzinho 🚂 verde, flutuando na lateral da tela (não fica no topo)."],
 ]
 tb = Table(botoes, colWidths=[3*cm, 12*cm])
 tb.setStyle(TableStyle([
@@ -323,11 +328,13 @@ story.append(Paragraph(
     "Logo que entra, você vê a sua <b>semana atual</b> em formato de cartões grandes, fáceis "
     "de bater o olho. Cada cartão mostra:", P))
 story.append(li("O <b>dia da semana</b> e a data."))
-story.append(li("Se é <b>Trabalho</b> (cor amarela) ou <b>Folga</b> (cor verde)."))
-story.append(li("Eventuais <b>marcadores</b> (exame médico, troca, férias, folga extra)."))
+story.append(li("Se é <b>Serviço</b> (cor azul, com 🚃) ou <b>Folga</b> (cor amarela/dourada, com 🌙)."))
+story.append(li("Eventuais <b>marcadores</b> de eventos do dia (médico, viagem, hora extra, aniversário, etc.)."))
 story.append(Paragraph(
-    "Acima da semana ficam os <b>indicadores rápidos</b>: dias trabalhados no mês, próxima folga, "
-    "documentos vencendo nos próximos 30 dias e checklist pendente.", P))
+    "Acima da semana ficam os <b>indicadores rápidos</b> do ano: <b>Folgas</b> 🌙, "
+    "<b>Serviço</b> 🚃, <b>Feriados</b> 🎉, <b>Eventos</b> 📌 (tudo que você cadastrou) "
+    "e <b>Docs</b> 📎 (anexos guardados). Abaixo, dois botões alternam entre a visão de "
+    "<b>📅 Calendário</b> e a lista de <b>📋 Eventos</b>.", P))
 story.append(nota("Toque em qualquer cartão de dia para abrir os detalhes daquele turno e adicionar "
                   "uma observação (por exemplo: 'cobertura do colega João')."))
 
@@ -342,11 +349,10 @@ story.append(Paragraph(
 
 leg = [
     ["Cor", "Significado"],
-    ["Amarelo", "Dia de trabalho normal"],
-    ["Verde", "Folga regular"],
-    ["Azul", "Folga extra ou compensação"],
-    ["Vermelho", "Atenção: documento ou exame vencendo"],
-    ["Cinza", "Férias programadas"],
+    ["Azul", "Dia de Serviço (escala 2x2)"],
+    ["Amarelo", "Dia de Folga"],
+    ["Verde", "Feriado nacional"],
+    ["Vermelho", "Hoje (destaque) ou aviso de documento vencendo"],
 ]
 tl = Table(leg, colWidths=[3*cm, 12*cm])
 tl.setStyle(TableStyle([
@@ -354,15 +360,13 @@ tl.setStyle(TableStyle([
     ("TEXTCOLOR", (0,0), (-1,0), white),
     ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
     ("FONT", (0,1), (-1,-1), "Helvetica", 10),
-    ("BACKGROUND", (0,1), (0,1), AMARELO),
-    ("BACKGROUND", (0,2), (0,2), VERDE),
-    ("TEXTCOLOR", (0,2), (0,2), white),
-    ("BACKGROUND", (0,3), (0,3), HexColor("#3b82f6")),
+    ("BACKGROUND", (0,1), (0,1), HexColor("#3b9eff")),
+    ("TEXTCOLOR", (0,1), (0,1), white),
+    ("BACKGROUND", (0,2), (0,2), AMARELO),
+    ("BACKGROUND", (0,3), (0,3), VERDE),
     ("TEXTCOLOR", (0,3), (0,3), white),
     ("BACKGROUND", (0,4), (0,4), VERMELHO),
     ("TEXTCOLOR", (0,4), (0,4), white),
-    ("BACKGROUND", (0,5), (0,5), HexColor("#9ca3af")),
-    ("TEXTCOLOR", (0,5), (0,5), white),
     ("ALIGN", (0,0), (0,-1), "CENTER"),
     ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
     ("GRID", (0,0), (-1,-1), 0.4, CINZA_CLARO),
@@ -373,35 +377,42 @@ story.append(tl)
 story.append(PageBreak())
 
 # 5. Eventos
-story.append(Paragraph("5. Eventos: marcar exames, férias, folgas e trocas", H1))
+story.append(Paragraph("5. Eventos: marcar médico, viagens, hora extra e mais", H1))
 story.append(Paragraph(
-    "Toque no botão <b>+</b> (canto inferior) para criar um evento. Os tipos disponíveis são:", P))
-story.append(li("<b>Exame médico</b> (ASO periódico, exames complementares)."))
-story.append(li("<b>Curso / treinamento</b> (NR, reciclagens, cursos internos)."))
-story.append(li("<b>Férias</b> (marca o período inteiro de uma vez)."))
-story.append(li("<b>Folga extra</b> (compensações, abonos)."))
-story.append(li("<b>Troca de turno</b> (com o nome do colega que está cobrindo)."))
-story.append(li("<b>Aniversário</b> — basta cadastrar uma vez, o app repete automaticamente todo ano 🔁."))
-story.append(li("<b>Pessoal</b> (consulta, qualquer compromisso seu)."))
+    "Toque em qualquer dia do calendário (ou no <b>+</b> dentro do detalhe do dia) para criar "
+    "um evento. Os tipos disponíveis são:", P))
+story.append(li("🎂 <b>Aniversário</b> — basta cadastrar uma vez; o app repete automaticamente todo ano 🔁."))
+story.append(li("🏥 <b>Médico</b> — consultas, ASO periódico, exames complementares."))
+story.append(li("✈ <b>Viagem</b> — viagens pessoais ou a serviço."))
+story.append(li("📋 <b>Compromisso</b> — qualquer compromisso pessoal (cartório, escola dos filhos, reunião)."))
+story.append(li("⏰ <b>Hora Extra</b> — registro de horas trabalhadas além da escala."))
+story.append(li("⭐ <b>Outro</b> — para o que não se encaixa nos demais."))
 story.append(Paragraph(
-    "Cada evento aparece direto no cartão do dia e também na lista geral. Você pode editar ou "
-    "apagar tocando duas vezes nele.", P))
-story.append(nota("As trocas de turno ficam registradas com data e nome — útil quando o supervisor "
-                  "pergunta meses depois quem cobriu quem."))
+    "Cada evento aparece direto no cartão do dia e também na lista geral (botão "
+    "<b>📋 Eventos</b>). Você pode editar ou apagar tocando nele.", P))
+story.append(nota("Para registrar troca de turno ou cobertura de colega, use o tipo <b>Compromisso</b> "
+                  "ou <b>Outro</b> e descreva no texto (ex.: 'Cobertura do João'). Útil quando o "
+                  "supervisor pergunta meses depois quem cobriu quem."))
 
-# 6. Documentos
-story.append(Paragraph("6. Documentos: ASO, NR-11 e outros vencimentos", H1))
+# 6. Função na ferrovia
+story.append(Paragraph("6. Função na ferrovia: Operacional ou Administrativa", H1))
 story.append(Paragraph(
-    "Na aba <b>Documentos</b>, cadastre tudo que tem prazo de validade na ferrovia:", P))
-story.append(li("ASO (Atestado de Saúde Ocupacional) — o principal, exigido por lei"))
-story.append(li("Habilitação Ferroviária e certificado de maquinista"))
-story.append(li("NR-11 e outras normas regulamentadoras"))
-story.append(li("Crachá e certificados internos"))
+    "No cadastro, e também ao entrar pela primeira vez depois de uma atualização, o app pergunta "
+    "qual é a sua <b>função na ferrovia</b>. Existem duas opções:", P))
+story.append(li("<b>Função Operacional</b> — quem trabalha na escala 2x2 de campo, faz cabine, pátio "
+                "ou inspeção. Vê os itens <b>Prontos 1</b> e <b>Prontos 2</b> no Checklist e recebe "
+                "lembretes automáticos pela manhã (a partir das 04:00) e à tarde (após 14:30) nos "
+                "dias de serviço."))
+story.append(li("<b>Função Administrativa</b> — quem trabalha em escritório, coordenação ou suporte. "
+                "Não precisa fazer Prontos, então o Checklist mostra só o ASO e os itens pessoais "
+                "que você cadastrar."))
 story.append(Paragraph(
-    "Para cada documento, informe o <b>nome</b>, a <b>data de vencimento</b> e, se quiser, anexe "
-    "uma observação (por exemplo: 'fazer no posto da Vila Industrial'). O app começa a avisar "
-    "<b>60 dias antes</b> e o aviso fica vermelho a partir de 30 dias.", P))
-story.append(aviso("Documento vencido = afastamento. Não confie só na memória, deixe o app cuidar."))
+    "Você pode mudar sua função a qualquer momento, mas isso normalmente só acontece se você for "
+    "transferido entre operação e administração. Se errar na hora do cadastro, peça pro Angelo "
+    "(ou um aprovador) corrigir.", P))
+story.append(aviso("Quem é da Função Operacional <b>não pode esquecer dos Prontos</b>. O app avisa, "
+                   "mas a responsabilidade de fazer o teste antes de assumir a jornada continua sendo "
+                   "sua. Banner laranja no topo = teste pendente."))
 
 # 7. Checklist
 story.append(Paragraph("7. Checklist Pré-Jornada", H1))
@@ -409,14 +420,15 @@ story.append(Paragraph(
     "Toque no ícone da <b>prancheta 📋</b> no topo da tela para abrir o <b>Checklist</b>. "
     "Ele já vem pronto com o básico da Turma A:", P))
 story.append(Paragraph("• <b>ASO</b> — Atestado de Saúde Ocupacional (com data de validade)", P))
-story.append(Paragraph("• <b>Prontos 1</b> — confirmação da prontidão pela manhã", P))
-story.append(Paragraph("• <b>Prontos 2</b> — confirmação da prontidão pela tarde", P))
+story.append(Paragraph("• <b>Prontos 1</b> — teste psicotécnico antes da jornada da manhã <i>(só Função Operacional)</i>", P))
+story.append(Paragraph("• <b>Prontos 2</b> — teste psicotécnico antes da jornada da tarde <i>(só Função Operacional)</i>", P))
 story.append(Paragraph(
     "Marque cada item conforme for cumprindo. Para o ASO, dá pra registrar a data de "
     "validade — o app avisa quando estiver perto de vencer. Você também pode adicionar "
     "ou remover itens à vontade (lanterna, garrafa, cobertor, o que precisar).", P))
-story.append(nota("Os itens que você adicionar ficam salvos no seu celular. Já o ASO, "
-                  "Prontos 1 e Prontos 2 não podem ser apagados — fazem parte do checklist padrão da turma."))
+story.append(nota("Os itens Prontos 1 e Prontos 2 só aparecem para quem se cadastrou como "
+                  "<b>Função Operacional</b>. Se você é Administrativa, vai ver só o ASO no Checklist. "
+                  "Os itens extras que você adicionar ficam salvos no seu celular."))
 story.append(PageBreak())
 
 # 8. Viriato
@@ -532,7 +544,9 @@ gloss = [
     ["Turma A", "Equipe da escala 2x2 deste app."],
     ["Escala 2x2", "Dois dias de trabalho seguidos por dois de folga, sem parar."],
     ["ASO", "Atestado de Saúde Ocupacional — exame periódico obrigatório."],
-    ["NR-11", "Norma regulamentadora de transporte e movimentação de cargas."],
+    ["Prontos 1 / Prontos 2", "Testes psicotécnicos feitos antes de iniciar a jornada (manhã e tarde). Obrigatórios para a Função Operacional."],
+    ["Função Operacional", "Quem cumpre escala 2x2 de campo (cabine, pátio, inspeção). Faz Prontos 1 e 2."],
+    ["Função Administrativa", "Quem trabalha no escritório, coordenação ou suporte. Não faz Prontos."],
     ["Aprovador", "Colega indicado pelo admin para aprovar cadastros. São no máximo 3, totalizando 4 pessoas habilitadas com o admin."],
     ["Senha temporária", "Senha de 4 dígitos gerada pelo Viriato ou pelo admin, válida só até você trocar."],
     ["Viriato", "O trenzinho assistente que ajuda dentro do app."],
