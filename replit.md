@@ -48,6 +48,18 @@ Endpoints novos:
 
 Limite: 5MB por upload. PDFs digitalizados (imagem) não funcionam (sem OCR).
 
+## Helpdesk e Diagnóstico
+
+Pasta `helpdesk/` contém guias `.md` de troubleshooting (1 problema por arquivo: sintomas, causa, solução). O servidor inclui esses guias no system prompt do Viriato — quando o utilizador relata um erro, o Viriato consulta os guias e responde com a frase humorada **"🚦 *Parada pelo Governador!*"** (gíria ferroviária) seguida da explicação.
+
+Endpoints:
+- `GET /api/helpdesk` — lista guias disponíveis
+- `GET /api/helpdesk/<arquivo.md>` — conteúdo de um guia
+- `GET /api/diag/health` — status do servidor (data dir, pdfplumber, claude, helpdesk)
+- `GET /api/diag/biblioteca` — estatísticas da biblioteca (totais, categorias, tamanho)
+
+Botão **🩺 Diagnóstico** no header do Viriato abre modal com checklist visual de saúde (verde/vermelho).
+
 ## Deployment
 
 Configured as a **static** deployment with `publicDir: "."`.
