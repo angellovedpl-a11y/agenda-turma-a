@@ -1,0 +1,2068 @@
+   Básico de Locomotivas
+   Trilha Técnica: Ferrovia | Pátio/Tração
+
+
+
+
+VALER - EDUCAÇÃO VALE
+Básico de Locomotivas
+Trilha Técnica: Ferrovia | Pátio/Tração
+
+
+
+
+  Colaboradores
+
+   •• Emanoel Assis
+   •• Eustáquio Andrade
+   •• José Borba
+   •• Nelson Romanha
+   •• Paulo Silva Serra
+   •• Ronilson Vieira
+
+
+
+
+      VALER - EDUCAÇÃO VALE
+Caro Empregado,
+
+
+
+
+                                                              Mensagem Valer
+Você está participando da ação de desenvolvimento Básico de
+Locomotivas de sua Trilha Técnica.
+
+A Valer – Educação Vale construiu esta Trilha em conjunto
+com profissionais técnicos da sua área com o objetivo de
+desenvolver as competências essenciais para o melhor
+desempenho de sua função e o aperfeiçoamento da condução
+de suas atividades diárias.
+
+Todos os treinamentos contidos na Trilha Técnica contribuem
+para o seu desenvolvimento profissional e reforçam os
+valores saúde e segurança, que são indispensáveis para sua
+atuação em conformidade com os padrões de excelência
+exigidos pela Vale.
+
+Agora é com você. Siga o seu caminho e cresça com a Vale.
+
+Vamos Trilhar!
+Introdução                                                     5
+
+
+
+
+                                                                   Sumário
+1. Componentes Básicos de uma Locomotiva                       6
+ 1.1 Conjunto Motor/ Rodeiro                                   7
+ 1.2 Truques                                                  22
+ 1.3 Plataforma                                               28
+ 1.4 Engates                                                  34
+ 1.5 Tomadas Jumper                                           36
+ 1.6 Cabina do Motor a Diesel e do Radiador de Resfriamento   38
+ 1.7 Tanque de Combustível                                    40
+ 1.8 Reservatório de Ar                                       43
+
+2. Sistema de Freio                                           45
+ 2.1 Visão Geral do Sistema de Freio                          46
+ 2.2 Compressor                                               48
+ 2.3 Manômetros                                               50
+ 2.4 Manipulador Automático                                   52
+ 2.5 Freio Eletrônico                                         61
+
+3. Motor Elétrico                                             64
+ 3.1 Contextualização                                         65
+ 3.2 Gerador de Tração                                        66
+
+4. Motor a Diesel                                             69
+ 4.1 Contextualização                                         70
+ 4.2 Particularidades do Motor a Diesel                       71
+
+Anexo                                                         74
+A locomotiva, com certeza, é parte imprescindível em um
+
+
+
+
+                                                                     Introdução
+trem: é a fornecedora de energia para o deslocamento da
+composição. Portanto, é muito importante o entendimento
+de cada um de seus elementos – é isso que propiciará a
+compreensão da relação entre eles, ou seja, como atuam em
+conjunto para a boa operação de uma locomotiva.
+
+Logo, este curso foi elaborado para que você conheça os
+princípios de funcionamento e os principais componentes
+das locomotivas. Verá a finalidade de cada um, o sistema de
+freios, os motores do tipo elétrico e a diesel – com destaque
+para o gerador e o compressor – e os tipos de locomotivas
+utilizados na Vale.
+
+Além disso, é importante sempre ter em mente um dos grandes
+objetivos da Vale com esta capacitação: assegurar que a realização
+das manobras ferroviárias se dará conforme a programação e
+regulamentação operacional, seguindo os padrões de qualidade,
+segurança, meio ambiente e saúde ocupacional.
+               Inserir Imagem
+
+
+
+
+                                                                      1
+                                                                de uma Locomotiva
+                                                                Componentes Básicos
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 1.1 Conjunto Motor/ Rodeiro
+•• 1.2 Truques
+•• 1.3 Plataforma
+•• 1.4 Engates
+•• 1.5 Tomadas Jumper
+•• 1.6 Cabina do Motor a Diesel e do Radiador de Resfriamento
+•• 1.7 Tanque de Combustível
+•• 1.8 Reservatório de Ar
+Básico de Locomotivas                                                            7
+
+
+
+
+1.1 Conjunto Motor/
+Rodeiro
+
+
+
+ O conjunto motor/rodeiro de uma locomotiva é formado por:
+
+   •• um eixo do rodeiro;
+   •• um par de rodas;
+   •• um par de rolamentos (mancais de apoio);
+   •• um pinhão;
+   •• uma engrenagem;
+   •• uma caixa de engrenagens/ graxa;
+   •• um motor de tração.
+ Veja os detalhes de cada um e como manter a integridade e o bom funcionamento
+ desses elementos.
+Básico de Locomotivas                                                                           8
+
+
+
+
+ Eixo do rodeiro
+
+ O eixo dos rodeiros é formado de aço forjado. Sua resistência é definida pela manga do eixo,
+ como explicado na imagem:
+
+
+                                                                  b
+
+
+
+
+                                                                                 a
+
+
+
+
+                    Manga = a x b
+
+ Veja alguns exemplos:
+   6 ½“ x 12”
+   6 ½“ x 12”
+   5 ½“ x 10”
+   5 ½“ x 10”
+  36“ = 914 mm
+  36“ = 914 mm
+  40” = 1.016 mm
+ Pode-se
+  40” = 1.016concluir
+              mm      que a manga do eixo define a resistência dele de acordo com a carga por
+ eixo
+  42” = da  locomotiva.
+        1.066,8 mm
+  42” = 1.066,8 mm
+
+
+ Rodas
+
+ As rodas das locomotivas são constituídas de aço forjado e laminado, como você pode
+ observar nas fotos a seguir:
+        Básico de Locomotivas                                                                      9
+
+
+
+
+             66 ½“
+                ½“ xx 12”
+                      12”
+         As rodas das locomotivas podem ter os seguintes diâmetros, de acordo com o modelo:
+             5 ½“ x 10”
+            36“
+            36“ =
+                = 914
+                  914 mm
+                      mm
+
+            40”
+            40” =
+                = 1.016
+                  1.016 mm
+                        mm
+
+            42” = 1.066,8 mm      0-126-122
+
+
+
+
+o!              Atenção!
+
+ nte!           A falta de manutenção das rodas é um fator importante na
+                ocorrência de acidentes. É indispensável que elas sejam
+ais!            frequentemente inspecionadas e perfiladas, prolongando sua
+                vida útil.
+ ndo!
+
+
+        Mancais
+         Os mancais têm a função de fixar o motor de tração ao eixo do rodeiro sem, contudo,
+         impedir seu giro. Podem ser de dois tipos – de fricção ou de rolamentos. Observe-os nas
+         imagens a seguir:
+
+
+         Mancais de fricção
+
+
+
+
+           Montagem de um conjunto de fricção
+Básico de Locomotivas                                                                   10
+
+
+
+
+ No alojamento dos mancais de apoio de fricção, são montados os casquilhos, como você
+ pode ver nas fotos a seguir:
+
+
+
+
+                                      Motor com mancais de apoio de fricção
+
+
+
+
+                            Alojamento do mancal de apoio de fricção
+
+
+
+
+ Casquilhos dos mancais de apoio de fricção
+Básico de Locomotivas                                                                  11
+
+
+
+
+ A lubrificação dos casquilhos e do eixo das rodas é garantida pela escova ou mecha.
+ Observe a escova de lubrificação:
+
+
+
+
+                        Escova de lubrificação do mancal
+
+ Além da escova, um óleo também é utilizado na lubrificação dos casquilhos. Ele é
+ armazenado em um reservatório localizado na capa do mancal, como mostra a figura:
+
+
+
+
+                          Reservatório de óleo
+        Básico de Locomotivas                                                                12
+
+
+
+
+         Mancais de rolamentos
+
+
+
+
+        Montagem de um conjunto de rolamentos
+
+
+
+         Os mancais de rolamento, por sua vez, são classificados de acordo com o rolamento
+         utilizado. Podem ser do tipo:
+
+           •• rolo cilíndrico;
+           •• cartucho.
+         Mancais de rolamento do tipo rolo cilíndrico
+
+         São lubrificados a óleo e compostos por:
+
+           •• adaptador ou caixa de rolamento;
+           •• gaiola;            0-126-122
+
+           •• rolos cilíndricos.
+o!              Atenção!
+
+ nte!           As caixas de rolamento são usadas para fixar o conjunto do mancal
+                aos pedestais do truque. Elas devem estar limpas e isentas de
+ais!            sujeira, poeira, cavacos de metal e materiais estranhos. Esses
+                materiais podem impedir o assentamento adequado do rolamento
+ ndo!
+                no adaptador.
+        Básico de Locomotivas                                                         13
+
+
+
+
+                                Adaptador
+
+
+
+
+                                Gaiola e rolo cilíndrico
+
+         Mancais de rolamento do tipo cartucho
+
+         Os mancais desse tipo são independentes e completamente vedados. Eles são:
+
+           •• pré-montados;
+           •• pré-ajustados; 0-126-122
+           •• pré-lubrificados.
+o!              Atenção!
+
+ nte!           Esse tipo de rolamento deve ser lubrificado com graxa.
+
+ais!
+
+ ndo!
+Básico de Locomotivas                                                                                    14
+
+
+
+
+As imagens a seguir mostram alguns exemplos de rolamentos tipo cartucho. Confira:
+
+
+
+
+Vista em corte do rolamento tipo cartucho
+
+
+
+ Os rolamentos tipo cartucho podem ser aplicados e removidos do eixo sem expor seus
+ elementos, vedações ou lubrificantes a uma contaminação ou avaria. Eles são retidos no eixo
+ por uma capa terminal, que é segura por três parafusos de tampa e uma placa trava.
+  Anel traseiro de reforço
+                                            Conjunto do mancal
+
+
+                                                                       Placa da extremidade do eixo
+
+
+
+
+                                                                                           Placa brava
+
+
+
+
+                                                                 Parafusos de alta resistência
+
+
+
+Vista parcial do rolamento tipo cartucho
+Básico de Locomotivas                                                                      15
+
+
+
+
+ Adaptador (caixa do rolamento)
+
+ A caixa do rolamento é usada para fixar o conjunto do mancal aos pedestais do truque.
+ Devem ser limpas e isentas de sujeira, poeira, cavacos de metal e material estranho, os quais
+ podem impedir o assentamento adequado do rolamento no adaptador.
+
+
+
+
+Caixa do rolamento
+
+
+
+ O fechamento dos mancais de apoio de rolamentos é feito por uma peça denominada
+ tubo U (apresentada nas imagens a seguir), onde são montados os rolamentos.
+
+
+
+
+Tubo U
+Básico de Locomotivas                                                                 16
+
+
+
+
+ Pinhão
+
+ O pinhão tem formato cilíndrico e é fabricado em aço médio-carbono tratado termicamente.
+ Possui um furo cônico sem chaveta e é montado a quente no eixo do motor de tração, ou
+ seja, o pinhão é fixado ao eixo unicamente pela interferência eixo-pinhão.
+ Observe-os nas imagens:
+
+
+
+
+ Defeitos
+
+ O acoplamento do pinhão com o eixo do motor está sujeito a altos torques, que ocasionam
+ diversos defeitos.
+ Veja algumas dessas avarias, mostradas nas imagens a seguir.
+
+
+
+
+                              Desgaste dos dentes do pinhão
+Básico de Locomotivas                                 17
+
+
+
+
+                        Quebra dos dentes do pinhão
+
+
+
+
+                        Pinhão solto
+
+
+
+
+                        Pinhão trincado
+Básico de Locomotivas                                                                 18
+
+
+
+
+                             Pinhão avariado
+
+
+
+
+                             Eixo do motor quebrado
+
+
+
+
+ Engrenagem
+
+ A engrenagem de uma locomotiva tem a função de transmitir o torque do motor de tração
+ para as rodas, a partir do contato dos dentes do pinhão com os dentes da engrenagem.
+ Ela é fabricada em aço de médio-carbono, tratado termicamente. Além disso, possui formato
+ cilíndrico e dentes retos, desta forma:
+        Básico de Locomotivas                                                                      19
+
+
+
+
+         Manutenção
+
+         É muito importante a constante medição das folgas da engrenagem. Esse monitoramento
+         evita que vibrações anormais prejudiquem o motor de tração e todos os seus componentes.
+         A medição é feita utilizando-se um gabarito para verificar o desgaste excessivo dos dentes da
+         engrenagem – e o gabarito pode ser usado com a engrenagem suja de óleo, como mostra a
+         imagem adiante. Caso o dente da engrenagem apresente um desgaste perceptível, a ela deve
+         ser limpa e, em seguida, é necessário realizar uma medida do desgaste, com um paquímetro.
+
+
+
+
+                                0-126-122
+                                      Método de medição da folga da engrenagem
+
+
+
+o!              Atenção!
+
+ nte!           Caso estejam desgastadas, as engrenagens deverão ser substituídas.
+
+ais!
+
+ ndo!    Engrenamento
+
+         Nas locomotivas diesel-elétricas, de baixa velocidade, a transmissão do torque do motor de
+         tração para as rodas é feita pelo contato dos dentes de um pinhão com os dentes de uma
+         engrenagem. Isso é chamado engrenamento.
+
+
+
+
+                                  Pinhão e engrenagem
+        Básico de Locomotivas                                                                     20
+
+                                     0-126-122
+
+
+
+
+o!              Atenção!
+
+ nte!           A montagem do conjunto pinhão-engrenagem, apesar de simples,
+                merece cuidados especiais – sua performance depende, em grande
+ais!            parte, tanto dos cuidados na montagem como da instalação do
+                eixo do rodeiro.
+ ndo!
+
+
+
+
+         Caixa de engrenagens
+
+         A caixa de engrenagens aloja o pinhão do motor de tração, a engrenagem correspondente
+         do eixo de rodeiro e o lubrificante, protegendo-os de danos e de sujeira. Ela pode ter nomes
+         diferentes, de acordo com a lubrificação dos seus componentes.
+         Veja
+
+         Quando a engrenagem e o pinhão são lubrificados por graxa de alta viscosidade, a caixa de
+         engrenagens é denominada caixa de graxa.
+         Em caso de lubrificação por meio de óleo de alta viscosidade, a caixa de engrenagens é
+         denominada caixa de óleo.
+         A caixa de graxa é constituída de metades de construção soldada modular, com maior ou
+         menor grau de complexidade, dependendo do espaço disponível entre as rodas.
+
+
+
+
+                                     0-126-122
+        As duas partes da caixa de graxa
+
+
+
+
+o!              Atenção!
+
+ nte!           A altura da caixa de graxa, em relação ao topo do trilho, deverá ser
+                superior a 108 mm com rodas novas.
+ais!
+
+ ndo!
+Básico de Locomotivas                                                                      21
+
+
+
+
+ A metade superior da caixa deve ser colocada e ajustada na metade inferior, como
+ mostra a imagem:
+
+
+
+
+                        Caixa de graxa completa
+
+ Nas condições normais de funcionamento, a instalação de anéis vedadores de plástico,
+ no furo do eixo, garante a vedação, reduzindo o vazamento de lubrificante. Dessa forma,
+ os casos de caixa de graxa seca se tornam muito menos frequentes, além de prolongar os
+ períodos de intervalo entre cada manutenção.
+
+
+
+
+                        Anel de vedação da caixa de graxa
+Básico de Locomotivas                                                                     22
+
+
+
+
+1.2 Truques
+
+
+
+ Em poucas palavras, podemos dizer que os truques foram projetados para suportar o peso
+ da locomotiva e fornecer os meios para a transmissão da potência aos trilhos.
+ Mas o conjunto de truques tem outra importante função: suportar as tensões resultantes
+ dos choques de rodagem produzidos pelas variações normais existentes na linha e por
+ outras condições encontradas durante o serviço.
+ E como isso é possível?
+
+ O conjunto de truques absorve e isola os choques de rodagem – atua como um
+ amortecedor. Sem o truque, os efeitos desses choques seriam transmitidos à plataforma da
+ locomotiva e aos equipamentos montados sobre ela.
+ O truque é formado por várias partes mecânicas, tais como:
+
+   •• estrutura (aranha);
+   •• travessa flutuante (bolster);
+   •• prato;
+   •• suspensão (mola).
+ Veja, separadamente, cada parte e suas especificidades.
+
+
+ Estrutura (aranha)
+
+ A estrutura do truque possui, basicamente, duas laterais fundidas e/ ou soldadas, unidas por
+ transversais também fundidas ou soldadas.
+Básico de Locomotivas                                                                      23
+
+
+
+
+ Veja um exemplo na imagem a seguir.
+
+
+
+
+ Travessa flutuante (bolster)
+
+ É uma peça de aço fundido que liga o truque à plataforma. É utilizada para transferir o peso
+ da locomotiva para a estrutura do truque.
+ Veja algumas imagens de truques com a travessa flutuante.
+
+
+
+
+ A interligação do bolster é feita por intermédio de molas helicoidais de aço ou coxins
+ de aço e de borracha, que absorvem boa parte dos impactos provenientes da estrutura
+ para a plataforma.
+ A imagem a seguir mostra a estrutura de molas.
+        Básico de Locomotivas                                                                       24
+
+
+
+
+         Prato
+
+         O bolster possui um “prato” central que liga os truques ao “pião” central da plataforma.
+         Veja-o na imagem a seguir.
+
+
+
+
+                                                                                  Prato central
+
+
+
+
+                          Prato central
+
+
+
+         Suspensão (mola)
+
+         As funções essenciais do sistema de suspensão são proporcionar uma boa aderência do
+         truque aos trilhos e a utilização eficiente das forças de tração.
+         Para a suspensão das locomotivas, são utilizadas, geralmente, molas do tipo:
+
+           •• helicoidais;
+           •• elípticas;      0-126-122
+
+           •• de borracha paralela;
+           •• de borracha do tipo V.
+o!
+
+ nte!
+                Importante!
+
+ais!            O sistema de suspensão, na maioria dos truques, consiste em uma
+                suspensão primária e em outra secundária. A primária fica entre o
+ ndo!           chassi do truque e o munhão do eixo (que fica na extremidade do
+                eixo, onde está a caixa de rolamento). A secundária, entre o quadro
+                das travessas (onde são posicionadas as molas) e o chassi do truque.
+Básico de Locomotivas                                                                      25
+
+
+
+
+ Molas helicoidais
+
+ Tipicamente, as suspensões de truques (primárias, secundárias ou ambas) consistem em
+ combinações de molas helicoidais de aço.
+ As molas helicoidais, em geral, permitem grandes distâncias de deformação elástica que tendem
+ a igualar as cargas nas rodas e a melhorar as condições de viagem em trilhos irregulares.
+ Dessa forma, todo o peso da locomotiva é transferido das estruturas dos truques para
+ os eixos dos rodeiros, por intermédio de um conjunto de molas helicoidais que se apoia
+ diretamente sobre as caixas de rolamento das pontas dos eixos.
+
+
+
+
+ Molas elípticas
+
+ Utilizadas para a suspensão secundária, trabalham entre o quadro das travessas e a prancha
+ de molas (local de posicionamento das molas nas laterais do truque) e absorvem os choques
+ ocasionados pelos movimentos verticais da carroceria e do truque. Além disso, produzem
+ amortecimento vertical na suspensão.
+
+
+ Molas de borracha
+
+ São usadas como elementos de suspensão secundária, entre o quadro das travessas e o
+ chassi do truque. Eventualmente, alguns truques usam molas de borracha de formato em
+ “V” na suspensão primária, entre o chassi do truque e a caixa de mancal do eixo.
+Básico de Locomotivas                                                              26
+
+
+
+
+ Amortecedores
+
+ Na suspensão da locomotiva, além das molas helicoidais, podem ser utilizados
+ amortecedores telescópicos hidráulicos. Veja a seguir.
+
+
+
+
+ Classificação dos truques
+
+ Os truques podem ser classificados quanto ao número de eixos e à flexibilidade.
+ Quanto ao número de eixos, podem ser de 2, 3 ou 4 eixos.
+
+
+
+
+        Truque B (2 eixos)
+Básico de Locomotivas                                                              27
+
+
+
+
+             Truque c (3 eixos)
+
+ Quanto à flexibilidade, podem ser divididos em rígidos, articulados ou radiais.
+
+
+
+
+              Truques Rígidos
+
+
+
+
+             Truques Articulados
+
+
+
+
+               Truques Radiais
+Básico de Locomotivas                                                                      28
+
+
+
+
+1.3 Plataforma
+
+
+
+ A plataforma é o principal elemento estrutural da locomotiva. Ela possui as funções a seguir.
+
+   •• Suportar o peso e os esforços mecânicos de todos os componentes montados na locomotiva.
+   •• Suportar as cabinas.
+   •• Transmitir o peso das cabinas e equipamentos ao truque.
+   •• Receber as forças de tração dos truques e transmitir para os vagões.
+   •• Servir como duto de ar para os equipamentos que necessitam de ventilação.
+   •• Receber os esforços de impacto.
+   •• Proteger o operador por intermédio dos postes de colisão soldados nela.
+   •• Permitir o içamento da locomotiva por meio dos ganchos de içamento soldados nela.
+Básico de Locomotivas                                                                                   29
+
+
+
+
+ Os elementos mais importantes de uma plataforma são:
+
+
+ Vigas principais longitudinais
+
+
+
+                                    Vigas I laminadas
+
+
+
+
+                                    Vigas T soldadas
+
+
+
+
+                            Chapas de aço soldadas
+
+
+
+
+ Vigas laterais longitudinais
+
+ São vigas em “U” ou cantoneiras, localizadas em cada lateral da plataforma, com a finalidade
+ de proporcionar maior rigidez ao passadiço e proteger os cabos elétricos.
+
+
+ Chapa de piso
+
+ É uma chapa de fechamento que cobre as vigas principais e laterais.
+
+
+ Chapa de fundo
+
+ Une as duas vigas principais pela parte inferior da plataforma, formando uma espécie de caixa.
+ A imagem a seguir sintetiza a estrutura da plataforma, portanto observe-a com cuidado.
+
+
+                                                                                         Viga lateral
+                                                        Chapa de piso
+
+
+
+
+                   Chapa de fundo
+                                                         Duto de ar     Viga principal
+        Básico de Locomotivas   0-126-122                                                            30
+
+
+
+
+o!
+
+ nte!
+                Importante!
+
+ais!            Nas locomotivas de médio e grande porte, a caixa formada pelas
+                duas vigas principais e as chapas de piso e de fundo é aproveitada
+ ndo!           como duto de ar para resfriamento dos motores de tração e dos
+                equipamentos elétricos sobre a plataforma. É o que mostra a imagem.
+
+
+
+
+        Vigas transversais
+         São conhecidas, também, como placas centrais ou travessas da plataforma. Consistem em
+         duas peças utilizadas para unir a junção entre as duas vigas principais. Elas podem ser feitas
+         de aço fundido ou de chapas de aço.
+
+
+         Pinos centrais
+
+         O pino central, também conhecido como pião, localiza-se nas vigas transversais e é utilizado
+         como um elemento de ligação entre a plataforma e os truques da locomotiva.
+         Veja a imagem a seguir:
+Básico de Locomotivas                                                                       31
+
+
+
+
+ Vigas agulhas
+
+ São utilizadas para unir as vigas principais às vigas laterais, como mostra a imagem.
+
+
+
+
+ Olhais de içamento
+
+ Estão localizados nas extremidades das vigas horizontais e são utilizados no içamento da
+ locomotiva e no encaixe dos macacos.
+ Observe as imagens:
+
+
+
+
+                        Encaixe dos macacos
+Básico de Locomotivas                                                                       32
+
+
+
+
+                        Içamento da locomotiva
+
+
+
+ Dutos de ar dos motores de tração
+
+ Para a refrigeração dos motores de tração, são abertos, na chapa de fundo da plataforma,
+ orifícios para a passagem do ar de refrigeração. Veja a seguir:
+
+
+
+
+ Nesses orifícios, são encaixados dutos de borracha flexíveis, em forma de sanfona, por meio
+ dos quais o ar é transferido para os motores de tração.
+Básico de Locomotivas                                                                       33
+
+
+
+
+ Você pode observar o duto em forma de sanfona na foto a seguir.
+
+
+
+
+ Testeiras
+
+ Localizadas nas extremidades traseira e dianteira da plataforma, as testeiras protegem as
+ partes inferiores da locomotiva, tais como os truques, as rodas e o tanque de combustível.
+ Mas a sua mais importante função é a sustentação de alguns componentes, tais como:
+
+   •• a caixa do aparelho de choque e tração;
+   •• as mangueiras dos encanamentos do sistema de freios;
+   •• as tomadas jumper;
+   •• o limpa-trilhos.
+ Caixa do aparelho de choque e tração
+
+ É uma estrutura que abriga o aparelho de choque e tração, e é projetada para transmitir,
+ à plataforma, os impactos e choques de tração e compressão, recebidos pelos engates.
+ Encontra-se instalada em cada uma das testeiras.
+ Observe-a na imagem:
+        Básico de Locomotivas                                                                  34
+
+
+
+
+        1.4 Engates
+
+
+
+         Os engates são utilizados para proporcionar o acoplamento da locomotiva aos vagões ou a
+         outras locomotivas, como apresentado na figura. Devem possuir dispositivos autoalinhantes
+         e de desengate manual em ambos os lados da locomotiva.
+
+
+
+
+                                0-126-122
+
+
+
+
+o!
+
+ nte!
+                Importante!
+
+ais!            Os engates da locomotiva devem estar em conformidade com a
+                especificação contida na seção “F” da Association of American
+ ndo!           Railroads – AAR.
+Básico de Locomotivas                                                                      35
+
+
+
+
+ Altura dos engates
+
+ A altura do engate é medida a partir da distância entre o topo do boleto do trilho e a linha
+ de centro do engate, localizada na extremidade da mandíbula. Essa altura varia de acordo
+ com os veículos ferroviários e os tipos de rolamentos utilizados, como você pode observar a
+ partir da tabela a seguir.
+
+ Altura de engates para locomotivas em ordem de marcha (mm)
+
+ Altura do engate                       Bitola métrica (1 m)       Bitola larga (1,60 m)
+
+ Nominal                                750                        990
+
+ Limites de montagem (locomotiva nova
+                                        750 a 765                  990 a 1005
+ ou reformada)
+
+ Mínimo (locomotiva em tráfego)         715                        955
+Básico de Locomotivas                                                                    36
+
+
+
+
+1.5 Tomadas Jumper
+
+
+
+ As tomadas jumper são utilizadas para repassar os comandos, efetuados pelo maquinista,
+ de uma locomotiva para a outra. Isso é feito por intermédio do cabo jumper, que é ligado à
+ tomada, como mostram as imagens a seguir.
+
+
+
+
+                        Tomada do cabo jumper
+
+
+
+
+                        Bocal do cabo jumper
+Básico de Locomotivas                          37
+
+
+
+
+ Agora, veja a ligação entre as composições:
+Básico de Locomotivas                                                                        38
+
+
+
+
+1.6 Cabina do Motor a
+Diesel e do Radiador de
+Resfriamento
+
+
+
+
+ Cabina do motor a diesel
+
+ A cabina do motor a diesel possui uma capota independente que pode ser removida da
+ plataforma, facilitando o acesso aos equipamentos nela contidos. Possui, ainda, portas laterais
+ e escotilhas que permitem a manutenção ou a remoção do motor e dos seus equipamentos.
+ Veja-a na imagem a seguir:
+Básico de Locomotivas                                                                   39
+
+
+
+
+ Cabina do radiador de resfriamento
+
+ Comporta os bancos de radiadores de resfriamento, que têm a função de refrigerar o líquido
+ responsável pelo sistema de arrefecimento. A cabina do radiador é independente e fica,
+ permanentemente, presa à plataforma.
+ Observe-a:
+Básico de Locomotivas                                                                 40
+
+
+
+
+1.7 Tanque de
+Combustível
+
+
+
+ O tanque de combustível das locomotivas está localizado sob a plataforma, entre o truque
+ dianteiro e o traseiro. Normalmente, é fabricado em chapas de aço soldadas e equipado com
+ dois bocais de enchimento, um em cada lado. Veja:
+Básico de Locomotivas                                                              41
+
+
+
+
+ A imagem a seguir mostra o interior de um tanque.
+
+
+
+
+ Você pode ver que há uma chapa de aço soldada, dividindo o tanque em compartimentos.
+ Essas chapas chamam-se quebra-ondas e têm a finalidade de evitar a formação de ondas
+ ocasionadas pelo balanço do trem.
+
+
+ Dreno do tanque de combustível
+
+ O tanque de combustível das locomotivas possui um bujão de dreno em cada extremidade,
+ para que a água condensada no tanque seja drenada periodicamente. Você pode vê-lo nas
+ imagens a seguir.
+Básico de Locomotivas                                                                       42
+
+
+
+
+ Os tanques de combustível possuem, também, janelas de inspeção utilizadas no acesso ao tanque.
+ Confira:
+
+
+
+
+                        Janela de inspeção
+Básico de Locomotivas                                                                    43
+
+
+
+
+1.8 Reservatório de Ar
+
+
+
+ Normalmente, o reservatório de ar é instalado sob a plataforma da locomotiva. É composto por
+ dois cilindros de aço, que armazenam o ar comprimido do sistema de freios da locomotiva.
+ Observe a imagem:
+
+
+
+
+ Secador de ar
+
+ Esse aparelho, apresentado na imagem a seguir, retira toda a umidade do ar contida no
+ sistema de ar comprimido da locomotiva.
+
+
+
+
+                                                                   Secador de ar
+                                0-126-122
+
+
+
+        Básico de Locomotivas                                               44
+o!
+
+ nte!
+
+ais!
+
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou os componentes básicos de uma
+                locomotiva. Pode-se destacar:
+                  •• o conjunto motor/ rodeiro;
+                  •• os mancais, o pinhão e a engrenagem;
+                  •• os truques e a suspensão;
+                  •• a plataforma e os engates;
+                  •• o tanque de combustível e as chapas quebra-ondas;
+                  •• o reservatório de ar.
+               Inserir Imagem
+
+
+
+
+                                                         2
+                                                         Sistema de Freio
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 2.1 Visão Geral do Sistema de Freio
+•• 2.2 Compressor
+•• 2.3 Manômetros
+•• 2.4 Manipulador Automático
+•• 2.5 Freio Eletrônico
+Básico de Locomotivas                                                 46
+
+
+
+
+2.1 Visão Geral do
+Sistema de Freio
+
+
+
+ O sistema de freio da locomotiva é composto das unidades a seguir.
+
+   •• Alimentação
+     •• Produção
+     •• Armazenamento
+     •• Condicionamento
+   •• Distribuição
+   •• Controle
+   •• Aplicação
+Básico de Locomotivas                                                                                                                                      47
+
+
+
+
+ Observe, no esquema a seguir, como estão conectados os componentes dessas quatro unidades.
+
+           Alimentação
+                                                  Condicionamento
+                                                       Válvula                      Ligação elétrica
+                                                    magnética do
+                                                     compressor            Governador do    Torneira de                  Chave
+                                                                             compressor     sobrecarga                pressostática
+                                                                            125 a 140 dpi
+
+
+             Produção
+                                                                                                                         Torneira
+                                                    Válvula de                                                         interruptora
+                                                  segurança do                                    Válvula de
+                                                     resfriador                                 segurança do
+                                                   intermediário                                 compressor
+                                                       60 psi                                    de ar 175 psi
+                                                                                                                            Controle
+                                                  Filtro de                                  Resfriador                                      Manipulador
+                                                  admissão                                  intermediário                                      de freio
+                                                                   Compressor de ar
+                                                                                                                                  Válvula
+                                                                                                                               alimentadora
+                    Serpentina de resfriamento
+
+
+
+
+               Armazenamento         Válvula de
+                                     segurança
+                                       150 psi                                                  Coletor de pó
+                                                   Válvula                                                                              Torneira
+                                                     de                                 Torneira centrifugo                           interruptora
+                                                  retenção                            interruptora
+                    Reservatório                                   Reservatório
+                    principal n⁰ 1                                 principal n⁰ 2
+                                                                                                                            Dispositivo de
+                                                                                         Torneira         Filtro             locomotiva
+             Torneira de dreno                                         Torneira                                                 morta
+                                                                       de dreno          de dreno
+               Para o sistema dos
+                 equipamentos
+                    auxiliares
+
+
+    Distribuição                                   Válvula de
+                                                    retenção
+                                                                    Encanamento geral
+
+                                  Válvula de
+                                 descarga n⁰ 8
+                                                                    Encanamento equilibrante dos reservatórios principais
+
+
+
+                                                                    Encanamento equilibrante dos cilindros de freio
+
+
+  Sistema de freio da locomotiva
+
+ Agora, veja as características de alguns elementos essenciais dos sistemas de freio,
+ envolvidos nos processos apresentados.
+Básico de Locomotivas                                                                   48
+
+
+
+
+2.2 Compressor
+
+
+
+ O sistema de freio é alimentado por uma pressão de ar produzida por compressor. De
+ acordo com o modelo da locomotiva, o compressor pode ser acionado diretamente pelo
+ movimento do eixo do motor a diesel ou por meio de acoplamento de motor elétrico.
+ Após ser comprimido, o ar é armazenado em tubos cilíndricos denominados reservatórios
+ principais. A locomotiva possui dois reservatórios.
+
+   •• O principal número 1, que é responsável pela alimentação dos equipamentos auxiliares.
+   •• O principal número 2, que é responsável pela alimentação do sistema de
+        freio, cujo ar comprimido será distribuído para toda a composição através de
+        mangueiras e encanamentos.
+
+
+
+
+          Eixo de
+        acionamento
+
+
+
+
+                                                                           Compressor
+
+
+
+
+  Compressor acionado diretamente pelo motor a diesel
+Básico de Locomotivas                                                     49
+
+
+
+
+                                                           Compressor
+
+
+
+
+                                                           Filtro de ar
+
+
+
+
+                                                             Motor
+                                                             elétrico
+
+
+                  Compressor acionado por motor elétrico
+        Básico de Locomotivas                                                                                50
+
+
+
+
+        2.3 Manômetros
+
+
+
+                                      0-126-122
+         São instrumentos destinados a medir a pressão. Eles precisam ser monitorados
+         durante todas as etapas relacionadas às atividades de condução de trens (manobras e
+         viagens na via de circulação).
+o!
+
+ nte!
+                Importante!
+
+ais!            A monitoração desses instrumentos é fundamental na operação de
+                um trem.
+ ndo!
+
+         Geralmente, as locomotivas possuem dois manômetros com indicação de quatro pressões,
+         como mostram as figuras.
+
+
+
+                                      80           80                          80           80
+                                60         60100         100             60         60100         100
+                          40         40                             40        40
+                                                 120          120                         120          120
+
+                          20         20                             20        20
+                                                 140          140                         140          140
+                                0          0
+                                           160          160              0          0
+                                                                                    160          160
+
+
+
+                  Vermelho – reservatório principal                      Vermelho – cilindro de freio
+                  Branco – reservatório equilibrante                     Branco – encanamento geral
+
+         Entenda os detalhes da medição de cada manômetro.
+        Básico de Locomotivas                                                                         51
+
+
+
+
+         Manômetro esquerdo
+
+
+         Ponteiro vermelho – reservatório principal
+
+         É a indicação da pressão do ar no reservatório principal da locomotiva. Esse reservatório
+         é o responsável pelo abastecimento de ar de todo o sistema de freio do trem. Portanto, a
+                                0-126-122
+         pressão irá variar de acordo  com o volume de abastecimento de todo o sistema de freio do
+         trem e com o ciclo do compressor.
+
+
+o!              Atenção!
+
+ nte!           Uma queda rápida da pressão do reservatório principal – abaixo da
+                mínima do ciclo do compressor, em torno de 120 PSI – indica uma
+ais!            grande vazão de ar. Isso pode estar relacionado a uma quebra de
+                trem ou a uma ruptura do mangote do encanamento geral (EG).
+ ndo!
+
+
+
+         Ponteiro branco – reservatório equilibrante
+
+         É a indicação de referência usada para o controle da pressão do EG, ajustada para o padrão
+         das ferrovias brasileiras, de 90 PSI. Possui um volume de 3,6 litros e é ajustável pela válvula
+         reguladora de pressão.
+         Essa pressão deve ser utilizada como referência para aplicação de freios. Por seu volume
+         ser muito menor que o EG, a queda será mais rápida, proporcionando uma aplicação nos
+         valores desejados.
+
+
+         Manômetro direito
+
+
+         Ponteiro vermelho – cilindro de freio
+
+         Indica a pressão do cilindro de freio da locomotiva, originada por uma redução de
+         pressão no EG, voluntária ou não, e também das aplicações pelo manipulador de freio
+         independente (MFI).
+         Tem uma pressão máxima entre 45 e 50 PSI em aplicação de freio automático, acrescida de
+         40% ou 60% em aplicação pelo MFI. Essa aplicação é feita conforme o tipo de válvula relé
+         utilizada pela locomotiva – que pode ser do tipo J-1-4-14 ou J-1-6-16.
+
+         Ponteiro branco – encanamento geral
+
+         Indica a evolução do abastecimento da linha do encanamento ao longo da composição. Por
+         meio da variação da pressão de ar, envia sinais de aplicação e alívio dos freios dos vagões
+         pelas válvulas de serviço e emergência.
+Básico de Locomotivas                                                                 52
+
+
+
+
+2.4 Manipulador
+Automático
+
+
+
+ O equipamento responsável pela frenagem dos vagões e das locomotivas do trem é um
+ manipulador automático montado no pedestal de comando da locomotiva. Por meio de
+ uma mudança de posição, ele controla as válvulas instaladas no trem, gerando comandos. É
+ apresentado em duas versões:
+
+
+
+
+                               Freio convencional manipulador
+Básico de Locomotivas                                                                     53
+
+
+
+
+                        Freio convencional manipulador H-6
+
+
+ O sistema de freio convencional 26-L, por exemplo, é composto por algumas válvulas
+ principais instaladas na locomotiva. A seguir, você terá detalhes de cada uma e poderá
+ observá-las nas imagens.
+
+   •• Válvula de controle 26-F
+ Essa válvula controla, de acordo com as posições do manipulador de freio automático (MFA),
+ o carregamento, a aplicação e o alívio dos freios da locomotiva.
+
+
+
+
+                             Válvula 26-F
+Básico de Locomotivas                                                                   54
+
+
+
+
+   •• Válvulas relé J1 e J1-6-16 ou J1-4-14
+ A válvula relé J1 fornece e descarrega a pressão de ar dos cilindros de freio ou dos
+ encanamentos equilibrantes dos cilindros de freio da locomotiva.
+ As válvulas relé J1-6-16 ou J1-4-14 são utilizadas em locomotivas mais modernas,
+ acrescentando esforço de frenagem equivalente a elas.
+
+
+
+
+                                 Válvula relé J1
+
+
+
+
+                                   Válvula relé J1-6-16 ou J1-4-14
+Básico de Locomotivas                                                                           55
+
+
+
+
+   •• Válvula de aplicação P-2-A
+ Age no controle e segurança da locomotiva. Conheça suas etapas de atuação.
+ 1. Interrompe o abastecimento do encanamento de carregamento do reservatório equilibrante.
+ 2. Como resultado, o manipulador de freio automático é isolado.
+ 3. Em seguida, há o descarregamento do ar do reservatório equilibrante para a atmosfera.
+ 4. Com uma aplicação de serviço total, corta a tração por meio do interruptor de controle de
+    potência, que é a chave Power Control Switch – PCS.
+
+
+
+
+   •• Válvula piloto interruptora de carregamento A-1
+ É responsável pela “proteção”, caso ocorra uma separação de vagões com ruptura da
+ mangueira do encanamento geral. Em uma situação como essa, observe como ela funciona.
+ 1. Interrompe o carregamento do encanamento geral.
+ 2. Corta a tração ou frenagem dinâmica.
+ 3. Aplica areia automaticamente durante 30 a 40 segundos.
+Básico de Locomotivas                                                                    56
+
+
+
+
+   •• Válvula MU-2A
+ Condiciona a locomotiva para operar em comando múltiplo com outras locomotivas
+ equipadas com sistema 26-L ou com outros sistemas diferentes.
+
+
+
+
+   •• Válvula seletora F-1
+ Transfere para as locomotivas comandadas as aplicações e alívios dos freios originados na
+ comandante. É imprescindível em comando múltiplo com outras locomotivas dotadas de
+ equipamentos de freio diferentes.
+ Em caso de fracionamento entre locomotivas, ela reposiciona uma das comandadas
+ automaticamente para a condição de comandante.
+Básico de Locomotivas                                                                    57
+
+
+
+
+   •• Válvulas de descarga nº 8 ou KM
+ Quando ocorre uma aplicação de emergência, essa válvula é capaz de assegurar a queda
+ rápida da pressão do encanamento geral, liberando ar comprimido para a atmosfera. Isso
+ ocorre principalmente nas aplicações de emergência originadas ao longo do trem, ou seja,
+ não oriundas do manipulador de freio automático.
+
+
+
+
+   •• Válvula relé HB-5D
+ A válvula Relayair HB-5D – em locomotivas equipadas com válvulas relé do tipo diferencial
+ relé J-1.6-16, por exemplo – evita que as aplicações de freio realizadas por meio do
+ manipulador de freio automático sejam multiplicadas nas locomotivas comandadas.
+        Básico de Locomotivas                                                                   58
+
+
+
+
+           •• Válvula de emergência de 1 ¼”
+                            0-126-122
+         Quando acionada, provoca  uma queda brusca de pressão no encanamento geral,
+         provocando uma aplicação de emergência na locomotiva ou no trem.
+
+
+o!              Atenção!
+
+ nte!           Em uma locomotiva “escoteira”, ou seja, sozinha, e com a válvula
+                MU-2A posicionada para comandada, o acionamento da válvula de
+ais!            emergência de 1 ¼” não provocará aplicação dos freios.
+ ndo!
+
+
+
+
+           •• Válvula de transferência BD-26
+         Atua em reposta às penalidades geradas pelo sistema de sinalização do trem, por meio de
+         corte de tração através da PCS e de aplicação total de serviço dos freios da locomotiva.
+Básico de Locomotivas                                                                    59
+
+
+
+
+   •• Torneira interruptora
+ É utilizada para verificar a evolução da pressão após uma emergência e para a realização
+ de teste de vazamento. Quando está na posição fechada, corta a alimentação do
+ encanamento geral.
+
+
+
+
+                          Torneira interruptora
+
+
+ Agora que você já conhece algumas válvulas e torneiras do sistema de freio 26-L, verá outras
+ do sistema 6-SL, também utilizado na Vale.
+
+   •• Válvula de alimentação D-24-B
+ Por meio dessa válvula, obtém-se uma regulagem predeterminada da pressão do ar que
+ vem do reservatório principal, para a alimentação do encanamento geral do trem.
+Básico de Locomotivas                                                                   60
+
+
+
+
+   •• Torneira de transferência de três posições:
+ Controla a ligação normal entre o encanamento geral e o manipulador. Além disso, também
+ faz a ligação do reservatório principal à câmara do diafragma da válvula de transferência.
+
+
+
+                                                     Posição rebocada
+
+
+
+                                                       Posição comandada
+
+
+
+
+                                             Posição comandante
+
+
+
+
+   •• Válvula magnética R-A-4:
+ É acoplada na válvula distribuidora, na parte de aplicação. Ela compõe a parte “I” da
+ válvula distribuidora. Sua função é evitar uma aplicação automática de freio durante a
+ frenagem dinâmica.
+Básico de Locomotivas                                               61
+
+
+
+
+2.5 Freio Eletrônico
+
+
+
+ A seguir, você conhecerá a composição do freio eletrônico CCBII.
+
+
+
+
+            Freio eletrônico CCBII
+Básico de Locomotivas                                                                                             62
+
+
+
+
+ O sistema de freio eletrônico CCBII é formado por uma unidade de controle pneumático –
+ EPCU, mostrada na figura adiante. Contém válvulas pneumáticas que controlam as linhas
+ pneumáticas do trem e da locomotiva.
+
+
+
+
+ Observe na figura cada módulo da EPCU e verifique, na tabela a seguir, a respectiva função.
+
+Módulo                  Função
+
+                        Simula a função de alívio da válvula 26-F.
+13CP
+                        Fornece a pressão do encanamento de aplicação.
+
+16CP                    Fornece a pressão de controle do cilindro do freio.
+
+                        Simula a função do independente.
+20CP
+                        Fornece a aplicação independente e a pressão do encanamento de alívio.
+
+                        Simulam em conjunto as funções das válvulas H5, F1 e J 1.6 16.
+16CP e 20CP
+                        Essas funções são auxiliadas pelo software do freio instalado no IPM e em cada módulo.
+
+
+                        Simula a função da válvula relé J1, mas também trabalha em conjunto com os módulos
+                        16CP e 20CP.
+BCCP
+                        Contém o relé do encanamento de freio e fornece acionamento e corte desse
+                        encanamento, bem como a aplicação de emergência.
+
+                        Simula as funções de emergência e carregamento da válvula 26-C.
+BPCP
+                        Abriga o relé do cilindro do freio.
+
+
+                        Simula a função de aplicação de serviço da válvula 26-F, mas a sua principal função é a
+DBTV                    de backup do Sistema de Freio CCBII.
+
+                        Fornece suporte pneumático na hipótese de falha eletrônica.
+        Básico de Locomotivas                                                                                     63
+
+
+
+
+        Módulo                  Função
+
+        16CP, 13CP e DBTV       Auxiliam o freio dinâmico.
+
+        16CP, BCCP e DBTV       Simulam em conjunto as funções da válvula 26-F.
+
+                                Simula as funções da válvula reguladora e da válvula de comunicação com o EG da
+        ERCP                    válvula 26-C.
+
+                                Fornece0-126-122
+                                        pressão de controle ao encanamento de freio.
+
+
+                                A válvula KR5 (instalada no BPCP), em conjunto com o ERCP, é responsável pelo
+        BPCP e ERCP
+                                recobrimento do sistema de freio da locomotiva.
+o!
+        PSJB                    Controla o fornecimento de energia.
+ nte!
+
+ais!
+
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou detalhes dos sistemas de freio de uma
+                locomotiva. Pode-se destacar:
+                  •• uma visão geral dos processos de alimentação (com a
+                     produção, o armazenamento e o condicionamento), de
+                     distribuição, de controle e de aplicação;
+                  •• o compressor de ar;
+                  •• os manômetros;
+                  •• o manipulador automático dos sistemas de freio, com seus
+                     diferentes tipos de válvulas e torneiras;
+                  •• o freio automático.
+               Inserir Imagem
+
+
+
+
+                                                         3
+                                                         Motor Elétrico
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 3.1 Contextualização
+•• 3.2 Gerador de Tração
+Básico de Locomotivas                                                                  65
+
+
+
+
+3.1 Contextualização
+
+
+
+ Em uma locomotiva, ocorre uma sequência de transformação de energia até que o
+ produto final seja o movimento da massa. Primeiramente, temos a energia mecânica sendo
+ transformada em energia elétrica. Então, a energia elétrica, por sua vez, é transformada
+ novamente em energia mecânica de movimento rotacional ao rodeiro da locomotiva.
+Básico de Locomotivas                                                                      66
+
+
+
+
+3.2 Gerador de Tração
+
+
+
+ No sistema de transmissão elétrica, o motor a diesel é acoplado a um gerador de energia
+ elétrica, denominado gerador de tração (gerador principal, mostrado na figura).
+
+
+
+
+                   Gerador principal
+Básico de Locomotivas                                                                      67
+
+
+
+
+ O gerador de tração, ou principal, alimenta os motores elétricos de tração. Por meio de
+ um conjunto de engrenagens, o esforço mecânico produzido pelos motores de tração é
+ transmitido às rodas acopladas aos eixos da locomotiva, como mostra a foto a seguir.
+
+
+
+
+                        Motor de tração acoplado ao eixo da locomotiva
+
+ Agora, veja que interessante: a locomotiva diesel-elétrica é um sistema de produção e
+ geração de energia completo e isolado, que tem como fonte primária de energia o motor
+ a diesel. Logo, a potência de saída do sistema nunca pode ultrapassar a sua capacidade
+ máxima de produção, ou seja, a capacidade do motor a diesel. Em outras palavras, o gerador
+ de tração, sendo acionado diretamente pelo motor a diesel, não pode gerar mais energia do
+ que recebe.
+ Diante disso, podemos concluir que uma locomotiva diesel-elétrica pode ser
+ caracterizada como uma locomotiva elétrica, que transporta a sua própria usina
+ geradora de energia elétrica.
+ As locomotivas diesel-elétricas podem ser classificadas conforme o tipo de gerador de
+ energia e motores de tração. São três tipos.
+
+   •• DC-DC – gerador em corrente contínua – motores em corrente contínua.
+   •• AC-DC – gerador em corrente alternada – motores em corrente contínua.
+   •• AC-DC-AC – gerador em corrente alternada – motores em corrente alternada.
+        Básico de Locomotivas                                                                                                                                    68
+
+
+
+
+         O circuito da figura mostra um diagrama de blocos que ilustra o funcionamento de uma
+         locomotiva diesel-elétrica do tipo DC-DC (gerador em corrente contínua – motores em
+         corrente contínua). Podemos observar que os motores de tração, em corrente contínua, são
+         alimentados pelo gerador de tração – constituído somente pelo gerador principal, que é um
+         gerador de corrente contínua.
+
+                                       Regulador de carga
+                                                                                                  Circuito de controle
+                                                                                                  de excitação e potência
+
+
+                                                                                                           V                I
+                Acelerador              Governador
+                                                                                        -        +
+
+                   Pedestal
+                                                                                                               +
+                                             Motor a diesel
+                                                                                                               -
+                                                                                                                                          Motores de tração
+
+
+                                                                                   Gerador principal
+                                                                                   Gerador de tração
+
+
+
+         Nas locomotivas diesel-elétricas do tipo AC-DC (gerador em corrente alternada – motores
+         em corrente contínua), o retificador converte a corrente alternada trifásica produzida pelo
+         alternador principal (substituindo o gerador principal), na corrente contínua necessária para
+         alimentar os motores de tração. Veja o circuito na figura:
+
+                                Regulador de carga
+                                                                                                Circuito de controle
+                                                                                                de excitação e potência
+
+                                                                                                           V                    I
+            Acelerador          Governador
+                                                                                            -        +
+                                              0-126-122       -       +
+                                                                          -    +
+             Pedestal
+
+                                  Motor a diesel
+
+
+o!                                                                                                                                                Motores de tração
+                                                                  Excitatriz                                                        Retificador
+                                                                                 Alternador principal
+ nte!                                                         Alternador de tração
+
+
+ais!
+
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou detalhes do motor elétrico. Pode-se destacar:
+                 •• as funções do gerador principal ou de tração;
+                 •• os tipos de locomotivas diesel-elétricas e seus circuitos.
+               Inserir Imagem
+
+
+
+
+                                                         4
+                                                         Motor a Diesel
+Nesta unidade, serão apresentadas as seguintes lições:
+
+
+•• 4.1 Contextualização
+•• 4.2 Particularidades do Motor a Diesel
+Básico de Locomotivas                                                                70
+
+
+
+
+4.1 Contextualização
+
+
+
+ A principal função do motor a diesel é fornecer movimento ao gerador principal para
+ geração da energia elétrica entregue aos motores de tração. Além disso, é ele quem
+ proporciona o movimento do compressor, do gerador auxiliar e demais componentes
+ da locomotiva.
+ As locomotivas são equipadas com um motor a diesel de grande porte, que é dimensionado
+ de acordo com a necessidade de demanda de esforço. Sua potência varia de 800 HP –
+ em relação a locomotivas utilizadas para pequenas remoções em pátios de manobra e
+ oficinas de manutenção – até 6.000 HP para motores turbinados instalados em locomotivas
+ destinadas a transporte de trens de carga em longos percursos.
+Básico de Locomotivas                                                                        71
+
+
+
+
+4.2 Particularidades do
+Motor a Diesel
+
+
+
+ Cilindros
+
+        Pode haver 8, 12, 16 ou 20 cilindros. Quanto à disposição, os cilindros podem ser:
+
+        • • alinhados horizontalmente, com motores que apresentam uma fila de
+             cilindros alinhados;
+
+        •• inclinados lateralmente com motores que apresentam duas filas de cilindros
+             alinhados, dispostas em V.
+ Ciclo de trabalho
+
+        O ciclo de trabalho pode ser em:
+
+        •• dois tempos, com motores GM (G12, G16, DDM, GT, SD40, SD45, DDM-MP);
+        •• quatro tempos, com motores GE (BB36, BB40, U20, U22, DASH8 E DASH9) ALCO (MX620).
+Básico de Locomotivas                                                                        72
+
+
+
+
+ Veja dois exemplos de motores e suas especificidades:
+
+
+
+                                                         •• 900 rpm;
+                                                         •• 3.900 HP;
+                                                         •• 20 cilindros;
+                                                         •• em V – ângulo de 45º;
+                                                         •• dois tempos;
+                                                         •• turbinado.
+
+                                                         •• 1.050 rpm;
+                                                         •• 4.150 HP;
+                                                         •• 10 cilindros;
+                                                         •• em V – ângulo de 45º;
+                                                         •• quatro tempos;
+                                                         •• turbinado.
+ Outras características dos motores a diesel são a forma de alimentação e de refrigeração.
+
+
+ Alimentação
+
+ Os motores a diesel podem ser alimentados por turbina ou através de sopradores.
+
+
+
+
+                           Turbina
+        Básico de Locomotivas                                                                   73
+
+
+
+
+                                0-126-122
+                                    Soprador (G12, G16)
+
+
+
+         Refrigeração
+o!
+         Todos os motores a diesel das locomotivas são refrigerados à água. O sistema é formado por
+ nte!
+         radiador, caixa d'água, ventiladores de arrefecimento e chaves termostáticas.
+ais!
+
+ ndo!           Relembrando!
+
+                Nesta unidade, você estudou detalhes do motor a diesel, com
+                destaque para suas particularidades quanto aos cilindros –
+                quantidade e disposição – e aos ciclos de trabalho.
+               Inserir Imagem
+
+
+
+
+                                                            5
+                                                            Anexo
+Você está terminando o estudo da apostila do curso Básico
+de Locomotivas e já é capaz de descrever o funcionamento
+desses veículos.
+
+Para complementar e enriquecer seus conhecimentos, veja
+agora fotos e informações sobre os diversos modelos de
+locomotivas utilizados na Vale.
+Básico de Locomotivas                                                         75
+
+
+
+
+           Locomotiva GM G 12 – Potência para tração: 1310 HP
+
+
+
+
+            Locomotiva GM G 12 (modificada) – Potência para tração: 1310 HP
+Básico de Locomotivas                                                         76
+
+
+
+
+            Locomotiva GM G 12 (modificada) – Potência para tração: 1310 HP
+
+
+
+
+            Locomotiva GM G 12 (SLUG) – Potência para tração: 1310 HP
+Básico de Locomotivas                                             77
+
+
+
+
+            Locomotiva GE U 15B – Potência para tração: 1500 HP
+
+
+
+
+          Locomotiva GM G 16 – Potência para tração: 1800 HP
+Básico de Locomotivas                                               78
+
+
+
+
+           Locomotiva ALco MX 620 – Potência para tração: 2000 HP
+
+
+
+
+           Locomotiva GE U 20 C – Potência para tração: 2000 HP
+Básico de Locomotivas                                                79
+
+
+
+
+           Locomotiva GE U 22 C – Potência para tração: 2200 HP
+
+
+
+
+          Locomotiva GM GT 26 CU-2 – Potência para tração: 2700 HP
+Básico de Locomotivas                                                                     80
+
+
+
+
+         Locomotiva GM GT 26 CU-MP – Potência para tração: 3000 HP
+
+
+
+
+           Locomotiva GE C 36-7A (SF C30-7A modificada) – Potência para tração: 3000 HP
+Básico de Locomotivas                                                          81
+
+
+
+
+          Locomotiva GE BB 30 – Potência para tração: 3000 HP
+
+
+
+
+          Locomotiva GM SD 40-2 (Modificada) – Potência para tração: 3000 HP
+Básico de Locomotivas                                                               82
+
+
+
+
+        Locomotiva GE C 36-7B – Potência para tração: 3600 HP
+
+
+
+
+       Locomotiva GE BB 36-7A (B36-7A modificada) – Potência para tração: 3600 HP
+Básico de Locomotivas                                            83
+
+
+
+
+       Locomotiva GM DDM 45 – Potência para tração: 3600 HP
+
+
+
+
+       Locomotiva GM DDM 45 MP – Potência para tração: 3600 HP
+Básico de Locomotivas                                                             84
+
+
+
+
+        Locomotiva GM BB45 (SD 45-2 modificada) – Potência para tração: 3600 HP
+
+
+
+
+        Locomotiva GM SD 60 M – Potência para tração: 3800 HP
+Básico de Locomotivas                                                       85
+
+
+
+
+         Locomotiva GE BB 40-8 (Dash 8) – Potência para tração: 4000 HP
+
+
+
+
+         Locomotiva GE BB 40 M-9 (Dash 9) – Potência para tração: 4000 HP
+Básico de Locomotivas                                                       86
+
+
+
+
+        Locomotiva GE BB 40 W-9 (Dash 9W) – Potência para tração: 4000 HP
+
+
+
+
+        Locomotiva GM SD 70 M – Potência para tração: 4300 HP
+Básico de Locomotivas                                                    87
+
+
+
+
+      Locomotiva GE C 44 WM-9 (Dash 9) – Potência para tração: 4400 HP
+
+
+
+
+     Locomotiva GM SD 80 ACe – Potência para tração: 5200 HP
+Básico de Locomotivas                                                  88
+
+
+
+
+         Locomotiva GE ES58 ACi- EVO – Potência para tração: 5800 HP
+
