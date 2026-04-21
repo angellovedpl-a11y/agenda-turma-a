@@ -66,7 +66,7 @@ def capa_canvas(canvas, doc):
     canvas.setFillColor(white)
     canvas.setFont("Helvetica", 11)
     canvas.drawCentredString(A4[0]/2, 3.2*cm, "Versão 1.0  •  Abril de 2026")
-    canvas.drawCentredString(A4[0]/2, 2.7*cm, "Administrador principal: Angelo Silva")
+    canvas.drawCentredString(A4[0]/2, 2.7*cm, "Criado por Angelo Silva  •  Turma A")
     canvas.restoreState()
 
 def li(txt):
@@ -106,6 +106,7 @@ sumario = [
     ("11.", "Trocar minha senha", "12"),
     ("12.", "Perguntas frequentes", "13"),
     ("13.", "Glossário ferroviário rápido", "14"),
+    ("14.", "Créditos e agradecimentos", "15"),
 ]
 data_sum = [[n, t, p] for n, t, p in sumario]
 ts = Table(data_sum, colWidths=[1.2*cm, 13*cm, 1.5*cm])
@@ -242,7 +243,8 @@ story.append(li("<b>Curso / treinamento</b> (NR, reciclagens, cursos internos)."
 story.append(li("<b>Férias</b> (marca o período inteiro de uma vez)."))
 story.append(li("<b>Folga extra</b> (compensações, abonos)."))
 story.append(li("<b>Troca de turno</b> (com o nome do colega que está cobrindo)."))
-story.append(li("<b>Pessoal</b> (aniversário, consulta, qualquer compromisso seu)."))
+story.append(li("<b>Aniversário</b> — basta cadastrar uma vez, o app repete automaticamente todo ano 🔁."))
+story.append(li("<b>Pessoal</b> (consulta, qualquer compromisso seu)."))
 story.append(Paragraph(
     "Cada evento aparece direto no cartão do dia e também na lista geral. Você pode editar ou "
     "apagar tocando duas vezes nele.", P))
@@ -253,10 +255,10 @@ story.append(nota("As trocas de turno ficam registradas com data e nome — úti
 story.append(Paragraph("6. Documentos: ASO, BAU, NR e outros vencimentos", H1))
 story.append(Paragraph(
     "Na aba <b>Documentos</b>, cadastre tudo que tem prazo de validade na ferrovia:", P))
-story.append(li("ASO (Atestado de Saúde Ocupacional)"))
-story.append(li("BAU (Brevê de Aptidão de Uso) e habilitações específicas"))
-story.append(li("NR-10, NR-35 e outras normas regulamentadoras"))
-story.append(li("Crachá, CNH, certificados internos"))
+story.append(li("ASO (Atestado de Saúde Ocupacional) — o principal, exigido por lei"))
+story.append(li("Habilitação Ferroviária e certificado de maquinista"))
+story.append(li("NR-11 e outras normas regulamentadoras"))
+story.append(li("Crachá e certificados internos"))
 story.append(Paragraph(
     "Para cada documento, informe o <b>nome</b>, a <b>data de vencimento</b> e, se quiser, anexe "
     "uma observação (por exemplo: 'fazer no posto da Vila Industrial'). O app começa a avisar "
@@ -400,7 +402,92 @@ tg.setStyle(TableStyle([
 ]))
 story.append(tg)
 
-story.append(Spacer(1, 1*cm))
+story.append(PageBreak())
+
+# 14. Creditos e agradecimentos
+story.append(Paragraph("14. Créditos e agradecimentos", H1))
+
+story.append(Paragraph("Idealização, projeto e desenvolvimento", H2))
+creditos_box = ParagraphStyle("CRED", parent=P, fontSize=12, alignment=TA_CENTER,
+                               backColor=HexColor("#fff8e0"), borderPadding=14,
+                               borderColor=AMARELO, borderWidth=1.2,
+                               textColor=AZUL, leading=18, spaceAfter=14)
+story.append(Paragraph(
+    "<b>Angelo Silva</b><br/>"
+    "<font size='10' color='#374151'>Maquinista — Turma A</font><br/><br/>"
+    "<font size='10'>Criador, idealizador e desenvolvedor deste aplicativo</font>",
+    creditos_box))
+
+story.append(Paragraph("Sobre o esforço por trás do app", H2))
+story.append(Paragraph(
+    "Este aplicativo nasceu da rotina de quem vive a escala 2x2 na pele. Foram <b>muitos dias</b> "
+    "de trabalho — entre turnos, folgas que viraram noites de código, ideias rabiscadas no caderno "
+    "durante a viagem e ajustes feitos depois de conversar com os colegas no pátio. Cada tela, "
+    "cada cor, cada botão deste app foi pensado para resolver uma dor real da turma: a escala que "
+    "ninguém lembra de cor, o documento que vence sem avisar, a troca de turno que fica solta no "
+    "WhatsApp, o checklist que esquecemos no fim do dia.", P))
+story.append(Paragraph(
+    "Foi um projeto feito <b>de maquinista para maquinistas</b>, sem ajuda de empresa, sem "
+    "patrocínio, sem prazo. Só com vontade de deixar a vida da turma um pouquinho mais "
+    "organizada — e, quem sabe, servir de exemplo de que dá pra ir além do volante.", P))
+
+story.append(Spacer(1, 0.4*cm))
+story.append(Paragraph("Agradecimentos especiais", H2))
+
+agrad_box = ParagraphStyle("AGR", parent=P, fontSize=11, alignment=TA_LEFT,
+                            backColor=HexColor("#f0f9ff"), borderPadding=14,
+                            borderColor=HexColor("#0ea5e9"), borderWidth=1,
+                            textColor=CINZA, leading=17, spaceAfter=10)
+story.append(Paragraph(
+    "À <b>Coordenação</b>, na pessoa da <b>Jéssica</b>, pela confiança, pelo apoio e por "
+    "acreditar que uma boa ideia pode vir de qualquer lugar — inclusive da cabine.",
+    agrad_box))
+
+story.append(Paragraph(
+    "Aos amigos que doaram tempo, ouvido e crítica construtiva ao longo do caminho:", P))
+
+amigos_data = [
+    ["Ivana Viegas",       "Glória Mulato"],
+    ["Geidher Aurélio",    "Rafael Melo"],
+    ["Carlos Deleon",      "Bruno Anderson"],
+]
+amigos_tbl = Table(amigos_data, colWidths=[7.5*cm, 7.5*cm])
+amigos_tbl.setStyle(TableStyle([
+    ("FONT", (0,0), (-1,-1), "Helvetica-Bold", 12),
+    ("TEXTCOLOR", (0,0), (-1,-1), AZUL),
+    ("ALIGN", (0,0), (-1,-1), "CENTER"),
+    ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+    ("BOTTOMPADDING", (0,0), (-1,-1), 12),
+    ("TOPPADDING", (0,0), (-1,-1), 12),
+    ("BACKGROUND", (0,0), (-1,-1), HexColor("#fff8e0")),
+    ("GRID", (0,0), (-1,-1), 0.6, AMARELO),
+]))
+story.append(amigos_tbl)
+
+story.append(Spacer(1, 0.3*cm))
+story.append(Paragraph(
+    "E a <b>todos os amigos da Turma</b> que, de alguma forma, contribuíram com disponibilidade "
+    "para ouvir a ideia, dar palpites, apontar o que não fazia sentido e sugerir o que ficaria "
+    "melhor. Sem vocês, este app seria só um arquivo esquecido no celular.",
+    P))
+
+story.append(Spacer(1, 0.6*cm))
+mensagem_final_style = ParagraphStyle(
+    "FINAL", parent=P, fontSize=14, alignment=TA_CENTER,
+    backColor=AZUL, textColor=white, borderPadding=18,
+    leading=22, fontName="Helvetica-Bold")
+story.append(Paragraph(
+    "🚂  O App tá pronto, gente.  🚂<br/><br/>"
+    "Espero que gostem.",
+    mensagem_final_style))
+
+story.append(Spacer(1, 0.6*cm))
+story.append(Paragraph(
+    "<i>— Angelo Silva, com carinho, para a Turma A. Abril de 2026.</i>",
+    ParagraphStyle("ASS", parent=P, alignment=TA_CENTER, textColor=CINZA,
+                   fontName="Helvetica-Oblique", fontSize=11)))
+
+story.append(Spacer(1, 0.4*cm))
 story.append(Paragraph(
     "<i>Boa viagem, Turma A. Que a escala seja sempre clara e os documentos sempre em dia.</i>",
     ParagraphStyle("FIM", parent=P, alignment=TA_CENTER, textColor=AZUL,
