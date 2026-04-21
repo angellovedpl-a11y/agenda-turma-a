@@ -67,8 +67,57 @@ _anthropic_client = Anthropic(
     base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL")
 )
 
+# === OCR VIA CLAUDE VISION (fallback para PDFs escaneados) ===
+def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 80) -> str:
+    try:
+        from pdf2image import convert_from_bytes
+    except ImportError:
+        return ''
+    try:
+        images = convert_from_bytes(raw, dpi=150, fmt='png',
+                                    first_page=1, last_page=max_pages)
+    except Exception:
+        return ''
+    if not images:
+        return ''
+    pages_text = []
+    BATCH = 4
+    for i in range(0, len(images), BATCH):
+        batch = images[i:i + BATCH]
+        content = []
+        for img in batch:
+            if img.width > 1600:
+                ratio = 1600 / img.width
+                img = img.resize((1600, int(img.height * ratio)))
+            buf = io.BytesIO()
+            img.save(buf, format='PNG', optimize=True)
+            b64img = base64.b64encode(buf.getvalue()).decode()
+            content.append({
+                'type': 'image',
+                'source': {'type': 'base64', 'media_type': 'image/png', 'data': b64img}
+            })
+        content.append({
+            'type': 'text',
+            'text': (f'Transcreva integralmente o texto destas {len(batch)} '
+                     'paginas de manual/documento ferroviario em portugues. '
+                     'Preserve a ordem, formate tabelas em markdown e mantenha '
+                     'listas. Separe cada pagina com "--- Pagina N ---" '
+                     '(numerando a partir de ' + str(i + 1) + '). '
+                     'Retorne APENAS o texto transcrito, sem comentarios.')
+        })
+        try:
+            resp = _anthropic_client.messages.create(
+                model='claude-haiku-4-5',
+                max_tokens=8000,
+                messages=[{'role': 'user', 'content': content}]
+            )
+            pages_text.append(resp.content[0].text.strip())
+        except Exception as e:
+            pages_text.append(f'[OCR falhou no lote {i // BATCH + 1}: {e}]')
+    return '\n\n'.join(pages_text)
+
 # === EXTRACAO DE TEXTO DE PDF/TXT ===
-def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str) -> str:
+def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str, permitir_ocr: bool = True) -> str:
     try:
         if ',' in b64_data:
             b64_data = b64_data.split(',', 1)[1]
@@ -77,6 +126,7 @@ def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str) -> str:
         return ''
     nome_lower = nome.lower()
     if (mimetype and 'pdf' in mimetype) or nome_lower.endswith('.pdf'):
+        texto_pdf = ''
         try:
             import pdfplumber
             with pdfplumber.open(io.BytesIO(raw)) as pdf:
@@ -85,9 +135,14 @@ def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str) -> str:
                     t = p.extract_text() or ''
                     if t.strip():
                         pages.append(t)
-                return '\n\n'.join(pages)
-        except Exception as e:
-            return ''
+                texto_pdf = '\n\n'.join(pages)
+        except Exception:
+            texto_pdf = ''
+        if permitir_ocr and len(texto_pdf.strip()) < 200:
+            ocr = _ocr_pdf_via_vision(raw)
+            if len(ocr.strip()) > len(texto_pdf.strip()):
+                texto_pdf = ocr
+        return texto_pdf
     if nome_lower.endswith('.docx') or 'officedocument.wordprocessingml' in (mimetype or ''):
         try:
             import zipfile
