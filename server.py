@@ -178,13 +178,38 @@ def claude_chat():
         data = request.json or {}
         messages = data.get('messages', [])
         system = data.get('system', '')
+        image_data_url = data.get('image')
         if not messages:
             return jsonify({'error': 'Nenhuma mensagem enviada'}), 400
+
+        if image_data_url and isinstance(image_data_url, str) and image_data_url.startswith('data:'):
+            try:
+                header, b64 = image_data_url.split(',', 1)
+                mime = header.split(':')[1].split(';')[0]
+                if mime not in ('image/jpeg', 'image/png', 'image/gif', 'image/webp'):
+                    return jsonify({'error': 'Formato de imagem nao suportado (use JPG, PNG, GIF ou WebP)'}), 400
+                for i in range(len(messages) - 1, -1, -1):
+                    if messages[i].get('role') == 'user':
+                        txt = messages[i].get('content') or 'Descreva esta imagem'
+                        messages[i] = {'role': 'user', 'content': [
+                            {'type': 'image', 'source': {'type': 'base64', 'media_type': mime, 'data': b64}},
+                            {'type': 'text', 'text': txt if isinstance(txt, str) else 'Descreva esta imagem'}
+                        ]}
+                        break
+            except Exception as e:
+                return jsonify({'error': 'Imagem invalida: ' + str(e)}), 400
 
         ultima = ''
         for m in reversed(messages):
             if m.get('role') == 'user':
-                ultima = m.get('content', '') or ''
+                c = m.get('content', '')
+                if isinstance(c, list):
+                    for blk in c:
+                        if isinstance(blk, dict) and blk.get('type') == 'text':
+                            ultima = blk.get('text', '') or ''
+                            break
+                else:
+                    ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
         trechos = buscar_chunks(ultima, biblioteca, top_k=3) if ultima else []
