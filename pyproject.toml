@@ -8,4 +8,6 @@ dependencies = [
     "anthropic",
     "pdfplumber",
     "gunicorn",
+    "sendgrid",
+    "requests",
 ]
