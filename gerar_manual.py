@@ -590,7 +590,7 @@ story.append(Paragraph(
     "Aos amigos que doaram tempo, ouvido e crítica construtiva ao longo do caminho:", P))
 
 amigos = ["Ivana Viegas", "Glória Mulato", "Geidher Aurélio", "Rafael Melo",
-          "Carlos Deleon", "Bruno Anderson", "Micael Viana"]
+          "Carlos Deleon", "Bruno Anderson", "Micael Viana", "Marcos Lima", "Arthur Diniz"]
 for nome in amigos:
     story.append(li("<b>" + nome + "</b>"))
 
