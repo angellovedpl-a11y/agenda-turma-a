@@ -75,7 +75,8 @@ def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str) -> str:
         raw = base64.b64decode(b64_data)
     except Exception as e:
         return ''
-    if mimetype and 'pdf' in mimetype or nome.lower().endswith('.pdf'):
+    nome_lower = nome.lower()
+    if (mimetype and 'pdf' in mimetype) or nome_lower.endswith('.pdf'):
         try:
             import pdfplumber
             with pdfplumber.open(io.BytesIO(raw)) as pdf:
@@ -87,7 +88,19 @@ def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str) -> str:
                 return '\n\n'.join(pages)
         except Exception as e:
             return ''
-    if mimetype and 'text' in mimetype:
+    if nome_lower.endswith('.docx') or 'officedocument.wordprocessingml' in (mimetype or ''):
+        try:
+            import zipfile
+            with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                xml = z.read('word/document.xml').decode('utf-8', errors='ignore')
+            xml = re.sub(r'</w:p>', '\n', xml)
+            xml = re.sub(r'<[^>]+>', ' ', xml)
+            xml = re.sub(r'[ \t]+', ' ', xml)
+            xml = re.sub(r'\n\s*\n+', '\n\n', xml)
+            return xml.strip()
+        except Exception:
+            return ''
+    if (mimetype and 'text' in mimetype) or nome_lower.endswith('.txt') or nome_lower.endswith('.md'):
         try:
             return raw.decode('utf-8', errors='ignore')
         except Exception:
