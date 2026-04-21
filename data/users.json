@@ -1,14 +1,1 @@
-{
-  "497444": {
-    "nome": "Angelo Silva",
-    "senha_hash": "dde05782d3c071554455bbbb032ff111e1b1cd76259af975dea72600fb9552eb",
-    "status": "aprovado",
-    "role": "admin",
-    "criado_em": 1776737845.5004349,
-    "aprovado_em": 1776737845.500435,
-    "aprovado_por": "setup-inicial",
-    "senha_temp": true,
-    "senha_resetada_em": 1776737845.500435,
-    "senha_resetada_por": "setup-inicial"
-  }
-}
+{}
