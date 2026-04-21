@@ -40,5 +40,5 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "vm"
-run = ["sh", "-c", "export UV_PROJECT_ENVIRONMENT=$(pwd)/.venv && .venv/bin/gunicorn --bind=0.0.0.0:5000 --workers=2 --timeout=120 server:app"]
-build = ["sh", "-c", "export UV_PROJECT_ENVIRONMENT=$(pwd)/.venv && python3 -m venv .venv && .venv/bin/pip install --upgrade pip && uv sync || .venv/bin/pip install flask anthropic pdfplumber gunicorn sendgrid requests"]
+run = ["sh", "-c", ".venv/bin/gunicorn --bind=0.0.0.0:5000 --workers=2 --timeout=120 server:app"]
+build = ["sh", "-c", "export UV_PROJECT_ENVIRONMENT=$(pwd)/.venv && export UV_LINK_MODE=copy && python3 -m venv .venv && .venv/bin/pip install --upgrade pip && .venv/bin/pip install -e . && .venv/bin/pip install flask anthropic pdfplumber reportlab gunicorn sendgrid requests"]
