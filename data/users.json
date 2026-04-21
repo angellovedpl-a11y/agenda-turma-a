@@ -1,24 +1,14 @@
 {
   "497444": {
     "nome": "Angelo Silva",
-    "senha_hash": "c0a158723aef317525e5e82d10cd8a4abd7510a2834a531533d79da7e95f2a65",
+    "senha_hash": "dde05782d3c071554455bbbb032ff111e1b1cd76259af975dea72600fb9552eb",
     "status": "aprovado",
     "role": "admin",
-    "criado_em": 1776736694.5933852,
-    "aprovado_em": 1776736694.5933855,
-    "aprovado_por": "auto-admin",
-    "senha_temp": false,
-    "senha_resetada_em": 1776737625.6457145,
-    "senha_resetada_por": "auto-viriato",
-    "senha_trocada_em": 1776737625.950088
-  },
-  "123456": {
-    "nome": "Joao Pendente",
-    "senha_hash": "bb857ddbba2b7005f82709e461ef3ffb3402c281f4c430f76d38c8b9bb721cb4",
-    "status": "pendente",
-    "role": "user",
-    "criado_em": 1776736694.859064,
-    "aprovado_em": null,
-    "aprovado_por": null
+    "criado_em": 1776737845.5004349,
+    "aprovado_em": 1776737845.500435,
+    "aprovado_por": "setup-inicial",
+    "senha_temp": true,
+    "senha_resetada_em": 1776737845.500435,
+    "senha_resetada_por": "setup-inicial"
   }
 }
