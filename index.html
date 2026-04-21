@@ -434,9 +434,9 @@ function loadS(){
 function saveS(){try{localStorage.setItem("turmaA_v10",JSON.stringify({events:S.events,docs:S.docs,auditorias:S.auditorias,checklist:S.checklist,alarmOn:S.alarmOn,alarmTime:S.alarmTime,dark:S.dark}));}catch(e){}}
 function viriatoBoasVindas(){
   if(S.userName){
-    return {role:"assistant",welcome:true,txt:"Você já viu como é linda a vista da Lagoa Mapaúra na janela de um trem? 🚂\n\nOlá novamente, "+S.userName+"! Sou o Viriato, seu assistente ferroviário. Pode me perguntar sobre escala, feriados, documentos ou qualquer dúvida da Turma A.",html:false};
+    return {role:"assistant",welcome:true,txt:"Você já viu como é linda a vista da Lagoa Mapaúra pela janela de um trem? 🚂\n\nOlá novamente, "+S.userName+"! Sou o Viriato, seu assistente ferroviário. Pode me perguntar sobre escala, feriados, documentos ou qualquer dúvida da Turma A.",html:false};
   }
-  return {role:"assistant",welcome:true,txt:"Você já viu como é linda a vista da Lagoa Mapaúra na janela de um trem? 🚂\n\nOlá! Sou o Viriato, assistente ferroviário da Turma A. Antes de começarmos, como você se chama?",html:false};
+  return {role:"assistant",welcome:true,txt:"Você já viu como é linda a vista da Lagoa Mapaúra pela janela de um trem? 🚂\n\nOlá! Sou o Viriato, assistente ferroviário da Turma A. Antes de começarmos, como você se chama?",html:false};
 }
 function salvarNome(nome){
   nome=(nome||"").trim().replace(/[.!?,;:"']/g,"").split(/\s+/).slice(0,3).join(" ");
