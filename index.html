@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Turma A"/>
 <meta name="theme-color" content="#07090f"/>
 <title>Agenda Turma A</title>
-<link rel="apple-touch-icon" sizes="512x512" href="https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png"/>
+<link rel="apple-touch-icon" sizes="512x512" href="/viriato_icon.png"/>
 <style>
 :root,[data-theme="dark"]{
   --bg:#07090f;--bg2:#0a0e1a;--hdr:#0d1120;--hdr2:#0a0d18;
@@ -394,7 +394,7 @@ function trainMsg(){
 let alarmCtx=null,alarmNodes=[],alarmInterval=null;
 function tocarAlarme(){stopAlarme();try{alarmCtx=new(window.AudioContext||window.webkitAudioContext)();function beep(t,f,d){const o=alarmCtx.createOscillator(),g=alarmCtx.createGain();o.connect(g);g.connect(alarmCtx.destination);o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d+.05);alarmNodes.push(o);}const t=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t+i*.45,880,.35);beep(t+i*.45+.15,1100,.2);}alarmInterval=setInterval(()=>{if(!alarmCtx)return;const t2=alarmCtx.currentTime;for(let i=0;i<8;i++){beep(t2+i*.45,880,.35);beep(t2+i*.45+.15,1100,.2);}},4000);}catch(e){}}
 function stopAlarme(){if(alarmInterval){clearInterval(alarmInterval);alarmInterval=null;}alarmNodes.forEach(n=>{try{n.stop();}catch(e){}});alarmNodes=[];if(alarmCtx){try{alarmCtx.close();}catch(e){}alarmCtx=null;}}
-setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('Ã°ÂÂÂ Turma A',{body:'NÃÂ£o esqueÃÂ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('Ã°ÂÂÂ Turma A',{body:'NÃÂ£o esqueÃÂ§a do Prontos!',icon:'https://raw.githubusercontent.com/angellovedpl-a11y/agenda-turma-a/main/Gemini_Generated_Image_pqp90dpqp90dpqp9.png'});});}}}},10000);
+setInterval(()=>{const now=new Date();const h=now.getHours();const min=now.getMinutes();const sec=now.getSeconds();if(sec>10)return;if((h===6&&min===0)||(h===14&&min===0)){const y=now.getFullYear();const m=now.getMonth()+1;const d=now.getDate();const key=y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');const evs=S.events[key]||[];const isServico=evs.some(e=>e.tipo==='servico');if(isServico&&'Notification'in window){if(Notification.permission==='granted'){new Notification('Ã°ÂÂÂ Turma A',{body:'NÃÂ£o esqueÃÂ§a do Prontos!',icon:'/viriato_icon.png'});}else if(Notification.permission!=='denied'){Notification.requestPermission().then(p=>{if(p==='granted')new Notification('Ã°ÂÂÂ Turma A',{body:'NÃÂ£o esqueÃÂ§a do Prontos!',icon:'/viriato_icon.png'});});}}}},10000);
 setInterval(()=>{if(!S.alarmOn||S.alarmRinging)return;const now=new Date();const hm=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");const alvo=S.snoozeTime||S.alarmTime;if(hm===alvo&&!isFolga(now)){S.alarmRinging=true;S.snoozeTime=null;tocarAlarme();render();}},30000);
 
 /* STATE */
