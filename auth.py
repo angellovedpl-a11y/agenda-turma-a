@@ -1,5 +1,5 @@
 """Sistema de autenticacao Agenda Turma A.
-- Matricula: 6 digitos
+- Matricula: 6 a 10 digitos
 - Senha: 4 digitos
 - Primeiro registro vira admin automaticamente
 - Admin pode promover ate 3 aprovadores adicionais (total 4 podem aprovar)
@@ -39,7 +39,7 @@ SESSIONS_PATH = os.path.join(DATA_DIR, 'sessions.json')
 SESSION_DAYS = 30
 MAX_APROVADORES = 3  # alem do admin
 
-MATRICULA_RE = re.compile(r'^\d{6}$')
+MATRICULA_RE = re.compile(r'^\d{6,10}$')
 SENHA_RE = re.compile(r'^\d{4}$')
 
 
@@ -198,7 +198,7 @@ def handle_registrar(data):
     nome = (data.get('nome') or '').strip()[:60]
     funcao = (data.get('funcao') or '').strip()
     if not validar_matricula(matricula):
-        return jsonify({'error': 'A matricula deve ter exatamente 6 digitos'}), 400
+        return jsonify({'error': 'A matricula deve ter de 6 a 10 digitos'}), 400
     if not validar_senha(senha):
         return jsonify({'error': 'A senha deve ter exatamente 4 digitos'}), 400
     if not nome or len(nome) < 2:
@@ -240,7 +240,7 @@ def handle_login(data):
     matricula = (data.get('matricula') or '').strip()
     senha = (data.get('senha') or '').strip()
     if not validar_matricula(matricula) or not validar_senha(senha):
-        return jsonify({'error': 'Matricula (6 digitos) ou senha (4 digitos) invalidas'}), 400
+        return jsonify({'error': 'Matricula (6 a 10 digitos) ou senha (4 digitos) invalidas'}), 400
     users = users_load()
     u = users.get(matricula)
     if not u:
@@ -420,7 +420,7 @@ def handle_recuperar_senha(data):
     matricula = (data.get('matricula') or '').strip()
     nome = (data.get('nome') or '').strip()
     if not validar_matricula(matricula):
-        return jsonify({'error': 'Matrícula precisa ter 6 dígitos'}), 400
+        return jsonify({'error': 'Matrícula precisa ter de 6 a 10 dígitos'}), 400
     if not nome or len(nome) < 2:
         return jsonify({'error': 'Informe o nome completo cadastrado'}), 400
     users = users_load()

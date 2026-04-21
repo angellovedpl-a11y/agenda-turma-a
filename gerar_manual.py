@@ -261,7 +261,7 @@ story.append(Paragraph(
     "que conversa com você). Toque em <b>Criar cadastro</b> e preencha:", P))
 story.append(li("<b>Nome completo:</b> exatamente como está no crachá."))
 story.append(li("<b>Função na ferrovia:</b> escolha entre <b>Função Operacional</b> (quem cumpre escala 2x2 de campo, faz Prontos 1 e 2) ou <b>Função Administrativa</b> (escritório, coordenação, suporte)."))
-story.append(li("<b>Matrícula:</b> seus 6 dígitos da ferrovia."))
+story.append(li("<b>Matrícula:</b> sua matrícula da ferrovia (de 6 a 10 dígitos — empregados mais novos podem ter mais de 6)."))
 story.append(li("<b>Senha:</b> 4 dígitos que só você sabe (evite 1234, 0000, sua data de nascimento)."))
 story.append(Paragraph(
     "Depois de enviar, o cadastro fica <b>aguardando aprovação</b>. Apenas as <b>4 pessoas "
