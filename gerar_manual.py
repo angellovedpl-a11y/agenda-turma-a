@@ -406,11 +406,17 @@ story.append(aviso("Documento vencido = afastamento. Não confie só na memória
 # 7. Checklist
 story.append(Paragraph("7. Checklist da viagem", H1))
 story.append(Paragraph(
-    "Antes de cada turno, abra o <b>Checklist</b> e marque o que já está pronto: documentos, EPI, "
-    "lanterna, garrafa, cobertor, etc. A lista vem pré-pronta com o básico da Turma A, mas você "
-    "pode adicionar ou remover itens à vontade.", P))
-story.append(nota("O checklist zera automaticamente a cada novo dia de trabalho, então você "
-                  "sempre começa com a lista limpa."))
+    "Toque no ícone da <b>prancheta 📋</b> no topo da tela para abrir o <b>Checklist</b>. "
+    "Ele já vem pronto com o básico da Turma A:", P))
+story.append(Paragraph("• <b>ASO</b> — Atestado de Saúde Ocupacional (com data de validade)", P))
+story.append(Paragraph("• <b>Prontos 1</b> — confirmação da prontidão pela manhã", P))
+story.append(Paragraph("• <b>Prontos 2</b> — confirmação da prontidão pela tarde", P))
+story.append(Paragraph(
+    "Marque cada item conforme for cumprindo. Para o ASO, dá pra registrar a data de "
+    "validade — o app avisa quando estiver perto de vencer. Você também pode adicionar "
+    "ou remover itens à vontade (lanterna, garrafa, cobertor, o que precisar).", P))
+story.append(nota("Os itens que você adicionar ficam salvos no seu celular. Já o ASO, "
+                  "Prontos 1 e Prontos 2 não podem ser apagados — fazem parte do checklist padrão da turma."))
 story.append(PageBreak())
 
 # 8. Viriato

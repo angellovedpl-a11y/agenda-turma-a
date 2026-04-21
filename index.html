@@ -346,7 +346,7 @@ const DSEM=["D","S","T","Q","Q","S","S"];
 const DSEM_F=["Dom","Seg","Ter","Qua","Qui","Sex","Sab"];
 const DFULL=["Domingo","Segunda-feira","Terca-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sabado"];
 const ANOS=[2026,2027,2028,2029,2030];
-const DOCS_OBRIGATORIOS_DEFAULT=[{id:"aso",nome:"ASO - Atestado de Saude Ocupacional",validade:"",ok:false},{id:"cert",nome:"Certificado de Maquinista",validade:"",ok:false},{id:"nr11",nome:"Curso NR-11",validade:"",ok:false},{id:"hab",nome:"Habilitacao Ferroviaria",validade:"",ok:false}];
+const DOCS_OBRIGATORIOS_DEFAULT=[{id:"aso",nome:"ASO - Atestado de Saude Ocupacional",validade:"",ok:false},{id:"prontos1",nome:"Prontos 1 (manhã)",validade:"",ok:false},{id:"prontos2",nome:"Prontos 2 (tarde)",validade:"",ok:false}];
 
 const REF=new Date(2026,3,8);
 function isFolga(d){const dt=new Date(d.getFullYear(),d.getMonth(),d.getDate());return((Math.round((dt-REF)/86400000)%4)+4)%4<2;}
@@ -450,6 +450,10 @@ function loadS(){
     S.events=d.events||{};S.docs=d.docs||{};
     S.auditorias=d.auditorias||[];
     S.checklist=d.checklist||(JSON.parse(JSON.stringify(DOCS_OBRIGATORIOS_DEFAULT)));
+    const _obs=new Set(["cert","nr11","hab"]);const _before=JSON.stringify(S.checklist);
+    S.checklist=S.checklist.filter(x=>!_obs.has(x.id));
+    const _ids=new Set(S.checklist.map(x=>x.id));DOCS_OBRIGATORIOS_DEFAULT.forEach(d2=>{if(!_ids.has(d2.id))S.checklist.push(JSON.parse(JSON.stringify(d2)));});
+    if(JSON.stringify(S.checklist)!==_before){try{localStorage.setItem("turmaA_v10",JSON.stringify({events:d.events||{},docs:d.docs||{},auditorias:d.auditorias||[],checklist:S.checklist,alarmOn:d.alarmOn||false,alarmTime:d.alarmTime||"05:30",dark:d.dark!==undefined?d.dark:true}));}catch(e){}}
     S.alarmOn=d.alarmOn||false;S.alarmTime=d.alarmTime||"05:30";S.dark=d.dark!==undefined?d.dark:true;
   }}catch(e){}
   S.viriatoMsgs=[viriatoBoasVindas()];
@@ -729,7 +733,7 @@ function renderHeader(){
   const darkBtn=el("button",{class:"icon-btn",title:"Alternar tema",onClick:()=>{S.dark=!S.dark;saveS();render();}},S.dark?"☀️":"🌙");
   const alBtn=el("button",{class:"icon-btn",title:"Alarme",onClick:()=>{S.showAlarmModal=true;render();}},["⏰",S.alarmOn?el("span",{class:"alarm-dot"}):null]);
   const auditBtn=el("button",{class:"icon-btn",title:"Auditorias",onClick:()=>{S.showAuditoriaModal=true;render();}},"🛑");
-  const checkBtn=el("button",{class:"icon-btn",title:"Documentos Obrigatorios",onClick:()=>{S.showChecklistModal=true;render();}},"📋");
+  const checkBtn=el("button",{class:"icon-btn",title:"Checklist",onClick:()=>{S.showChecklistModal=true;render();}},"📋");
   const u=S.auth.user;const podeAdmin=u&&u.pode_aprovar;
   const adminBtn=podeAdmin?el("button",{class:"icon-btn",title:"Painel Admin",style:{position:"relative"},onClick:adminAbrir},[u.role==="admin"?"👑":"🛡️",S.auth.pendentes>0?el("span",{style:{position:"absolute",top:"-3px",right:"-3px",background:"#ef4444",color:"#fff",fontSize:"9px",fontWeight:700,minWidth:"15px",height:"15px",padding:"0 3px",borderRadius:"8px",display:"flex",alignItems:"center",justifyContent:"center",border:"1.5px solid var(--card)"}},String(S.auth.pendentes)):null]):null;
   const trocarSenhaBtn=el("button",{class:"icon-btn",title:"Trocar minha senha",onClick:()=>{S.trocarSenhaOpen=true;S.trocarSenhaMsg="";render();}},"🔑");
@@ -946,15 +950,15 @@ function renderChecklistModal(){
         el("div",{class:"check-val",style:{color:valColor}},valTxt),
         el("input",{type:"date",style:{marginTop:"4px",background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:"7px",padding:"3px 8px",fontSize:"11px",color:"var(--text)",width:"100%"},value:item.validade||"",onChange:e=>{S.checklist[i].validade=e.target.value;saveS();render();}})
       ]),
-      i>=DOCS_OBRIGATORIOS_DEFAULT.length?el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"Ã¢ÂÂ"):null
+      DOCS_OBRIGATORIOS_DEFAULT.some(d=>d.id===item.id)?null:el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"Ã¢ÂÂ")
     ]);
   });
   const addForm=el("div",{style:{display:"flex",gap:"7px",marginTop:"12px"}},[
-    el("input",{class:"add-inp",style:{flex:1},placeholder:"Nome do documento...",value:S.novoCheckNome,onInput:e=>S.novoCheckNome=e.target.value}),
+    el("input",{class:"add-inp",style:{flex:1},placeholder:"Nome do item...",value:S.novoCheckNome,onInput:e=>S.novoCheckNome=e.target.value}),
     el("button",{class:"add-btn",style:{background:"#22d48a",fontSize:"16px"},onClick:()=>{if(!S.novoCheckNome.trim()){showToast("Informe o nome!",false);return;}S.checklist.push({id:"custom_"+Date.now(),nome:S.novoCheckNome.trim(),validade:"",ok:false});S.novoCheckNome="";saveS();render();}},"+")
   ]);
   const box=el("div",{class:"modal-box wide"},[
-    el("div",{style:{padding:"15px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},[el("div",{style:{fontWeight:700,color:"var(--text2)",fontSize:"16px"}},"📋 Documentos Obrigatorios"),el("button",{class:"close-btn",onClick:()=>{S.showChecklistModal=false;render();}},"x")]),
+    el("div",{style:{padding:"15px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}},[el("div",{style:{fontWeight:700,color:"var(--text2)",fontSize:"16px"}},"📋 Checklist"),el("button",{class:"close-btn",onClick:()=>{S.showChecklistModal=false;render();}},"x")]),
     el("div",{style:{padding:"16px"}},[alertBox].concat(itens).concat([addForm]))
   ]);
   return el("div",{class:"overlay",onClick:()=>{S.showChecklistModal=false;render();}},[el("div",{onClick:e=>e.stopPropagation()},[box])]);
