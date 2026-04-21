@@ -3,7 +3,12 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor, white, black
 from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, PageBreak,
-                                 Table, TableStyle, KeepTogether)
+                                 Table, TableStyle, KeepTogether, Image)
+from reportlab.lib.utils import ImageReader
+import os
+
+CAPA_IMG = "attached_assets/imagem_2_1776741704206.jpeg"
+ANGELO_IMG = "attached_assets/angelo_imagem_1_1776741704207.jpeg"
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
 
 OUT = "manual_agenda_turma_a.pdf"
@@ -47,25 +52,44 @@ def header_footer(canvas, doc):
 
 def capa_canvas(canvas, doc):
     canvas.saveState()
+    # fundo azul
     canvas.setFillColor(AZUL)
     canvas.rect(0, 0, A4[0], A4[1], fill=1, stroke=0)
+
+    # foto da turma centralizada
+    if os.path.exists(CAPA_IMG):
+        img = ImageReader(CAPA_IMG)
+        iw, ih = img.getSize()
+        max_w = A4[0] - 4*cm
+        max_h = 12*cm
+        ratio = min(max_w/iw, max_h/ih)
+        w, h = iw*ratio, ih*ratio
+        x = (A4[0]-w)/2
+        y = A4[1]/2 - h/2 + 1*cm
+        # moldura amarela
+        canvas.setFillColor(AMARELO)
+        canvas.rect(x-0.2*cm, y-0.2*cm, w+0.4*cm, h+0.4*cm, fill=1, stroke=0)
+        canvas.drawImage(img, x, y, width=w, height=h, preserveAspectRatio=True, mask='auto')
+
+    # faixas amarelas topo e rodape
     canvas.setFillColor(AMARELO)
-    canvas.rect(0, A4[1]-2.5*cm, A4[0], 0.4*cm, fill=1, stroke=0)
-    canvas.rect(0, 2.1*cm, A4[0], 0.4*cm, fill=1, stroke=0)
+    canvas.rect(0, A4[1]-2.2*cm, A4[0], 0.35*cm, fill=1, stroke=0)
+    canvas.rect(0, 2.4*cm, A4[0], 0.35*cm, fill=1, stroke=0)
+
+    # titulo no topo
     canvas.setFillColor(white)
-    canvas.setFont("Helvetica-Bold", 80)
-    canvas.drawCentredString(A4[0]/2, A4[1]/2 + 3*cm, "🚂")
-    canvas.setFont("Helvetica-Bold", 32)
-    canvas.drawCentredString(A4[0]/2, A4[1]/2 + 0.5*cm, "Agenda Turma A")
-    canvas.setFont("Helvetica", 16)
-    canvas.drawCentredString(A4[0]/2, A4[1]/2 - 0.5*cm, "Escala Ferroviária 2x2  •  2026 — 2030")
-    canvas.setFont("Helvetica-Bold", 18)
+    canvas.setFont("Helvetica-Bold", 26)
+    canvas.drawCentredString(A4[0]/2, A4[1]-3.5*cm, "Agenda Turma A")
+    canvas.setFont("Helvetica", 13)
+    canvas.drawCentredString(A4[0]/2, A4[1]-4.3*cm, "Escala Ferroviária 2x2  •  2026 — 2030")
+
+    # rodape
     canvas.setFillColor(AMARELO)
-    canvas.drawCentredString(A4[0]/2, A4[1]/2 - 3*cm, "MANUAL DE INSTRUÇÕES")
+    canvas.setFont("Helvetica-Bold", 16)
+    canvas.drawCentredString(A4[0]/2, 1.6*cm, "MANUAL DE INSTRUÇÕES")
     canvas.setFillColor(white)
-    canvas.setFont("Helvetica", 11)
-    canvas.drawCentredString(A4[0]/2, 3.2*cm, "Versão 1.0  •  Abril de 2026")
-    canvas.drawCentredString(A4[0]/2, 2.7*cm, "Criado por Angelo Silva  •  Turma A")
+    canvas.setFont("Helvetica", 10)
+    canvas.drawCentredString(A4[0]/2, 1.0*cm, "Versão 1.0  •  Abril de 2026  •  Criado por Angelo Silva (Turma A)")
     canvas.restoreState()
 
 def li(txt):
@@ -122,6 +146,29 @@ story.append(PageBreak())
 
 # 1. Boas-vindas
 story.append(Paragraph("1. Boas-vindas", H1))
+
+# Bloco com foto do Angelo ao lado do texto de assinatura
+if os.path.exists(ANGELO_IMG):
+    angelo_img = Image(ANGELO_IMG, width=3.8*cm, height=5.0*cm, kind="proportional")
+    autor_par = Paragraph(
+        "<para align='left'><font size='12' color='#1e3a8a'><b>Angelo Silva</b></font><br/>"
+        "<font size='10' color='#374151'>Maquinista — Turma A</font><br/>"
+        "<font size='9' color='#6b7280'><i>Idealizador e desenvolvedor deste aplicativo. "
+        "Esta é a foto que abre o caminho de cada turno: cabine, capacete, óculos, "
+        "e a velha confiança na máquina.</i></font></para>", P)
+    bloco = Table([[angelo_img, autor_par]], colWidths=[4.2*cm, 11*cm])
+    bloco.setStyle(TableStyle([
+        ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
+        ("LEFTPADDING", (0,0), (-1,-1), 0),
+        ("RIGHTPADDING", (0,0), (-1,-1), 0),
+        ("TOPPADDING", (0,0), (-1,-1), 6),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 6),
+        ("LINEBEFORE", (1,0), (1,0), 0.6, AMARELO),
+        ("LEFTPADDING", (1,0), (1,0), 12),
+    ]))
+    story.append(bloco)
+    story.append(Spacer(1, 0.4*cm))
+
 story.append(Paragraph(
     "Este aplicativo foi feito sob medida para a <b>Turma A</b> da escala ferroviária 2x2 "
     "(dois dias de trabalho, dois de folga). Ele cobre o ciclo completo de 2026 a 2030 e ajuda "
