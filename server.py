@@ -140,7 +140,7 @@ def categorizar_doc(nome: str, amostra: str) -> dict:
         prompt = f"""Voce vai analisar o documento abaixo e devolver APENAS um JSON valido com este formato exato (sem markdown, sem explicacao):
 {{"categoria":"...","resumo":"...","palavras_chave":["...","...","..."]}}
 
-Categorias possiveis: acordo_coletivo, norma_tecnica, manual, boletim, lei, ferroviario, seguranca, outros
+Categorias possiveis: acordo_coletivo, norma_tecnica, manual, boletim, lei, ferroviario, seguranca, temp, outros
 - categoria: uma das acima
 - resumo: 1 frase de no maximo 150 caracteres
 - palavras_chave: 5 termos importantes (substantivos, ferroviario tecnico)
@@ -347,6 +347,7 @@ def biblioteca_upload():
         nome = (data.get('nome') or '').strip()
         b64 = data.get('data') or ''
         mimetype = data.get('mimetype') or ''
+        is_temp = bool(data.get('temp'))
         if not nome or not b64:
             return jsonify({'error': 'Nome e dados sao obrigatorios'}), 400
         if len(b64) > 8 * 1024 * 1024:
@@ -358,6 +359,16 @@ def biblioteca_upload():
 
         chunks = fazer_chunks(texto)
         meta = categorizar_doc(nome, texto)
+        if is_temp:
+            meta['categoria'] = 'temp'
+            try:
+                temp_dir = os.path.join(DATA_DIR, 'biblioteca_temp')
+                os.makedirs(temp_dir, exist_ok=True)
+                safe_name = re.sub(r'[^a-zA-Z0-9._-]+', '_', nome)[:80]
+                with open(os.path.join(temp_dir, safe_name + '.txt'), 'w', encoding='utf-8') as f:
+                    f.write(texto)
+            except Exception:
+                pass
         biblioteca = mem_palace_load('biblioteca')
         docs = biblioteca.get('documentos', [])
         doc_id = re.sub(r'[^a-z0-9]+', '-', nome.lower())[:60].strip('-') + '-' + str(int(time.time()))
