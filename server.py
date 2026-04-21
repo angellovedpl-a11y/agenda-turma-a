@@ -293,24 +293,41 @@ def tokenize(s: str) -> list:
 
 def buscar_chunks(query: str, biblioteca: dict, top_k: int = 3) -> list:
     qtokens = set(tokenize(query))
-    if not qtokens:
+    qlower = (query or '').lower()
+    if not qtokens and not qlower:
         return []
     docs = biblioteca.get('documentos', [])
     scored = []
     for doc in docs:
+        nome_low = doc.get('nome', '').lower()
+        nome_tokens = set(tokenize(nome_low))
+        nome_match_score = 0
+        if nome_tokens:
+            overlap = len(qtokens & nome_tokens)
+            if overlap > 0:
+                nome_match_score = overlap * 3.0
+        for sigla in re.findall(r'\b([a-z]{3,6})\b', nome_low):
+            if sigla in qlower and len(sigla) >= 4:
+                nome_match_score += 2.0
         for idx, chunk in enumerate(doc.get('chunks', [])):
             ctokens = tokenize(chunk)
             if not ctokens:
                 continue
-            score = 0
+            score = 0.0
             cset = set(ctokens)
             for q in qtokens:
                 if q in cset:
                     score += 1
                     score += min(ctokens.count(q), 3) * 0.3
+            chunk_low = (chunk if isinstance(chunk, str) else '').lower()
+            chunk_low_nospace = re.sub(r'\s+', '', chunk_low)
+            for tok in re.findall(r'\b\d+[a-z]?\b', qlower):
+                if len(tok) >= 2 and (tok in chunk_low or tok in chunk_low_nospace):
+                    score += 2.5
             if doc.get('palavras_chave'):
                 kwset = set(tokenize(' '.join(doc['palavras_chave'])))
                 score += len(qtokens & kwset) * 0.5
+            score += nome_match_score
             if score > 0:
                 scored.append((score, doc['nome'], doc.get('categoria', 'outros'), idx, chunk))
     scored.sort(key=lambda x: -x[0])
@@ -488,8 +505,14 @@ def claude_chat():
                 'RESPONDA AFIRMATIVAMENTE citando o nome exato.\n\n'
             )
             for d in docs:
-                prefixo += f"- {d['nome']} [{d.get('categoria','outros')}] :: {d.get('resumo','')}\n"
-            prefixo += '### FIM DA BIBLIOTECA ###\n\n'
+                tem_texto = bool(d.get('chunks'))
+                marca = '[LIDO]' if tem_texto else '[so-titulo]'
+                prefixo += f"- {marca} {d['nome']} [{d.get('categoria','outros')}] :: {d.get('resumo','')}\n"
+            prefixo += '### FIM DA BIBLIOTECA ###\n'
+            prefixo += ('REGRA CRITICA: docs marcados [LIDO] tem o CONTEUDO completo extraido e voce PODE ler trechos deles. '
+                        'NUNCA diga que "o conteudo nao foi extraido" para docs marcados [LIDO]. '
+                        'Se o usuario citar um doc especifico que voce tem [LIDO] e voce nao achou a informacao no trecho recebido, '
+                        'diga "deixa eu procurar mais especificamente" e peça pra ele reformular ou citar a parte do documento.\n\n')
         if memoria_pess:
             prefixo += f'### MEMORIA PESSOAL DE {nome_user or matricula_user} (matricula {matricula_user}) ###\n'
             prefixo += 'Coisas que voce ja aprendeu sobre este usuario especifico. Use quando relevante.\n'
