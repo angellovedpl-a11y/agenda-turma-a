@@ -1,1 +1,11 @@
-{}
+{
+  "497444": {
+    "nome": "Angelo Silva",
+    "senha_hash": "4d48eea86a96f8b4071111d3c388b884de2209185740abc8d14c89859ec3c8a9",
+    "status": "aprovado",
+    "role": "admin",
+    "criado_em": 1776738170.5862827,
+    "aprovado_em": 1776738170.586283,
+    "aprovado_por": "auto-admin"
+  }
+}

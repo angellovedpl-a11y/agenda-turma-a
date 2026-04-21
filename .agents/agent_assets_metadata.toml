@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "eD-TW_Vj_TELQx-BJSvxX"
+uri = "file://manual_agenda_turma_a.pdf"
+type = "pdf"
+title = "Manual Agenda Turma A — Escala Ferroviária 2x2"
