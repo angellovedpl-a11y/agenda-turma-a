@@ -242,9 +242,13 @@ story.append(Paragraph(
     "você a saber, com um toque, qual é o seu turno hoje, quando vence cada documento, qual "
     "exame está chegando e o que precisa ir na mochila para a próxima viagem.", P))
 story.append(Paragraph(
-    "Tudo funciona no celular, mesmo sem internet depois do primeiro acesso. Não tem propaganda, "
-    "não vende seus dados e a única pessoa que aprova novos cadastros é o administrador da turma "
-    "(Angelo Silva).", P))
+    "A escala, os eventos, os documentos e o checklist ficam no seu celular e podem ser "
+    "consultados a qualquer hora. Já o <b>Viriato (assistente de IA) precisa de internet</b> "
+    "para responder, porque ele conversa com um servidor na nuvem. Sem sinal, o restante do app "
+    "continua funcionando — só o Viriato fica em silêncio até a internet voltar.", P))
+story.append(Paragraph(
+    "O app não tem propaganda, não vende seus dados e a única pessoa que aprova novos cadastros "
+    "é o administrador da turma (Angelo Silva).", P))
 story.append(nota("Se você está com pressa, pule direto para o capítulo 2 e siga o passo a passo. "
                   "O resto pode ler aos poucos, na hora do cafezinho."))
 
@@ -461,8 +465,10 @@ story.append(PageBreak())
 story.append(Paragraph("12. Perguntas frequentes", H1))
 faqs = [
     ("Funciona sem internet?",
-     "Sim, depois do primeiro acesso. O app guarda a escala, eventos e documentos no celular. "
-     "A internet só é necessária para sincronizar com os colegas e usar o Viriato."),
+     "Em parte. A escala, os eventos, os documentos e o checklist funcionam no celular mesmo sem sinal. "
+     "Já o <b>Viriato precisa de internet</b> para responder, porque ele conversa com um servidor de "
+     "inteligência artificial na nuvem. Sem internet, o resto do app continua normal, só o Viriato fica "
+     "indisponível até o sinal voltar."),
     ("Posso instalar como aplicativo de verdade no celular?",
      "Pode. Abra no Chrome (Android) ou Safari (iPhone), toque no menu e escolha "
      "“Adicionar à tela inicial”. Vira ícone igual a qualquer app."),
