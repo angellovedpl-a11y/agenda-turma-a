@@ -217,11 +217,12 @@ story.append(Paragraph("1. Boas-vindas", H1))
 if os.path.exists(ANGELO_IMG):
     angelo_img = Image(ANGELO_IMG, width=3.8*cm, height=5.0*cm, kind="proportional")
     autor_par = Paragraph(
-        "<para align='left'><font size='12' color='#1e3a8a'><b>Angelo Silva</b></font><br/>"
+        "<para align='left'><font size='12' color='#008f83'><b>Angelo Silva</b></font><br/>"
         "<font size='10' color='#374151'>Maquinista — Turma A</font><br/>"
-        "<font size='9' color='#6b7280'><i>Idealizador e desenvolvedor deste aplicativo. "
-        "Esta é a foto que abre o caminho de cada turno: cabine, capacete, óculos, "
-        "e a velha confiança na máquina.</i></font></para>", P)
+        "<font size='9' color='#6b7280'><i>Idealizador e desenvolvedor deste aplicativo "
+        "e <b>criador do agente Viriato</b>, o assistente inteligente que conversa com a turma "
+        "dentro do app. Esta é a foto que abre o caminho de cada turno: cabine, capacete, "
+        "óculos, e a velha confiança na máquina.</i></font></para>", P)
     bloco = Table([[angelo_img, autor_par]], colWidths=[4.2*cm, 11*cm])
     bloco.setStyle(TableStyle([
         ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
@@ -390,9 +391,13 @@ story.append(PageBreak())
 # 8. Viriato
 story.append(Paragraph("8. Viriato — o ajudante de bordo", H1))
 story.append(Paragraph(
-    "O <b>Viriato</b> é o trenzinho 🚂 que aparece na lateral da tela. Ele é um assistente "
-    "inteligente, treinado com a linguagem da turma e com o manual da ferrovia. Pode perguntar "
-    "qualquer coisa em português comum, por exemplo:", P))
+    "O <b>Viriato</b> é um agente inteligente <b>criado pelo Angelo Silva</b> "
+    "especialmente para esta agenda. Não é um chatbot genérico copiado da internet: ele foi "
+    "moldado com a linguagem da turma, com o jeito ferroviário de falar e com o conhecimento "
+    "da rotina 2x2.", P))
+story.append(Paragraph(
+    "Aparece como o trenzinho 🚂 na lateral da tela. Pode perguntar qualquer coisa em "
+    "português comum, por exemplo:", P))
 story.append(li("<i>“Quando é minha próxima folga?”</i>"))
 story.append(li("<i>“Quantos dias trabalhei esse mês?”</i>"))
 story.append(li("<i>“Qual o prazo do meu ASO?”</i>"))
@@ -521,7 +526,9 @@ story.append(Paragraph("14. Créditos e agradecimentos", H1))
 story.append(Paragraph("Idealização, projeto e desenvolvimento", H2))
 story.append(Paragraph(
     "<b>Angelo Silva</b> — Maquinista da Turma A. Criador, idealizador e "
-    "desenvolvedor deste aplicativo.", P))
+    "desenvolvedor deste aplicativo, e também <b>criador do agente Viriato</b>, o assistente "
+    "inteligente embarcado no app, treinado para falar a língua da turma e ajudar nas dúvidas "
+    "do dia a dia ferroviário.", P))
 
 story.append(Paragraph("Sobre o esforço por trás do app", H2))
 story.append(Paragraph(
