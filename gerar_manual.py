@@ -401,7 +401,7 @@ story.append(Paragraph(
     "qual é a sua <b>função na ferrovia</b>. Existem duas opções:", P))
 story.append(li("<b>Função Operacional</b> — quem trabalha na escala 2x2 de campo, faz cabine, pátio "
                 "ou inspeção. Vê os itens <b>Prontos 1</b> e <b>Prontos 2</b> no Checklist e recebe "
-                "lembretes automáticos pela manhã (a partir das 04:00) e à tarde (após 14:30) nos "
+                "lembretes automáticos pela manhã (a partir das 06:00) e à tarde (após 14:30) nos "
                 "dias de serviço."))
 story.append(li("<b>Função Administrativa</b> — quem trabalha em escritório, coordenação ou suporte. "
                 "Não precisa fazer Prontos, então o Checklist mostra só o ASO e os itens pessoais "

@@ -633,7 +633,7 @@ function renderProntosReminder(){
   const p1=S.checklist.find(x=>x.id==="prontos1");
   const p2=S.checklist.find(x=>x.id==="prontos2");
   let mostrar=null;
-  if(h>=4&&(h<10||(h===10&&min<30))&&p1&&!p1.ok)mostrar={t:"Prontos 1 (manhã)",cor:"#f59e0b",sub:"Faça o teste antes de iniciar a jornada."};
+  if(h>=6&&(h<10||(h===10&&min<30))&&p1&&!p1.ok)mostrar={t:"Prontos 1 (manhã)",cor:"#f59e0b",sub:"Faça o teste antes de iniciar a jornada."};
   else if(((h===14&&min>=30)||(h>14&&h<19))&&p2&&!p2.ok)mostrar={t:"Prontos 2 (tarde)",cor:"#f59e0b",sub:"Após a refeição, faça o teste antes de retornar."};
   if(!mostrar)return null;
   return el("div",{style:{padding:"10px 14px",background:mostrar.cor+"22",border:"1px solid "+mostrar.cor,borderRadius:"10px",margin:"8px 12px",fontSize:"13px",color:mostrar.cor,display:"flex",alignItems:"center",gap:"10px",cursor:"pointer"},onClick:()=>{S.showChecklistModal=true;render();}},["⏰ ",el("div",{style:{flex:1}},[el("b",null,mostrar.t+" pendente. "),mostrar.sub]),el("span",{style:{fontSize:"11px",fontWeight:700,padding:"4px 10px",background:mostrar.cor,color:"#000",borderRadius:"6px"}},"Marcar")]);
