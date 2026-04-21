@@ -937,9 +937,11 @@ function renderAuditoriaModal(){
 function renderChecklistModal(){
   const alert=checklistAlert();
   const alertBox=alert?el("div",{style:{background:alert.dias<=0?"#f8717122":"#f59e0b22",border:"1px solid "+(alert.dias<=0?"#f8717166":"#f59e0b66"),borderRadius:"10px",padding:"10px 12px",marginBottom:"12px",fontSize:"12px",color:alert.dias<=0?"#f87171":"#f59e0b"}},(alert.dias<=0?"⚠️ VENCIDO: ":"⏳ Vencendo em breve: ")+alert.nome+(alert.dias>0?" ("+alert.dias+" dia(s))":"")):null;
+  const SEM_VALIDADE=new Set(["prontos1","prontos2"]);
   const itens=S.checklist.map((item,i)=>{
+    const semVal=SEM_VALIDADE.has(item.id);
     const d=diasParaVencer(item.validade);
-    const vencido=d!==null&&d<0,aviso=d!==null&&d>=0&&d<=30;
+    const vencido=!semVal&&d!==null&&d<0,aviso=!semVal&&d!==null&&d>=0&&d<=30;
     const cls="check-item"+(vencido?" vencido":"")+(aviso?" aviso":"");
     const valColor=vencido?"#f87171":(aviso?"#f59e0b":"var(--muted)");
     const valTxt=item.validade?(vencido?"VENCIDO":(aviso?"Vence em "+d+" dia(s)":"Vence em "+new Date(item.validade).toLocaleDateString("pt-BR"))):"Sem validade";
@@ -947,8 +949,8 @@ function renderChecklistModal(){
       el("input",{type:"checkbox",class:"check-cb",checked:item.ok?"checked":null,onChange:e=>{S.checklist[i].ok=e.target.checked;saveS();render();}}),
       el("div",{class:"check-info"},[
         el("div",{class:"check-nome",style:{textDecoration:item.ok?"line-through":"none",opacity:item.ok?.6:1}},item.nome),
-        el("div",{class:"check-val",style:{color:valColor}},valTxt),
-        el("input",{type:"date",style:{marginTop:"4px",background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:"7px",padding:"3px 8px",fontSize:"11px",color:"var(--text)",width:"100%"},value:item.validade||"",onChange:e=>{S.checklist[i].validade=e.target.value;saveS();render();}})
+        semVal?null:el("div",{class:"check-val",style:{color:valColor}},valTxt),
+        semVal?null:el("input",{type:"date",style:{marginTop:"4px",background:"var(--bg2)",border:"1px solid var(--border)",borderRadius:"7px",padding:"3px 8px",fontSize:"11px",color:"var(--text)",width:"100%"},value:item.validade||"",onChange:e=>{S.checklist[i].validade=e.target.value;saveS();render();}})
       ]),
       DOCS_OBRIGATORIOS_DEFAULT.some(d=>d.id===item.id)?null:el("button",{class:"check-del",onClick:()=>{S.checklist.splice(i,1);saveS();render();}},"Ã¢ÂÂ")
     ]);
