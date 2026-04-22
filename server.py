@@ -508,7 +508,7 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
-        trechos = buscar_chunks(ultima, biblioteca, top_k=3) if ultima else []
+        trechos = buscar_chunks(ultima, biblioteca, top_k=6) if ultima else []
 
         u = request.current_user
         matricula_user = u.get('matricula', '')
