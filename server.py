@@ -117,17 +117,40 @@ def fatos_remove(id_fato: int) -> bool:
     kvstore.save('fatos_turma', {'fatos': novo})
     return True
 
-def buscar_fatos(query: str, top_k: int = 4) -> list:
-    qtokens = set(tokenize(query))
-    if not qtokens:
+def _expandir_tokens(tokens):
+    out = set(tokens)
+    for t in list(tokens):
+        m = re.match(r'^l(\d{1,4}[a-z]?)$', t)
+        if m:
+            out.add(m.group(1))
+            out.add(m.group(1).lstrip('0') or '0')
+        if re.match(r'^\d{1,4}[a-z]?$', t):
+            out.add('l' + t)
+            out.add('l' + t.lstrip('0'))
+            out.add(t.lstrip('0') or '0')
+        if re.match(r'^\d{1,4}$', t) and len(t) < 4:
+            out.add(t.zfill(3))
+            out.add('l' + t.zfill(3))
+    return out
+
+def buscar_fatos(query: str, top_k: int = 8) -> list:
+    qtokens_base = set(tokenize(query))
+    if not qtokens_base:
         return []
+    qtokens = _expandir_tokens(qtokens_base)
+    qlower = (query or '').lower()
     fatos = fatos_load()
     scored = []
     for f in fatos:
-        ftokens = set(f.get('tokens') or tokenize(f.get('texto', '')))
+        ftokens_base = set(f.get('tokens') or tokenize(f.get('texto', '')))
+        ftokens = _expandir_tokens(ftokens_base)
         if not ftokens:
             continue
-        score = len(qtokens & ftokens)
+        score = float(len(qtokens & ftokens))
+        ftxt_low = (f.get('texto', '') or '').lower()
+        for qt in qtokens_base:
+            if len(qt) >= 3 and qt in ftxt_low:
+                score += 0.5
         if score > 0:
             scored.append((score, f))
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
