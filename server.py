@@ -526,17 +526,6 @@ def claude_chat():
             for f in fatos_relev:
                 prefixo += f"- [{f.get('autor','?')}, {f.get('data','')}]: {f.get('texto','')}\n"
             prefixo += '### FIM FATOS ###\n\n'
-        prefixo += (
-            '### COMO SALVAR NA MEMORIA ###\n'
-            'Voce PODE salvar coisas na memoria persistente. Quando o usuario pedir explicitamente '
-            '("anota ai", "lembra disso", "memoriza", "guarda essa", "salva ai"), responda confirmando '
-            'e termine sua mensagem com UMA linha exatamente assim:\n'
-            '  [SALVAR_MEMORIA tipo=pessoal] texto curto\n'
-            '  [SALVAR_MEMORIA tipo=fato] texto curto e factual\n'
-            'Use tipo=pessoal para preferencias/contexto SO deste usuario. Use tipo=fato para '
-            'conhecimento da turma toda (ex: "Linha 105B comporta 110 vagoes"). NAO use sem o usuario pedir.\n'
-            '### FIM ###\n\n'
-        )
         full_system = prefixo + system
         full_system += helpdesk_resumo()
         if trechos:
@@ -547,6 +536,39 @@ def claude_chat():
                 full_system += f"\n<<<DOC nome=\"{t['doc']}\" categoria=\"{t['categoria']}\">>>\n{trecho_limpo}\n<<<FIM>>>\n"
             full_system += "\nAo responder, cite o nome do documento de origem.\n"
 
+        gatilhos_save = ('anota', 'anote', 'memoriz', 'lembra ', 'lembre ', 'lembra disso', 'lembre disso',
+                         'guarda ess', 'guarde ess', 'salva ess', 'salve ess', 'salva ai', 'salva aí',
+                         'salva isso', 'salve isso', 'registra ess', 'registre ess', 'decora', 'decore',
+                         'grava ess', 'grave ess', 'arquiva ess', 'arquive ess', 'fixa ess', 'fixe ess',
+                         'nao esqueç', 'não esqueç', 'nao esquec', 'não esquec')
+        ult_low = (ultima or '').lower()
+        pediu_salvar = any(g in ult_low for g in gatilhos_save)
+
+        full_system += (
+            '\n\n========================================\n'
+            '### REGRA OBRIGATORIA: PERSISTENCIA DE MEMORIA ###\n'
+            '========================================\n'
+            'Voce TEM ACESSO A MEMORIA PERSISTENTE no MemPalace (PostgreSQL).\n'
+            'Para salvar, escreva ao FINAL da sua resposta (em uma linha SEPARADA, sem nada depois) '
+            'EXATAMENTE um destes marcadores:\n\n'
+            '  [SALVAR_MEMORIA tipo=pessoal] <texto curto factual>\n'
+            '  [SALVAR_MEMORIA tipo=fato] <texto curto factual>\n\n'
+            'REGRAS:\n'
+            '- Use tipo=pessoal para coisas SO deste usuario (preferencia, dado pessoal, contexto individual).\n'
+            '- Use tipo=fato para conhecimento da turma toda (regra operacional, capacidade de linha, info tecnica compartilhada).\n'
+            '- O <texto curto> DEVE ser uma frase declarativa autocontida, sem "voce disse" ou "lembrei que" — apenas O FATO em si.\n'
+            '- Voce PODE emitir VARIOS marcadores se houver varios pontos a salvar (um por linha).\n'
+            '- O marcador NAO aparece para o usuario (e removido). Entao escreva normalmente sua resposta humana ANTES do marcador.\n\n'
+        )
+        if pediu_salvar:
+            full_system += (
+                '⚠️ ATENCAO MAXIMA: O USUARIO PEDIU EXPLICITAMENTE PARA VOCE SALVAR/MEMORIZAR NESTA MENSAGEM.\n'
+                'É OBRIGATORIO emitir pelo menos UM marcador [SALVAR_MEMORIA ...] ao final da sua resposta.\n'
+                'Decida tipo=pessoal vs tipo=fato com base no conteudo. Nao pergunte se deve salvar — SALVE.\n'
+                'Resposta humana curta confirmando + nova linha + marcador. SEM EXCECAO.\n'
+            )
+        full_system += '========================================\n'
+
         response = _anthropic_client.messages.create(
             model="claude-haiku-4-5",
             max_tokens=8192,
@@ -555,12 +577,17 @@ def claude_chat():
         )
         texto_resp = response.content[0].text
         salvos = []
-        marcador = re.compile(r'\[SALVAR_MEMORIA\s+tipo=(pessoal|fato)\]\s*([^\n]+)', re.IGNORECASE)
+        ja_salvos = set()
+        marcador = re.compile(r'\[\s*SALVAR[_ ]MEMORIA\s*[:\s]\s*tipo\s*=\s*(pessoal|fato)\s*\]\s*[:\-]?\s*([^\n\[]+)', re.IGNORECASE)
         for m in marcador.finditer(texto_resp):
             tipo = m.group(1).lower()
-            conteudo = m.group(2).strip().rstrip('.').strip()
-            if not conteudo:
+            conteudo = re.sub(r'\s+', ' ', m.group(2)).strip().rstrip('.').strip()
+            if not conteudo or len(conteudo) < 3:
                 continue
+            chave = (tipo, conteudo.lower())
+            if chave in ja_salvos:
+                continue
+            ja_salvos.add(chave)
             if tipo == 'pessoal':
                 r = memoria_pessoal_add(matricula_user, conteudo, nome_user)
                 if r.get('ok'):
@@ -569,7 +596,60 @@ def claude_chat():
                 r = fatos_add(conteudo, matricula_user, nome_user)
                 if r.get('ok'):
                     salvos.append({'tipo': 'fato', 'texto': conteudo})
-        texto_limpo = marcador.sub('', texto_resp).strip()
+        texto_limpo = marcador.sub('', texto_resp)
+        texto_limpo = re.sub(r'\n[ \t]*\n[ \t]*\n+', '\n\n', texto_limpo).strip()
+
+        if pediu_salvar and not salvos:
+            try:
+                ctx_extrair = ''
+                for m in messages[-3:]:
+                    role = m.get('role', '')
+                    c = m.get('content', '')
+                    if isinstance(c, list):
+                        c = ' '.join(b.get('text', '') for b in c if isinstance(b, dict) and b.get('type') == 'text')
+                    if not isinstance(c, str):
+                        c = str(c)
+                    ctx_extrair += f"{role.upper()}: {c[:800]}\n"
+                ctx_extrair += f"ASSISTANT: {texto_limpo[:800]}\n"
+                if len(ctx_extrair) > 3500:
+                    ctx_extrair = ctx_extrair[-3500:]
+                extrair_prompt = (
+                    'Da conversa abaixo, o USUARIO pediu para SALVAR/MEMORIZAR algo. '
+                    'Extraia UMA UNICA frase declarativa, factual e autocontida que represente '
+                    'o que deve ser memorizado. Decida o tipo: "pessoal" se for so deste usuario, '
+                    '"fato" se for conhecimento operacional/tecnico compartilhado da turma.\n\n'
+                    'Responda APENAS no formato (sem nada antes ou depois):\n'
+                    'TIPO|TEXTO\n\n'
+                    'Exemplo: pessoal|Trabalha na linha 105B como maquinista.\n'
+                    'Exemplo: fato|Linha L030 comporta 253 vagoes GDT.\n\n'
+                    f'CONVERSA:\n{ctx_extrair}'
+                )
+                ext = _anthropic_client.messages.create(
+                    model='claude-haiku-4-5',
+                    max_tokens=300,
+                    messages=[{'role': 'user', 'content': extrair_prompt}]
+                )
+                bruto = (ext.content[0].text or '').strip().splitlines()[0]
+                if '|' in bruto:
+                    tipo_x, texto_x = bruto.split('|', 1)
+                    tipo_x = tipo_x.strip().lower()
+                    texto_x = texto_x.strip().rstrip('.').strip()
+                    if tipo_x in ('pessoal', 'fato') and len(texto_x) >= 3:
+                        if tipo_x == 'pessoal':
+                            r = memoria_pessoal_add(matricula_user, texto_x, nome_user)
+                            if r.get('ok'):
+                                salvos.append({'tipo': 'pessoal', 'texto': texto_x, 'fallback': True})
+                        else:
+                            r = fatos_add(texto_x, matricula_user, nome_user)
+                            if r.get('ok'):
+                                salvos.append({'tipo': 'fato', 'texto': texto_x, 'fallback': True})
+            except Exception as _e:
+                pass
+
+        if salvos and '✅' not in texto_limpo and 'memori' not in texto_limpo.lower()[:80]:
+            tag_mem = '\n\n*✅ Memorizado: ' + '; '.join(s['texto'][:80] for s in salvos) + '*'
+            texto_limpo = texto_limpo + tag_mem
+
         return jsonify({'text': texto_limpo, 'trechos_usados': len(trechos),
                         'memoria_salva': salvos})
     except Exception as e:
