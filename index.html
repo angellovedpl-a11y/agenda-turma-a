@@ -1096,7 +1096,7 @@ function uploadDoc(isTemp){
   const inp=document.createElement("input");inp.type="file";inp.accept=".pdf,.docx,.txt";
   inp.onchange=async()=>{
     const f=inp.files&&inp.files[0];if(!f)return;
-    if(f.size>10*1024*1024){showToast("Arquivo > 10MB");return;}
+    if(f.size>50*1024*1024){showToast("Arquivo > 50MB");return;}
     showToast("Enviando "+f.name+"...");
     const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f);});
     try{
@@ -1323,7 +1323,7 @@ window.renderViriato=function(){
       else if(act==="img"||act==="cam"){
         const inp=document.createElement("input");inp.type="file";inp.accept="image/*";if(act==="cam")inp.capture="environment";
         inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;
-          if(f.size>10*1024*1024){showToast("Imagem > 10MB");return;}
+          if(f.size>50*1024*1024){showToast("Imagem > 50MB");return;}
           showToast("Enviando imagem...");
           const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f);});
           try{

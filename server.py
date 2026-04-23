@@ -12,6 +12,7 @@ import auth
 app = Flask(__name__, static_folder='.')
 app.json.ensure_ascii = False
 app.config['JSON_AS_ASCII'] = False
+app.config['MAX_CONTENT_LENGTH'] = 80 * 1024 * 1024
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 HELPDESK_DIR = os.path.join(os.path.dirname(__file__), 'helpdesk')
@@ -714,8 +715,8 @@ def biblioteca_upload():
         is_temp = bool(data.get('temp'))
         if not nome or not b64:
             return jsonify({'error': 'Nome e dados sao obrigatorios'}), 400
-        if len(b64) > 14 * 1024 * 1024:
-            return jsonify({'error': 'Arquivo muito grande (max 10MB)'}), 413
+        if len(b64) > 70 * 1024 * 1024:
+            return jsonify({'error': 'Arquivo muito grande (max 50MB)'}), 413
 
         texto = extrair_texto_arquivo(b64, mimetype, nome)
         if not texto or len(texto.strip()) < 30:
