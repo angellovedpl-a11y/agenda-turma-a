@@ -569,7 +569,7 @@ function renderAnual(){
       const k=toKey(dt);
       const fol=isFolga(dt);
       const today=k===HOJE_KEY?"today":"";
-      cells+=`<div class="mini-day ${fol?"folga":"trab"} ${today}">${d}</div>`;
+      cells+=`<div class="mini-day ${fol?"folga":"trab"} ${today}" data-k="${k}" role="button" tabindex="0">${d}</div>`;
     }
     html+=`<div class="mini-mes">
       <h4>${MESES3[m]}</h4>
@@ -677,6 +677,11 @@ function render(){
   // hoje
   const bh=document.getElementById("btnHoje");
   if(bh)bh.onclick=()=>{S.curMes=HOJE.getMonth();S.curAno=HOJE.getFullYear();saveLS();render();};
+  // clique nos dias do calendário
+  document.querySelectorAll(".mini-day[data-k]").forEach(d=>{
+    d.onclick=()=>openDia(d.dataset.k);
+    d.onkeydown=(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openDia(d.dataset.k);}};
+  });
 }
 
 document.querySelectorAll(".tab").forEach(t=>{
@@ -963,11 +968,66 @@ async function renderEventos(c){
     });
   }catch(e){if(e.message!=="auth")document.getElementById("evBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
 }
-function openEventoForm(){
+async function openDia(k){
+  if(!await requireAuth())return;
+  const [a,m,d]=k.split("-");
+  const dt=new Date(+a,+m-1,+d);
+  const dataBr=`${d}/${m}/${a}`;
+  const dow=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"][dt.getDay()];
+  const fol=isFolga(dt);
+  openModal(`${dow}, ${dataBr}`,`
+    <div style="margin-bottom:12px;padding:8px 12px;background:${fol?"rgba(59,231,153,.1)":"rgba(255,138,76,.1)"};border-radius:8px;font-size:12px;color:${fol?"var(--neon)":"var(--orange)"}">${fol?"🟢 Folga":"🟠 Trabalho"}</div>
+    <div id="diaList" style="margin-bottom:14px;max-height:240px;overflow:auto"><div style="color:var(--muted);font-size:13px">Carregando...</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <button id="diaEv" class="btn-primary" style="font-size:12px;padding:10px 6px">+ Evento</button>
+      <button id="diaArq" class="btn-secondary" style="font-size:12px;padding:10px 6px">📎 Anexar</button>
+      <button id="diaNota" class="btn-secondary" style="font-size:12px;padding:10px 6px">📝 Nota</button>
+    </div>
+    <input type="file" id="diaFile" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" style="display:none"/>
+  `,async()=>{
+    async function refresh(){
+      const list=document.getElementById("diaList");
+      try{
+        const [rEv,rMem]=await Promise.all([apiFetch("/api/mem/eventos"),apiFetch("/api/memoria")]);
+        const dEv=await rEv.json();const dMem=await rMem.json();
+        const evs=(dEv.eventos||[]).filter(e=>e.data===k);
+        const notas=(dMem.pessoal||[]).filter(p=>(p.texto||"").startsWith(`[DIA ${k}]`));
+        let html="";
+        if(evs.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px">EVENTOS</div>`;
+          html+=evs.map(e=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px">
+            <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${escapeHtml(e.titulo)}</div>${e.hora?`<div style="color:var(--muted);font-size:11px">⏰ ${escapeHtml(e.hora)}</div>`:""}${e.descricao?`<div style="font-size:12px;color:var(--text);margin-top:3px">${escapeHtml(e.descricao)}</div>`:""}</div>
+          </div>`).join("");
+        }
+        if(notas.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin:10px 0 6px">NOTAS</div>`;
+          html+=notas.map(n=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px"><div style="flex:1;min-width:0;font-size:12px">${escapeHtml((n.texto||"").replace(`[DIA ${k}] `,""))}</div></div>`).join("");
+        }
+        list.innerHTML=html||`<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Nada agendado neste dia.</div>`;
+      }catch(e){if(e.message!=="auth")list.innerHTML='<div style="color:#ff8a8a">Erro ao carregar.</div>';}
+    }
+    refresh();
+    document.getElementById("diaEv").onclick=()=>{closeModal();openEventoForm(k);};
+    const fi=document.getElementById("diaFile");
+    document.getElementById("diaArq").onclick=()=>fi.click();
+    fi.onchange=async()=>{
+      const f=fi.files[0];if(!f)return;
+      const b64=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.readAsDataURL(f);});
+      const r=await apiFetch("/api/biblioteca/upload",{method:"POST",body:JSON.stringify({nome:`[DIA ${k}] ${f.name}`,data:b64,mimetype:f.type})});
+      const d=await r.json();
+      if(r.ok){showToast(`✅ Anexado (${d.chunks} trechos)`);refresh();}
+      else showToast("❌ "+(d.error||"Falha"));
+    };
+    document.getElementById("diaNota").onclick=()=>{
+      const t=prompt(`Nota para ${dataBr}:`);
+      if(!t||!t.trim())return;
+      apiFetch("/api/memoria/pessoal",{method:"POST",body:JSON.stringify({texto:`[DIA ${k}] ${t.trim()}`})}).then(()=>{showToast("✅ Nota salva");refresh();});
+    };
+  });
+}
+function openEventoForm(dataPre){
   openModal("Novo Evento",`
     <div class="modal-fld"><label>Título</label><input id="eTit"/></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="modal-fld"><label>Data</label><input id="eData" type="date" value="${new Date().toISOString().slice(0,10)}"/></div>
+      <div class="modal-fld"><label>Data</label><input id="eData" type="date" value="${dataPre||new Date().toISOString().slice(0,10)}"/></div>
       <div class="modal-fld"><label>Hora (opcional)</label><input id="eHora" type="time"/></div>
     </div>
     <div class="modal-fld"><label>Descrição</label><textarea id="eDesc" rows="4"></textarea></div>
