@@ -154,7 +154,7 @@ def capa_canvas(canvas, doc):
     canvas.drawCentredString(W/2, rodape_h - 1.0*cm, "Criado por Angelo Silva")
     canvas.setFont("Helvetica", 9)
     canvas.setFillColor(HexColor("#e8f4f3"))
-    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 1.0   •   Abril de 2026")
+    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 2.0   •   Abril de 2026")
 
     canvas.restoreState()
 
@@ -184,18 +184,20 @@ story.append(Paragraph("Sumário", H1))
 sumario = [
     ("1.", "Boas-vindas", "3"),
     ("2.", "Primeiros passos: cadastro e login", "3"),
-    ("3.", "A tela inicial e o que cada coisa faz", "5"),
-    ("4.", "A escala 2x2: como ler", "6"),
-    ("5.", "Eventos: marcar exames, férias, folgas e trocas", "7"),
-    ("6.", "Função na ferrovia: Operacional ou Administrativa", "8"),
-    ("7.", "Checklist Pré-Jornada", "9"),
-    ("8.", "Viriato — o ajudante de bordo", "10"),
-    ("9.", "Painel do administrador", "11"),
-    ("10.", "Esqueci minha senha — e agora?", "12"),
-    ("11.", "Trocar minha senha", "12"),
-    ("12.", "Perguntas frequentes", "13"),
-    ("13.", "Glossário ferroviário rápido", "14"),
-    ("14.", "Créditos e agradecimentos", "15"),
+    ("3.", "A tela inicial e a barra lateral", "5"),
+    ("4.", "A escala 2x2: como ler", "7"),
+    ("5.", "Mural de Eventos da Turma", "8"),
+    ("6.", "Chat — conversas e grupos da turma", "9"),
+    ("7.", "Acervo (biblioteca) e anexos até 50 MB", "10"),
+    ("8.", "Função na ferrovia: Operacional ou Administrativa", "11"),
+    ("9.", "Checklist Pré-Jornada", "12"),
+    ("10.", "Viriato — o ajudante de bordo", "13"),
+    ("11.", "Painel do administrador", "14"),
+    ("12.", "Esqueci minha senha — e agora?", "15"),
+    ("13.", "Trocar minha senha", "15"),
+    ("14.", "Perguntas frequentes", "16"),
+    ("15.", "Glossário ferroviário rápido", "17"),
+    ("16.", "Créditos e agradecimentos", "18"),
 ]
 data_sum = [[n, t, p] for n, t, p in sumario]
 ts = Table(data_sum, colWidths=[1.2*cm, 13*cm, 1.5*cm])
@@ -276,7 +278,11 @@ story.append(Paragraph(
     "Na tela de entrada, toque em <b>Já tenho cadastro</b>, digite sua matrícula e sua senha "
     "de 4 dígitos. Pronto, está dentro.", P))
 
-story.append(Paragraph("2.3. O que cada botão do topo faz", H2))
+story.append(Paragraph("2.3. O que cada botão da barra lateral faz", H2))
+story.append(Paragraph(
+    "Na nova versão (2.0), os botões principais ficam numa <b>barra lateral escura</b> à esquerda "
+    "(no celular ela vira uma barrinha fina, no computador uma faixa de 60 px). Esses são os "
+    "ícones empilhados, de cima pra baixo:", P))
 def badge(label, bg, fg=white):
     s = ParagraphStyle("BG", parent=P, alignment=TA_CENTER, fontName="Helvetica-Bold",
                        fontSize=10, textColor=fg, leading=12)
@@ -295,15 +301,13 @@ def badge(label, bg, fg=white):
     return t
 
 botoes = [
-    ["Botão (ícone)", "O que faz"],
-    [badge("TEMA", HexColor("#64748b")), "Alterna entre modo claro ☀️ e escuro 🌙. Fica no canto esquerdo do topo."],
-    [badge("ALARME", HexColor("#f59e0b"), black), "Configura um alarme para acordar nos dias de serviço. É o relógio ⏰ no topo."],
-    [badge("AUDITORIA", HexColor("#dc2626")), "Marca períodos de auditoria — o Viriato te lembra de manter os documentos em dia. É o sinal 🛑 no topo."],
-    [badge("CHECKLIST", HexColor("#22d48a"), black), "Abre o Checklist Pré-Jornada (ASO, Prontos 1 e 2 para quem é da função operacional). É a prancheta 📋 no topo."],
-    [badge("ADMIN", AMARELO, black), "Abre o painel do administrador (só aparece para as 4 pessoas habilitadas a aprovar). É a coroa 👑 (admin) ou escudo 🛡️ (aprovador) no topo."],
-    [badge("CHAVE", HexColor("#0ea5e9")), "Troca a sua própria senha. É a chave 🔑 no topo."],
-    [badge("SAIR", HexColor("#dc2626")), "Sai (encerra a sessão neste celular). É a porta 🚪 no canto direito do topo."],
-    [badge("VIRIATO", AZUL), "Abre o assistente inteligente. É o trenzinho 🚂 verde, flutuando na lateral da tela (não fica no topo)."],
+    ["Ícone (lateral)", "O que faz"],
+    [badge("CALENDÁRIO", AZUL), "Abre o calendário com a escala 2x2 (visões mensal e anual). Tela inicial do app."],
+    [badge("MURAL", HexColor("#7c3aed")), "Mural de Eventos da Turma — onde a turma posta avisos, fotos e arquivos pra todos verem. Quadro com 'pinos'."],
+    [badge("CHAT", HexColor("#16a34a")), "Conversas privadas e grupos da turma, estilo WhatsApp. Tem bolinha vermelha quando há mensagem nova."],
+    [badge("ACERVO", HexColor("#0ea5e9")), "Biblioteca de documentos (PDFs, fotos, regulamentos). É o cérebro de consulta do Viriato."],
+    [badge("CONFIG.", HexColor("#64748b")), "Tema claro/escuro, alarme da jornada, auditoria, trocar senha, sair, e (para admins) o painel de aprovação."],
+    [badge("PRONTOS", HexColor("#fdb913"), black), "Atalho que abre o portal externo Sistema Prontos no navegador (pra fazer o teste antes da jornada)."],
 ]
 tb = Table(botoes, colWidths=[3*cm, 12*cm])
 tb.setStyle(TableStyle([
@@ -376,10 +380,24 @@ tl.setStyle(TableStyle([
 story.append(tl)
 story.append(PageBreak())
 
-# 5. Eventos
-story.append(Paragraph("5. Eventos: marcar médico, viagens, hora extra e mais", H1))
+# 5. Mural de Eventos
+story.append(Paragraph("5. Mural de Eventos da Turma", H1))
 story.append(Paragraph(
-    "Toque em qualquer dia do calendário (ou no <b>+</b> dentro do detalhe do dia) para criar "
+    "O <b>Mural</b> (ícone do quadro com pinos na barra lateral) é onde a turma deixa avisos "
+    "que <b>todo mundo precisa ver</b>: comunicados da coordenação, fotos da equipe, escalas "
+    "extras, troca de turno combinada, etc. Não é conversa privada — é o quadro de avisos "
+    "compartilhado.", P))
+story.append(li("Toque no <b>+</b> para postar uma nova mensagem com texto e até um anexo (foto, "
+                "PDF, planilha — limite de <b>50 MB</b> por arquivo)."))
+story.append(li("Posts ficam ordenados do mais novo para o mais antigo."))
+story.append(li("Cada post mostra o nome de quem postou, a data e a hora."))
+story.append(nota("Conversas pessoais ou em pequeno grupo não vão aqui — vão no <b>Chat</b> (capítulo 6)."))
+
+# 5.1 Eventos no calendário (mantido)
+story.append(Paragraph("5.1. Eventos no calendário (médico, viagem, hora extra)", H2))
+story.append(Paragraph(
+    "Independente do Mural, cada dia do calendário aceita os seus <b>eventos pessoais</b>. "
+    "Toque em qualquer dia (no mês ou no calendário anual) para abrir o detalhe do dia e criar "
     "um evento. Os tipos disponíveis são:", P))
 story.append(li("🎂 <b>Aniversário</b> — basta cadastrar uma vez; o app repete automaticamente todo ano 🔁."))
 story.append(li("🏥 <b>Médico</b> — consultas, ASO periódico, exames complementares."))
