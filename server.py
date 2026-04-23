@@ -46,6 +46,20 @@ for _k, _f in [
 ]:
     _kv_init.migrar_de_arquivo(_k, _f)
 
+# Migracao unica: aprova usuarios legados (cadastrados antes do sistema de aprovacao)
+try:
+    _u = _kv_init.load('users') or {}
+    _changed = False
+    for _mat, _d in _u.items():
+        if _d.get('aprovado') in (None, '', 0):
+            _d['aprovado'] = True
+            _changed = True
+    if _changed:
+        _kv_init.save('users', _u)
+        print(f'[migracao] aprovados {len(_u)} usuarios legados')
+except Exception as _e:
+    print('[migracao] erro:', _e)
+
 def helpdesk_load() -> list:
     if not os.path.isdir(HELPDESK_DIR):
         return []
