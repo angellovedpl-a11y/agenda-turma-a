@@ -52,6 +52,32 @@
 [data-theme="light"] .sb-icon{color:#64748b}
 [data-theme="light"] .sb-icon:hover{background:var(--chip-hover);color:var(--text)}
 [data-theme="light"] .sb-icon.active{background:var(--chip);color:var(--neon)}
+/* Chat com colegas — modo claro */
+[data-theme="light"] .chat-list{background:#f8fafc;border-color:#e2e8f0}
+[data-theme="light"] .chat-list-head{color:#475569;background:#f1f5f9}
+[data-theme="light"] .chat-conv{border-bottom-color:#e2e8f0;color:#0f172a}
+[data-theme="light"] .chat-conv:hover{background:#e2e8f0}
+[data-theme="light"] .chat-conv.active{background:#dcfce7;border-left:2px solid var(--neon);color:#0f172a}
+[data-theme="light"] .chat-conv .av{background:#e2e8f0;color:#0f172a}
+[data-theme="light"] .chat-conv .meta .nm{color:#0f172a}
+[data-theme="light"] .chat-conv .meta .lst{color:#475569}
+[data-theme="light"] .chat-conv .nlb{color:#fff}
+[data-theme="light"] .chat-pane{background:#ffffff}
+[data-theme="light"] .chat-head{background:#f8fafc;border-bottom-color:#e2e8f0;color:#0f172a}
+[data-theme="light"] .chat-head .nm{color:#0f172a}
+[data-theme="light"] .chat-head .sub{color:#64748b}
+[data-theme="light"] .chat-msgs{background:#ffffff}
+[data-theme="light"] .chat-msg{background:#f1f5f9;color:#0f172a;border:1px solid #e2e8f0}
+[data-theme="light"] .chat-msg .au{color:#475569}
+[data-theme="light"] .chat-msg .tx{color:#0f172a}
+[data-theme="light"] .chat-msg .ts{color:#64748b}
+[data-theme="light"] .chat-msg.mine{background:var(--neon);color:#ffffff;border-color:#00854955}
+[data-theme="light"] .chat-msg.mine .au,[data-theme="light"] .chat-msg.mine .tx,[data-theme="light"] .chat-msg.mine .ts{color:#ffffff}
+[data-theme="light"] .chat-input{background:#f8fafc;border-top-color:#e2e8f0}
+[data-theme="light"] .chat-input textarea{background:#ffffff;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .chat-empty{color:#64748b;background:#ffffff}
+[data-theme="light"] .presence{border-color:#ffffff}
+[data-theme="light"] .presence.off{background:#94a3b8}
 [data-theme="light"] .tabs{background:var(--chip)}
 [data-theme="light"] .tab.active{color:#fff;box-shadow:0 0 14px #00854955}
 [data-theme="light"] .nav-arrow,[data-theme="light"] .btn-hoje{background:var(--card)}
@@ -301,6 +327,23 @@ input,textarea{font-family:inherit;color:inherit}
 .resumo-bar .b-t{background:var(--orange)}
 .resumo-leg{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-mute);margin-top:6px;letter-spacing:1px}
 
+/* ===== VIRIATO BANNER ===== */
+.viriato-banner{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;margin:0 0 12px;
+  background:linear-gradient(135deg,#7c3aed22,#00e67622);
+  border:1px solid #7c3aed44;border-radius:12px;
+  font-size:13px;color:var(--text);
+  position:relative;
+}
+.viriato-banner.hidden{display:none}
+.vb-ico{font-size:18px;flex-shrink:0}
+.vb-txt{flex:1;line-height:1.4;font-style:italic;color:var(--text)}
+.vb-close{width:24px;height:24px;border-radius:6px;color:var(--text-mute);font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vb-close:hover{background:var(--chip);color:var(--text)}
+[data-theme="light"] .viriato-banner{background:linear-gradient(135deg,#ede9fe,#dcfce7);border-color:#7c3aed55;color:#0f172a}
+[data-theme="light"] .vb-txt{color:#0f172a}
+
 /* ===== VIRIATO FAB ===== */
 @keyframes viriatoGrad{
   0%{background-position:0% 50%}
@@ -405,18 +448,20 @@ input,textarea{font-family:inherit;color:inherit}
   .app{grid-template-columns:1fr;height:100vh}
   .sidebar{
     display:flex;flex-direction:row;align-items:center;justify-content:space-around;
-    width:100%;height:56px;padding:0 6px;gap:4px;
+    width:100%;height:64px;padding:0 6px;gap:4px;
     border-top:1px solid var(--border);border-right:none;
     position:fixed;bottom:0;left:0;right:0;z-index:50;
   }
   .sb-logo{display:none}
-  .sb-icon{width:42px;height:42px;flex-shrink:0}
-  .main{padding:14px;padding-bottom:72px;overflow-y:auto}
+  .sb-icon{width:48px;height:48px;min-width:48px;min-height:48px;flex-shrink:0}
+  .sb-icon svg{width:24px;height:24px}
+  .sb-icon.sb-img img{width:32px;height:32px}
+  .main{padding:14px;padding-bottom:80px;overflow-y:auto}
   .year-wrap{grid-template-columns:1fr}
-  .viriato-win{right:8px;left:8px;width:auto;bottom:68px}
-  .viriato-fab{bottom:68px;right:auto;left:50%;transform:translateX(-50%)}
-  .viriato-fab:hover{transform:translateX(-50%) scale(1.08)}
-  .viriato-fab:active{transform:translateX(-50%) scale(.95)}
+  .viriato-win{right:8px;left:8px;width:auto;bottom:148px;height:calc(100vh - 180px);max-height:520px}
+  .viriato-fab{bottom:80px;right:14px;left:auto;transform:none;width:52px;height:52px}
+  .viriato-fab:hover{transform:scale(1.08)}
+  .viriato-fab:active{transform:scale(.95)}
   .top-bar{flex-wrap:wrap;gap:8px}
   .month-title{min-width:0;font-size:15px}
   .cal-dow,.cal-grid{gap:4px}
@@ -465,6 +510,11 @@ input,textarea{font-family:inherit;color:inherit}
 
   <!-- Main -->
   <main class="main">
+    <div class="viriato-banner" id="viriatoBanner">
+      <span class="vb-ico">🤖</span>
+      <span class="vb-txt"><i>Vc Já viu como é Linda a Vista da Lagoa Mapaúra, pela Janela de Uma Locomotiva?</i></span>
+      <button class="vb-close" id="vbClose" aria-label="Fechar">×</button>
+    </div>
     <div class="top-bar">
       <div class="brand">
         <div class="brand-logo" title="Vale">
@@ -787,6 +837,18 @@ document.getElementById("themeToggle").addEventListener("click",()=>{
   const cur=document.documentElement.getAttribute("data-theme")||"dark";
   applyTheme(cur==="dark"?"light":"dark");
 });
+// Banner reflexivo do Viriato
+(function(){
+  try{
+    const banner=document.getElementById("viriatoBanner");
+    if(!banner)return;
+    if(localStorage.getItem("turmaA_vbHidden")==="1"){banner.classList.add("hidden");}
+    document.getElementById("vbClose").onclick=()=>{
+      banner.classList.add("hidden");
+      try{localStorage.setItem("turmaA_vbHidden","1");}catch(e){}
+    };
+  }catch(e){}
+})();
 
 // ===== Viriato =====
 function renderViriato(){
