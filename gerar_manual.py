@@ -412,8 +412,52 @@ story.append(nota("Para registrar troca de turno ou cobertura de colega, use o t
                   "ou <b>Outro</b> e descreva no texto (ex.: 'Cobertura do João'). Útil quando o "
                   "supervisor pergunta meses depois quem cobriu quem."))
 
-# 6. Função na ferrovia
-story.append(Paragraph("6. Função na ferrovia: Operacional ou Administrativa", H1))
+# 6. Chat
+story.append(Paragraph("6. Chat — conversas e grupos da turma", H1))
+story.append(Paragraph(
+    "O <b>Chat</b> (ícone do balão de fala na barra lateral) funciona parecido com o WhatsApp, "
+    "mas <b>dentro do app da turma</b>. Serve pra conversa privada (1 pra 1) ou em grupos pequenos "
+    "(escala da semana, churrasco do mês, troca de cobertura, etc).", P))
+story.append(li("Toque em <b>+ Nova conversa</b>, escolha um colega aprovado e pronto — começa "
+                "uma conversa privada."))
+story.append(li("Para criar um <b>grupo</b>, marque dois ou mais colegas e dê um nome ao grupo "
+                "(ex.: 'Turma A — Avisos rápidos')."))
+story.append(li("Você pode mandar <b>texto</b> e <b>anexos</b> (foto, PDF, áudio, vídeo curto) "
+                "até <b>50 MB</b> por arquivo. Imagens aparecem direto na bolha; PDFs viram link "
+                "pra abrir."))
+story.append(li("Toque na <b>★ estrela</b> embaixo de uma mensagem pra marcá-la como importante. "
+                "Mensagens com estrela ficam <b>pra sempre</b>; as outras são apagadas "
+                "automaticamente após <b>30 dias</b> pra não pesar o app."))
+story.append(li("A <b>bolinha vermelha</b> em cima do ícone do Chat conta quantas mensagens não "
+                "lidas você tem em todas as conversas."))
+story.append(li("Pra sair de um grupo (ou apagar uma conversa privada do seu lado), toque no "
+                "botão <b>Sair</b> dentro da conversa."))
+story.append(nota("Conversas e grupos só enxergam <b>colegas aprovados</b> pelos administradores. "
+                  "Cadastros pendentes não aparecem na lista."))
+story.append(aviso("Não use o Chat pra avisos que <b>todos da turma</b> precisam ver — esses vão no "
+                   "<b>Mural</b> (capítulo 5). Chat é pra conversa direta."))
+
+# 7. Acervo
+story.append(Paragraph("7. Acervo (biblioteca) e anexos até 50 MB", H1))
+story.append(Paragraph(
+    "O <b>Acervo</b> (ícone do livro aberto na barra lateral) é a <b>biblioteca de documentos</b> "
+    "da turma. É também o <b>cérebro de consulta do Viriato</b>: tudo que você anexa aqui, ele "
+    "pode ler e usar pra responder perguntas.", P))
+story.append(li("<b>📎 Anexar documento</b> — para arquivos <b>permanentes</b>: regulamentos, "
+                "manuais técnicos, acordos coletivos, normas de segurança."))
+story.append(li("<b>📌 Marcar como TEMP</b> — para arquivos que <b>mudam com frequência</b> "
+                "(boletins da semana, escalas reajustadas). Toque no 📌 antes de anexar; ele acende "
+                "em <b>laranja</b>; depois toque no 📎."))
+story.append(li("<b>🖼️ Anexar imagem</b> e <b>📷 Tirar foto</b> — para o Viriato analisar a imagem "
+                "junto com a sua pergunta. A imagem <b>não</b> entra na biblioteca; serve só "
+                "pra aquela conversa."))
+story.append(li("<b>Limite de tamanho:</b> até <b>50 MB</b> por arquivo, em qualquer canto do app "
+                "(Acervo, Mural ou Chat). Acima disso o app recusa antes de subir."))
+story.append(nota("PDFs e Word viram texto automaticamente para o Viriato consultar. Se quiser "
+                  "que ele leia uma imagem, prefira o botão 🖼️/📷 — não o 📎."))
+
+# 8. Função na ferrovia
+story.append(Paragraph("8. Função na ferrovia: Operacional ou Administrativa", H1))
 story.append(Paragraph(
     "No cadastro, e também ao entrar pela primeira vez depois de uma atualização, o app pergunta "
     "qual é a sua <b>função na ferrovia</b>. Existem duas opções:", P))
@@ -433,7 +477,7 @@ story.append(aviso("Quem é da Função Operacional <b>não pode esquecer dos Pr
                    "sua. Banner laranja no topo = teste pendente."))
 
 # 7. Checklist
-story.append(Paragraph("7. Checklist Pré-Jornada", H1))
+story.append(Paragraph("9. Checklist Pré-Jornada", H1))
 story.append(Paragraph(
     "Toque no ícone da <b>prancheta 📋</b> no topo da tela para abrir o <b>Checklist</b>. "
     "Ele já vem pronto com o básico da Turma A:", P))
@@ -450,7 +494,7 @@ story.append(nota("Os itens Prontos 1 e Prontos 2 só aparecem para quem se cada
 story.append(PageBreak())
 
 # 8. Viriato
-story.append(Paragraph("8. Viriato — o ajudante de bordo", H1))
+story.append(Paragraph("10. Viriato — o ajudante de bordo", H1))
 story.append(Paragraph(
     "O <b>Viriato</b> é um agente inteligente <b>criado pelo Angelo Silva</b> "
     "especialmente para esta agenda. Não é um chatbot genérico copiado da internet: ele foi "
@@ -470,7 +514,7 @@ story.append(Paragraph(
 story.append(nota("O Viriato não inventa: se ele não souber, vai dizer que não sabe e sugerir falar "
                   "com o Angelo."))
 
-story.append(Paragraph("8.1. Anexar documentos para o Viriato ler", H2))
+story.append(Paragraph("10.1. Anexar documentos para o Viriato ler", H2))
 story.append(Paragraph(
     "Na barra de baixo da tela do Viriato existem botões de anexo. Cada um tem uma função "
     "diferente — todos colocam o arquivo na <b>biblioteca</b>, que é o cérebro de consulta do Viriato:", P))
@@ -491,17 +535,17 @@ story.append(nota("A pasta TEMP existe para você não misturar boletim da seman
                   "definitivo. Quando o boletim vencer, é só apagar dali sem mexer no resto."))
 
 # 9. Painel admin
-story.append(Paragraph("9. Painel do administrador", H1))
+story.append(Paragraph("11. Painel do administrador", H1))
 story.append(Paragraph(
     "Esta seção interessa <b>apenas às 4 pessoas habilitadas</b> da turma: o "
     "<b>administrador principal</b> (Angelo Silva) e até <b>3 aprovadores</b> indicados por "
     "ele. Somente estes 4 podem aprovar novos usuários — ninguém mais.", P))
-story.append(Paragraph("9.1. O que essas 4 pessoas podem fazer", H2))
+story.append(Paragraph("11.1. O que essas 4 pessoas podem fazer", H2))
 story.append(li("<b>Aprovar</b> ou <b>Negar</b> novos cadastros (aparecem com badge no 👑)."))
 story.append(li("<b>Promover</b> outro usuário a aprovador (somente o admin principal pode fazer isso, e o limite é 3)."))
 story.append(li("<b>Resetar a senha</b> de qualquer colega — aparece um código temporário de 4 dígitos para você passar pelo WhatsApp ou pessoalmente."))
 story.append(li("<b>Remover</b> usuários que saíram da turma."))
-story.append(Paragraph("9.2. Aprovação de cadastros", H2))
+story.append(Paragraph("11.2. Aprovação de cadastros", H2))
 story.append(Paragraph(
     "Quando alguém se cadastra, aparece uma bolinha vermelha com o número de pendentes no botão "
     "👑. Toque, confira nome e matrícula com o crachá da pessoa, e clique em <b>Aprovar</b> ou "
@@ -510,7 +554,7 @@ story.append(aviso("Antes de aprovar, confirme pessoalmente que a matrícula bat
                    "Quem entra aqui tem acesso à escala e aos eventos da turma."))
 
 # 10. Esqueci a senha
-story.append(Paragraph("10. Esqueci minha senha — e agora?", H1))
+story.append(Paragraph("12. Esqueci minha senha — e agora?", H1))
 story.append(Paragraph(
     "Calma, sem stress. Tem dois caminhos:", P))
 story.append(Paragraph("<b>Caminho 1 — Pelo Viriato (mais rápido):</b>", P))
@@ -526,7 +570,7 @@ story.append(aviso("Toda vez que sua senha for resetada ou trocada, todas as ses
                    "outros celulares são canceladas automaticamente. Quem estava logado é deslogado."))
 
 # 11. Trocar senha
-story.append(Paragraph("11. Trocar minha senha", H1))
+story.append(Paragraph("13. Trocar minha senha", H1))
 story.append(Paragraph(
     "A qualquer momento, dentro do app, toque no <b>🔑</b> no topo. O sistema vai pedir:", P))
 story.append(li("Sua <b>senha atual</b> (4 dígitos)"))
@@ -540,7 +584,7 @@ story.append(nota("Se aparecer um aviso laranja no topo dizendo <b>“Senha temp
 story.append(PageBreak())
 
 # 12. FAQ
-story.append(Paragraph("12. Perguntas frequentes", H1))
+story.append(Paragraph("14. Perguntas frequentes", H1))
 faqs = [
     ("Funciona sem internet?",
      "Em parte. A escala, os eventos, os documentos e o checklist funcionam no celular mesmo sem sinal. "
@@ -574,7 +618,7 @@ for q, a in faqs:
 story.append(PageBreak())
 
 # 13. Glossario
-story.append(Paragraph("13. Glossário ferroviário rápido", H1))
+story.append(Paragraph("15. Glossário ferroviário rápido", H1))
 gloss = [
     ["Termo", "Significado"],
     ["Bater asa", "Cometer erros bobos no dia a dia."],
@@ -609,7 +653,7 @@ story.append(tg)
 story.append(PageBreak())
 
 # 14. Creditos e agradecimentos
-story.append(Paragraph("14. Créditos e agradecimentos", H1))
+story.append(Paragraph("16. Créditos e agradecimentos", H1))
 
 story.append(Paragraph("Idealização, projeto e desenvolvimento", H2))
 story.append(Paragraph(
