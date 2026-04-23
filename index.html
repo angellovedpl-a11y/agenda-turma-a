@@ -1108,14 +1108,19 @@ async function drawChatList(){
   });
   if(CHAT_CONV){const cur=convs.find(x=>x.id===CHAT_CONV.id);if(cur){CHAT_CONV=cur;await abrirConversa(cur,true);}}
 }
+function _isMobileChat(){return window.matchMedia("(max-width:720px)").matches;}
+function _showChatPane(){const list=document.querySelector(".chat-list"),pane=document.getElementById("chatPane");if(!list||!pane)return;if(_isMobileChat()){list.classList.add("hide-mobile");pane.classList.remove("hide-mobile");}else{list.classList.remove("hide-mobile");pane.classList.remove("hide-mobile");}}
+function _showChatList(){const list=document.querySelector(".chat-list"),pane=document.getElementById("chatPane");if(!list||!pane)return;if(_isMobileChat()){list.classList.remove("hide-mobile");pane.classList.add("hide-mobile");}else{list.classList.remove("hide-mobile");pane.classList.remove("hide-mobile");}}
 async function abrirConversa(c,jaListou){
   CHAT_CONV=c;CHAT_LAST_TS=0;
   if(!jaListou){document.querySelectorAll(".chat-conv").forEach(el=>el.classList.toggle("active",el.dataset.id===c.id));}
   const pane=document.getElementById("chatPane");
+  _showChatPane();
   const sub=c.tipo==="grupo"?(c.participantes||[]).length+" participantes":"Conversa privada";
   pane.innerHTML=`
     <div class="chat-head">
-      <div><div class="nm">${c.tipo==="grupo"?"👥 ":""}${escapeHtml(c.nome)}</div><div class="sub">${escapeHtml(sub)}</div></div>
+      <button class="btn-secondary" id="convBack" style="padding:4px 10px;font-size:14px;margin-right:8px">←</button>
+      <div style="flex:1;min-width:0"><div class="nm">${c.tipo==="grupo"?"👥 ":""}${escapeHtml(c.nome)}</div><div class="sub">${escapeHtml(sub)}</div></div>
       <button class="btn-secondary" id="convExit" style="padding:4px 10px;font-size:11px">Sair</button>
     </div>
     <div class="chat-msgs" id="chatMsgs"><div style="color:var(--muted);text-align:center;padding:20px">Carregando...</div></div>
@@ -1125,9 +1130,10 @@ async function abrirConversa(c,jaListou){
       <button id="chatSend" class="btn-primary" style="padding:8px 14px">Enviar</button>
       <input type="file" id="chatFile" accept="image/*,.pdf,.docx,.txt" style="display:none"/>
     </div>`;
+  document.getElementById("convBack").onclick=()=>{CHAT_CONV=null;_stopChatPoll();_showChatList();const p=document.getElementById("chatPane");if(p)p.innerHTML='<div class="chat-empty">Toque numa conversa ou num colega à esquerda.</div>';};
   document.getElementById("convExit").onclick=async()=>{
     if(!confirm(c.tipo==="grupo"?"Sair deste grupo?":"Apagar esta conversa?"))return;
-    await apiFetch("/api/chat/conversa/"+c.id,{method:"DELETE"});CHAT_CONV=null;_stopChatPoll();await drawChatList();
+    await apiFetch("/api/chat/conversa/"+c.id,{method:"DELETE"});CHAT_CONV=null;_stopChatPoll();_showChatList();await drawChatList();
   };
   document.getElementById("chatAttach").onclick=()=>document.getElementById("chatFile").click();
   document.getElementById("chatFile").onchange=enviarComAnexo;
