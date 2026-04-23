@@ -1046,13 +1046,22 @@ async function renderChat(c){
 }
 async function drawChatList(){
   const root=document.getElementById("chatRoot");if(!root)return;
-  let convs=[];
+  let convs=[],usuarios=[];
   try{const r=await apiFetch("/api/chat/conversas");convs=(await r.json()).conversas||[];}catch(e){if(e.message==="auth")return;}
+  try{const r=await apiFetch("/api/chat/usuarios");usuarios=(await r.json()).usuarios||[];}catch(e){}
   const totUnread=convs.reduce((s,c)=>s+(c.nao_lidas||0),0);
   updateChatBadge(totUnread);
+  // mapeia matricula -> conversa 1a1 existente
+  const conv1a1ByMat={};
+  convs.forEach(c=>{
+    if(c.tipo!=="grupo" && (c.participantes||[]).length===2){
+      const outra=(c.participantes||[]).find(m=>m!==CURRENT_USER.matricula);
+      if(outra)conv1a1ByMat[outra]=c;
+    }
+  });
   root.innerHTML=`
     <div class="chat-list">
-      <div class="chat-list-head"><span>Conversas</span><button id="newConv" class="btn-primary" style="padding:4px 10px;font-size:11px">+ Nova</button></div>
+      <div class="chat-list-head"><span>Conversas</span><button id="newConv" class="btn-primary" style="padding:4px 10px;font-size:11px">+ Grupo</button></div>
       <div id="convList">${convs.length?convs.map(c=>{
         const lst=c.ultima?(c.ultima.texto||(c.ultima.anexo?"📎 anexo":"")).slice(0,40):"Nova conversa";
         const tag=c.tipo==="grupo"?"👥 ":"";
@@ -1061,13 +1070,36 @@ async function drawChatList(){
           <div class="meta"><div class="nm">${tag}${escapeHtml(c.nome)}</div><div class="lst">${escapeHtml(lst)}</div></div>
           ${c.nao_lidas?`<div class="nlb">${c.nao_lidas}</div>`:""}
         </div>`;
-      }).join(""):'<div style="padding:20px;color:var(--muted);font-size:12px;text-align:center">Nenhuma conversa.<br/>Clique em + Nova.</div>'}</div>
+      }).join(""):'<div style="padding:14px;color:var(--muted);font-size:12px;text-align:center">Nenhuma conversa ainda.<br/>Toque num colega abaixo pra começar.</div>'}</div>
+      <div class="chat-list-head" style="margin-top:8px;border-top:1px solid var(--border);padding-top:12px"><span>Colegas da Turma</span></div>
+      <div id="colegasList">${usuarios.length?usuarios.map(u=>{
+        const conv=conv1a1ByMat[u.matricula];
+        const unread=conv?conv.nao_lidas||0:0;
+        return `<div class="chat-conv" data-mat="${escapeHtml(u.matricula)}" title="Conversar com ${escapeHtml(u.nome)}">
+          <div class="av">${escapeHtml(avatarFor(u.nome))}</div>
+          <div class="meta"><div class="nm">${escapeHtml(u.nome)}</div><div class="lst">${conv?"💬 conversa aberta":"Toque para conversar"}</div></div>
+          ${unread?`<div class="nlb">${unread}</div>`:""}
+        </div>`;
+      }).join(""):'<div style="padding:14px;color:var(--muted);font-size:12px;text-align:center">Nenhum colega aprovado ainda.</div>'}</div>
     </div>
     <div class="chat-pane" id="chatPane">
-      ${CHAT_CONV?"":'<div class="chat-empty">Selecione uma conversa ou crie uma nova.</div>'}
+      ${CHAT_CONV?"":'<div class="chat-empty">Toque numa conversa ou num colega à esquerda.</div>'}
     </div>`;
   document.getElementById("newConv").onclick=openNovaConversa;
-  document.querySelectorAll(".chat-conv").forEach(el=>{el.onclick=()=>{const c=convs.find(x=>x.id===el.dataset.id);if(c)abrirConversa(c);};});
+  document.querySelectorAll(".chat-conv[data-id]").forEach(el=>{el.onclick=()=>{const c=convs.find(x=>x.id===el.dataset.id);if(c)abrirConversa(c);};});
+  document.querySelectorAll(".chat-conv[data-mat]").forEach(el=>{
+    el.onclick=async()=>{
+      const mat=el.dataset.mat;
+      const existing=conv1a1ByMat[mat];
+      if(existing){abrirConversa(existing);return;}
+      const u=usuarios.find(x=>x.matricula===mat);if(!u)return;
+      try{
+        const r=await apiFetch("/api/chat/conversa",{method:"POST",body:JSON.stringify({participantes:[mat],nome:""})});
+        const d=await r.json();
+        if(r.ok){await drawChatList();abrirConversa({id:d.id,tipo:"1a1",nome:u.nome,participantes:[mat,CURRENT_USER.matricula]});}
+      }catch(e){}
+    };
+  });
   if(CHAT_CONV){const cur=convs.find(x=>x.id===CHAT_CONV.id);if(cur){CHAT_CONV=cur;await abrirConversa(cur,true);}}
 }
 async function abrirConversa(c,jaListou){
