@@ -467,17 +467,18 @@ body.sec-calendario .viriato-fab{display:none}
 @media (max-width:720px){
   .app{grid-template-columns:1fr;height:100vh}
   .sidebar{
-    display:flex;flex-direction:row;align-items:center;justify-content:space-around;
-    width:100%;height:90px;padding:8px 6px;gap:4px;
+    display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+    width:100%;height:84px;padding:8px 6px;gap:2px;
     border-top:1px solid var(--border);border-right:none;
     position:fixed;bottom:0;left:0;right:0;z-index:50;
+    box-sizing:border-box;
   }
   .sb-logo{display:none}
-  .sb-icon{width:70px;height:70px;min-width:70px;min-height:70px;flex-shrink:0;border-radius:18px}
-  .sb-icon svg{width:36px;height:36px}
-  .sb-icon.sb-img img{width:46px;height:46px}
+  .sb-icon{flex:1 1 0;min-width:0;width:auto;height:64px;min-height:64px;border-radius:14px;padding:0}
+  .sb-icon svg{width:32px;height:32px}
+  .sb-icon.sb-img img{width:42px;height:42px}
   .sb-badge{font-size:11px;min-width:18px;height:18px;border-radius:9px}
-  .main{padding:14px;padding-bottom:108px;overflow-y:auto}
+  .main{padding:14px;padding-bottom:100px;overflow-y:auto}
   .year-wrap{grid-template-columns:1fr}
   .viriato-fab{bottom:90px;right:14px;left:auto;transform:none;width:64px;height:64px;font-size:30px}
   .viriato-fab:hover{transform:scale(1.08)}
