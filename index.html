@@ -113,6 +113,42 @@ input,textarea{font-family:inherit;color:inherit}
 .sb-icon svg{width:20px;height:20px}
 .sb-icon.sb-img{padding:4px}
 .sb-icon.sb-img img{width:28px;height:28px;border-radius:6px;object-fit:contain;display:block}
+.sb-icon{position:relative}
+.sb-badge{position:absolute;top:2px;right:2px;background:#e23838;color:#fff;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;padding:0 4px;display:flex;align-items:center;justify-content:center;line-height:1}
+
+/* Chat */
+.chat-wrap{display:grid;grid-template-columns:260px 1fr;height:100%;min-height:0}
+.chat-list{border-right:1px solid var(--border);overflow-y:auto;background:var(--sidebar)}
+.chat-list-head{padding:14px 14px 8px;display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:1.6px;color:var(--text-mute);text-transform:uppercase}
+.chat-conv{padding:10px 14px;border-bottom:1px solid var(--border-soft);cursor:pointer;display:flex;gap:10px;align-items:center}
+.chat-conv:hover{background:#15171d}
+.chat-conv.active{background:#15171d;border-left:2px solid var(--neon)}
+.chat-conv .av{width:36px;height:36px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:var(--text);flex-shrink:0}
+.chat-conv .meta{flex:1;min-width:0}
+.chat-conv .meta .nm{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-conv .meta .lst{font-size:11px;color:var(--text-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.chat-conv .nlb{background:var(--neon);color:#000;font-size:10px;font-weight:700;border-radius:10px;padding:2px 6px;min-width:18px;text-align:center}
+.chat-pane{display:flex;flex-direction:column;min-width:0;min-height:0}
+.chat-head{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.chat-head .nm{font-weight:600;font-size:14px}
+.chat-head .sub{font-size:11px;color:var(--text-mute);margin-top:2px}
+.chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.chat-msg{max-width:70%;padding:8px 12px;border-radius:14px;background:var(--chip);position:relative;word-wrap:break-word}
+.chat-msg .au{font-size:10px;color:var(--text-mute);margin-bottom:3px;font-weight:600}
+.chat-msg .tx{font-size:13px;line-height:1.5;white-space:pre-wrap}
+.chat-msg .ts{font-size:9px;color:var(--text-mute);margin-top:4px;display:flex;gap:8px;align-items:center}
+.chat-msg .star{cursor:pointer;font-size:13px;opacity:.4}
+.chat-msg .star.on{opacity:1;color:#f5a623}
+.chat-msg.mine{align-self:flex-end;background:var(--neon);color:#000}
+.chat-msg.mine .au,.chat-msg.mine .ts{color:rgba(0,0,0,.55)}
+.chat-msg .anx{margin-top:6px;padding:6px 10px;background:rgba(255,255,255,.08);border-radius:8px;font-size:11px;display:flex;align-items:center;gap:6px}
+.chat-msg.mine .anx{background:rgba(0,0,0,.12)}
+.chat-msg .anx a{color:inherit;text-decoration:underline}
+.chat-msg img.anximg{max-width:100%;max-height:240px;border-radius:8px;margin-top:6px;display:block}
+.chat-input{border-top:1px solid var(--border);padding:10px;display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.chat-input textarea{flex:1;background:var(--chip);border:1px solid var(--border-soft);border-radius:10px;padding:8px 12px;color:var(--text);font-family:inherit;font-size:13px;resize:none;min-height:38px;max-height:120px}
+.chat-input button{flex-shrink:0}
+.chat-empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-mute);font-size:13px;text-align:center;padding:20px}
 
 /* Main */
 .main{
@@ -373,6 +409,10 @@ input,textarea{font-family:inherit;color:inherit}
     </button>
     <button class="sb-icon" title="Eventos da Turma" data-sec="eventos">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </button>
+    <button class="sb-icon" title="Chat" data-sec="chat">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 17h-6l-4 3v-3H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><path d="M8 11h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-4 3v-3"/></svg>
+      <span id="chatBadge" class="sb-badge" style="display:none"></span>
     </button>
     <button class="sb-icon" title="Acervo (PDFs, fatos, memórias)" data-sec="acervo">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></svg>
@@ -658,6 +698,7 @@ function render(){
     document.getElementById("rightPanel").style.display="none";
     if(S.section==="eventos")renderEventos(c);
     else if(S.section==="acervo")renderAcervo(c);
+    else if(S.section==="chat")renderChat(c);
     return;
   }
   document.getElementById("rightPanel").style.display="";
@@ -974,6 +1015,177 @@ async function renderEventos(c){
     });
   }catch(e){if(e.message!=="auth")document.getElementById("evBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
 }
+// ===== CHAT =====
+let CHAT_CONV=null, CHAT_POLL=null, CHAT_LAST_TS=0;
+function _stopChatPoll(){if(CHAT_POLL){clearInterval(CHAT_POLL);CHAT_POLL=null;}}
+function avatarFor(nome){return (nome||"?").trim().split(/\s+/).slice(0,2).map(s=>s[0]||"").join("").toUpperCase()||"?";}
+async function renderChat(c){
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">💬 CHAT</div></div><div class="pg-body" style="padding:0"><div id="chatRoot" class="chat-wrap"><div style="padding:30px;color:var(--muted)">Carregando...</div></div></div>`;
+  if(!await requireAuth()){document.getElementById("chatRoot").innerHTML='<div style="padding:30px;color:var(--muted);text-align:center;width:100%">Faça login para usar o chat.</div>';return;}
+  await drawChatList();
+}
+async function drawChatList(){
+  const root=document.getElementById("chatRoot");if(!root)return;
+  let convs=[];
+  try{const r=await apiFetch("/api/chat/conversas");convs=(await r.json()).conversas||[];}catch(e){if(e.message==="auth")return;}
+  const totUnread=convs.reduce((s,c)=>s+(c.nao_lidas||0),0);
+  updateChatBadge(totUnread);
+  root.innerHTML=`
+    <div class="chat-list">
+      <div class="chat-list-head"><span>Conversas</span><button id="newConv" class="btn-primary" style="padding:4px 10px;font-size:11px">+ Nova</button></div>
+      <div id="convList">${convs.length?convs.map(c=>{
+        const lst=c.ultima?(c.ultima.texto||(c.ultima.anexo?"📎 anexo":"")).slice(0,40):"Nova conversa";
+        const tag=c.tipo==="grupo"?"👥 ":"";
+        return `<div class="chat-conv ${CHAT_CONV&&CHAT_CONV.id===c.id?"active":""}" data-id="${c.id}">
+          <div class="av">${escapeHtml(avatarFor(c.nome))}</div>
+          <div class="meta"><div class="nm">${tag}${escapeHtml(c.nome)}</div><div class="lst">${escapeHtml(lst)}</div></div>
+          ${c.nao_lidas?`<div class="nlb">${c.nao_lidas}</div>`:""}
+        </div>`;
+      }).join(""):'<div style="padding:20px;color:var(--muted);font-size:12px;text-align:center">Nenhuma conversa.<br/>Clique em + Nova.</div>'}</div>
+    </div>
+    <div class="chat-pane" id="chatPane">
+      ${CHAT_CONV?"":'<div class="chat-empty">Selecione uma conversa ou crie uma nova.</div>'}
+    </div>`;
+  document.getElementById("newConv").onclick=openNovaConversa;
+  document.querySelectorAll(".chat-conv").forEach(el=>{el.onclick=()=>{const c=convs.find(x=>x.id===el.dataset.id);if(c)abrirConversa(c);};});
+  if(CHAT_CONV){const cur=convs.find(x=>x.id===CHAT_CONV.id);if(cur){CHAT_CONV=cur;await abrirConversa(cur,true);}}
+}
+async function abrirConversa(c,jaListou){
+  CHAT_CONV=c;CHAT_LAST_TS=0;
+  if(!jaListou){document.querySelectorAll(".chat-conv").forEach(el=>el.classList.toggle("active",el.dataset.id===c.id));}
+  const pane=document.getElementById("chatPane");
+  const sub=c.tipo==="grupo"?(c.participantes||[]).length+" participantes":"Conversa privada";
+  pane.innerHTML=`
+    <div class="chat-head">
+      <div><div class="nm">${c.tipo==="grupo"?"👥 ":""}${escapeHtml(c.nome)}</div><div class="sub">${escapeHtml(sub)}</div></div>
+      <button class="btn-secondary" id="convExit" style="padding:4px 10px;font-size:11px">Sair</button>
+    </div>
+    <div class="chat-msgs" id="chatMsgs"><div style="color:var(--muted);text-align:center;padding:20px">Carregando...</div></div>
+    <div class="chat-input">
+      <button id="chatAttach" class="btn-secondary" title="Anexar" style="padding:8px 10px">📎</button>
+      <textarea id="chatTxt" placeholder="Mensagem..." rows="1"></textarea>
+      <button id="chatSend" class="btn-primary" style="padding:8px 14px">Enviar</button>
+      <input type="file" id="chatFile" accept="image/*,.pdf,.docx,.txt" style="display:none"/>
+    </div>`;
+  document.getElementById("convExit").onclick=async()=>{
+    if(!confirm(c.tipo==="grupo"?"Sair deste grupo?":"Apagar esta conversa?"))return;
+    await apiFetch("/api/chat/conversa/"+c.id,{method:"DELETE"});CHAT_CONV=null;_stopChatPoll();await drawChatList();
+  };
+  document.getElementById("chatAttach").onclick=()=>document.getElementById("chatFile").click();
+  document.getElementById("chatFile").onchange=enviarComAnexo;
+  document.getElementById("chatSend").onclick=enviarMsg;
+  document.getElementById("chatTxt").onkeydown=(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();enviarMsg();}};
+  await carregarMsgs(true);
+  _stopChatPoll();
+  CHAT_POLL=setInterval(()=>{if(S.section==="chat"&&CHAT_CONV)carregarMsgs(false);else _stopChatPoll();},4000);
+}
+const CHAT_ANEXO_CACHE={};
+async function _loadAnexoBlob(cid,mid){
+  const k=cid+"/"+mid;
+  if(CHAT_ANEXO_CACHE[k])return CHAT_ANEXO_CACHE[k];
+  try{
+    const r=await apiFetch("/api/chat/conversa/"+cid+"/anexo/"+mid);
+    if(!r.ok)return null;
+    const blob=await r.blob();
+    const url=URL.createObjectURL(blob);
+    CHAT_ANEXO_CACHE[k]=url;return url;
+  }catch(e){return null;}
+}
+async function _hydrateAnexos(cid,box){
+  box.querySelectorAll("[data-anx-mid]").forEach(async el=>{
+    const mid=el.dataset.anxMid;const url=await _loadAnexoBlob(cid,mid);if(!url)return;
+    if(el.tagName==="IMG"){el.src=url;}
+    else{const a=el.querySelector("a");if(a){a.href=url;a.removeAttribute("data-pending");}}
+  });
+}
+async function carregarMsgs(scroll,force){
+  if(!CHAT_CONV)return;
+  try{
+    const r=await apiFetch("/api/chat/conversa/"+CHAT_CONV.id+"/mensagens");
+    const msgs=(await r.json()).mensagens||[];
+    const top=msgs[msgs.length-1];
+    const newTs=top?top.ts:0;
+    if(newTs===CHAT_LAST_TS && !scroll && !force)return;
+    CHAT_LAST_TS=newTs;
+    const box=document.getElementById("chatMsgs");if(!box)return;
+    const me=CURRENT_USER&&CURRENT_USER.matricula;
+    box.innerHTML=msgs.length?msgs.map(m=>{
+      const mine=m.autor_mat===me;
+      const dt=new Date((m.ts||0)*1000);
+      const hh=dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+      const dd=dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
+      let anexoHtml="";
+      if(m.anexo&&m.anexo.tem){
+        const isImg=(m.anexo.mimetype||"").startsWith("image/");
+        anexoHtml=isImg
+          ? `<img class="anximg" data-anx-mid="${m.id}" alt="${escapeHtml(m.anexo.nome)}"/>`
+          : `<div class="anx" data-anx-mid="${m.id}">📎 <a href="#" data-pending="1" download="${escapeHtml(m.anexo.nome)}" target="_blank">${escapeHtml(m.anexo.nome)}</a></div>`;
+      }
+      return `<div class="chat-msg ${mine?"mine":""}">
+        ${!mine&&CHAT_CONV.tipo==="grupo"?`<div class="au">${escapeHtml(m.autor_nome||"")}</div>`:""}
+        ${m.texto?`<div class="tx">${escapeHtml(m.texto)}</div>`:""}
+        ${anexoHtml}
+        <div class="ts"><span>${dd} ${hh}</span><span class="star ${m.importante?"on":""}" data-mid="${m.id}" title="${m.importante?"Importante (mantém)":"Marcar como importante"}">★</span></div>
+      </div>`;
+    }).join(""):'<div style="color:var(--muted);text-align:center;padding:20px">Sem mensagens. Diga oi 👋</div>';
+    box.querySelectorAll(".star").forEach(s=>{s.onclick=async()=>{await apiFetch("/api/chat/mensagem/"+CHAT_CONV.id+"/"+s.dataset.mid+"/importante",{method:"POST"});carregarMsgs(true,true);};});
+    _hydrateAnexos(CHAT_CONV.id,box);
+    if(scroll)box.scrollTop=box.scrollHeight;
+    await apiFetch("/api/chat/conversa/"+CHAT_CONV.id+"/lida",{method:"POST"}).catch(()=>{});
+    refreshChatBadge();
+  }catch(e){if(e.message==="auth")_stopChatPoll();}
+}
+async function enviarMsg(){
+  const ta=document.getElementById("chatTxt");if(!ta)return;
+  const t=ta.value.trim();if(!t)return;
+  ta.value="";
+  await apiFetch("/api/chat/conversa/"+CHAT_CONV.id+"/mensagem",{method:"POST",body:JSON.stringify({texto:t})});
+  await carregarMsgs(true);await drawChatList();
+}
+async function enviarComAnexo(){
+  const fi=document.getElementById("chatFile");const f=fi.files&&fi.files[0];if(!f)return;
+  if(f.size>50*1024*1024){showToast("Anexo > 50MB");fi.value="";return;}
+  const ta=document.getElementById("chatTxt");const t=ta?ta.value.trim():"";
+  showToast("Enviando "+f.name+"...");
+  const b64=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.readAsDataURL(f);});
+  const r=await apiFetch("/api/chat/conversa/"+CHAT_CONV.id+"/mensagem",{method:"POST",body:JSON.stringify({texto:t,anexo:{nome:f.name,mimetype:f.type,data:b64}})});
+  if(r.ok){if(ta)ta.value="";fi.value="";await carregarMsgs(true);await drawChatList();}
+  else{const d=await r.json();showToast("❌ "+(d.error||"Falha"));}
+}
+async function openNovaConversa(){
+  let usuarios=[];
+  try{const r=await apiFetch("/api/chat/usuarios");usuarios=(await r.json()).usuarios||[];}catch(e){return;}
+  if(!usuarios.length){openModal("Nova conversa","<div style='color:var(--muted);text-align:center;padding:20px'>Nenhum outro usuário aprovado ainda.</div>",()=>{});return;}
+  openModal("Nova conversa",`
+    <div class="modal-fld"><label>Nome do grupo (opcional — deixe vazio para conversa 1 a 1)</label><input id="ncNome" placeholder="Ex: Resgate Linha 6"/></div>
+    <div class="modal-fld"><label>Selecione os colegas:</label>
+      <div id="ncList" style="max-height:240px;overflow:auto;border:1px solid var(--border-soft);border-radius:8px;padding:6px">
+        ${usuarios.map(u=>`<label style="display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;border-radius:6px"><input type="checkbox" value="${escapeHtml(u.matricula)}"/> <span>${escapeHtml(u.nome)} <span style="color:var(--muted);font-size:11px">(${escapeHtml(u.matricula)})</span></span></label>`).join("")}
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button id="ncSave" class="btn-primary">Iniciar</button>
+    </div>
+  `,()=>{
+    document.getElementById("ncSave").onclick=async()=>{
+      const sel=Array.from(document.querySelectorAll("#ncList input:checked")).map(i=>i.value);
+      const nome=document.getElementById("ncNome").value.trim();
+      if(!sel.length){showToast("Selecione pelo menos um colega");return;}
+      const r=await apiFetch("/api/chat/conversa",{method:"POST",body:JSON.stringify({participantes:sel,nome})});
+      const d=await r.json();
+      if(r.ok){closeModal();await drawChatList();const conv={id:d.id,tipo:sel.length>=2?"grupo":"1a1",nome:nome||usuarios.find(u=>u.matricula===sel[0]).nome,participantes:sel.concat([CURRENT_USER.matricula])};abrirConversa(conv);}
+      else{showToast("❌ "+(d.error||"Falha"));}
+    };
+  });
+}
+function updateChatBadge(n){const b=document.getElementById("chatBadge");if(!b)return;if(n>0){b.textContent=n>9?"9+":n;b.style.display="";}else{b.style.display="none";}}
+async function refreshChatBadge(){
+  if(!CURRENT_USER)return;
+  try{const r=await apiFetch("/api/chat/conversas");const d=await r.json();const tot=(d.conversas||[]).reduce((s,c)=>s+(c.nao_lidas||0),0);updateChatBadge(tot);}catch(e){}
+}
+setInterval(()=>{if(CURRENT_USER&&S.section!=="chat")refreshChatBadge();},15000);
+
 async function openDia(k){
   if(!await requireAuth())return;
   const [a,m,d]=k.split("-");

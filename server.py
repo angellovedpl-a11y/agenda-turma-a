@@ -868,6 +868,246 @@ def helpdesk_ler(arquivo):
     with open(path, 'r', encoding='utf-8') as f:
         return jsonify({'arquivo': arquivo, 'conteudo': f.read()})
 
+# === API CHAT (1-a-1 e grupos) ===
+import kvstore as _kv
+
+CHAT_RETENCAO_DIAS = 30
+
+def _chat_conversas_load():
+    d = _kv.load('chat:conversas')
+    return d if isinstance(d, list) else (d.get('lista', []) if isinstance(d, dict) else [])
+
+def _chat_conversas_save(lst):
+    _kv.save('chat:conversas', {'lista': lst})
+
+def _chat_msgs_load(conv_id):
+    d = _kv.load(f'chat:msgs:{conv_id}')
+    return d if isinstance(d, list) else (d.get('lista', []) if isinstance(d, dict) else [])
+
+def _chat_msgs_save(conv_id, lst):
+    _kv.save(f'chat:msgs:{conv_id}', {'lista': lst})
+
+def _chat_lido_load(mat):
+    d = _kv.load(f'chat:lido:{mat}')
+    return d if isinstance(d, dict) and 'conv' not in d else d.get('conv', {}) if isinstance(d, dict) else {}
+
+def _chat_lido_save(mat, m):
+    _kv.save(f'chat:lido:{mat}', {'conv': m})
+
+def _chat_prune(conv_id):
+    msgs = _chat_msgs_load(conv_id)
+    if not msgs:
+        return msgs
+    limite = time.time() - (CHAT_RETENCAO_DIAS * 86400)
+    novo = [m for m in msgs if m.get('importante') or float(m.get('ts', 0)) >= limite]
+    if len(novo) != len(msgs):
+        _chat_msgs_save(conv_id, novo)
+    return novo
+
+def _chat_get_conv(conv_id, mat):
+    for c in _chat_conversas_load():
+        if c.get('id') == conv_id:
+            if mat in (c.get('participantes') or []):
+                return c
+            return None
+    return None
+
+@app.route('/api/chat/usuarios', methods=['GET'])
+@auth.require_auth
+def chat_usuarios():
+    me = request.current_user['matricula']
+    users = auth.users_load()
+    out = []
+    for mat, u in users.items():
+        if mat == me:
+            continue
+        if not u.get('aprovado'):
+            continue
+        out.append({'matricula': mat, 'nome': u.get('nome', mat)})
+    out.sort(key=lambda x: x['nome'].lower())
+    return jsonify({'usuarios': out})
+
+def _strip_anexo_data(m):
+    if not m:
+        return m
+    m2 = dict(m)
+    if m2.get('anexo'):
+        a = m2['anexo']
+        m2['anexo'] = {'nome': a.get('nome'), 'mimetype': a.get('mimetype'), 'tem': True}
+    return m2
+
+@app.route('/api/chat/conversas', methods=['GET'])
+@auth.require_auth
+def chat_conversas():
+    me = request.current_user['matricula']
+    convs = _chat_conversas_load()
+    lido = _chat_lido_load(me)
+    minhas = []
+    users = auth.users_load()
+    for c in convs:
+        if me not in (c.get('participantes') or []):
+            continue
+        msgs = _chat_prune(c['id'])
+        ultima = _strip_anexo_data(msgs[-1]) if msgs else None
+        if ultima:
+            ultima = {'autor_mat': ultima.get('autor_mat'), 'autor_nome': ultima.get('autor_nome'),
+                      'texto': (ultima.get('texto') or '')[:80], 'ts': ultima.get('ts'),
+                      'anexo': ultima.get('anexo')}
+        ult_lido = float(lido.get(c['id'], 0))
+        nao_lidas = sum(1 for m in msgs if float(m.get('ts', 0)) > ult_lido and m.get('autor_mat') != me)
+        if c.get('tipo') == '1a1':
+            outro = next((p for p in c['participantes'] if p != me), me)
+            nome = users.get(outro, {}).get('nome', outro)
+        else:
+            nome = c.get('nome') or 'Grupo'
+        minhas.append({
+            'id': c['id'], 'tipo': c.get('tipo'), 'nome': nome,
+            'participantes': c.get('participantes'),
+            'ultima': ultima, 'nao_lidas': nao_lidas,
+            'criada_em': c.get('criada_em')
+        })
+    minhas.sort(key=lambda c: float((c.get('ultima') or {}).get('ts', c.get('criada_em', 0))), reverse=True)
+    return jsonify({'conversas': minhas})
+
+@app.route('/api/chat/conversa', methods=['POST'])
+@auth.require_auth
+def chat_conversa_criar():
+    me = request.current_user['matricula']
+    data = request.json or {}
+    parts = list(set([str(p).strip() for p in (data.get('participantes') or []) if str(p).strip()]))
+    if me not in parts:
+        parts.append(me)
+    if len(parts) < 2:
+        return jsonify({'error': 'Selecione ao menos um colega'}), 400
+    tipo = '1a1' if len(parts) == 2 else 'grupo'
+    nome = (data.get('nome') or '').strip() if tipo == 'grupo' else ''
+    if tipo == 'grupo' and not nome:
+        return jsonify({'error': 'Grupo precisa de um nome'}), 400
+    convs = _chat_conversas_load()
+    if tipo == '1a1':
+        ps = set(parts)
+        for c in convs:
+            if c.get('tipo') == '1a1' and set(c.get('participantes') or []) == ps:
+                return jsonify({'ok': True, 'id': c['id'], 'existente': True})
+    cid = f"c{int(time.time()*1000)}"
+    nova = {'id': cid, 'tipo': tipo, 'nome': nome, 'participantes': parts,
+            'criada_em': time.time(), 'criada_por': me}
+    convs.append(nova)
+    _chat_conversas_save(convs)
+    return jsonify({'ok': True, 'id': cid})
+
+@app.route('/api/chat/conversa/<cid>/mensagens', methods=['GET'])
+@auth.require_auth
+def chat_msgs_listar(cid):
+    me = request.current_user['matricula']
+    if not _chat_get_conv(cid, me):
+        return jsonify({'error': 'Conversa nao encontrada'}), 404
+    msgs = _chat_prune(cid)
+    msgs = msgs[-200:]
+    return jsonify({'mensagens': [_strip_anexo_data(m) for m in msgs]})
+
+@app.route('/api/chat/conversa/<cid>/anexo/<mid>', methods=['GET'])
+@auth.require_auth
+def chat_anexo_download(cid, mid):
+    me = request.current_user['matricula']
+    if not _chat_get_conv(cid, me):
+        return jsonify({'error': 'Conversa nao encontrada'}), 404
+    msgs = _chat_msgs_load(cid)
+    m = next((x for x in msgs if x.get('id') == mid), None)
+    if not m or not m.get('anexo'):
+        return jsonify({'error': 'Anexo nao encontrado'}), 404
+    a = m['anexo']
+    try:
+        raw = base64.b64decode(a.get('data') or '')
+    except Exception:
+        return jsonify({'error': 'Dados invalidos'}), 500
+    from flask import Response
+    return Response(raw, mimetype=a.get('mimetype') or 'application/octet-stream',
+                    headers={'Content-Disposition': f'inline; filename="{a.get("nome","arquivo")}"',
+                             'Cache-Control': 'private, max-age=300'})
+
+@app.route('/api/chat/conversa/<cid>/mensagem', methods=['POST'])
+@auth.require_auth
+def chat_msg_enviar(cid):
+    me = request.current_user
+    if not _chat_get_conv(cid, me['matricula']):
+        return jsonify({'error': 'Conversa nao encontrada'}), 404
+    data = request.json or {}
+    texto = (data.get('texto') or '').strip()
+    anexo = data.get('anexo')  # {nome, data(b64), mimetype}
+    if not texto and not anexo:
+        return jsonify({'error': 'Mensagem vazia'}), 400
+    if anexo and isinstance(anexo, dict):
+        b64 = anexo.get('data') or ''
+        if len(b64) > 70 * 1024 * 1024:
+            return jsonify({'error': 'Anexo muito grande (max 50MB)'}), 413
+    msgs = _chat_msgs_load(cid)
+    novo = {
+        'id': f"m{int(time.time()*1000)}",
+        'autor_mat': me['matricula'],
+        'autor_nome': me.get('nome', ''),
+        'texto': texto[:4000],
+        'ts': time.time(),
+        'importante': False,
+    }
+    if anexo and isinstance(anexo, dict) and anexo.get('data'):
+        novo['anexo'] = {
+            'nome': (anexo.get('nome') or 'arquivo')[:120],
+            'mimetype': (anexo.get('mimetype') or '')[:80],
+            'data': anexo.get('data'),
+        }
+    msgs.append(novo)
+    _chat_msgs_save(cid, msgs)
+    return jsonify({'ok': True, 'mensagem': novo})
+
+@app.route('/api/chat/conversa/<cid>/lida', methods=['POST'])
+@auth.require_auth
+def chat_marcar_lida(cid):
+    me = request.current_user['matricula']
+    if not _chat_get_conv(cid, me):
+        return jsonify({'error': 'Conversa nao encontrada'}), 404
+    lido = _chat_lido_load(me)
+    lido[cid] = time.time()
+    _chat_lido_save(me, lido)
+    return jsonify({'ok': True})
+
+@app.route('/api/chat/mensagem/<cid>/<mid>/importante', methods=['POST'])
+@auth.require_auth
+def chat_marcar_importante(cid, mid):
+    me = request.current_user['matricula']
+    if not _chat_get_conv(cid, me):
+        return jsonify({'error': 'Conversa nao encontrada'}), 404
+    msgs = _chat_msgs_load(cid)
+    achou = False
+    for m in msgs:
+        if m.get('id') == mid:
+            m['importante'] = not m.get('importante', False)
+            achou = True
+            break
+    if not achou:
+        return jsonify({'error': 'Mensagem nao encontrada'}), 404
+    _chat_msgs_save(cid, msgs)
+    return jsonify({'ok': True})
+
+@app.route('/api/chat/conversa/<cid>', methods=['DELETE'])
+@auth.require_auth
+def chat_conv_sair(cid):
+    me = request.current_user['matricula']
+    if not _chat_get_conv(cid, me):
+        return jsonify({'error': 'Conversa nao encontrada'}), 404
+    convs = _chat_conversas_load()
+    nova = []
+    for c in convs:
+        if c.get('id') == cid:
+            parts = [p for p in (c.get('participantes') or []) if p != me]
+            if not parts:
+                _kv.save(f'chat:msgs:{cid}', {'lista': []})
+                continue
+            c['participantes'] = parts
+        nova.append(c)
+    _chat_conversas_save(nova)
+    return jsonify({'ok': True})
+
 # === API DIAGNOSTICO ===
 @app.route('/api/diag/health', methods=['GET'])
 @auth.require_auth
