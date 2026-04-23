@@ -384,11 +384,28 @@ input,textarea{font-family:inherit;color:inherit}
   .right{display:none}
 }
 @media (max-width:720px){
-  .app{grid-template-columns:1fr}
-  .sidebar{display:none}
-  .main{padding:18px}
-  .year-wrap{grid-template-columns:repeat(2,1fr)}
-  .viriato-win{right:12px;left:12px;width:auto}
+  .app{grid-template-columns:1fr;grid-template-rows:1fr 56px;height:100vh}
+  .sidebar{
+    display:flex;flex-direction:row;align-items:center;justify-content:space-around;
+    width:100%;height:56px;padding:0 6px;gap:4px;
+    border-top:1px solid var(--border);border-right:none;
+    position:fixed;bottom:0;left:0;right:0;z-index:50;
+  }
+  .sb-logo{display:none}
+  .sb-icon{width:42px;height:42px;flex-shrink:0}
+  .main{padding:14px;padding-bottom:72px;overflow-y:auto}
+  .year-wrap{grid-template-columns:1fr}
+  .viriato-win{right:8px;left:8px;width:auto;bottom:68px}
+  .top-bar{flex-wrap:wrap;gap:8px}
+  .month-title{min-width:0;font-size:15px}
+  .cal-dow,.cal-grid{gap:4px}
+  .day{padding:6px 4px;min-height:62px}
+  .day .num{font-size:14px}
+  .day .lbl{font-size:8px;letter-spacing:1px}
+  .chat-wrap{grid-template-columns:1fr}
+  .chat-list.hide-mobile{display:none}
+  .chat-pane.hide-mobile{display:none}
+  .resumo-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
