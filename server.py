@@ -14,6 +14,18 @@ app.json.ensure_ascii = False
 app.config['JSON_AS_ASCII'] = False
 app.config['MAX_CONTENT_LENGTH'] = 80 * 1024 * 1024
 
+PRESENCE = {}
+PRESENCE_ONLINE_SEC = 120
+
+@app.before_request
+def _presence_track():
+    try:
+        u = auth.get_current_user()
+        if u and u.get('matricula'):
+            PRESENCE[u['matricula']] = int(time.time())
+    except Exception:
+        pass
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 HELPDESK_DIR = os.path.join(os.path.dirname(__file__), 'helpdesk')
 SALAS = ['escala', 'eventos', 'documentos', 'checklist', 'biblioteca']
@@ -918,14 +930,21 @@ def chat_usuarios():
     me = request.current_user['matricula']
     users = auth.users_load()
     out = []
+    now = int(time.time())
     for mat, u in users.items():
         if mat == me:
             continue
         if not u.get('aprovado'):
             continue
-        out.append({'matricula': mat, 'nome': u.get('nome', mat)})
-    out.sort(key=lambda x: x['nome'].lower())
-    return jsonify({'usuarios': out})
+        ls = PRESENCE.get(mat, 0)
+        out.append({
+            'matricula': mat,
+            'nome': u.get('nome', mat),
+            'last_seen': ls,
+            'online': bool(ls and (now - ls) < PRESENCE_ONLINE_SEC),
+        })
+    out.sort(key=lambda x: (not x['online'], x['nome'].lower()))
+    return jsonify({'usuarios': out, 'now': now})
 
 def _strip_anexo_data(m):
     if not m:

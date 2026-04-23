@@ -124,6 +124,9 @@ input,textarea{font-family:inherit;color:inherit}
 .chat-conv:hover{background:#15171d}
 .chat-conv.active{background:#15171d;border-left:2px solid var(--neon)}
 .chat-conv .av{width:36px;height:36px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:var(--text);flex-shrink:0}
+.presence{position:absolute;bottom:-2px;right:-2px;width:11px;height:11px;border-radius:50%;border:2px solid var(--sidebar);box-sizing:border-box}
+.presence.on{background:#22c55e;box-shadow:0 0 6px #22c55e88}
+.presence.off{background:#6b7280}
 .chat-conv .meta{flex:1;min-width:0}
 .chat-conv .meta .nm{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chat-conv .meta .lst{font-size:11px;color:var(--text-mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
@@ -1039,6 +1042,7 @@ async function renderEventos(c){
 let CHAT_CONV=null, CHAT_POLL=null, CHAT_LAST_TS=0;
 function _stopChatPoll(){if(CHAT_POLL){clearInterval(CHAT_POLL);CHAT_POLL=null;}}
 function avatarFor(nome){return (nome||"?").trim().split(/\s+/).slice(0,2).map(s=>s[0]||"").join("").toUpperCase()||"?";}
+function _relTime(ts){const s=Math.max(0,Math.floor(Date.now()/1000-ts));if(s<60)return"agora";if(s<3600)return"há "+Math.floor(s/60)+"min";if(s<86400)return"há "+Math.floor(s/3600)+"h";return"há "+Math.floor(s/86400)+"d";}
 async function renderChat(c){
   c.innerHTML=`<div class="pg-head"><div class="pg-tit">💬 CHAT</div></div><div class="pg-body" style="padding:0"><div id="chatRoot" class="chat-wrap"><div style="padding:30px;color:var(--muted)">Carregando...</div></div></div>`;
   if(!await requireAuth()){document.getElementById("chatRoot").innerHTML='<div style="padding:30px;color:var(--muted);text-align:center;width:100%">Faça login para usar o chat.</div>';return;}
@@ -1075,9 +1079,11 @@ async function drawChatList(){
       <div id="colegasList">${usuarios.length?usuarios.map(u=>{
         const conv=conv1a1ByMat[u.matricula];
         const unread=conv?conv.nao_lidas||0:0;
+        const status=u.online?'<span class="presence on" title="online"></span>':'<span class="presence off" title="offline"></span>';
+        const sub=u.online?"online agora":(u.last_seen?"visto "+_relTime(u.last_seen):"offline");
         return `<div class="chat-conv" data-mat="${escapeHtml(u.matricula)}" title="Conversar com ${escapeHtml(u.nome)}">
-          <div class="av">${escapeHtml(avatarFor(u.nome))}</div>
-          <div class="meta"><div class="nm">${escapeHtml(u.nome)}</div><div class="lst">${conv?"💬 conversa aberta":"Toque para conversar"}</div></div>
+          <div class="av" style="position:relative">${escapeHtml(avatarFor(u.nome))}${status}</div>
+          <div class="meta"><div class="nm">${escapeHtml(u.nome)}</div><div class="lst">${conv?"💬 ":""}${sub}</div></div>
           ${unread?`<div class="nlb">${unread}</div>`:""}
         </div>`;
       }).join(""):'<div style="padding:14px;color:var(--muted);font-size:12px;text-align:center">Nenhum colega aprovado ainda.</div>'}</div>
