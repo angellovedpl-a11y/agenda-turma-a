@@ -67,7 +67,7 @@ export function BottomSheet() {
       <div style={{ padding: "10px 12px", borderTop: `1px solid ${C.border}`, background: C.card }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button onClick={() => setSheetOpen(true)}
-            style={{ width: 36, height: 36, borderRadius: 10, background: C.card2, border: `1px solid ${C.border}`, color: C.text3, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, position: "relative" }}
+            style={{ width: 44, height: 44, minHeight: 44, minWidth: 44, borderRadius: 10, background: C.card2, border: `1px solid ${C.border}`, color: C.text3, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, position: "relative" }}
             title="Mais ações">
             <MoreHorizontal size={18} />
             {tempMode && (
@@ -79,10 +79,10 @@ export function BottomSheet() {
             value={text}
             onChange={e => setText(e.target.value)}
             placeholder="Pergunte"
-            style={{ flex: 1, height: 36, padding: "0 12px", background: C.card2, border: `1px solid ${C.border}`, borderRadius: 10, color: C.text, fontSize: 13.5, outline: "none" }}
+            style={{ flex: 1, height: 44, minHeight: 44, padding: "0 12px", background: C.card2, border: `1px solid ${C.border}`, borderRadius: 10, color: C.text, fontSize: 13.5, outline: "none" }}
           />
 
-          <button style={{ width: 36, height: 36, borderRadius: 10, background: C.green, border: "none", color: "#000", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+          <button style={{ width: 44, height: 44, minHeight: 44, minWidth: 44, borderRadius: 10, background: C.green, border: "none", color: "#000", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
             <Send size={16} />
           </button>
         </div>
