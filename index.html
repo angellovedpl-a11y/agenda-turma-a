@@ -534,7 +534,7 @@ function renderMensal(){
     const fol=isFolga(dt);
     const today=k===HOJE_KEY;
     const fer=FER[k]?"fer":"";
-    html+=`<div class="day ${fol?"folga":"trab"} ${today?"today":""} ${fer}" title="${FER[k]||""}"><span class="num">${d}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
+    html+=`<div class="day ${fol?"folga":"trab"} ${today?"today":""} ${fer}" data-k="${k}" role="button" tabindex="0" title="${FER[k]||""}"><span class="num">${d}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
   }
   // completar grid
   const total=startOffset+diasMes;
@@ -683,7 +683,8 @@ function render(){
   const bh=document.getElementById("btnHoje");
   if(bh)bh.onclick=()=>{S.curMes=HOJE.getMonth();S.curAno=HOJE.getFullYear();saveLS();render();};
   // clique nos dias do calendário
-  document.querySelectorAll(".mini-day[data-k]").forEach(d=>{
+  document.querySelectorAll(".mini-day[data-k],.day[data-k]").forEach(d=>{
+    d.style.cursor="pointer";
     d.onclick=()=>openDia(d.dataset.k);
     d.onkeydown=(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openDia(d.dataset.k);}};
   });
