@@ -486,8 +486,8 @@ const DOW=["DOM","SEG","TER","QUA","QUI","SEX","SAB"];
 const DOW_FULL=["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
 const DOW_MINI=["D","S","T","Q","Q","S","S"];
 
-// REF: 05/04/2026 = dia de TRABALHO. Ciclo: trab,trab,folga,folga (2x2).
-const REF=new Date(2026,3,5);
+// REF: 22/04/2026 = 1º dia de TRABALHO do par. Ciclo: trab,trab,folga,folga (2x2).
+const REF=new Date(2026,3,22);
 function toKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function isFolga(d){
   const dt=new Date(d.getFullYear(),d.getMonth(),d.getDate());
