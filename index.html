@@ -366,16 +366,16 @@ input,textarea{font-family:inherit;color:inherit}
   <!-- Sidebar 60px -->
   <aside class="sidebar">
     <div class="sb-logo">🚂</div>
-    <button class="sb-icon active" title="Calendário">
+    <button class="sb-icon active" title="Calendário" data-sec="calendario">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
     </button>
-    <button class="sb-icon" title="Eventos">
+    <button class="sb-icon" title="Eventos da Turma" data-sec="eventos">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
     </button>
-    <button class="sb-icon" title="Estatísticas">
+    <button class="sb-icon" title="Acervo (PDFs, fatos, memórias)" data-sec="acervo">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
     </button>
-    <button class="sb-icon" title="Configurações">
+    <button class="sb-icon" title="Configurações" data-sec="setup">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </aside>
@@ -649,6 +649,13 @@ function renderRight(){
 // ===== Render geral =====
 function render(){
   const c=document.getElementById("content");
+  if(S.section && S.section!=="calendario"){
+    document.getElementById("rightPanel").style.display="none";
+    if(S.section==="eventos")renderEventos(c);
+    else if(S.section==="acervo")renderAcervo(c);
+    return;
+  }
+  document.getElementById("rightPanel").style.display="";
   c.innerHTML=S.view==="mensal"?renderMensal():renderAnual();
   document.getElementById("rightPanel").innerHTML=renderRight();
 
@@ -674,7 +681,9 @@ function render(){
 
 document.querySelectorAll(".tab").forEach(t=>{
   t.addEventListener("click",()=>{
-    S.view=t.dataset.view;saveLS();render();
+    S.view=t.dataset.view;S.section="calendario";
+    document.querySelectorAll(".sb-icon").forEach(b=>b.classList.toggle("active",b.dataset.sec==="calendario"));
+    saveLS();render();
   });
 });
 
@@ -710,9 +719,17 @@ function renderViriato(){
         ${msgs.map(m=>`<div class="msg ${m.role==="user"?"user":"bot"}">${escapeHtml(m.content)}</div>`).join("")}
         ${S.viriatoTyping?'<div class="msg bot typing">Viriato digitando…</div>':""}
       </div>
-      <div class="vw-input">
+      <div class="vw-input" style="position:relative">
+        <button class="vw-plus" id="vwPlus" title="Anexar / opções" style="background:#161a22;border:1px solid var(--border);color:var(--text);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:18px;font-weight:600">+</button>
         <input id="vwInput" type="text" placeholder="Digite sua mensagem…" autocomplete="off"/>
         <button class="vw-send" id="vwSend">➤</button>
+        <div id="vwPlusPop" style="display:none;position:absolute;bottom:48px;left:8px;background:#0e1117;border:1px solid var(--border);border-radius:10px;padding:6px;z-index:5;box-shadow:0 12px 30px #000a;min-width:180px">
+          <button data-act="doc" class="vp-opt">📄 Documento (PDF/DOCX)</button>
+          <button data-act="temp" class="vp-opt">⏱️ Documento TEMP</button>
+          <button data-act="img" class="vp-opt">🖼️ Imagem</button>
+          <button data-act="cam" class="vp-opt">📷 Câmera</button>
+          <button data-act="clear" class="vp-opt" style="color:#ff8a8a">🗑️ Limpar conversa</button>
+        </div>
       </div>
     </div>`;
   document.getElementById("vwClose").onclick=()=>{S.viriatoOpen=false;renderViriato();};
@@ -750,6 +767,9 @@ function renderViriato(){
         const d=await r.json();
         const reply=d.text||d.reply||d.error||"Sem resposta.";
         S.history.push({role:"assistant",content:reply});
+        if(d.memoria_salva && d.memoria_salva.length){
+          showToast("✅ "+d.memoria_salva.length+" item(s) salvo(s) na memória");
+        }
       }
     }catch(e){
       S.history.push({role:"assistant",content:"Erro de conexão: "+e.message});
@@ -765,6 +785,498 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":
 document.getElementById("viriatoBtn").addEventListener("click",()=>{
   S.viriatoOpen=!S.viriatoOpen;renderViriato();
 });
+
+// =====================================================
+// ===== RELIGAÇÃO: navegação, login, modal, eventos, acervo, setup, viriato +
+// =====================================================
+
+// ----- estilos de apoio (injetados) -----
+(function injectCSS(){
+  const css=`
+    .vp-opt{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px}
+    .vp-opt:hover{background:#171b24}
+    .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#0e1117;color:var(--text);padding:10px 16px;border:1px solid var(--border);border-radius:24px;z-index:300;box-shadow:0 12px 30px #000a;font-size:13px;animation:tFade .3s ease}
+    @keyframes tFade{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+    .modal-fld{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .modal-fld label{font-size:11px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+    .modal-fld input,.modal-fld textarea,.modal-fld select{background:#0f1117;border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-size:14px;font-family:inherit}
+    [data-theme="light"] .modal-fld input,[data-theme="light"] .modal-fld textarea,[data-theme="light"] .modal-fld select{background:#fff;color:var(--text)}
+    .btn-primary{background:var(--neon);color:#000;border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer;font-size:13px;letter-spacing:.5px}
+    .btn-secondary{background:#161a22;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px}
+    [data-theme="light"] .btn-secondary{background:#f1f5f9}
+    .btn-danger{background:#3a1414;color:#ff8a8a;border:1px solid #5a1f1f;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:12px}
+    .lst-item{background:#0f1117;border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    [data-theme="light"] .lst-item{background:#fff}
+    .pg-head{display:flex;justify-content:space-between;align-items:center;padding:18px 24px 10px;border-bottom:1px solid var(--border)}
+    .pg-tit{font-size:18px;font-weight:600;letter-spacing:.5px}
+    .pg-body{padding:18px 24px;overflow:auto;height:calc(100vh - 130px)}
+    .tabs-mini{display:flex;gap:6px;margin-bottom:14px}
+    .tabs-mini button{background:#0f1117;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:12px;letter-spacing:.5px}
+    .tabs-mini button.active{background:var(--neon);color:#000;border-color:var(--neon);font-weight:700}
+  `;
+  const s=document.createElement("style");s.textContent=css;document.head.appendChild(s);
+})();
+
+// ----- toast -----
+function showToast(msg,ms=3500){
+  const t=document.createElement("div");t.className="toast";t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity="0";t.style.transition="opacity .3s";setTimeout(()=>t.remove(),300);},ms);
+}
+
+// ----- auth helpers -----
+function getToken(){return localStorage.getItem("turmaA_authToken")||"";}
+function setToken(t){if(t)localStorage.setItem("turmaA_authToken",t);else localStorage.removeItem("turmaA_authToken");}
+let CURRENT_USER=null;
+async function apiFetch(path,opts={}){
+  const headers=Object.assign({},opts.headers||{});
+  const t=getToken();
+  if(t)headers["Authorization"]="Bearer "+t;
+  if(opts.body && !headers["Content-Type"])headers["Content-Type"]="application/json";
+  const r=await fetch(path,Object.assign({},opts,{headers}));
+  if(r.status===401){setToken("");CURRENT_USER=null;openLogin();throw new Error("auth");}
+  return r;
+}
+async function loadMe(){
+  if(!getToken())return null;
+  try{
+    const r=await fetch("/api/auth/me",{headers:{"Authorization":"Bearer "+getToken()}});
+    if(r.ok){
+      const d=await r.json();
+      if(d && d.authenticated===false){setToken("");CURRENT_USER=null;return null;}
+      CURRENT_USER=d.user||d;return CURRENT_USER;
+    }
+  }catch(e){}
+  setToken("");CURRENT_USER=null;return null;
+}
+
+// ----- modal genérico -----
+function openModal(title,bodyHtml,onMount){
+  closeModal();
+  const m=document.createElement("div");
+  m.id="appModal";
+  m.style.cssText="position:fixed;inset:0;background:#000a;backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px";
+  m.innerHTML=`<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:22px;color:var(--text)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px">
+      <h3 style="margin:0;font-size:18px;letter-spacing:.5px">${escapeHtml(title)}</h3>
+      <button id="mdClose" style="background:none;border:0;color:var(--muted);cursor:pointer;font-size:26px;line-height:1">×</button>
+    </div>
+    <div id="mdBody">${bodyHtml}</div>
+  </div>`;
+  document.body.appendChild(m);
+  document.getElementById("mdClose").onclick=closeModal;
+  m.addEventListener("click",e=>{if(e.target===m)closeModal();});
+  if(onMount)onMount(document.getElementById("mdBody"));
+}
+function closeModal(){const m=document.getElementById("appModal");if(m)m.remove();}
+
+// ----- LOGIN -----
+function openLogin(){
+  openModal("Entrar",`
+    <div class="modal-fld"><label>Matrícula (6 a 10 dígitos)</label><input id="loginMat" inputmode="numeric" maxlength="10" autocomplete="username"/></div>
+    <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="loginSen" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"/></div>
+    <button id="loginBtn" class="btn-primary" style="width:100%">ENTRAR</button>
+    <div id="loginMsg" style="color:#ff6b6b;font-size:12px;text-align:center;min-height:14px;margin-top:10px"></div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
+      Não tem conta? <a href="#" id="goReg" style="color:var(--neon)">Cadastrar-se</a>
+    </div>
+  `,()=>{
+    const go=async()=>{
+      const m=document.getElementById("loginMat").value.trim();
+      const s=document.getElementById("loginSen").value.trim();
+      const msg=document.getElementById("loginMsg");
+      msg.textContent="Entrando...";
+      try{
+        const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:m,senha:s})});
+        const d=await r.json();
+        if(r.ok && d.token){setToken(d.token);CURRENT_USER=d.user||null;closeModal();showToast("✅ Bem-vindo, "+(CURRENT_USER&&CURRENT_USER.nome||"colega"));}
+        else msg.textContent=d.error||"Falha no login";
+      }catch(e){msg.textContent="Erro: "+e.message;}
+    };
+    document.getElementById("loginBtn").onclick=go;
+    document.getElementById("loginSen").addEventListener("keydown",e=>{if(e.key==="Enter")go();});
+    document.getElementById("loginMat").focus();
+    document.getElementById("goReg").onclick=e=>{e.preventDefault();openRegistro();};
+  });
+}
+function openRegistro(){
+  openModal("Criar conta",`
+    <div class="modal-fld"><label>Nome completo</label><input id="rgNome"/></div>
+    <div class="modal-fld"><label>Matrícula (6 a 10 dígitos)</label><input id="rgMat" inputmode="numeric" maxlength="10"/></div>
+    <div class="modal-fld"><label>Função</label><select id="rgFun"><option value="">— selecione —</option><option value="Função Operacional">Função Operacional</option><option value="Função Administrativa">Função Administrativa</option></select></div>
+    <div class="modal-fld"><label>E-mail (opcional)</label><input id="rgEmail" type="email"/></div>
+    <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="rgSen" type="password" inputmode="numeric" maxlength="4"/></div>
+    <button id="rgBtn" class="btn-primary" style="width:100%">CADASTRAR</button>
+    <div id="rgMsg" style="font-size:12px;text-align:center;min-height:14px;margin-top:10px"></div>
+    <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted)"><a href="#" id="goLog" style="color:var(--neon)">Já tenho conta</a></div>
+  `,()=>{
+    document.getElementById("rgBtn").onclick=async()=>{
+      const body={nome:document.getElementById("rgNome").value.trim(),matricula:document.getElementById("rgMat").value.trim(),funcao:document.getElementById("rgFun").value.trim(),email:document.getElementById("rgEmail").value.trim(),senha:document.getElementById("rgSen").value.trim()};
+      const msg=document.getElementById("rgMsg");
+      msg.style.color="var(--muted)";msg.textContent="Enviando...";
+      try{
+        const r=await fetch("/api/auth/registrar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+        const d=await r.json();
+        if(r.ok){msg.style.color="var(--neon)";msg.textContent=d.mensagem||"Cadastro enviado. Aguarde aprovação do admin.";}
+        else{msg.style.color="#ff8a8a";msg.textContent=d.error||"Falha";}
+      }catch(e){msg.style.color="#ff8a8a";msg.textContent="Erro: "+e.message;}
+    };
+    document.getElementById("goLog").onclick=e=>{e.preventDefault();openLogin();};
+  });
+}
+
+// ----- guard de autenticação para seções privadas -----
+async function requireAuth(){
+  if(!getToken()){openLogin();return false;}
+  if(!CURRENT_USER){await loadMe();}
+  if(!CURRENT_USER){openLogin();return false;}
+  return true;
+}
+
+// ===== EVENTOS =====
+async function renderEventos(c){
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📅 EVENTOS DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO EVENTO</button></div><div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;
+  document.getElementById("evNew").onclick=()=>openEventoForm();
+  if(!await requireAuth()){document.getElementById("evBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login para ver os eventos.</div>';return;}
+  try{
+    const r=await apiFetch("/api/mem/eventos");
+    const d=await r.json();
+    const evs=(d.eventos||[]).slice().sort((a,b)=>(a.data||"").localeCompare(b.data||""));
+    const body=document.getElementById("evBody");
+    if(!evs.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum evento ainda. Clique em + NOVO EVENTO.</div>';return;}
+    body.innerHTML=evs.map(e=>`<div class="lst-item">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:14px">${escapeHtml(e.titulo||"")}</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:4px">📅 ${escapeHtml(e.data||"")} ${e.hora?"· ⏰ "+escapeHtml(e.hora):""}</div>
+        ${e.descricao?`<div style="margin-top:6px;color:var(--text);font-size:13px;line-height:1.5">${escapeHtml(e.descricao)}</div>`:""}
+        <div style="color:var(--muted);font-size:11px;margin-top:6px">por ${escapeHtml(e.autor||"—")}</div>
+      </div>
+      <button class="btn-danger" data-id="${e.id}">Excluir</button>
+    </div>`).join("");
+    body.querySelectorAll("button.btn-danger").forEach(b=>{
+      b.onclick=async()=>{
+        if(!confirm("Excluir este evento?"))return;
+        const novos=evs.filter(x=>x.id!=b.dataset.id);
+        await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
+        renderEventos(c);
+      };
+    });
+  }catch(e){if(e.message!=="auth")document.getElementById("evBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
+}
+function openEventoForm(){
+  openModal("Novo Evento",`
+    <div class="modal-fld"><label>Título</label><input id="eTit"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="modal-fld"><label>Data</label><input id="eData" type="date" value="${new Date().toISOString().slice(0,10)}"/></div>
+      <div class="modal-fld"><label>Hora (opcional)</label><input id="eHora" type="time"/></div>
+    </div>
+    <div class="modal-fld"><label>Descrição</label><textarea id="eDesc" rows="4"></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button id="eSave" class="btn-primary">SALVAR</button>
+    </div>
+  `,()=>{
+    document.getElementById("eSave").onclick=async()=>{
+      const ev={id:Date.now(),titulo:document.getElementById("eTit").value.trim(),data:document.getElementById("eData").value,hora:document.getElementById("eHora").value,descricao:document.getElementById("eDesc").value.trim(),autor:CURRENT_USER&&CURRENT_USER.nome||""};
+      if(!ev.titulo||!ev.data){showToast("Título e data são obrigatórios");return;}
+      const r=await apiFetch("/api/mem/eventos");
+      const d=await r.json();
+      const novos=(d.eventos||[]).concat([ev]);
+      await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
+      closeModal();showToast("✅ Evento criado");render();
+    };
+  });
+}
+
+// ===== ACERVO (PDFs + Fatos + Memórias) =====
+let ACERVO_TAB="pdfs";
+async function renderAcervo(c){
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📚 ACERVO</div></div><div class="pg-body" id="acBody"></div>`;
+  if(!await requireAuth()){document.getElementById("acBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login para ver o acervo.</div>';return;}
+  const body=document.getElementById("acBody");
+  body.innerHTML=`<div class="tabs-mini">
+    <button data-t="pdfs" class="${ACERVO_TAB==="pdfs"?"active":""}">📄 PDFs (${"…"})</button>
+    <button data-t="fatos" class="${ACERVO_TAB==="fatos"?"active":""}">🧠 Fatos da turma</button>
+    <button data-t="minhas" class="${ACERVO_TAB==="minhas"?"active":""}">🔒 Minhas memórias</button>
+  </div><div id="acPanel">Carregando...</div>`;
+  body.querySelectorAll(".tabs-mini button").forEach(b=>b.onclick=()=>{ACERVO_TAB=b.dataset.t;renderAcervo(c);});
+  if(ACERVO_TAB==="pdfs")await renderAcervoPdfs(document.getElementById("acPanel"));
+  else if(ACERVO_TAB==="fatos")await renderAcervoFatos(document.getElementById("acPanel"));
+  else await renderAcervoMinhas(document.getElementById("acPanel"));
+}
+async function renderAcervoPdfs(el){
+  el.innerHTML="Carregando...";
+  const r=await apiFetch("/api/biblioteca");const d=await r.json();
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div style="color:var(--muted);font-size:13px">${d.total} documento(s) na biblioteca</div>
+    <button id="upPdf" class="btn-primary">+ ENVIAR PDF</button>
+  </div><div id="docs"></div>`;
+  document.getElementById("upPdf").onclick=()=>uploadDoc(false);
+  const docs=document.getElementById("docs");
+  if(!d.documentos.length){docs.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum PDF enviado ainda.</div>';return;}
+  docs.innerHTML=d.documentos.map(doc=>`<div class="lst-item">
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:600;font-size:13px">${escapeHtml(doc.nome)}</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:4px">[${escapeHtml(doc.categoria||"")}] · ${doc.paginas_chunks} trechos · ${escapeHtml(doc.data_envio||"")}</div>
+      ${doc.resumo?`<div style="font-size:12px;margin-top:6px;color:var(--text);opacity:.85">${escapeHtml(doc.resumo)}</div>`:""}
+    </div>
+    <button class="btn-danger" data-id="${escapeHtml(doc.id)}">Excluir</button>
+  </div>`).join("");
+  docs.querySelectorAll("button.btn-danger").forEach(b=>{
+    b.onclick=async()=>{if(!confirm("Excluir este documento? Os trechos não estarão mais disponíveis para o Viriato."))return;await apiFetch("/api/biblioteca/"+encodeURIComponent(b.dataset.id),{method:"DELETE"});showToast("Documento excluído");renderAcervoPdfs(el);};
+  });
+}
+function uploadDoc(isTemp){
+  const inp=document.createElement("input");inp.type="file";inp.accept=".pdf,.docx,.txt";
+  inp.onchange=async()=>{
+    const f=inp.files&&inp.files[0];if(!f)return;
+    if(f.size>10*1024*1024){showToast("Arquivo > 10MB");return;}
+    showToast("Enviando "+f.name+"...");
+    const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f);});
+    try{
+      const r=await apiFetch("/api/biblioteca/upload",{method:"POST",body:JSON.stringify({nome:f.name,data:b64,mimetype:f.type,temp:isTemp})});
+      const d=await r.json();
+      if(r.ok){showToast("✅ "+f.name+" ("+d.chunks+" trechos)");if(S.section==="acervo")render();}
+      else showToast("❌ "+(d.error||"falhou"));
+    }catch(e){if(e.message!=="auth")showToast("Erro: "+e.message);}
+  };
+  inp.click();
+}
+async function renderAcervoFatos(el){
+  el.innerHTML="Carregando...";
+  const r=await apiFetch("/api/memoria");const d=await r.json();
+  const fatos=(d.fatos||[]).slice().reverse();
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div style="color:var(--muted);font-size:13px">${fatos.length} fato(s) compartilhado(s) com a turma</div>
+    <button id="addF" class="btn-primary">+ NOVO FATO</button>
+  </div><div id="fl"></div>`;
+  document.getElementById("addF").onclick=()=>{
+    openModal("Novo fato da turma",`
+      <div class="modal-fld"><label>Texto do fato (será visível ao Viriato e à turma)</label><textarea id="fxT" rows="5" placeholder="Ex: Linha L006 tem capacidade ~117 vagões GDT"></textarea></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn-secondary" onclick="closeModal()">Cancelar</button><button id="fxS" class="btn-primary">SALVAR</button></div>
+    `,()=>{
+      document.getElementById("fxS").onclick=async()=>{
+        const txt=document.getElementById("fxT").value.trim();if(!txt){showToast("Texto vazio");return;}
+        await apiFetch("/api/memoria/fato",{method:"POST",body:JSON.stringify({texto:txt})});
+        closeModal();showToast("✅ Fato salvo");renderAcervoFatos(el);
+      };
+    });
+  };
+  const fl=document.getElementById("fl");
+  if(!fatos.length){fl.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum fato salvo ainda.</div>';return;}
+  fl.innerHTML=fatos.map(f=>`<div class="lst-item">
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;line-height:1.5">${escapeHtml(f.texto||"")}</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:6px">por ${escapeHtml(f.autor||"—")} · ${escapeHtml(f.data||"")}</div>
+    </div>
+    <button class="btn-danger" data-id="${f.id}">Excluir</button>
+  </div>`).join("");
+  fl.querySelectorAll("button.btn-danger").forEach(b=>{
+    b.onclick=async()=>{
+      if(!confirm("Excluir este fato?"))return;
+      const r=await apiFetch("/api/memoria/fato/"+b.dataset.id,{method:"DELETE"});
+      if(r.ok){showToast("Excluído");renderAcervoFatos(el);}
+      else{const d=await r.json();showToast("❌ "+(d.error||"falhou"));}
+    };
+  });
+}
+async function renderAcervoMinhas(el){
+  el.innerHTML="Carregando...";
+  const r=await apiFetch("/api/memoria");const d=await r.json();
+  const mem=(d.pessoal||[]).slice().reverse();
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div style="color:var(--muted);font-size:13px">${mem.length} memória(s) pessoal(is) — só você vê</div>
+    <button id="addM" class="btn-primary">+ NOVA MEMÓRIA</button>
+  </div><div id="ml"></div>`;
+  document.getElementById("addM").onclick=()=>{
+    openModal("Nova memória pessoal",`
+      <div class="modal-fld"><label>Texto (visível só pra você e o Viriato)</label><textarea id="mxT" rows="5"></textarea></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn-secondary" onclick="closeModal()">Cancelar</button><button id="mxS" class="btn-primary">SALVAR</button></div>
+    `,()=>{
+      document.getElementById("mxS").onclick=async()=>{
+        const txt=document.getElementById("mxT").value.trim();if(!txt){showToast("Texto vazio");return;}
+        await apiFetch("/api/memoria/pessoal",{method:"POST",body:JSON.stringify({texto:txt})});
+        closeModal();showToast("✅ Memória salva");renderAcervoMinhas(el);
+      };
+    });
+  };
+  const ml=document.getElementById("ml");
+  if(!mem.length){ml.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nada salvo. Você também pode pedir ao Viriato "anota isso".</div>';return;}
+  ml.innerHTML=mem.map(m=>`<div class="lst-item">
+    <div style="flex:1;min-width:0">
+      <div style="font-size:13px;line-height:1.5">${escapeHtml(m.texto||"")}</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:6px">${escapeHtml(m.data||"")}</div>
+    </div>
+    <button class="btn-danger" data-id="${m.id}">Excluir</button>
+  </div>`).join("");
+  ml.querySelectorAll("button.btn-danger").forEach(b=>{
+    b.onclick=async()=>{
+      if(!confirm("Excluir?"))return;
+      await apiFetch("/api/memoria/pessoal/"+b.dataset.id,{method:"DELETE"});showToast("Excluído");renderAcervoMinhas(el);
+    };
+  });
+}
+
+// ===== SETUP MODAL =====
+async function openSetup(){
+  if(!await requireAuth())return;
+  const u=CURRENT_USER||{};
+  const isAdm=u.role==="admin"||u.role==="aprovador";
+  openModal("Configurações",`
+    <div style="margin-bottom:14px;padding:10px;background:#0f1117;border:1px solid var(--border);border-radius:10px">
+      <div style="font-size:13px;font-weight:600">${escapeHtml(u.nome||"")}</div>
+      <div style="font-size:12px;color:var(--muted)">Matrícula ${escapeHtml(u.matricula||"")} · ${escapeHtml(u.role||"membro")}</div>
+    </div>
+    <div style="display:grid;gap:8px">
+      <button class="btn-secondary" id="stTema">🌓 Alternar tema (claro/escuro)</button>
+      <button class="btn-secondary" id="stSenha">🔑 Trocar senha</button>
+      <button class="btn-secondary" id="stFun">👤 Trocar função</button>
+      ${isAdm?'<button class="btn-secondary" id="stAdm">👑 Painel admin</button>':""}
+      <button class="btn-danger" id="stSair" style="margin-top:6px">🚪 Sair</button>
+    </div>
+  `,()=>{
+    document.getElementById("stTema").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")||"dark";applyTheme(cur==="dark"?"light":"dark");};
+    document.getElementById("stSenha").onclick=()=>openTrocarSenha();
+    document.getElementById("stFun").onclick=()=>openTrocarFuncao();
+    if(isAdm)document.getElementById("stAdm").onclick=()=>openAdmin();
+    document.getElementById("stSair").onclick=async()=>{
+      try{await apiFetch("/api/auth/logout",{method:"POST"});}catch(e){}
+      setToken("");CURRENT_USER=null;closeModal();showToast("Sessão encerrada");
+    };
+  });
+}
+function openTrocarSenha(){
+  openModal("Trocar senha",`
+    <div class="modal-fld"><label>Senha atual</label><input id="psA" type="password" maxlength="4" inputmode="numeric"/></div>
+    <div class="modal-fld"><label>Senha nova (4 dígitos)</label><input id="psN" type="password" maxlength="4" inputmode="numeric"/></div>
+    <button id="psB" class="btn-primary" style="width:100%">SALVAR</button>
+    <div id="psM" style="font-size:12px;text-align:center;margin-top:10px;min-height:14px"></div>
+  `,()=>{
+    document.getElementById("psB").onclick=async()=>{
+      const r=await apiFetch("/api/auth/trocar-senha",{method:"POST",body:JSON.stringify({atual:document.getElementById("psA").value,nova:document.getElementById("psN").value})});
+      const d=await r.json();const m=document.getElementById("psM");
+      if(r.ok){m.style.color="var(--neon)";m.textContent="✅ Senha alterada";setTimeout(closeModal,1200);}
+      else{m.style.color="#ff8a8a";m.textContent=d.error||"Falha";}
+    };
+  });
+}
+function openTrocarFuncao(){
+  openModal("Trocar função",`
+    <div class="modal-fld"><label>Função atual: ${escapeHtml((CURRENT_USER&&CURRENT_USER.funcao)||"—")}</label><select id="fnN"><option value="">— selecione —</option><option value="Função Operacional">Função Operacional</option><option value="Função Administrativa">Função Administrativa</option></select></div>
+    <button id="fnB" class="btn-primary" style="width:100%">SALVAR</button>
+    <div id="fnM" style="font-size:12px;text-align:center;margin-top:10px;min-height:14px"></div>
+  `,()=>{
+    document.getElementById("fnB").onclick=async()=>{
+      const r=await apiFetch("/api/auth/funcao",{method:"POST",body:JSON.stringify({funcao:document.getElementById("fnN").value.trim()})});
+      const d=await r.json();const m=document.getElementById("fnM");
+      if(r.ok){m.style.color="var(--neon)";m.textContent="✅ Atualizado";await loadMe();setTimeout(closeModal,1000);}
+      else{m.style.color="#ff8a8a";m.textContent=d.error||"Falha";}
+    };
+  });
+}
+async function openAdmin(){
+  openModal("Painel administrativo",`
+    <div class="tabs-mini" id="adTabs">
+      <button data-t="pend" class="active">⏳ Pendentes</button>
+      <button data-t="usu">👥 Usuários</button>
+    </div>
+    <div id="adPanel">Carregando...</div>
+  `,async(body)=>{
+    let tab="pend";
+    const load=async()=>{
+      const p=document.getElementById("adPanel");p.innerHTML="Carregando...";
+      if(tab==="pend"){
+        const r=await apiFetch("/api/admin/pendentes");const d=await r.json();
+        const list=d.pendentes||d||[];
+        if(!list.length){p.innerHTML='<div style="color:var(--muted);padding:14px;text-align:center">Nenhum cadastro pendente</div>';return;}
+        p.innerHTML=list.map(u=>`<div class="lst-item"><div style="flex:1"><div style="font-weight:600">${escapeHtml(u.nome||"")}</div><div style="font-size:12px;color:var(--muted)">Mat ${escapeHtml(u.matricula||"")} · ${escapeHtml(u.funcao||"—")}</div></div><div style="display:flex;gap:6px"><button class="btn-primary" data-act="ap" data-m="${escapeHtml(u.matricula)}" style="padding:6px 10px">Aprovar</button><button class="btn-danger" data-act="ng" data-m="${escapeHtml(u.matricula)}">Negar</button></div></div>`).join("");
+        p.querySelectorAll("button[data-act]").forEach(b=>{
+          b.onclick=async()=>{
+            const ep=b.dataset.act==="ap"?"aprovar":"negar";
+            const r=await apiFetch("/api/admin/"+ep+"/"+encodeURIComponent(b.dataset.m),{method:"POST"});
+            if(r.ok){showToast(b.dataset.act==="ap"?"✅ Aprovado":"Negado");load();}
+          };
+        });
+      }else{
+        const r=await apiFetch("/api/admin/usuarios");const d=await r.json();
+        const list=d.usuarios||d||[];
+        p.innerHTML=list.map(u=>`<div class="lst-item"><div style="flex:1"><div style="font-weight:600">${escapeHtml(u.nome||"")}</div><div style="font-size:12px;color:var(--muted)">Mat ${escapeHtml(u.matricula||"")} · ${escapeHtml(u.role||"membro")}</div></div><div style="display:flex;gap:4px;flex-wrap:wrap">${u.role==="admin"||u.role==="aprovador"?'<button class="btn-secondary" data-act="dp" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">↓ Despromover</button>':'<button class="btn-secondary" data-act="pr" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">↑ Promover</button>'}<button class="btn-secondary" data-act="rs" data-m="${escapeHtml(u.matricula)}" style="padding:4px 8px;font-size:11px">🔑 Resetar</button></div></div>`).join("");
+        p.querySelectorAll("button[data-act]").forEach(b=>{
+          b.onclick=async()=>{
+            const ep={pr:"promover",dp:"despromover",rs:"reset-senha"}[b.dataset.act];
+            const r=await apiFetch("/api/admin/"+ep+"/"+encodeURIComponent(b.dataset.m),{method:"POST"});
+            const d=await r.json();
+            if(r.ok)showToast(d.mensagem||"✅ Feito");
+            else showToast("❌ "+(d.error||"falhou"));
+            load();
+          };
+        });
+      }
+    };
+    body.querySelectorAll("#adTabs button").forEach(b=>{
+      b.onclick=()=>{tab=b.dataset.t;body.querySelectorAll("#adTabs button").forEach(x=>x.classList.toggle("active",x===b));load();};
+    });
+    load();
+  });
+}
+
+// ===== SIDEBAR ROUTER =====
+function setSection(sec){
+  S.section=sec;
+  document.querySelectorAll(".sb-icon").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
+  render();
+}
+S.section=S.section||"calendario";
+document.querySelectorAll(".sidebar .sb-icon").forEach(b=>{
+  b.addEventListener("click",async()=>{
+    const sec=b.dataset.sec;
+    if(sec==="setup"){await openSetup();return;}
+    if(sec!=="calendario"){if(!await requireAuth())return;}
+    setSection(sec);
+  });
+});
+
+// ===== VIRIATO + popover (anexa após cada renderViriato) =====
+const _origRenderViriato=renderViriato;
+window.renderViriato=function(){
+  _origRenderViriato();
+  if(window._viriatoPlusOutside){document.removeEventListener("click",window._viriatoPlusOutside,true);window._viriatoPlusOutside=null;}
+  if(!S.viriatoOpen)return;
+  const plus=document.getElementById("vwPlus");
+  const pop=document.getElementById("vwPlusPop");
+  if(!plus||!pop)return;
+  plus.onclick=(e)=>{e.stopPropagation();pop.style.display=pop.style.display==="block"?"none":"block";};
+  window._viriatoPlusOutside=(e)=>{if(pop && pop.style.display==="block" && !pop.contains(e.target) && e.target!==plus)pop.style.display="none";};
+  document.addEventListener("click",window._viriatoPlusOutside,true);
+  pop.querySelectorAll("button").forEach(b=>{
+    b.onclick=async()=>{
+      pop.style.display="none";
+      const act=b.dataset.act;
+      if(act==="doc")uploadDoc(false);
+      else if(act==="temp")uploadDoc(true);
+      else if(act==="img"||act==="cam"){
+        const inp=document.createElement("input");inp.type="file";inp.accept="image/*";if(act==="cam")inp.capture="environment";
+        inp.onchange=async()=>{const f=inp.files&&inp.files[0];if(!f)return;
+          if(f.size>10*1024*1024){showToast("Imagem > 10MB");return;}
+          showToast("Enviando imagem...");
+          const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f);});
+          try{
+            const r=await apiFetch("/api/biblioteca/upload",{method:"POST",body:JSON.stringify({nome:f.name||"camera.jpg",data:b64,mimetype:f.type||"image/jpeg",temp:true})});
+            const d=await r.json();
+            if(r.ok)showToast("✅ Imagem enviada ("+d.chunks+" trechos)");
+            else showToast("❌ "+(d.error||"falhou"));
+          }catch(e){if(e.message!=="auth")showToast("Erro: "+e.message);}
+        };
+        inp.click();
+      }else if(act==="clear"){
+        if(confirm("Limpar conversa atual?")){S.history=[];renderViriato();}
+      }
+    };
+  });
+};
+
+// ===== Boot =====
+loadMe().then(()=>{/* token validado */});
 
 render();
 </script>
