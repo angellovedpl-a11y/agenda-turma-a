@@ -327,6 +327,75 @@ input,textarea{font-family:inherit;color:inherit}
 .resumo-bar .b-t{background:var(--orange)}
 .resumo-leg{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-mute);margin-top:6px;letter-spacing:1px}
 
+/* ===== VIRIATO TELA CHEIA (aba dedicada) ===== */
+.viriato-full{
+  display:flex;flex-direction:column;
+  height:calc(100vh - 28px);max-height:calc(100vh - 28px);
+  background:var(--bg);border-radius:14px;overflow:hidden;
+  border:1px solid var(--border);
+}
+.vf-head{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:linear-gradient(135deg,#7c3aed22,#00e67622);
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.vf-back{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text);background:transparent;border:none;cursor:pointer}
+.vf-back:hover{background:var(--chip)}
+.vf-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#00e676,#7c3aed);
+  background-size:200% 200%;animation:viriatoGrad 4s ease infinite;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:0 4px 12px #7c3aed44;
+}
+.vf-name{font-weight:700;font-size:15px;letter-spacing:1px;color:var(--text)}
+.vf-sub{font-size:11px;color:var(--text-mute);letter-spacing:.5px}
+.vf-clear{width:40px;height:40px;border-radius:10px;background:transparent;border:none;cursor:pointer;font-size:18px}
+.vf-clear:hover{background:var(--chip)}
+.vf-body{
+  flex:1;overflow-y:auto;padding:18px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--bg);
+}
+.vf-body .msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap}
+.vf-body .msg.bot{background:#1a1a1a;color:var(--neon);align-self:flex-start;border:1px solid #00e67622}
+.vf-body .msg.user{background:#1f2840;color:#fff;align-self:flex-end}
+.vf-body .msg.typing{color:var(--text-mute);font-style:italic}
+.vf-input{
+  display:flex;gap:10px;padding:14px 14px;
+  border-top:1px solid var(--border);background:var(--card);flex-shrink:0;align-items:flex-end;
+}
+.vf-input textarea{
+  flex:1;background:#15171d;border:1px solid var(--border);border-radius:14px;
+  padding:14px 16px;font-size:16px;color:var(--text);outline:none;resize:none;
+  font-family:inherit;line-height:1.4;min-height:54px;max-height:140px;
+  transition:border-color .15s;
+}
+.vf-input textarea:focus{border-color:var(--neon)}
+.vf-send{
+  width:54px;height:54px;border-radius:14px;background:var(--neon);color:#001a0c;
+  display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;
+  border:none;cursor:pointer;flex-shrink:0;transition:transform .15s;
+}
+.vf-send:hover{transform:scale(1.05)}
+.vf-send:active{transform:scale(.95)}
+[data-theme="light"] .viriato-full{background:#ffffff;border-color:#e2e8f0}
+[data-theme="light"] .vf-body{background:#f8fafc}
+[data-theme="light"] .vf-body .msg.bot{background:#f1f5f9;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .vf-body .msg.user{background:#3b82f6;color:#fff}
+[data-theme="light"] .vf-input{background:#f8fafc;border-top-color:#e2e8f0}
+[data-theme="light"] .vf-input textarea{background:#ffffff;color:#0f172a;border-color:#cbd5e1}
+[data-theme="light"] .vf-input textarea::placeholder{color:#94a3b8}
+@media (max-width:720px){
+  .viriato-full{height:calc(100vh - 110px);max-height:calc(100vh - 110px);border-radius:10px}
+  .vf-head{padding:12px}
+  .vf-body{padding:14px}
+  .vf-body .msg{font-size:15px;max-width:90%}
+  .vf-input{padding:10px}
+  .vf-input textarea{font-size:16px;min-height:58px;padding:14px 14px}
+  .vf-send{width:58px;height:58px}
+}
+
 /* ===== VIRIATO BANNER (logo abaixo do calendario) ===== */
 .viriato-banner{
   display:flex;align-items:center;gap:14px;
@@ -808,6 +877,7 @@ function render(){
     if(S.section==="eventos")renderEventos(c);
     else if(S.section==="acervo")renderAcervo(c);
     else if(S.section==="chat")renderChat(c);
+    else if(S.section==="viriato")renderViriatoFull(c);
     return;
   }
   document.getElementById("rightPanel").style.display="";
@@ -870,7 +940,74 @@ function attachViriatoBanner(){
     try{localStorage.setItem("turmaA_vbHidden","1");}catch(e){}
   };
   const ob=document.getElementById("vbOpenViriato");
-  if(ob)ob.onclick=()=>{S.viriatoOpen=!S.viriatoOpen;renderViriato();};
+  if(ob)ob.onclick=()=>{setSection("viriato");};
+}
+
+// ===== Viriato em tela cheia (aba dedicada) =====
+function renderViriatoFull(c){
+  const msgs=S.history.length?S.history:[{role:"assistant",content:"Olá! Sou o Viriato, assistente ferroviário. Como posso ajudar?"}];
+  c.innerHTML=`
+    <div class="viriato-full">
+      <div class="vf-head">
+        <button class="vf-back" id="vfBack" aria-label="Voltar">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="vf-avatar">🤖</div>
+        <div style="flex:1;min-width:0">
+          <div class="vf-name">VIRIATO</div>
+          <div class="vf-sub">Assistente Ferroviário</div>
+        </div>
+        <button class="vf-clear" id="vfClear" title="Limpar conversa">🗑️</button>
+      </div>
+      <div class="vf-body" id="vfBody">
+        ${msgs.map(m=>`<div class="msg ${m.role==="user"?"user":"bot"}">${escapeHtml(m.content)}</div>`).join("")}
+        ${S.viriatoTyping?'<div class="msg bot typing">Viriato digitando…</div>':""}
+      </div>
+      <div class="vf-input">
+        <textarea id="vfInput" placeholder="Digite sua mensagem para o Viriato…" rows="2"></textarea>
+        <button class="vf-send" id="vfSend" aria-label="Enviar">➤</button>
+      </div>
+    </div>`;
+  const inp=document.getElementById("vfInput");
+  const send=document.getElementById("vfSend");
+  const body=document.getElementById("vfBody");
+  body.scrollTop=body.scrollHeight;
+  setTimeout(()=>inp&&inp.focus(),50);
+  document.getElementById("vfBack").onclick=()=>setSection("calendario");
+  document.getElementById("vfClear").onclick=()=>{
+    if(confirm("Limpar toda a conversa com o Viriato?")){S.history=[];renderViriatoFull(c);}
+  };
+  const doSend=async()=>{
+    const txt=(inp.value||"").trim();
+    if(!txt||S.viriatoTyping)return;
+    S.history.push({role:"user",content:txt});
+    inp.value="";
+    S.viriatoTyping=true;
+    renderViriatoFull(c);
+    try{
+      const token=localStorage.getItem("turmaA_authToken")||"";
+      const headers={"Content-Type":"application/json"};
+      if(token)headers["Authorization"]="Bearer "+token;
+      const conversation_history=S.history.slice(0,-1).map(m=>({role:m.role,content:m.content}));
+      const messages=conversation_history.concat([{role:"user",content:txt}]);
+      const r=await fetch("/api/claude",{method:"POST",headers,body:JSON.stringify({message:txt,conversation_history,messages})});
+      if(r.status===401){
+        localStorage.removeItem("turmaA_authToken");
+        S.history.push({role:"assistant",content:"Sessão expirada. Faça login no app para continuar nossa conversa."});
+      }else{
+        const d=await r.json();
+        const reply=d.text||d.reply||d.error||"Sem resposta.";
+        S.history.push({role:"assistant",content:reply});
+        if(d.memoria_salva && d.memoria_salva.length){showToast("✅ "+d.memoria_salva.length+" item(s) salvo(s) na memória");}
+      }
+    }catch(e){S.history.push({role:"assistant",content:"Erro de conexão: "+e.message});}
+    S.viriatoTyping=false;
+    renderViriatoFull(c);
+  };
+  send.onclick=doSend;
+  inp.addEventListener("keydown",e=>{
+    if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();doSend();}
+  });
 }
 
 // ===== Viriato =====
