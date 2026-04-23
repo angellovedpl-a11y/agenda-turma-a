@@ -334,22 +334,34 @@ input,textarea{font-family:inherit;color:inherit}
 .resumo-bar .b-t{background:var(--orange)}
 .resumo-leg{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-mute);margin-top:6px;letter-spacing:1px}
 
-/* ===== VIRIATO BANNER ===== */
+/* ===== VIRIATO BANNER (logo abaixo do calendario) ===== */
 .viriato-banner{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 14px;margin:0 0 12px;
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;margin:16px 0 0;
   background:linear-gradient(135deg,#7c3aed22,#00e67622);
-  border:1px solid #7c3aed44;border-radius:12px;
+  border:1px solid #7c3aed44;border-radius:14px;
   font-size:13px;color:var(--text);
   position:relative;
 }
 .viriato-banner.hidden{display:none}
-.vb-ico{font-size:18px;flex-shrink:0}
+.vb-bot{
+  width:52px;height:52px;min-width:52px;border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#00e676,#7c3aed);
+  background-size:200% 200%;animation:viriatoGrad 4s ease infinite;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:#fff;flex-shrink:0;
+  box-shadow:0 6px 18px #7c3aed55, 0 0 16px #00e67644;
+  transition:transform .18s;cursor:pointer;
+}
+.vb-bot:hover{transform:scale(1.08)}
+.vb-bot:active{transform:scale(.95)}
 .vb-txt{flex:1;line-height:1.4;font-style:italic;color:var(--text)}
-.vb-close{width:24px;height:24px;border-radius:6px;color:var(--text-mute);font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vb-close{width:28px;height:28px;border-radius:8px;color:var(--text-mute);font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .vb-close:hover{background:var(--chip);color:var(--text)}
 [data-theme="light"] .viriato-banner{background:linear-gradient(135deg,#ede9fe,#dcfce7);border-color:#7c3aed55;color:#0f172a}
 [data-theme="light"] .vb-txt{color:#0f172a}
+/* esconde o FAB flutuante quando estamos no calendario (banner ja tem o botao) */
+body.sec-calendario .viriato-fab{display:none}
 
 /* ===== VIRIATO FAB ===== */
 @keyframes viriatoGrad{
@@ -522,11 +534,6 @@ input,textarea{font-family:inherit;color:inherit}
 
   <!-- Main -->
   <main class="main">
-    <div class="viriato-banner" id="viriatoBanner">
-      <span class="vb-ico">🤖</span>
-      <span class="vb-txt"><i>Vc Já viu como é Linda a Vista da Lagoa Mapaúra, pela Janela de Uma Locomotiva?</i></span>
-      <button class="vb-close" id="vbClose" aria-label="Fechar">×</button>
-    </div>
     <div class="top-bar">
       <div class="brand">
         <div class="brand-logo" title="Vale">
@@ -687,6 +694,12 @@ function renderMensal(){
     html+=`<div class="day outside ${fol?"folga":"trab"}"><span class="num">${i}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
   }
   html+=`</div></div>`;
+  // Banner reflexivo do Viriato (logo abaixo do calendario, com botao integrado)
+  html+=`<div class="viriato-banner" id="viriatoBanner">
+    <button class="vb-bot" id="vbOpenViriato" aria-label="Abrir Viriato" title="Falar com o Viriato">🤖</button>
+    <span class="vb-txt"><i>Vc Já viu como é Linda a Vista da Lagoa Mapaúra, pela Janela de Uma Locomotiva?</i></span>
+    <button class="vb-close" id="vbClose" aria-label="Fechar">×</button>
+  </div>`;
   return html;
 }
 
@@ -806,6 +819,7 @@ function render(){
   document.getElementById("rightPanel").style.display="";
   c.innerHTML=S.view==="mensal"?renderMensal():renderAnual();
   document.getElementById("rightPanel").innerHTML=renderRight();
+  attachViriatoBanner();
 
   // tabs
   document.querySelectorAll(".tab").forEach(t=>{
@@ -851,18 +865,19 @@ document.getElementById("themeToggle").addEventListener("click",()=>{
   const cur=document.documentElement.getAttribute("data-theme")||"dark";
   applyTheme(cur==="dark"?"light":"dark");
 });
-// Banner reflexivo do Viriato
-(function(){
-  try{
-    const banner=document.getElementById("viriatoBanner");
-    if(!banner)return;
-    if(localStorage.getItem("turmaA_vbHidden")==="1"){banner.classList.add("hidden");}
-    document.getElementById("vbClose").onclick=()=>{
-      banner.classList.add("hidden");
-      try{localStorage.setItem("turmaA_vbHidden","1");}catch(e){}
-    };
-  }catch(e){}
-})();
+// Banner reflexivo do Viriato — attach handlers a cada render do calendario
+function attachViriatoBanner(){
+  const banner=document.getElementById("viriatoBanner");
+  if(!banner)return;
+  try{if(localStorage.getItem("turmaA_vbHidden")==="1")banner.classList.add("hidden");}catch(e){}
+  const cls=document.getElementById("vbClose");
+  if(cls)cls.onclick=()=>{
+    banner.classList.add("hidden");
+    try{localStorage.setItem("turmaA_vbHidden","1");}catch(e){}
+  };
+  const ob=document.getElementById("vbOpenViriato");
+  if(ob)ob.onclick=()=>{S.viriatoOpen=!S.viriatoOpen;renderViriato();};
+}
 
 // ===== Viriato =====
 function renderViriato(){
@@ -1657,9 +1672,11 @@ async function openAdmin(){
 function setSection(sec){
   S.section=sec;
   document.querySelectorAll(".sb-icon").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
+  document.body.classList.toggle("sec-calendario",sec==="calendario");
   render();
 }
 S.section=S.section||"calendario";
+document.body.classList.toggle("sec-calendario",S.section==="calendario");
 document.querySelectorAll(".sidebar .sb-icon").forEach(b=>{
   b.addEventListener("click",async()=>{
     const sec=b.dataset.sec;
