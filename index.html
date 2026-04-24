@@ -1072,7 +1072,7 @@ function renderViriatoFull(c){
   c.innerHTML=`
     <div class="viriato-full">
       <div class="vf-head">
-        <button class="vf-back" id="vfBack" aria-label="Voltar">
+        <button class="vf-back" id="vfBack" aria-label="Voltar ao menu" title="Voltar ao menu">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="vf-avatar">🤖</div>
@@ -1080,6 +1080,7 @@ function renderViriatoFull(c){
           <div class="vf-name">VIRIATO</div>
           <div class="vf-sub">Assistente Ferroviário</div>
         </div>
+        <button class="vf-back" id="vfMenu" aria-label="Abrir menu" title="Abrir menu" style="font-size:20px">🚪</button>
         <button class="vf-clear" id="vfClear" title="Limpar conversa">🗑️</button>
       </div>
       <div class="vf-body" id="vfBody">
@@ -1097,6 +1098,10 @@ function renderViriatoFull(c){
   body.scrollTop=body.scrollHeight;
   setTimeout(()=>inp&&inp.focus(),50);
   document.getElementById("vfBack").onclick=()=>setSection("calendario");
+  document.getElementById("vfMenu").onclick=()=>{
+    setSection("calendario");
+    setTimeout(()=>{const f=document.getElementById("menuFab");if(f)f.click();},60);
+  };
   document.getElementById("vfClear").onclick=()=>{
     if(confirm("Limpar toda a conversa com o Viriato?")){S.history=[];renderViriatoFull(c);}
   };
