@@ -127,15 +127,57 @@ button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:n
 input,textarea{font-family:inherit;color:inherit}
 
 /* ===== LAYOUT 3 COLUNAS ===== */
-.app{display:grid;grid-template-columns:60px 1fr 280px;height:100vh;width:100vw}
+.app{display:grid;grid-template-columns:1fr 280px;height:100vh;width:100vw}
 
-/* Sidebar */
-.sidebar{
-  background:var(--sidebar);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;align-items:center;
-  padding:18px 0;gap:8px;
+/* Sidebar (oculta — substituída pelo menu ⋮) */
+.sidebar{display:none!important}
+
+/* Menu FAB ⋮ */
+.menu-fab{
+  position:fixed;top:14px;left:14px;z-index:60;
+  width:42px;height:42px;border-radius:12px;
+  background:var(--card-2);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;line-height:1;font-weight:700;
+  transition:all .15s;box-shadow:0 4px 14px rgba(0,0,0,.25);
 }
+.menu-fab:hover{background:var(--chip-hover);color:var(--neon)}
+.menu-fab.active{background:var(--chip);color:var(--neon)}
+.menu-fab .menu-badge{
+  position:absolute;top:-4px;right:-4px;
+  background:#e23838;color:#fff;font-size:10px;font-weight:700;
+  min-width:16px;height:16px;border-radius:8px;padding:0 4px;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+.menu-pop{
+  position:fixed;top:64px;right:14px;z-index:59;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:8px;min-width:240px;
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+  display:none;flex-direction:column;gap:2px;
+}
+.menu-pop.open{display:flex}
+.menu-pop .mp-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 12px;border-radius:10px;
+  background:transparent;border:none;color:var(--text);
+  font-size:14px;font-weight:500;text-align:left;cursor:pointer;
+  transition:background .12s,color .12s;width:100%;
+  text-decoration:none;position:relative;
+}
+.menu-pop .mp-item:hover{background:var(--chip-hover);color:var(--neon)}
+.menu-pop .mp-item.active{background:var(--chip);color:var(--neon)}
+.menu-pop .mp-item svg{width:20px;height:20px;flex-shrink:0}
+.menu-pop .mp-item img{width:24px;height:24px;border-radius:6px;object-fit:contain;flex-shrink:0}
+.menu-pop .mp-divider{height:1px;background:var(--border);margin:4px 0}
+.menu-pop .mp-badge{
+  margin-left:auto;background:#e23838;color:#fff;font-size:10px;font-weight:700;
+  min-width:18px;height:18px;border-radius:9px;padding:0 5px;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+.menu-backdrop{position:fixed;inset:0;z-index:58;background:transparent;display:none}
+.menu-backdrop.open{display:block}
 .sb-logo{
   width:36px;height:36px;border-radius:10px;
   background:linear-gradient(135deg,var(--neon),#00b85a);
@@ -210,7 +252,7 @@ input,textarea{font-family:inherit;color:inherit}
 /* Main */
 .main{
   overflow-y:auto;
-  padding:28px 36px;
+  padding:28px 36px 28px 70px;
   display:flex;flex-direction:column;gap:22px;
 }
 .main::-webkit-scrollbar{width:8px}
@@ -556,12 +598,12 @@ body.sec-viriato .viriato-fab{display:none}
   .sb-icon svg{width:32px;height:32px}
   .sb-icon.sb-img img{width:42px;height:42px}
   .sb-badge{font-size:11px;min-width:18px;height:18px;border-radius:9px}
-  .main{padding:14px;padding-bottom:100px;overflow-y:auto}
+  .main{padding:14px 14px 80px 70px;overflow-y:auto}
   .year-wrap{grid-template-columns:1fr}
-  .viriato-fab{bottom:90px;right:14px;left:auto;transform:none;width:64px;height:64px;font-size:30px}
+  .viriato-fab{bottom:24px;right:14px;left:auto;transform:none;width:64px;height:64px;font-size:30px}
   .viriato-fab:hover{transform:scale(1.08)}
   .viriato-fab:active{transform:scale(.95)}
-  .viriato-win{right:8px;left:8px;width:auto;top:64px;bottom:166px;height:auto;max-height:none}
+  .viriato-win{right:8px;left:8px;width:auto;top:64px;bottom:96px;height:auto;max-height:none}
   .viriato-win .vw-body{flex:1;min-height:0}
   .viriato-win .vw-input input{height:54px;font-size:17px;padding:14px 16px}
   .viriato-win .vw-send{width:54px;height:54px;font-size:20px}
@@ -588,29 +630,40 @@ body.sec-viriato .viriato-fab{display:none}
 </div>
 
 <div class="app">
-  <!-- Sidebar 60px -->
-  <aside class="sidebar">
-    <div class="sb-logo">🚂</div>
-    <button class="sb-icon active" title="Calendário" data-sec="calendario">
+  <!-- Menu FAB ⋮ + popup -->
+  <button class="menu-fab" id="menuFab" aria-label="Menu" title="Menu">
+    <span style="letter-spacing:1px">⋮</span>
+    <span id="menuFabBadge" class="menu-badge" style="display:none"></span>
+  </button>
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <div class="menu-pop" id="menuPop" role="menu">
+    <button class="mp-item active" data-sec="calendario" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span>Calendário</span>
     </button>
-    <button class="sb-icon" title="Eventos da Turma" data-sec="eventos">
+    <button class="mp-item" data-sec="eventos" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="7" cy="9" r="1" fill="currentColor"/><line x1="11" y1="9" x2="18" y2="9"/><circle cx="7" cy="14" r="1" fill="currentColor"/><line x1="11" y1="14" x2="18" y2="14"/></svg>
+      <span>Mural da Turma</span>
     </button>
-    <button class="sb-icon" title="Chat" data-sec="chat">
+    <button class="mp-item" data-sec="chat" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 17h-6l-4 3v-3H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><path d="M8 11h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-4 3v-3"/></svg>
-      <span id="chatBadge" class="sb-badge" style="display:none"></span>
+      <span>Chat</span>
+      <span id="chatBadge" class="mp-badge" style="display:none"></span>
     </button>
-    <button class="sb-icon" title="Acervo (PDFs, fatos, memórias)" data-sec="acervo">
+    <button class="mp-item" data-sec="acervo" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/></svg>
+      <span>Acervo</span>
     </button>
-    <button class="sb-icon" title="Configurações" data-sec="setup">
+    <button class="mp-item" data-sec="setup" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Configurações</span>
     </button>
-    <a class="sb-icon sb-img" href="https://sistemaprontos.com.br/auth/realms/vale/protocol/openid-connect/auth?client_id=portal-web&redirect_uri=https%3A%2F%2Fvale-portal.sistemaprontos.com.br%2F&state=304bd04b-028f-4842-8b51-6ed3b9457203&response_mode=fragment&response_type=code&scope=openid&nonce=a6b798ce-327b-4823-8ad8-b118a8d9b2e7" target="_blank" rel="noopener noreferrer" title="Prontos (abre em nova aba)">
+    <div class="mp-divider"></div>
+    <a class="mp-item" href="https://sistemaprontos.com.br/auth/realms/vale/protocol/openid-connect/auth?client_id=portal-web&redirect_uri=https%3A%2F%2Fvale-portal.sistemaprontos.com.br%2F&state=304bd04b-028f-4842-8b51-6ed3b9457203&response_mode=fragment&response_type=code&scope=openid&nonce=a6b798ce-327b-4823-8ad8-b118a8d9b2e7" target="_blank" rel="noopener noreferrer">
       <img src="/assets/prontos.png" alt="Prontos"/>
+      <span>Prontos <span style="color:var(--muted);font-size:11px">(nova aba)</span></span>
     </a>
-  </aside>
+  </div>
 
   <!-- Main -->
   <main class="main">
@@ -930,7 +983,7 @@ function render(){
 document.querySelectorAll(".tab").forEach(t=>{
   t.addEventListener("click",()=>{
     S.view=t.dataset.view;S.section="calendario";
-    document.querySelectorAll(".sb-icon").forEach(b=>b.classList.toggle("active",b.dataset.sec==="calendario"));
+    document.querySelectorAll(".mp-item[data-sec]").forEach(b=>b.classList.toggle("active",b.dataset.sec==="calendario"));
     saveLS();render();
   });
 });
@@ -1345,7 +1398,7 @@ async function requireAuth(){
 
 // ===== EVENTOS =====
 async function renderEventos(c){
-  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📅 EVENTOS DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO EVENTO</button></div><div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📋 MURAL DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO POST</button></div><div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;
   document.getElementById("evNew").onclick=()=>openEventoForm();
   if(!await requireAuth()){document.getElementById("evBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login para ver os eventos.</div>';return;}
   try{
@@ -1933,7 +1986,7 @@ async function openAdmin(){
 // ===== SIDEBAR ROUTER =====
 function setSection(sec){
   S.section=sec;
-  document.querySelectorAll(".sb-icon").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
+  document.querySelectorAll(".mp-item[data-sec]").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
   ["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
   document.body.classList.add("sec-"+sec);
   render();
@@ -1941,14 +1994,29 @@ function setSection(sec){
 S.section=S.section||"calendario";
 ["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
 document.body.classList.add("sec-"+S.section);
-document.querySelectorAll(".sidebar .sb-icon").forEach(b=>{
-  b.addEventListener("click",async()=>{
-    const sec=b.dataset.sec;
-    if(sec==="setup"){await openSetup();return;}
-    if(sec!=="calendario"){if(!await requireAuth())return;}
-    setSection(sec);
+// Menu ⋮ wiring
+(function(){
+  const fab=document.getElementById("menuFab");
+  const pop=document.getElementById("menuPop");
+  const bd=document.getElementById("menuBackdrop");
+  const closeMenu=()=>{pop.classList.remove("open");bd.classList.remove("open");fab.classList.remove("active");};
+  const openMenu=()=>{pop.classList.add("open");bd.classList.add("open");fab.classList.add("active");};
+  fab.addEventListener("click",(e)=>{e.stopPropagation();pop.classList.contains("open")?closeMenu():openMenu();});
+  bd.addEventListener("click",closeMenu);
+  document.addEventListener("keydown",(e)=>{if(e.key==="Escape")closeMenu();});
+  document.querySelectorAll(".menu-pop .mp-item[data-sec]").forEach(b=>{
+    b.addEventListener("click",async()=>{
+      const sec=b.dataset.sec;
+      closeMenu();
+      if(sec==="setup"){await openSetup();return;}
+      if(sec!=="calendario"){if(!await requireAuth())return;}
+      setSection(sec);
+    });
   });
-});
+  document.querySelectorAll(".menu-pop a.mp-item").forEach(a=>{
+    a.addEventListener("click",closeMenu);
+  });
+})();
 
 // ===== VIRIATO + popover (anexa após cada renderViriato) =====
 const _origRenderViriato=renderViriato;
