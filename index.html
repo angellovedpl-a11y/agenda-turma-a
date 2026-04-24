@@ -405,11 +405,12 @@ body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!
 .resumo-leg{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-mute);margin-top:6px;letter-spacing:1px}
 
 /* ===== VIRIATO TELA CHEIA (aba dedicada) ===== */
+body.sec-viriato .main{padding:0!important;overflow:hidden!important;height:100dvh!important}
 .viriato-full{
   display:flex;flex-direction:column;
-  height:calc(100vh - 28px);max-height:calc(100vh - 28px);
-  background:var(--bg);border-radius:14px;overflow:hidden;
-  border:1px solid var(--border);
+  height:100%;min-height:0;
+  background:var(--bg);overflow:hidden;
+  border:none;border-radius:0;
 }
 .vf-head{
   display:flex;align-items:center;gap:12px;padding:14px 16px;
@@ -430,10 +431,11 @@ body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!
 .vf-clear{width:40px;height:40px;border-radius:10px;background:transparent;border:none;cursor:pointer;font-size:18px}
 .vf-clear:hover{background:var(--chip)}
 .vf-body{
-  flex:1;overflow-y:auto;padding:18px;
+  flex:1;min-height:0;overflow-y:auto;padding:18px;
   display:flex;flex-direction:column;gap:10px;
-  background:var(--bg);
+  background:var(--bg);position:relative;
 }
+.vf-body::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border);opacity:.45;pointer-events:none}
 .vf-body .msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap}
 .vf-body .msg.bot{background:#1a1a1a;color:var(--neon);align-self:flex-start;border:1px solid #00e67622}
 .vf-body .msg.user{background:#1f2840;color:#fff;align-self:flex-end}
@@ -464,7 +466,6 @@ body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!
 [data-theme="light"] .vf-input textarea{background:#ffffff;color:#0f172a;border-color:#cbd5e1}
 [data-theme="light"] .vf-input textarea::placeholder{color:#94a3b8}
 @media (max-width:720px){
-  .viriato-full{height:calc(100vh - 110px);max-height:calc(100vh - 110px);border-radius:10px}
   .vf-head{padding:12px}
   .vf-body{padding:14px}
   .vf-body .msg{font-size:15px;max-width:90%}
