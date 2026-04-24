@@ -144,6 +144,41 @@ def fatos_remove(id_fato: int) -> bool:
     kvstore.save('fatos_turma', {'fatos': novo})
     return True
 
+# === MEMPALACE — FILA DE APROVACAO DE MEMORIZACOES ===
+def pendentes_mem_load() -> list:
+    d = kvstore.load('pendentes_memoria')
+    return d.get('pendentes', []) if isinstance(d, dict) else []
+
+def pendentes_mem_save(lst):
+    kvstore.save('pendentes_memoria', {'pendentes': lst[:500]})
+
+def pendentes_mem_add(tipo: str, texto: str, matricula: str, nome: str) -> dict:
+    texto = (texto or '').strip()[:800]
+    if len(texto) < 3:
+        return {'ok': False, 'erro': 'Texto muito curto'}
+    if tipo not in ('pessoal', 'fato'):
+        return {'ok': False, 'erro': 'Tipo invalido'}
+    import time as _t
+    pend = pendentes_mem_load()
+    novo = {
+        'id': int(_t.time() * 1000),
+        'data': time.strftime('%Y-%m-%d %H:%M'),
+        'tipo': tipo, 'texto': texto,
+        'matricula': matricula, 'autor': nome or matricula,
+    }
+    pend.insert(0, novo)
+    pendentes_mem_save(pend)
+    return {'ok': True, 'pendente': novo}
+
+def pendentes_mem_remove(id_p: int) -> dict:
+    pend = pendentes_mem_load()
+    alvo = next((p for p in pend if p.get('id') == id_p), None)
+    if not alvo:
+        return {'ok': False, 'erro': 'Nao encontrado'}
+    novos = [p for p in pend if p.get('id') != id_p]
+    pendentes_mem_save(novos)
+    return {'ok': True, 'pendente': alvo}
+
 def _expandir_tokens(tokens):
     out = set(tokens)
     for t in list(tokens):
@@ -540,6 +575,8 @@ def claude_chat():
         u = request.current_user
         matricula_user = u.get('matricula', '')
         nome_user = u.get('nome', '')
+        role_user = u.get('role', '')
+        is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
         fatos_relev = buscar_fatos(ultima, top_k=4) if ultima else []
 
@@ -675,14 +712,19 @@ def claude_chat():
             if chave in ja_salvos:
                 continue
             ja_salvos.add(chave)
-            if tipo == 'pessoal':
-                r = memoria_pessoal_add(matricula_user, conteudo, nome_user)
-                if r.get('ok'):
-                    salvos.append({'tipo': 'pessoal', 'texto': conteudo})
+            if is_admin_user:
+                if tipo == 'pessoal':
+                    r = memoria_pessoal_add(matricula_user, conteudo, nome_user)
+                    if r.get('ok'):
+                        salvos.append({'tipo': 'pessoal', 'texto': conteudo, 'status': 'salvo'})
+                else:
+                    r = fatos_add(conteudo, matricula_user, nome_user)
+                    if r.get('ok'):
+                        salvos.append({'tipo': 'fato', 'texto': conteudo, 'status': 'salvo'})
             else:
-                r = fatos_add(conteudo, matricula_user, nome_user)
+                r = pendentes_mem_add(tipo, conteudo, matricula_user, nome_user)
                 if r.get('ok'):
-                    salvos.append({'tipo': 'fato', 'texto': conteudo})
+                    salvos.append({'tipo': tipo, 'texto': conteudo, 'status': 'pendente'})
         texto_limpo = marcador.sub('', texto_resp)
         texto_limpo = re.sub(r'\n[ \t]*\n[ \t]*\n+', '\n\n', texto_limpo).strip()
 
@@ -722,20 +764,31 @@ def claude_chat():
                     tipo_x = tipo_x.strip().lower()
                     texto_x = texto_x.strip().rstrip('.').strip()
                     if tipo_x in ('pessoal', 'fato') and len(texto_x) >= 3:
-                        if tipo_x == 'pessoal':
-                            r = memoria_pessoal_add(matricula_user, texto_x, nome_user)
-                            if r.get('ok'):
-                                salvos.append({'tipo': 'pessoal', 'texto': texto_x, 'fallback': True})
+                        if is_admin_user:
+                            if tipo_x == 'pessoal':
+                                r = memoria_pessoal_add(matricula_user, texto_x, nome_user)
+                                if r.get('ok'):
+                                    salvos.append({'tipo': 'pessoal', 'texto': texto_x, 'fallback': True, 'status': 'salvo'})
+                            else:
+                                r = fatos_add(texto_x, matricula_user, nome_user)
+                                if r.get('ok'):
+                                    salvos.append({'tipo': 'fato', 'texto': texto_x, 'fallback': True, 'status': 'salvo'})
                         else:
-                            r = fatos_add(texto_x, matricula_user, nome_user)
+                            r = pendentes_mem_add(tipo_x, texto_x, matricula_user, nome_user)
                             if r.get('ok'):
-                                salvos.append({'tipo': 'fato', 'texto': texto_x, 'fallback': True})
+                                salvos.append({'tipo': tipo_x, 'texto': texto_x, 'fallback': True, 'status': 'pendente'})
             except Exception as _e:
                 pass
 
-        if salvos and '✅' not in texto_limpo and 'memori' not in texto_limpo.lower()[:80]:
-            tag_mem = '\n\n*✅ Memorizado: ' + '; '.join(s['texto'][:80] for s in salvos) + '*'
-            texto_limpo = texto_limpo + tag_mem
+        if salvos and '✅' not in texto_limpo and '⏳' not in texto_limpo and 'memori' not in texto_limpo.lower()[:80]:
+            pendentes_now = [s for s in salvos if s.get('status') == 'pendente']
+            confirmados = [s for s in salvos if s.get('status') != 'pendente']
+            partes = []
+            if confirmados:
+                partes.append('\n\n*✅ Memorizado: ' + '; '.join(s['texto'][:80] for s in confirmados) + '*')
+            if pendentes_now:
+                partes.append('\n\n*⏳ Enviado para aprovação do admin: ' + '; '.join(s['texto'][:80] for s in pendentes_now) + '*')
+            texto_limpo = texto_limpo + ''.join(partes)
 
         return jsonify({'text': texto_limpo, 'trechos_usados': len(trechos),
                         'memoria_salva': salvos})
@@ -912,6 +965,41 @@ def memoria_fato_del(id_f):
        not any(f.get('id') == id_f and f.get('matricula') == u['matricula'] for f in fatos_load()):
         return jsonify({'error': 'Apenas o autor ou admin pode remover'}), 403
     return jsonify({'ok': fatos_remove(id_f)})
+
+# === API ADMIN - PENDENTES DE MEMORIZACAO ===
+@app.route('/api/admin/memoria/pendentes', methods=['GET'])
+@auth.require_admin
+def admin_pend_mem_list():
+    return jsonify({'pendentes': pendentes_mem_load()})
+
+@app.route('/api/admin/memoria/pendentes/<int:id_p>/aprovar', methods=['POST'])
+@auth.require_admin
+def admin_pend_mem_aprovar(id_p):
+    r = pendentes_mem_remove(id_p)
+    if not r.get('ok'):
+        return jsonify(r), 404
+    p = r['pendente']
+    if p['tipo'] == 'pessoal':
+        rs = memoria_pessoal_add(p['matricula'], p['texto'], p.get('autor', ''))
+    else:
+        rs = fatos_add(p['texto'], p['matricula'], p.get('autor', ''))
+    if not rs.get('ok'):
+        pend = pendentes_mem_load()
+        pend.insert(0, p)
+        pendentes_mem_save(pend)
+        return jsonify(rs), 400
+    return jsonify({'ok': True, 'tipo': p['tipo'], 'salvo': rs})
+
+@app.route('/api/admin/memoria/pendentes/<int:id_p>/negar', methods=['POST'])
+@auth.require_admin
+def admin_pend_mem_negar(id_p):
+    r = pendentes_mem_remove(id_p)
+    return jsonify(r), (200 if r.get('ok') else 404)
+
+@app.route('/api/admin/memoria/pendentes/contagem', methods=['GET'])
+@auth.require_admin
+def admin_pend_mem_count():
+    return jsonify({'total': len(pendentes_mem_load())})
 
 # === API HELPDESK ===
 @app.route('/api/helpdesk', methods=['GET'])

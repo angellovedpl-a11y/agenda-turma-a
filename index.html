@@ -1017,7 +1017,12 @@ function renderViriatoFull(c){
         const d=await r.json();
         const reply=d.text||d.reply||d.error||"Sem resposta.";
         S.history.push({role:"assistant",content:reply});
-        if(d.memoria_salva && d.memoria_salva.length){showToast("✅ "+d.memoria_salva.length+" item(s) salvo(s) na memória");}
+        if(d.memoria_salva && d.memoria_salva.length){
+          const pe=d.memoria_salva.filter(x=>x.status==="pendente").length;
+          const ok=d.memoria_salva.length-pe;
+          if(ok)showToast("✅ "+ok+" item(s) salvo(s) na memória");
+          if(pe)showToast("⏳ "+pe+" sugestão(ões) enviada(s) para aprovação do admin");
+        }
       }
     }catch(e){S.history.push({role:"assistant",content:"Erro de conexão: "+e.message});}
     S.viriatoTyping=false;
@@ -1099,7 +1104,10 @@ function renderViriato(){
         const reply=d.text||d.reply||d.error||"Sem resposta.";
         S.history.push({role:"assistant",content:reply});
         if(d.memoria_salva && d.memoria_salva.length){
-          showToast("✅ "+d.memoria_salva.length+" item(s) salvo(s) na memória");
+          const pe=d.memoria_salva.filter(x=>x.status==="pendente").length;
+          const ok=d.memoria_salva.length-pe;
+          if(ok)showToast("✅ "+ok+" item(s) salvo(s) na memória");
+          if(pe)showToast("⏳ "+pe+" sugestão(ões) enviada(s) para aprovação do admin");
         }
       }
     }catch(e){
@@ -1850,7 +1858,8 @@ function openTrocarFuncao(){
 async function openAdmin(){
   openModal("Painel administrativo",`
     <div class="tabs-mini" id="adTabs">
-      <button data-t="pend" class="active">⏳ Pendentes</button>
+      <button data-t="pend" class="active">⏳ Cadastros</button>
+      <button data-t="mem">🧠 Memorizações</button>
       <button data-t="usu">👥 Usuários</button>
     </div>
     <div id="adPanel">Carregando...</div>
@@ -1868,6 +1877,34 @@ async function openAdmin(){
             const ep=b.dataset.act==="ap"?"aprovar":"negar";
             const r=await apiFetch("/api/admin/"+ep+"/"+encodeURIComponent(b.dataset.m),{method:"POST"});
             if(r.ok){showToast(b.dataset.act==="ap"?"✅ Aprovado":"Negado");load();}
+          };
+        });
+      }else if(tab==="mem"){
+        const r=await apiFetch("/api/admin/memoria/pendentes");const d=await r.json();
+        const list=d.pendentes||[];
+        if(!list.length){p.innerHTML='<div style="color:var(--muted);padding:14px;text-align:center">Nenhuma memorização pendente</div>';return;}
+        p.innerHTML='<div style="font-size:11px;color:var(--muted);margin-bottom:8px;padding:0 4px">Sugestões enviadas pelo Viriato a partir das conversas dos colegas. Aprove para gravar no MemPalace.</div>'+list.map(m=>{
+          const isPess=m.tipo==='pessoal';
+          const cor=isPess?'#7c3aed':'#0ea5e9';
+          const tag=isPess?'PESSOAL':'FATO DA TURMA';
+          return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="background:${cor};color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700">${tag}</span>
+              <span style="font-size:11px;color:var(--muted)">${escapeHtml(m.autor||"")} · Mat ${escapeHtml(m.matricula||"")} · ${escapeHtml(m.data||"")}</span>
+            </div>
+            <div style="font-size:13px;line-height:1.4">${escapeHtml(m.texto||"")}</div>
+            <div style="display:flex;gap:6px;justify-content:flex-end">
+              <button class="btn-primary" data-act="ap" data-i="${m.id}" style="padding:6px 12px">✅ Aprovar</button>
+              <button class="btn-danger" data-act="ng" data-i="${m.id}" style="padding:6px 12px">✖ Negar</button>
+            </div>
+          </div>`;
+        }).join("");
+        p.querySelectorAll("button[data-act]").forEach(b=>{
+          b.onclick=async()=>{
+            const ep=b.dataset.act==="ap"?"aprovar":"negar";
+            const r=await apiFetch("/api/admin/memoria/pendentes/"+b.dataset.i+"/"+ep,{method:"POST"});
+            if(r.ok){showToast(b.dataset.act==="ap"?"✅ Memorizado":"Sugestão descartada");load();}
+            else{const d=await r.json().catch(()=>({}));showToast("❌ "+(d.error||d.erro||"falhou"));}
           };
         });
       }else{
