@@ -328,6 +328,21 @@ body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!
 
 /* Calendário mensal */
 .cal-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.week-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-top:14px}
+.week-tit{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;color:var(--text-mute);font-weight:600;margin-bottom:10px}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wk{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:10px;border:1px solid var(--border-soft);background:#15171d}
+.wk .wd{font-family:var(--mono);font-size:9px;letter-spacing:1.2px;color:var(--text-mute);font-weight:600}
+.wk .wn{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--text)}
+.wk .wl{font-family:var(--mono);font-size:8px;letter-spacing:1px;font-weight:700}
+.wk.folga{border-color:#00e67655}
+.wk.folga .wl{color:var(--neon)}
+.wk.trab{border-color:#f5a62333}
+.wk.trab .wl{color:var(--orange)}
+.wk.today{outline:2px solid var(--neon);outline-offset:1px}
+[data-theme="light"] .wk{background:#ffffff}
+[data-theme="light"] .wk.folga{background:linear-gradient(160deg,#dcfce7,#f0fdf4)}
+[data-theme="light"] .wk.trab{background:linear-gradient(160deg,#ffedd5,#fff7ed)}
 .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:10px}
 .cal-dow div{font-family:var(--mono);font-size:10px;color:var(--text-mute);letter-spacing:2px;text-align:center;padding:6px 0;text-transform:uppercase}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
@@ -859,6 +874,20 @@ function renderMensal(){
     html+=`<div class="day outside ${fol?"folga":"trab"}"><span class="num">${i}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
   }
   html+=`</div></div>`;
+  // Caixa "ESTA SEMANA" — 7 dias da semana corrente
+  {
+    const dow=HOJE.getDay();
+    const ws=new Date(HOJE);ws.setDate(HOJE.getDate()-dow);
+    let wk=`<div class="week-box"><div class="week-tit">ESTA SEMANA</div><div class="week-grid">`;
+    for(let i=0;i<7;i++){
+      const dt=new Date(ws);dt.setDate(ws.getDate()+i);
+      const fol=isFolga(dt);
+      const today=toKey(dt)===HOJE_KEY;
+      wk+=`<div class="wk ${fol?"folga":"trab"} ${today?"today":""}"><span class="wd">${DOW[i]}</span><span class="wn">${dt.getDate()}</span><span class="wl">${fol?"FOLGA":"TRAB"}</span></div>`;
+    }
+    wk+=`</div></div>`;
+    html+=wk;
+  }
   // Banner reflexivo do Viriato (logo abaixo do calendario, com botao integrado)
   html+=`<div class="viriato-banner" id="viriatoBanner">
     <button class="vb-bot" id="vbOpenViriato" aria-label="Abrir Viriato" title="Falar com o Viriato">🤖</button>
