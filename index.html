@@ -1686,16 +1686,17 @@ async function renderAcervoPdfs(el){
   document.getElementById("upPdf").onclick=()=>uploadDoc(false);
   const docs=document.getElementById("docs");
   if(!d.documentos.length){docs.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum PDF enviado ainda.</div>';return;}
+  const isAdmin=CURRENT_USER&&CURRENT_USER.role==="admin";
   docs.innerHTML=d.documentos.map(doc=>`<div class="lst-item">
     <div style="flex:1;min-width:0">
       <div style="font-weight:600;font-size:13px">${escapeHtml(doc.nome)}</div>
       <div style="color:var(--muted);font-size:11px;margin-top:4px">[${escapeHtml(doc.categoria||"")}] · ${doc.paginas_chunks} trechos · ${escapeHtml(doc.data_envio||"")}</div>
       ${doc.resumo?`<div style="font-size:12px;margin-top:6px;color:var(--text);opacity:.85">${escapeHtml(doc.resumo)}</div>`:""}
     </div>
-    <button class="btn-danger" data-id="${escapeHtml(doc.id)}">Excluir</button>
+    ${isAdmin?`<button class="btn-danger" data-id="${escapeHtml(doc.id)}">Excluir</button>`:""}
   </div>`).join("");
-  docs.querySelectorAll("button.btn-danger").forEach(b=>{
-    b.onclick=async()=>{if(!confirm("Excluir este documento? Os trechos não estarão mais disponíveis para o Viriato."))return;await apiFetch("/api/biblioteca/"+encodeURIComponent(b.dataset.id),{method:"DELETE"});showToast("Documento excluído");renderAcervoPdfs(el);};
+  if(isAdmin)docs.querySelectorAll("button.btn-danger").forEach(b=>{
+    b.onclick=async()=>{if(!confirm("Excluir este documento? Os trechos não estarão mais disponíveis para o Viriato."))return;const r=await apiFetch("/api/biblioteca/"+encodeURIComponent(b.dataset.id),{method:"DELETE"});if(r.ok){showToast("Documento excluído");renderAcervoPdfs(el);}else{const d=await r.json().catch(()=>({}));showToast("❌ "+(d.error||"Sem permissão"));}};
   });
 }
 function uploadDoc(isTemp){

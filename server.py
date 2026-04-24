@@ -829,7 +829,7 @@ def biblioteca_upload():
 
 # === API BIBLIOTECA - REMOVER ===
 @app.route('/api/biblioteca/<doc_id>', methods=['DELETE'])
-@auth.require_auth
+@auth.require_admin
 def biblioteca_remover(doc_id):
     biblioteca = mem_palace_load('biblioteca')
     docs = biblioteca.get('documentos', [])
