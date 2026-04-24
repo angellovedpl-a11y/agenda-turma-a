@@ -1064,14 +1064,12 @@ document.getElementById("themeToggle").addEventListener("click",()=>{
 function attachViriatoBanner(){
   const banner=document.getElementById("viriatoBanner");
   if(!banner){document.body.classList.remove("banner-visible");return;}
-  const hidden=(()=>{try{return localStorage.getItem("turmaA_vbHidden")==="1";}catch(e){return false;}})();
-  if(hidden)banner.classList.add("hidden");
-  document.body.classList.toggle("banner-visible",!hidden);
+  try{localStorage.removeItem("turmaA_vbHidden");}catch(e){}
+  document.body.classList.add("banner-visible");
   const cls=document.getElementById("vbClose");
   if(cls)cls.onclick=()=>{
     banner.classList.add("hidden");
     document.body.classList.remove("banner-visible");
-    try{localStorage.setItem("turmaA_vbHidden","1");}catch(e){}
   };
   const ob=document.getElementById("vbOpenViriato");
   if(ob)ob.onclick=()=>{setSection("viriato");};
