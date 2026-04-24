@@ -442,11 +442,13 @@ body.sec-viriato .main{padding:0!important;overflow:hidden!important;height:100d
 .vf-clear{width:40px;height:40px;border-radius:10px;background:transparent;border:none;cursor:pointer;font-size:18px}
 .vf-clear:hover{background:var(--chip)}
 .vf-body{
-  flex:1;min-height:0;overflow-y:auto;padding:18px;
+  flex:1 1 0;min-height:0;height:100%;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:18px;
   display:flex;flex-direction:column;gap:10px;
   background:var(--bg);position:relative;
 }
-.vf-body::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border);opacity:.45;pointer-events:none}
 .vf-body .msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap}
 .vf-body .msg.bot{background:#1a1a1a;color:var(--neon);align-self:flex-start;border:1px solid #00e67622}
 .vf-body .msg.user{background:#1f2840;color:#fff;align-self:flex-end}
@@ -744,7 +746,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-24 v2.3 (fix grid 60px)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-24 v2.4 (scroll chat)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
