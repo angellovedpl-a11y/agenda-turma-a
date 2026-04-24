@@ -448,13 +448,20 @@ Conteudo (amostra):
 # === ROTAS ESTATICAS ===
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    resp = send_from_directory('.', 'index.html')
+    resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    resp.headers['Pragma'] = 'no-cache'
+    resp.headers['Expires'] = '0'
+    return resp
 
 @app.route('/<path:path>')
 def static_files(path):
     if path.startswith('api/'):
         return jsonify({'error': 'Not found'}), 404
-    return send_from_directory('.', path)
+    resp = send_from_directory('.', path)
+    if path.endswith('.html'):
+        resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return resp
 
 # === API CLAUDE ===
 # === API AUTH ===
