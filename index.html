@@ -308,6 +308,14 @@ body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!
 /* Calendário mensal */
 .cal-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
 .week-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-top:14px}
+.rx-bar{display:flex;flex-wrap:wrap;gap:6px;padding-top:8px;border-top:1px solid var(--border-soft)}
+.rx-btn{display:inline-flex;align-items:center;gap:4px;background:var(--chip);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:4px 10px;cursor:pointer;font-size:14px;line-height:1;transition:transform .12s,background .12s,border-color .12s}
+.rx-btn:hover{transform:translateY(-1px);border-color:var(--neon)}
+.rx-btn.on{background:rgba(245,197,66,.18);border-color:var(--neon);color:var(--neon)}
+.rx-emo{font-size:16px}
+.rx-cnt{font-size:11px;font-weight:700;font-family:var(--mono)}
+[data-theme="light"] .rx-btn{background:#f1f5f9;border-color:#cbd5e1;color:#0f172a}
+[data-theme="light"] .rx-btn.on{background:#fef3c7;border-color:#d97706;color:#92400e}
 .week-tit{font-family:var(--mono);font-size:11px;letter-spacing:1.6px;color:var(--text-mute);font-weight:600;margin-bottom:10px}
 .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .wk{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:10px;border:1px solid var(--border-soft);background:#15171d}
@@ -1330,6 +1338,7 @@ function showToast(msg,ms=3500){
 function getToken(){return localStorage.getItem("turmaA_authToken")||"";}
 function setToken(t){if(t)localStorage.setItem("turmaA_authToken",t);else localStorage.removeItem("turmaA_authToken");}
 let CURRENT_USER=null;
+const REACTION_EMOJIS=["👍","❤️","😂","😮","🎉","🙏","👏","🚂"];
 async function apiFetch(path,opts={}){
   const headers=Object.assign({},opts.headers||{});
   const t=getToken();
@@ -1446,21 +1455,48 @@ async function renderEventos(c){
     const evs=(d.eventos||[]).slice().sort((a,b)=>(a.data||"").localeCompare(b.data||""));
     const body=document.getElementById("evBody");
     if(!evs.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum evento ainda. Clique em + NOVO EVENTO.</div>';return;}
-    body.innerHTML=evs.map(e=>`<div class="lst-item">
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:600;font-size:14px">${escapeHtml(e.titulo||"")}</div>
-        <div style="color:var(--muted);font-size:12px;margin-top:4px">📅 ${escapeHtml(e.data||"")} ${e.hora?"· ⏰ "+escapeHtml(e.hora):""}</div>
-        ${e.descricao?`<div style="margin-top:6px;color:var(--text);font-size:13px;line-height:1.5">${escapeHtml(e.descricao)}</div>`:""}
-        <div style="color:var(--muted);font-size:11px;margin-top:6px">por ${escapeHtml(e.autor||"—")}</div>
-      </div>
-      <button class="btn-danger" data-id="${e.id}">Excluir</button>
-    </div>`).join("");
+    const meuMat=CURRENT_USER&&CURRENT_USER.matricula;
+    body.innerHTML=evs.map(e=>{
+      const reac=e.reacoes||{};
+      const barra=REACTION_EMOJIS.map(emo=>{
+        const lst=reac[emo]||[];
+        const mine=meuMat&&lst.includes(meuMat);
+        const cnt=lst.length;
+        return `<button class="rx-btn ${mine?"on":""}" data-eid="${e.id}" data-emo="${emo}" title="${cnt?cnt+(cnt===1?" reação":" reações"):"Reagir"}">
+          <span class="rx-emo">${emo}</span>${cnt?`<span class="rx-cnt">${cnt}</span>`:""}
+        </button>`;
+      }).join("");
+      return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:10px">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:14px">${escapeHtml(e.titulo||"")}</div>
+            <div style="color:var(--muted);font-size:12px;margin-top:4px">📅 ${escapeHtml(e.data||"")} ${e.hora?"· ⏰ "+escapeHtml(e.hora):""}</div>
+            ${e.descricao?`<div style="margin-top:6px;color:var(--text);font-size:13px;line-height:1.5">${escapeHtml(e.descricao)}</div>`:""}
+            <div style="color:var(--muted);font-size:11px;margin-top:6px">por ${escapeHtml(e.autor||"—")}</div>
+          </div>
+          <button class="btn-danger" data-id="${e.id}">Excluir</button>
+        </div>
+        <div class="rx-bar">${barra}</div>
+      </div>`;
+    }).join("");
     body.querySelectorAll("button.btn-danger").forEach(b=>{
       b.onclick=async()=>{
         if(!confirm("Excluir este evento?"))return;
         const novos=evs.filter(x=>x.id!=b.dataset.id);
         await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
         renderEventos(c);
+      };
+    });
+    body.querySelectorAll("button.rx-btn").forEach(b=>{
+      b.onclick=async()=>{
+        const eid=b.dataset.eid, emo=b.dataset.emo;
+        try{
+          const r=await apiFetch("/api/eventos/"+encodeURIComponent(eid)+"/reacao",{method:"POST",body:JSON.stringify({emoji:emo})});
+          if(r.ok){
+            const ev=evs.find(x=>String(x.id)===String(eid));
+            if(ev){const d=await r.json();ev.reacoes=d.reacoes||{};renderEventos(c);}
+          }
+        }catch(err){}
       };
     });
   }catch(e){if(e.message!=="auth")document.getElementById("evBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}

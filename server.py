@@ -931,6 +931,42 @@ def mem_update(sala):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# === REACOES NO MURAL ===
+REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '🎉', '🙏', '👏', '🚂']
+
+@app.route('/api/eventos/<eid>/reacao', methods=['POST'])
+@auth.require_auth
+def evento_reacao(eid):
+    u = request.current_user
+    data = request.json or {}
+    emoji = data.get('emoji')
+    if emoji not in REACTION_EMOJIS:
+        return jsonify({'error': 'Emoji invalido'}), 400
+    sala = mem_palace_load('eventos')
+    evs = sala.get('eventos', []) or []
+    found = None
+    for e in evs:
+        if str(e.get('id')) == str(eid):
+            found = e
+            break
+    if not found:
+        return jsonify({'error': 'Evento nao encontrado'}), 404
+    reacoes = found.get('reacoes') or {}
+    lst = list(reacoes.get(emoji, []))
+    mat = u['matricula']
+    if mat in lst:
+        lst.remove(mat)
+    else:
+        lst.append(mat)
+    if lst:
+        reacoes[emoji] = lst
+    else:
+        reacoes.pop(emoji, None)
+    found['reacoes'] = reacoes
+    sala['eventos'] = evs
+    mem_palace_save('eventos', sala)
+    return jsonify({'ok': True, 'reacoes': reacoes})
+
 # === API MEMPALACE — MEMORIA PESSOAL & FATOS ===
 @app.route('/api/memoria', methods=['GET'])
 @auth.require_auth
