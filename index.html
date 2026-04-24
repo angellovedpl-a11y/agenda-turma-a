@@ -422,10 +422,11 @@ input,textarea{font-family:inherit;color:inherit}
 .vb-close:hover{background:var(--chip);color:var(--text)}
 [data-theme="light"] .viriato-banner{background:linear-gradient(135deg,#ede9fe,#dcfce7);border-color:#7c3aed55;color:#0f172a}
 [data-theme="light"] .vb-txt{color:#0f172a}
-/* esconde o FAB flutuante quando estamos no calendario (banner ja tem o botao) ou no chat */
-body.sec-calendario .viriato-fab,
+/* esconde o FAB flutuante quando estamos no chat ou ja na tela do viriato.
+   No calendario, so esconde se o banner estiver visivel (que ja tem o botao). */
 body.sec-chat .viriato-fab,
-body.sec-viriato .viriato-fab{display:none}
+body.sec-viriato .viriato-fab,
+body.sec-calendario.banner-visible .viriato-fab{display:none}
 
 /* ===== VIRIATO FAB ===== */
 @keyframes viriatoGrad{
@@ -934,11 +935,14 @@ document.getElementById("themeToggle").addEventListener("click",()=>{
 // Banner reflexivo do Viriato — attach handlers a cada render do calendario
 function attachViriatoBanner(){
   const banner=document.getElementById("viriatoBanner");
-  if(!banner)return;
-  try{if(localStorage.getItem("turmaA_vbHidden")==="1")banner.classList.add("hidden");}catch(e){}
+  if(!banner){document.body.classList.remove("banner-visible");return;}
+  const hidden=(()=>{try{return localStorage.getItem("turmaA_vbHidden")==="1";}catch(e){return false;}})();
+  if(hidden)banner.classList.add("hidden");
+  document.body.classList.toggle("banner-visible",!hidden);
   const cls=document.getElementById("vbClose");
   if(cls)cls.onclick=()=>{
     banner.classList.add("hidden");
+    document.body.classList.remove("banner-visible");
     try{localStorage.setItem("turmaA_vbHidden","1");}catch(e){}
   };
   const ob=document.getElementById("vbOpenViriato");
