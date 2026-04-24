@@ -422,8 +422,10 @@ input,textarea{font-family:inherit;color:inherit}
 .vb-close:hover{background:var(--chip);color:var(--text)}
 [data-theme="light"] .viriato-banner{background:linear-gradient(135deg,#ede9fe,#dcfce7);border-color:#7c3aed55;color:#0f172a}
 [data-theme="light"] .vb-txt{color:#0f172a}
-/* esconde o FAB flutuante quando estamos no calendario (banner ja tem o botao) */
-body.sec-calendario .viriato-fab{display:none}
+/* esconde o FAB flutuante quando estamos no calendario (banner ja tem o botao) ou no chat */
+body.sec-calendario .viriato-fab,
+body.sec-chat .viriato-fab,
+body.sec-viriato .viriato-fab{display:none}
 
 /* ===== VIRIATO FAB ===== */
 @keyframes viriatoGrad{
@@ -1806,11 +1808,13 @@ async function openAdmin(){
 function setSection(sec){
   S.section=sec;
   document.querySelectorAll(".sb-icon").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
-  document.body.classList.toggle("sec-calendario",sec==="calendario");
+  ["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+  document.body.classList.add("sec-"+sec);
   render();
 }
 S.section=S.section||"calendario";
-document.body.classList.toggle("sec-calendario",S.section==="calendario");
+["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+document.body.classList.add("sec-"+S.section);
 document.querySelectorAll(".sidebar .sb-icon").forEach(b=>{
   b.addEventListener("click",async()=>{
     const sec=b.dataset.sec;
