@@ -228,17 +228,15 @@ input,textarea{font-family:inherit;color:inherit}
 .sb-icon{position:relative}
 .sb-badge{position:absolute;top:2px;right:2px;background:#e23838;color:#fff;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;padding:0 4px;display:flex;align-items:center;justify-content:center;line-height:1}
 
-/* Chat */
+/* Chat — layout WhatsApp-like, tela cheia */
+body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!important}
 .chat-wrap{display:grid;grid-template-columns:260px 1fr;grid-template-rows:100%;height:100%;min-height:0}
-/* Em mobile, garante que o chat ocupa toda a tela disponivel sem scroll do main */
 @media (max-width:720px){
-  body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100vh!important}
-  body.sec-chat .pg-head{padding:10px 14px!important;border-bottom:1px solid var(--border)}
-  body.sec-chat .pg-body{height:calc(100vh - 44px)!important;padding:0!important}
+  .chat-wrap{grid-template-columns:1fr}
   .chat-msgs{padding:14px;font-size:15px}
   .chat-msg{font-size:15px}
-  .chat-input{padding:12px}
-  .chat-input textarea{font-size:16px;min-height:58px}
+  .chat-input{padding:10px}
+  .chat-input textarea{font-size:16px;min-height:54px}
   .chat-head{padding:10px 14px}
 }
 .chat-list{border-right:1px solid var(--border);overflow-y:auto;background:var(--sidebar)}
@@ -258,7 +256,8 @@ input,textarea{font-family:inherit;color:inherit}
 .chat-head{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .chat-head .nm{font-weight:600;font-size:14px}
 .chat-head .sub{font-size:11px;color:var(--text-mute);margin-top:2px}
-.chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.chat-msgs{flex:1;min-height:0;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px;position:relative}
+.chat-msgs::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border);opacity:.45;pointer-events:none}
 .chat-msg{max-width:70%;padding:8px 12px;border-radius:14px;background:var(--chip);position:relative;word-wrap:break-word}
 .chat-msg .au{font-size:10px;color:var(--text-mute);margin-bottom:3px;font-weight:600}
 .chat-msg .tx{font-size:13px;line-height:1.5;white-space:pre-wrap}
@@ -1466,7 +1465,7 @@ function _stopChatPoll(){if(CHAT_POLL){clearInterval(CHAT_POLL);CHAT_POLL=null;}
 function avatarFor(nome){return (nome||"?").trim().split(/\s+/).slice(0,2).map(s=>s[0]||"").join("").toUpperCase()||"?";}
 function _relTime(ts){const s=Math.max(0,Math.floor(Date.now()/1000-ts));if(s<60)return"agora";if(s<3600)return"há "+Math.floor(s/60)+"min";if(s<86400)return"há "+Math.floor(s/3600)+"h";return"há "+Math.floor(s/86400)+"d";}
 async function renderChat(c){
-  c.innerHTML=`<div class="pg-head"><div class="pg-tit">💬 CHAT</div></div><div class="pg-body" style="padding:0"><div id="chatRoot" class="chat-wrap"><div style="padding:30px;color:var(--muted)">Carregando...</div></div></div>`;
+  c.innerHTML=`<div id="chatRoot" class="chat-wrap"><div style="padding:30px;color:var(--muted)">Carregando...</div></div>`;
   if(!await requireAuth()){document.getElementById("chatRoot").innerHTML='<div style="padding:30px;color:var(--muted);text-align:center;width:100%">Faça login para usar o chat.</div>';return;}
   await drawChatList();
 }
