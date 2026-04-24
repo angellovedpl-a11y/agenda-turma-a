@@ -241,8 +241,7 @@ if os.path.exists(ANGELO_IMG):
 story.append(Paragraph(
     "Este aplicativo foi feito sob medida para a <b>Turma A</b> da escala ferroviária 2x2 "
     "(dois dias de trabalho, dois de folga). Ele cobre o ciclo completo de 2026 a 2030 e ajuda "
-    "você a saber, com um toque, qual é o seu turno hoje, quando vence cada documento, qual "
-    "exame está chegando e o que precisa ir na mochila para a próxima viagem.", P))
+    "você a saber, com um toque, qual é o seu turno hoje.", P))
 story.append(Paragraph(
     "A escala, os eventos, os documentos e o checklist ficam no seu celular e podem ser "
     "consultados a qualquer hora. Já o <b>Viriato (assistente de IA) precisa de internet</b> "
