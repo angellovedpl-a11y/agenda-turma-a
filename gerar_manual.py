@@ -154,7 +154,7 @@ def capa_canvas(canvas, doc):
     canvas.drawCentredString(W/2, rodape_h - 1.0*cm, "Criado por Angelo Silva")
     canvas.setFont("Helvetica", 9)
     canvas.setFillColor(HexColor("#e8f4f3"))
-    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 2.0   •   Abril de 2026")
+    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 2.2   •   Abril de 2026")
 
     canvas.restoreState()
 
@@ -184,9 +184,9 @@ story.append(Paragraph("Sumário", H1))
 sumario = [
     ("1.", "Boas-vindas", "3"),
     ("2.", "Primeiros passos: cadastro e login", "3"),
-    ("3.", "A tela inicial e a barra lateral", "5"),
+    ("3.", "A tela inicial e o menu da Porta", "5"),
     ("4.", "A escala 2x2: como ler", "7"),
-    ("5.", "Mural de Eventos da Turma", "8"),
+    ("5.", "Mural da Turma (com reações)", "8"),
     ("6.", "Chat — conversas e grupos da turma", "9"),
     ("7.", "Acervo (biblioteca) e anexos até 50 MB", "10"),
     ("8.", "Função na ferrovia: Operacional ou Administrativa", "11"),
@@ -278,11 +278,11 @@ story.append(Paragraph(
     "Na tela de entrada, toque em <b>Já tenho cadastro</b>, digite sua matrícula e sua senha "
     "de 4 dígitos. Pronto, está dentro.", P))
 
-story.append(Paragraph("2.3. O que cada botão da barra lateral faz", H2))
+story.append(Paragraph("2.3. O que cada item do menu faz", H2))
 story.append(Paragraph(
-    "Na nova versão (2.0), os botões principais ficam numa <b>barra lateral escura</b> à esquerda "
-    "(no celular ela vira uma barrinha fina, no computador uma faixa de 60 px). Esses são os "
-    "ícones empilhados, de cima pra baixo:", P))
+    "Na versão atual (2.2), os botões principais ficam dentro de um <b>popup que abre pelo "
+    "ícone da Porta 🚪</b> no topo da tela, ao lado do botão de tema (sol/lua). Toque na "
+    "Porta e o menu desce com estes itens:", P))
 def badge(label, bg, fg=white):
     s = ParagraphStyle("BG", parent=P, alignment=TA_CENTER, fontName="Helvetica-Bold",
                        fontSize=10, textColor=fg, leading=12)
@@ -301,13 +301,14 @@ def badge(label, bg, fg=white):
     return t
 
 botoes = [
-    ["Ícone (lateral)", "O que faz"],
+    ["Item do menu (Porta 🚪)", "O que faz"],
     [badge("CALENDÁRIO", AZUL), "Abre o calendário com a escala 2x2 (visões mensal e anual). Tela inicial do app."],
-    [badge("MURAL", HexColor("#7c3aed")), "Mural de Eventos da Turma — onde a turma posta avisos, fotos e arquivos pra todos verem. Quadro com 'pinos'."],
-    [badge("CHAT", HexColor("#16a34a")), "Conversas privadas e grupos da turma, estilo WhatsApp. Tem bolinha vermelha quando há mensagem nova."],
-    [badge("ACERVO", HexColor("#0ea5e9")), "Biblioteca de documentos (PDFs, fotos, regulamentos). É o cérebro de consulta do Viriato."],
+    [badge("MURAL", HexColor("#7c3aed")), "Mural da Turma — onde a turma posta avisos, fotos e arquivos pra todos verem. Inclui reações com emoji."],
+    [badge("CHAT", HexColor("#16a34a")), "Conversas privadas e grupos da turma, estilo WhatsApp. Bolinha vermelha mostra mensagens não lidas."],
+    [badge("ACERVO", HexColor("#0ea5e9")), "Biblioteca de documentos (PDFs, regulamentos, manuais). É o cérebro de consulta do Viriato."],
     [badge("CONFIG.", HexColor("#64748b")), "Tema claro/escuro, alarme da jornada, auditoria, trocar senha, sair, e (para admins) o painel de aprovação."],
-    [badge("PRONTOS", HexColor("#fdb913"), black), "Atalho que abre o portal externo Sistema Prontos no navegador (pra fazer o teste antes da jornada)."],
+    [badge("PRONTOS", HexColor("#fdb913"), black), "Atalho que abre o portal externo Sistema Prontos numa aba nova (pra fazer o teste antes da jornada)."],
+    [badge("MANUAL", HexColor("#dc2626")), "Abre este manual em PDF numa aba nova, pronto pra ler ou imprimir."],
 ]
 tb = Table(botoes, colWidths=[3*cm, 12*cm])
 tb.setStyle(TableStyle([
@@ -329,18 +330,21 @@ story.append(PageBreak())
 # 3. Tela inicial
 story.append(Paragraph("3. A tela inicial e o que cada coisa faz", H1))
 story.append(Paragraph(
-    "Logo que entra, você vê a sua <b>semana atual</b> em formato de cartões grandes, fáceis "
-    "de bater o olho. Cada cartão mostra:", P))
-story.append(li("O <b>dia da semana</b> e a data."))
-story.append(li("Se é <b>Serviço</b> (cor azul, com 🚃) ou <b>Folga</b> (cor amarela/dourada, com 🌙)."))
-story.append(li("Eventuais <b>marcadores</b> de eventos do dia (médico, viagem, hora extra, aniversário, etc.)."))
+    "Logo que entra, você cai no <b>Calendário</b>. No topo ficam três coisas importantes:", P))
+story.append(li("À esquerda, a marca <b>AGENDA TURMA A — Escala 2x2</b> com o símbolo da Vale."))
+story.append(li("No meio, dois botões para alternar entre <b>MENSAL</b> e <b>ANUAL</b>."))
+story.append(li("À direita, dois ícones pequenos: <b>🌗 Tema</b> (claro/escuro) e <b>🚪 Porta</b> "
+                "(abre o menu com Calendário, Mural, Chat, Acervo, Configurações, Prontos e Manual)."))
 story.append(Paragraph(
-    "Acima da semana ficam os <b>indicadores rápidos</b> do ano: <b>Folgas</b> 🌙, "
-    "<b>Serviço</b> 🚃, <b>Feriados</b> 🎉, <b>Eventos</b> 📌 (tudo que você cadastrou) "
-    "e <b>Docs</b> 📎 (anexos guardados). Abaixo, dois botões alternam entre a visão de "
-    "<b>📅 Calendário</b> e a lista de <b>📋 Eventos</b>.", P))
-story.append(nota("Toque em qualquer cartão de dia para abrir os detalhes daquele turno e adicionar "
-                  "uma observação (por exemplo: 'cobertura do colega João')."))
+    "Logo abaixo do mês, aparece a caixa <b>ESTA SEMANA</b>: sete cartões pequenos (Dom a Sáb) "
+    "mostrando se o dia é <b>TRAB</b> (trabalho) ou <b>FOLGA</b>. O dia de hoje vem destacado "
+    "em <b>amarelo neon</b> com uma borda viva — bater o olho e já saber.", P))
+story.append(Paragraph(
+    "Mais abaixo entra o calendário do mês inteiro, depois a <b>lista de eventos</b> da turma, e "
+    "por fim o <b>banner do Viriato</b> — uma faixa colorida que convida a abrir uma conversa com "
+    "o assistente. Quando o banner está visível, o trenzinho 🚂 flutuante some pra não atrapalhar.", P))
+story.append(nota("Toque em qualquer dia do calendário para abrir os detalhes daquele turno e "
+                  "adicionar uma observação (por exemplo: 'cobertura do colega João')."))
 
 # 4. Escala 2x2
 story.append(Paragraph("4. A escala 2x2: como ler", H1))
@@ -381,20 +385,37 @@ story.append(tl)
 story.append(PageBreak())
 
 # 5. Mural de Eventos
-story.append(Paragraph("5. Mural de Eventos da Turma", H1))
+story.append(Paragraph("5. Mural da Turma", H1))
 story.append(Paragraph(
-    "O <b>Mural</b> (ícone do quadro com pinos na barra lateral) é onde a turma deixa avisos "
-    "que <b>todo mundo precisa ver</b>: comunicados da coordenação, fotos da equipe, escalas "
-    "extras, troca de turno combinada, etc. Não é conversa privada — é o quadro de avisos "
-    "compartilhado.", P))
-story.append(li("Toque no <b>+</b> para postar uma nova mensagem com texto e até um anexo (foto, "
-                "PDF, planilha — limite de <b>50 MB</b> por arquivo)."))
-story.append(li("Posts ficam ordenados do mais novo para o mais antigo."))
-story.append(li("Cada post mostra o nome de quem postou, a data e a hora."))
+    "O <b>Mural</b> (item do menu da Porta 🚪) é onde a turma deixa avisos que <b>todo mundo "
+    "precisa ver</b>: comunicados da coordenação, fotos da equipe, escalas extras, troca de turno "
+    "combinada, etc. Não é conversa privada — é o quadro de avisos compartilhado.", P))
+story.append(li("Toque em <b>+ NOVO EVENTO</b> para postar uma nova mensagem com título, data, "
+                "hora e descrição."))
+story.append(li("Posts ficam ordenados pela data do evento."))
+story.append(li("Cada post mostra o nome de quem postou e a data."))
+
+story.append(Paragraph("5.1. Reações com emoji", H2))
+story.append(Paragraph(
+    "Embaixo de cada post existe uma <b>barra de reações</b> com 8 emojis para você responder "
+    "rapidinho, sem precisar escrever:", P))
+story.append(li("<b>👍 Joia</b> — concordo, beleza, anotado."))
+story.append(li("<b>❤️ Coração</b> — gostei, valeu, me emocionou."))
+story.append(li("<b>😂 Risada</b> — pra brincadeira, foto engraçada do pátio."))
+story.append(li("<b>😮 Surpresa</b> — pra notícia inesperada."))
+story.append(li("<b>🎉 Festa</b> — comemoração, conquista, aniversário."))
+story.append(li("<b>🙏 Agradecimento</b> — valeu pela cobertura, obrigado pelo aviso."))
+story.append(li("<b>👏 Palmas</b> — parabéns, mandou bem."))
+story.append(li("<b>🚂 Trenzinho</b> — assunto ferroviário, simbólico da turma."))
+story.append(Paragraph(
+    "Toque uma vez para reagir; toque de novo no mesmo emoji para retirar sua reação. Quando "
+    "alguém reage, aparece o <b>contador</b> ao lado do emoji. Sua reação fica destacada em "
+    "<b>amarelo neon</b> pra você lembrar onde já reagiu.", P))
+
 story.append(nota("Conversas pessoais ou em pequeno grupo não vão aqui — vão no <b>Chat</b> (capítulo 6)."))
 
-# 5.1 Eventos no calendário (mantido)
-story.append(Paragraph("5.1. Eventos no calendário (médico, viagem, hora extra)", H2))
+# 5.2 Eventos no calendário (mantido)
+story.append(Paragraph("5.2. Eventos no calendário (médico, viagem, hora extra)", H2))
 story.append(Paragraph(
     "Independente do Mural, cada dia do calendário aceita os seus <b>eventos pessoais</b>. "
     "Toque em qualquer dia (no mês ou no calendário anual) para abrir o detalhe do dia e criar "
@@ -440,21 +461,47 @@ story.append(aviso("Não use o Chat pra avisos que <b>todos da turma</b> precisa
 # 7. Acervo
 story.append(Paragraph("7. Acervo (biblioteca) e anexos até 50 MB", H1))
 story.append(Paragraph(
-    "O <b>Acervo</b> (ícone do livro aberto na barra lateral) é a <b>biblioteca de documentos</b> "
-    "da turma. É também o <b>cérebro de consulta do Viriato</b>: tudo que você anexa aqui, ele "
-    "pode ler e usar pra responder perguntas.", P))
+    "O <b>Acervo</b> (item do menu da Porta 🚪) é a <b>biblioteca de documentos</b> da turma. "
+    "É também o <b>cérebro de consulta do Viriato</b>: tudo que você anexa aqui, ele pode ler e "
+    "usar pra responder perguntas.", P))
 story.append(li("<b>📎 Anexar documento</b> — para arquivos <b>permanentes</b>: regulamentos, "
                 "manuais técnicos, acordos coletivos, normas de segurança."))
 story.append(li("<b>📌 Marcar como TEMP</b> — para arquivos que <b>mudam com frequência</b> "
                 "(boletins da semana, escalas reajustadas). Toque no 📌 antes de anexar; ele acende "
                 "em <b>laranja</b>; depois toque no 📎."))
-story.append(li("<b>🖼️ Anexar imagem</b> e <b>📷 Tirar foto</b> — para o Viriato analisar a imagem "
-                "junto com a sua pergunta. A imagem <b>não</b> entra na biblioteca; serve só "
-                "pra aquela conversa."))
 story.append(li("<b>Limite de tamanho:</b> até <b>50 MB</b> por arquivo, em qualquer canto do app "
                 "(Acervo, Mural ou Chat). Acima disso o app recusa antes de subir."))
-story.append(nota("PDFs e Word viram texto automaticamente para o Viriato consultar. Se quiser "
-                  "que ele leia uma imagem, prefira o botão 🖼️/📷 — não o 📎."))
+
+story.append(Paragraph("7.1. O que o Viriato consegue ler de cada formato", H2))
+story.append(Paragraph(
+    "Nem todo arquivo é igual. Veja o que acontece quando você sobe cada tipo no Acervo:", P))
+formatos = [
+    ["Formato", "O Viriato lê o conteúdo?"],
+    ["PDF com texto (digitado)", "✅ Sim. Texto extraído na hora."],
+    ["PDF escaneado / foto de papel virada PDF", "✅ Sim. O servidor faz OCR automático usando inteligência artificial (Vision)."],
+    ["DOCX (Word) / TXT", "✅ Sim. Texto extraído na hora."],
+    ["PPTX (PowerPoint)", "✅ Sim. Texto dos slides é extraído."],
+    ["Imagem solta (JPG, PNG)", "❌ Não. O documento entra com o nome, mas o Viriato não enxerga o que está escrito na imagem."],
+]
+tf = Table(formatos, colWidths=[5*cm, 10*cm])
+tf.setStyle(TableStyle([
+    ("BACKGROUND", (0,0), (-1,0), AZUL),
+    ("TEXTCOLOR", (0,0), (-1,0), white),
+    ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+    ("FONT", (0,1), (-1,-1), "Helvetica", 10),
+    ("FONTNAME", (0,1), (0,-1), "Helvetica-Bold"),
+    ("VALIGN", (0,0), (-1,-1), "TOP"),
+    ("GRID", (0,0), (-1,-1), 0.4, CINZA_CLARO),
+    ("ROWBACKGROUNDS", (0,1), (-1,-1), [white, CINZA_CLARO]),
+    ("BOTTOMPADDING", (0,0), (-1,-1), 7),
+    ("TOPPADDING", (0,0), (-1,-1), 7),
+    ("LEFTPADDING", (0,0), (-1,-1), 8),
+]))
+story.append(tf)
+story.append(nota("Vai fotografar uma escala ou um boletim impresso? Salve como <b>PDF</b> antes de subir "
+                  "(qualquer aplicativo de scanner do celular faz isso). Aí o OCR roda automaticamente "
+                  "e o Viriato passa a enxergar o conteúdo. Subir como JPG/PNG só serve para guardar a "
+                  "imagem; o Viriato não vai conseguir responder perguntas sobre o que está escrito nela."))
 
 # 8. Função na ferrovia
 story.append(Paragraph("8. Função na ferrovia: Operacional ou Administrativa", H1))
@@ -500,39 +547,49 @@ story.append(Paragraph(
     "especialmente para esta agenda. Não é um chatbot genérico copiado da internet: ele foi "
     "moldado com a linguagem da turma, com o jeito ferroviário de falar e com o conhecimento "
     "da rotina 2x2.", P))
+
+story.append(Paragraph("10.1. Como abrir o Viriato", H2))
 story.append(Paragraph(
-    "Aparece como o trenzinho 🚂 na lateral da tela. Pode perguntar qualquer coisa em "
-    "português comum, por exemplo:", P))
+    "O Viriato aparece em três lugares — o caminho que estiver mais à mão:", P))
+story.append(li("<b>Banner colorido no Calendário</b> (faixa roxa-verde abaixo dos eventos): "
+                "toque para abrir a tela cheia de conversa. O banner volta toda vez que você "
+                "abre o Calendário."))
+story.append(li("<b>Trenzinho flutuante 🚂</b> no canto inferior direito: arrastável, sempre à "
+                "mão em qualquer aba. Some sozinho quando o banner do Viriato está visível, pra "
+                "não atrapalhar."))
+story.append(li("<b>Janelinha pop-up</b>: tocar no trenzinho abre uma janela menor por cima da "
+                "tela, sem precisar sair de onde você está."))
+
+story.append(Paragraph("10.2. Como conversar com ele", H2))
+story.append(Paragraph(
+    "Pode perguntar qualquer coisa em português comum, por exemplo:", P))
 story.append(li("<i>“Quando é minha próxima folga?”</i>"))
 story.append(li("<i>“Quantos dias trabalhei esse mês?”</i>"))
 story.append(li("<i>“Qual o prazo do meu ASO?”</i>"))
 story.append(li("<i>“Como faço pra trocar turno com o Pedro?”</i>"))
-story.append(li("<i>“Esqueci minha senha, me ajuda?”</i>"))
+story.append(li("<i>“Resume pra mim o ACT 2025/2027.”</i>"))
 story.append(Paragraph(
     "Ele responde no jargão ferroviário — se você errar uma senha três vezes, ele diz "
     "<b>“🚦 Parada pelo Governador!”</b> em vez de um chato “erro 401”.", P))
 story.append(nota("O Viriato não inventa: se ele não souber, vai dizer que não sabe e sugerir falar "
                   "com o Angelo."))
 
-story.append(Paragraph("10.1. Anexar documentos para o Viriato ler", H2))
+story.append(Paragraph("10.3. O Viriato precisa de internet", H2))
 story.append(Paragraph(
-    "Na barra de baixo da tela do Viriato existem botões de anexo. Cada um tem uma função "
-    "diferente — todos colocam o arquivo na <b>biblioteca</b>, que é o cérebro de consulta do Viriato:", P))
-story.append(li("<b>📎 Anexar documento</b> — para arquivos <b>permanentes</b>: regulamentos, "
-                "manuais técnicos, acordos coletivos, normas de segurança. Coisas que mudam pouco "
-                "ou nunca."))
-story.append(li("<b>📌 Marcar como TEMP</b> — para arquivos que <b>mudam com frequência</b>: "
-                "boletins da semana, escalas reajustadas, avisos do mês, comunicados rápidos. "
-                "Toque no 📌 antes de anexar — ele acende em <b>laranja</b>. Em seguida toque no 📎 e "
-                "escolha o arquivo: ele vai para uma pasta separada chamada <b>TEMP</b>, com a "
-                "categoria <i>temp</i>. Depois do envio, o 📌 desliga sozinho para o próximo "
-                "anexo voltar a ser permanente."))
-story.append(li("<b>🖼️ Anexar imagem</b> e <b>📷 Tirar foto</b> — para o Viriato analisar a imagem "
-                "junto com a sua pergunta (ex.: foto de um defeito, de um boletim impresso, de um "
-                "trecho de norma). A imagem <b>não</b> entra na biblioteca; serve só para aquela "
-                "conversa."))
-story.append(nota("A pasta TEMP existe para você não misturar boletim da semana com manual "
-                  "definitivo. Quando o boletim vencer, é só apagar dali sem mexer no resto."))
+    "O resto do app (escala, eventos, checklist, mural) funciona offline. O Viriato precisa "
+    "de internet porque conversa com um servidor de inteligência artificial na nuvem. Sem sinal, "
+    "ele fica em silêncio até a conexão voltar — o restante do app continua normal.", P))
+
+story.append(Paragraph("10.4. Quero que o Viriato leia um documento meu", H2))
+story.append(Paragraph(
+    "O chat do Viriato hoje não tem botão de anexar arquivo. O caminho correto é:", P))
+story.append(li("Abra o <b>Acervo</b> (item Acervo no menu da Porta 🚪)."))
+story.append(li("Toque em <b>📎 Anexar documento</b> e escolha o arquivo (PDF, DOCX, PPTX, TXT)."))
+story.append(li("Espere processar (alguns segundos). Pronto: o Viriato passa a poder consultar "
+                "esse conteúdo nas próximas perguntas."))
+story.append(aviso("Imagens soltas (JPG/PNG) <b>não</b> são lidas. Se for uma foto de papel, salve "
+                   "como PDF antes de subir — assim o OCR é acionado automaticamente. Detalhes na "
+                   "tabela do capítulo 7.1."))
 
 # 9. Painel admin
 story.append(Paragraph("11. Painel do administrador", H1))
@@ -610,6 +667,13 @@ faqs = [
     ("E se eu mudar de celular?",
      "É só baixar o app no novo (mesmo endereço) e fazer login com matrícula + senha. "
      "Tudo aparece igualzinho."),
+    ("Posso jogar uma foto no Acervo e perguntar ao Viriato sobre o que está escrito?",
+     "Não diretamente, se a foto for JPG/PNG. O Viriato só lê texto extraído de PDF, DOCX, "
+     "PPTX ou TXT. Para ele entender uma foto de papel (boletim, escala, regulamento impresso), "
+     "salve antes como <b>PDF</b> — qualquer app de scanner do celular faz isso. Aí o servidor "
+     "roda OCR automático e o conteúdo passa a ser consultável. Detalhes na tabela do capítulo 7.1."),
+    ("Onde encontro este manual depois?",
+     "No menu da <b>Porta 🚪</b>, item <b>📕 Manual</b>. Abre o PDF numa aba nova, dá pra ler ou imprimir."),
 ]
 for q, a in faqs:
     story.append(Paragraph("<b>" + q + "</b>", H3))
@@ -633,6 +697,11 @@ gloss = [
     ["Senha temporária", "Senha de 4 dígitos gerada pelo Viriato ou pelo admin, válida só até você trocar."],
     ["TEMP (📌)", "Pasta separada da biblioteca para arquivos que mudam com frequência (boletins, escalas reajustadas, avisos). Marque com 📌 antes de anexar com 📎."],
     ["Viriato", "O trenzinho assistente que ajuda dentro do app."],
+    ["Porta (🚪)", "Ícone no topo da tela. Abre o menu com Calendário, Mural, Chat, Acervo, Configurações, Prontos e Manual."],
+    ["Banner do Viriato", "Faixa colorida que aparece no Calendário convidando a conversar com o Viriato. Volta toda vez que você abre essa aba."],
+    ["FAB / Trenzinho 🚂", "Botão flutuante e arrastável do Viriato no canto inferior direito. Some quando o banner do Viriato está visível, pra não atrapalhar."],
+    ["Reações (Mural)", "Os 8 emojis sob cada post do mural (👍 ❤️ 😂 😮 🎉 🙏 👏 🚂). Toque para reagir; toque de novo no mesmo emoji para retirar."],
+    ["OCR", "Reconhecimento Óptico de Caracteres. O servidor faz OCR automático em PDF escaneado para extrair o texto. Em imagem solta (JPG/PNG) o OCR não roda — salve antes como PDF."],
 ]
 tg = Table(gloss, colWidths=[4*cm, 11*cm])
 tg.setStyle(TableStyle([
