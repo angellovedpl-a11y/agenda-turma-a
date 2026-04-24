@@ -2026,6 +2026,10 @@ function setSection(sec){
   render();
 }
 S.section=S.section||"calendario";
+(function(){
+  const q=new URLSearchParams(location.search).get("sec");
+  if(q && ["calendario","eventos","chat","acervo","setup"].includes(q)) S.section=q;
+})();
 ["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
 document.body.classList.add("sec-"+S.section);
 // Menu ⋮ wiring
@@ -2039,12 +2043,10 @@ document.body.classList.add("sec-"+S.section);
   bd.addEventListener("click",closeMenu);
   document.addEventListener("keydown",(e)=>{if(e.key==="Escape")closeMenu();});
   document.querySelectorAll(".menu-pop .mp-item[data-sec]").forEach(b=>{
-    b.addEventListener("click",async()=>{
+    b.addEventListener("click",()=>{
       const sec=b.dataset.sec;
       closeMenu();
-      if(sec==="setup"){await openSetup();return;}
-      if(sec!=="calendario"){if(!await requireAuth())return;}
-      setSection(sec);
+      window.open(location.pathname+"?sec="+encodeURIComponent(sec),"_blank","noopener");
     });
   });
   document.querySelectorAll(".menu-pop a.mp-item").forEach(a=>{
