@@ -1514,7 +1514,7 @@ async function renderEventos(c){
   try{
     const r=await apiFetch("/api/mem/eventos");
     const d=await r.json();
-    const evs=(d.eventos||[]).slice().sort((a,b)=>(a.data||"").localeCompare(b.data||""));
+    const evs=(d.eventos||[]).slice().sort((a,b)=>(Number(b.id)||0)-(Number(a.id)||0));
     const body=document.getElementById("evBody");
     if(!evs.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum evento ainda. Clique em + NOVO EVENTO.</div>';return;}
     const meuMat=CURRENT_USER&&CURRENT_USER.matricula;
