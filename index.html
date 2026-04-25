@@ -2072,10 +2072,13 @@ function openTrocarFuncao(){
 }
 async function openAdmin(){
   openModal("Painel administrativo",`
-    <div class="tabs-mini" id="adTabs">
+    <div class="tabs-mini" id="adTabs" style="flex-wrap:wrap">
       <button data-t="pend" class="active">⏳ Cadastros</button>
       <button data-t="mem">🧠 Memorizações</button>
       <button data-t="usu">👥 Usuários</button>
+      <button data-t="reg">🧪 Regras técnicas</button>
+      <button data-t="ant">🚫 Anti-padrões</button>
+      <button data-t="log">📋 Log Viriato</button>
     </div>
     <div id="adPanel">Carregando...</div>
   `,async(body)=>{
@@ -2122,7 +2125,7 @@ async function openAdmin(){
             else{const d=await r.json().catch(()=>({}));showToast("❌ "+(d.error||d.erro||"falhou"));}
           };
         });
-      }else{
+      }else if(tab==="usu"){
         const r=await apiFetch("/api/admin/usuarios");const d=await r.json();
         const list=d.usuarios||d||[];
         p.innerHTML=list.map(u=>`<div class="lst-item"><div style="flex:1"><div style="font-weight:600">${escapeHtml(u.nome||"")}</div><div style="font-size:12px;color:var(--muted)">Mat ${escapeHtml(u.matricula||"")} · ${escapeHtml(u.role||"membro")}</div></div><div style="display:flex;gap:4px;flex-wrap:wrap">${u.role==="admin"||u.role==="aprovador"?'<button class="btn-secondary" data-act="dp" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">↓ Despromover</button>':'<button class="btn-secondary" data-act="pr" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">↑ Promover</button>'}<button class="btn-secondary" data-act="rs" data-m="${escapeHtml(u.matricula)}" style="padding:4px 8px;font-size:11px">🔑 Resetar</button></div></div>`).join("");
@@ -2136,6 +2139,99 @@ async function openAdmin(){
             load();
           };
         });
+      }else if(tab==="reg"){
+        const r=await apiFetch("/api/regras_tecnicas");const d=await r.json();
+        const regras=d.regras||[];
+        const form=`<div style="background:#0f1117;border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--neon)">+ Nova regra técnica</div>
+          <div class="modal-fld" style="margin-bottom:6px"><input id="rgC" placeholder="Conceito (ex: Pressão de alívio L201)" maxlength="120"/></div>
+          <div class="modal-fld" style="margin-bottom:6px"><textarea id="rgR" placeholder="Regra de ouro (operacional, completa)" maxlength="600" rows="3" style="width:100%;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
+          <div class="modal-fld" style="margin-bottom:6px"><input id="rgB" placeholder="Condição de borda (opcional)" maxlength="400"/></div>
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <input id="rgP" placeholder="Peso 0.0–1.0" value="0.9" style="flex:1;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text)"/>
+            <input id="rgF" placeholder="Fonte (doc/pessoa)" maxlength="120" style="flex:2;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text)"/>
+          </div>
+          <button id="rgB1" class="btn-primary" style="width:100%;padding:8px">Gravar regra</button>
+        </div>`;
+        const lista=regras.length?regras.map(r=>`<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="background:#14b8a6;color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700">REGRA</span>
+            <span style="font-weight:600;font-size:13px;flex:1">${escapeHtml(r.conceito||"")}</span>
+            <span style="font-size:10px;color:var(--muted)">peso ${r.peso_de_confianca||1}</span>
+            <button class="btn-danger" data-id="${r.id}" data-act="del" style="padding:4px 10px;font-size:11px">🗑</button>
+          </div>
+          <div style="font-size:13px;line-height:1.4">${escapeHtml(r.regra_de_ouro||"")}</div>
+          ${r.condicao_de_borda?`<div style="font-size:11px;color:var(--muted)"><b>Borda:</b> ${escapeHtml(r.condicao_de_borda)}</div>`:""}
+          <div style="font-size:10px;color:var(--muted)">Fonte: ${escapeHtml(r.fonte||"?")} · ${escapeHtml(r.data||"")}</div>
+        </div>`).join(""):'<div style="color:var(--muted);padding:14px;text-align:center;font-size:12px">Nenhuma regra cadastrada ainda</div>';
+        p.innerHTML=form+lista;
+        document.getElementById("rgB1").onclick=async()=>{
+          const body={
+            conceito:document.getElementById("rgC").value.trim(),
+            regra_de_ouro:document.getElementById("rgR").value.trim(),
+            condicao_de_borda:document.getElementById("rgB").value.trim(),
+            peso_de_confianca:parseFloat(document.getElementById("rgP").value)||0.9,
+            fonte:document.getElementById("rgF").value.trim()
+          };
+          const r=await apiFetch("/api/regras_tecnicas",{method:"POST",body:JSON.stringify(body)});
+          const d=await r.json();
+          if(r.ok){showToast("✅ Regra gravada");load();}else{showToast("❌ "+(d.error||"falha"));}
+        };
+        p.querySelectorAll("button[data-act='del']").forEach(b=>{
+          b.onclick=async()=>{
+            if(!confirm("Apagar esta regra?"))return;
+            const r=await apiFetch("/api/regras_tecnicas/"+b.dataset.id,{method:"DELETE"});
+            if(r.ok){showToast("Apagada");load();}
+          };
+        });
+      }else if(tab==="ant"){
+        const r=await apiFetch("/api/antipadroes");const d=await r.json();
+        const lst=d.antipadroes||[];
+        const form=`<div style="background:#0f1117;border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:#ff8a8a">+ Novo anti-padrão (erro a NUNCA repetir)</div>
+          <div class="modal-fld" style="margin-bottom:6px"><textarea id="apE" placeholder="Erro que o Viriato cometeu" maxlength="400" rows="2" style="width:100%;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
+          <div class="modal-fld" style="margin-bottom:6px"><textarea id="apC" placeholder="Correção (o que ele deveria ter dito)" maxlength="400" rows="2" style="width:100%;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
+          <button id="apB1" class="btn-primary" style="width:100%;padding:8px">Gravar anti-padrão</button>
+        </div>`;
+        const lista=lst.length?lst.map(a=>`<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700">EVITAR</span>
+            <span style="font-size:11px;color:var(--muted);flex:1">${escapeHtml(a.autor||"")} · ${escapeHtml(a.data||"")}</span>
+            <button class="btn-danger" data-id="${a.id}" data-act="del" style="padding:4px 10px;font-size:11px">🗑</button>
+          </div>
+          <div style="font-size:13px;line-height:1.4"><b style="color:#ff8a8a">Erro:</b> ${escapeHtml(a.erro_a_evitar||"")}</div>
+          <div style="font-size:13px;line-height:1.4"><b style="color:var(--neon)">Correção:</b> ${escapeHtml(a.correcao||"")}</div>
+        </div>`).join(""):'<div style="color:var(--muted);padding:14px;text-align:center;font-size:12px">Nenhum anti-padrão cadastrado</div>';
+        p.innerHTML=form+lista;
+        document.getElementById("apB1").onclick=async()=>{
+          const body={erro_a_evitar:document.getElementById("apE").value.trim(),correcao:document.getElementById("apC").value.trim()};
+          const r=await apiFetch("/api/antipadroes",{method:"POST",body:JSON.stringify(body)});
+          const d=await r.json();
+          if(r.ok){showToast("✅ Anti-padrão gravado");load();}else{showToast("❌ "+(d.error||"falha"));}
+        };
+        p.querySelectorAll("button[data-act='del']").forEach(b=>{
+          b.onclick=async()=>{
+            if(!confirm("Apagar este anti-padrão?"))return;
+            const r=await apiFetch("/api/antipadroes/"+b.dataset.id,{method:"DELETE"});
+            if(r.ok){showToast("Apagado");load();}
+          };
+        });
+      }else if(tab==="log"){
+        const r=await apiFetch("/api/admin/log_decisoes");const d=await r.json();
+        const lst=d.entradas||[];
+        if(!lst.length){p.innerHTML='<div style="color:var(--muted);padding:14px;text-align:center;font-size:12px">Sem decisões deliberativas registradas</div>';return;}
+        p.innerHTML='<div style="font-size:11px;color:var(--muted);margin-bottom:8px;padding:0 4px">Cada vez que o Viriato entra em modo deliberativo (pergunta crítica), uma entrada é gravada aqui.</div>'+lst.map(e=>{
+          const cor=e.modo==="deliberativo"?"#14b8a6":"#f59e0b";
+          const tag=e.modo==="deliberativo"?"AUDITADO":"SEM REGRA";
+          return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="background:${cor};color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700">${tag}</span>
+              <span style="font-size:11px;color:var(--muted)">${escapeHtml(e.autor||e.matricula||"")} · ${escapeHtml(e.data||"")}</span>
+            </div>
+            <div style="font-size:13px;line-height:1.4">${escapeHtml(e.pergunta||"")}</div>
+            ${(e.regras_usadas||[]).length?`<div style="font-size:11px;color:var(--muted)"><b>Regras consultadas:</b> ${e.regras_usadas.map(r=>escapeHtml(r.conceito||"?")).join(" · ")}</div>`:'<div style="font-size:11px;color:#f59e0b">⚠ Pergunta crítica sem regra técnica cadastrada</div>'}
+          </div>`;
+        }).join("");
       }
     };
     body.querySelectorAll("#adTabs button").forEach(b=>{

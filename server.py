@@ -171,6 +171,150 @@ def fatos_remove(id_fato: int) -> bool:
     kvstore.save('fatos_turma', {'fatos': novo})
     return True
 
+# === MEMPALACE — REGRAS TECNICAS (synaptic_weights) ===
+# Estrutura rica para conhecimento crítico (segurança, normas operacionais).
+# Cada regra tem: regra_de_ouro, condicao_de_borda, peso_de_confianca, fonte, erro_corrigido.
+def regras_tecnicas_load() -> list:
+    d = kvstore.load('regras_tecnicas')
+    return d.get('regras', []) if isinstance(d, dict) else []
+
+def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
+    conceito = (regra.get('conceito') or '').strip()[:120]
+    regra_ouro = (regra.get('regra_de_ouro') or '').strip()[:600]
+    if len(conceito) < 3 or len(regra_ouro) < 5:
+        return {'ok': False, 'erro': 'conceito e regra_de_ouro sao obrigatorios'}
+    try:
+        peso = float(regra.get('peso_de_confianca', 1.0))
+        peso = max(0.0, min(1.0, peso))
+    except Exception:
+        peso = 1.0
+    import time as _t
+    nova = {
+        'id': int(_t.time() * 1000),
+        'data': time.strftime('%Y-%m-%d'),
+        'conceito': conceito,
+        'regra_de_ouro': regra_ouro,
+        'condicao_de_borda': (regra.get('condicao_de_borda') or '').strip()[:400],
+        'peso_de_confianca': peso,
+        'fonte': (regra.get('fonte') or autor or 'admin').strip()[:120],
+        'erro_corrigido': (regra.get('erro_corrigido') or '').strip()[:400],
+        'tokens': tokenize(conceito + ' ' + regra_ouro + ' ' + (regra.get('condicao_de_borda') or '')),
+        'autor': autor,
+    }
+    regras = regras_tecnicas_load()
+    regras.insert(0, nova)
+    regras = regras[:200]
+    kvstore.save('regras_tecnicas', {'regras': regras})
+    return {'ok': True, 'regra': nova}
+
+def regras_tecnicas_remove(id_r: int) -> bool:
+    regras = regras_tecnicas_load()
+    novo = [r for r in regras if r.get('id') != id_r]
+    if len(novo) == len(regras):
+        return False
+    kvstore.save('regras_tecnicas', {'regras': novo})
+    return True
+
+def buscar_regras_tecnicas(query: str, top_k: int = 4) -> list:
+    qbase = set(tokenize(query))
+    if not qbase:
+        return []
+    qexp = _expandir_tokens(qbase)
+    qlow = (query or '').lower()
+    regras = regras_tecnicas_load()
+    scored = []
+    for r in regras:
+        rtokens = set(r.get('tokens') or tokenize(
+            r.get('conceito', '') + ' ' + r.get('regra_de_ouro', '') + ' ' + r.get('condicao_de_borda', '')
+        ))
+        if not rtokens:
+            continue
+        rtokens = _expandir_tokens(rtokens)
+        score = float(len(qexp & rtokens))
+        full_low = (r.get('conceito', '') + ' ' + r.get('regra_de_ouro', '') + ' ' + r.get('condicao_de_borda', '')).lower()
+        for qt in qbase:
+            if len(qt) >= 3 and qt in full_low:
+                score += 0.7
+        score *= (0.5 + 0.5 * float(r.get('peso_de_confianca', 1.0)))
+        if score > 0:
+            scored.append((score, r))
+    scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
+    return [s[1] for s in scored[:top_k]]
+
+# === MEMPALACE — ANTI-PADROES (correcoes do admin viram bloqueios) ===
+def antipadroes_load() -> list:
+    d = kvstore.load('antipadroes')
+    return d.get('antipadroes', []) if isinstance(d, dict) else []
+
+def antipadroes_add(erro: str, correcao: str, autor: str = '') -> dict:
+    erro = (erro or '').strip()[:400]
+    correcao = (correcao or '').strip()[:400]
+    if len(erro) < 5 or len(correcao) < 5:
+        return {'ok': False, 'erro': 'erro e correcao obrigatorios'}
+    import time as _t
+    novo = {
+        'id': int(_t.time() * 1000),
+        'data': time.strftime('%Y-%m-%d'),
+        'erro_a_evitar': erro,
+        'correcao': correcao,
+        'autor': autor or 'admin',
+    }
+    lst = antipadroes_load()
+    lst.insert(0, novo)
+    lst = lst[:100]
+    kvstore.save('antipadroes', {'antipadroes': lst})
+    return {'ok': True, 'antipadrao': novo}
+
+def antipadroes_remove(id_a: int) -> bool:
+    lst = antipadroes_load()
+    novo = [a for a in lst if a.get('id') != id_a]
+    if len(novo) == len(lst):
+        return False
+    kvstore.save('antipadroes', {'antipadroes': novo})
+    return True
+
+# === MEMPALACE — LOG DE DECISOES (auditoria do modo deliberativo) ===
+def log_decisoes_add(matricula: str, nome: str, pergunta: str, modo: str, regras_usadas: list):
+    import time as _t
+    log = kvstore.load('log_decisoes')
+    if not isinstance(log, dict):
+        log = {}
+    entradas = log.get('entradas', []) if isinstance(log, dict) else []
+    entradas.insert(0, {
+        'id': int(_t.time() * 1000),
+        'data': time.strftime('%Y-%m-%d %H:%M:%S'),
+        'matricula': matricula,
+        'autor': nome or matricula,
+        'pergunta': (pergunta or '')[:300],
+        'modo': modo,
+        'regras_usadas': [{'conceito': r.get('conceito'), 'id': r.get('id')} for r in (regras_usadas or [])],
+    })
+    entradas = entradas[:500]
+    kvstore.save('log_decisoes', {'entradas': entradas})
+
+# === DETECCAO DE PERGUNTA CRITICA (Sistema 2 / deliberacao) ===
+KEYWORDS_CRITICAS = {
+    'freio', 'freios', 'frenagem', 'frenagens', 'pressao', 'pressões', 'libra', 'libras',
+    'alivio', 'alívio', 'alivios', 'rodagem', 'velocidade', 'velocidades', 'critica', 'crítica',
+    'seguranca', 'segurança', 'risco', 'riscos', 'perigo', 'colisao', 'colisão', 'descarrilamento',
+    'manobra', 'manobras', 'patio', 'pátio', 'amv', 'amvs', 'rampa', 'rampas',
+    'bitola', 'gqt', 'gqts', 'gdt', 'gdts', 'tct', 'tcts', 'hat', 'hats',
+    'tracao', 'tração', 'composicao', 'composição', 'vagao', 'vagão', 'vagoes', 'vagões',
+    'locomotiva', 'locomotivas', 'engate', 'engates', 'lotacao', 'lotação', 'peso', 'pesos',
+    'capacidade', 'sinaleiro', 'sinal', 'sinais', 'parada', 'paradas', 'emergencia', 'emergência',
+    'norma', 'normas', 'procedimento', 'procedimentos', 'operacional', 'operacionais',
+    'l201', 'l202', 'l006', 'l007', 'l008', 'l030',
+    'pneumatico', 'pneumático', 'vacuo', 'vácuo', 'ar', 'reservatorio', 'reservatório',
+    'truque', 'caboose', 'pinhao', 'pinhão', 'kpa', 'psi', 'mpa',
+}
+
+def pergunta_critica(texto: str) -> bool:
+    if not texto:
+        return False
+    txt_low = texto.lower()
+    tokens = set(re.findall(r'[a-záéíóúâêôãõç0-9]+', txt_low))
+    return bool(tokens & KEYWORDS_CRITICAS)
+
 # === MEMPALACE — FILA DE APROVACAO DE MEMORIZACOES ===
 def pendentes_mem_load() -> list:
     d = kvstore.load('pendentes_memoria')
@@ -647,6 +791,47 @@ def claude_chat():
             for f in fatos_relev:
                 prefixo += f"- [{f.get('autor','?')}, {f.get('data','')}]: {f.get('texto','')}\n"
             prefixo += '### FIM FATOS ###\n\n'
+
+        modo_critico = pergunta_critica(ultima)
+        regras_relev = buscar_regras_tecnicas(ultima, top_k=4) if modo_critico else []
+        antipadroes = antipadroes_load() if modo_critico else []
+        if modo_critico:
+            prefixo += '### MODO DELIBERATIVO ATIVO (Sistema 2) ###\n'
+            prefixo += (
+                'A pergunta envolve operacao tecnica/seguranca. ANTES de responder ao usuario:\n'
+                '1) Identifique a resposta intuitiva (Sistema 1).\n'
+                '2) Audite essa resposta contra as REGRAS TECNICAS abaixo, condicoes de borda, limites numericos e ANTI-PADROES.\n'
+                '3) Se houver conflito, a regra com maior peso_de_confianca prevalece. Cite a fonte.\n'
+                '4) Se faltar dado, diga "nao tenho certeza" em vez de inventar numero.\n'
+                'Sua resposta ao usuario deve ser DIRETA e curta - nao mostre o processo Sistema 1/2 explicitamente, '
+                'apenas a conclusao auditada. NAO use rotulos tipo [Via Beta] ou [Conclusao].\n'
+            )
+            prefixo += '### FIM MODO DELIBERATIVO ###\n\n'
+        if regras_relev:
+            prefixo += '### REGRAS TECNICAS APLICAVEIS (use como verdade auditavel) ###\n'
+            for r in regras_relev:
+                prefixo += (
+                    f"- CONCEITO: {r.get('conceito','')}\n"
+                    f"  REGRA DE OURO: {r.get('regra_de_ouro','')}\n"
+                )
+                if r.get('condicao_de_borda'):
+                    prefixo += f"  CONDICAO DE BORDA: {r['condicao_de_borda']}\n"
+                prefixo += f"  PESO DE CONFIANCA: {r.get('peso_de_confianca',1.0)} | FONTE: {r.get('fonte','?')}\n"
+                if r.get('erro_corrigido'):
+                    prefixo += f"  NUNCA REPITA ERRO: {r['erro_corrigido']}\n"
+            prefixo += '### FIM REGRAS TECNICAS ###\n\n'
+        if antipadroes:
+            prefixo += '### ANTI-PADROES (erros corrigidos pelo admin - NUNCA repetir) ###\n'
+            for a in antipadroes[:8]:
+                prefixo += f"- ERRO A EVITAR: {a.get('erro_a_evitar','')}\n  CORRECAO: {a.get('correcao','')}\n"
+            prefixo += '### FIM ANTI-PADROES ###\n\n'
+        if modo_critico:
+            try:
+                log_decisoes_add(matricula_user, nome_user, ultima,
+                                 'deliberativo' if regras_relev else 'critico_sem_regra',
+                                 regras_relev)
+            except Exception:
+                pass
         # Carrega instrucoes adicionais do arquivo (se existir)
         instr_extra = ''
         try:
@@ -796,6 +981,45 @@ def claude_chat():
             if r_ev.get('ok'):
                 eventos_criados.append(r_ev['evento'])
         texto_limpo = marcador_ev.sub('', texto_limpo)
+
+        regras_sugeridas = []
+        marcador_rg = re.compile(
+            r'\[\s*SALVAR[_ ]REGRA\s+'
+            r'conceito\s*=\s*"([^"\n]+)"\s*\|\s*'
+            r'regra\s*=\s*"([^"\n]+)"'
+            r'(?:\s*\|\s*borda\s*=\s*"([^"\n]*)")?'
+            r'(?:\s*\|\s*peso\s*=\s*(\d+(?:\.\d+)?))?'
+            r'(?:\s*\|\s*fonte\s*=\s*"([^"\n]*)")?'
+            r'\s*\]',
+            re.IGNORECASE
+        )
+        for m in marcador_rg.finditer(texto_limpo):
+            try:
+                peso_val = float(m.group(4)) if m.group(4) else 0.7
+            except (ValueError, TypeError):
+                peso_val = 0.7
+            peso_val = max(0.0, min(1.0, peso_val))
+            sugestao = {
+                'conceito': m.group(1),
+                'regra_de_ouro': m.group(2),
+                'condicao_de_borda': m.group(3) or '',
+                'peso_de_confianca': peso_val,
+                'fonte': m.group(5) or (nome_user or matricula_user),
+            }
+            if is_admin_user:
+                r_rg = regras_tecnicas_add(sugestao, autor=nome_user or matricula_user)
+                if r_rg.get('ok'):
+                    regras_sugeridas.append({'conceito': sugestao['conceito'], 'status': 'salvo'})
+            else:
+                pend_txt = (
+                    f"[REGRA TECNICA] {sugestao['conceito']} :: {sugestao['regra_de_ouro']}"
+                    + (f" | borda: {sugestao['condicao_de_borda']}" if sugestao['condicao_de_borda'] else '')
+                    + f" | peso: {sugestao['peso_de_confianca']} | fonte: {sugestao['fonte']}"
+                )
+                r_rg = pendentes_mem_add('fato', pend_txt, matricula_user, nome_user)
+                if r_rg.get('ok'):
+                    regras_sugeridas.append({'conceito': sugestao['conceito'], 'status': 'pendente'})
+        texto_limpo = marcador_rg.sub('', texto_limpo)
         texto_limpo = re.sub(r'\n[ \t]*\n[ \t]*\n+', '\n\n', texto_limpo).strip()
 
         if pediu_salvar and not salvos:
@@ -862,7 +1086,9 @@ def claude_chat():
 
         return jsonify({'text': texto_limpo, 'trechos_usados': len(trechos),
                         'memoria_salva': salvos,
-                        'eventos_criados': eventos_criados})
+                        'eventos_criados': eventos_criados,
+                        'regras_sugeridas': regras_sugeridas,
+                        'modo_deliberativo': bool(modo_critico)})
     except Exception as e:
         err = str(e)
         if "FREE_CLOUD_BUDGET_EXCEEDED" in err:
@@ -1107,6 +1333,59 @@ def admin_pend_mem_negar(id_p):
 @auth.require_admin
 def admin_pend_mem_count():
     return jsonify({'total': len(pendentes_mem_load())})
+
+# === API REGRAS TECNICAS / ANTI-PADROES / LOG DECISOES ===
+@app.route('/api/regras_tecnicas', methods=['GET'])
+@auth.require_auth
+def regras_tecnicas_listar():
+    return jsonify({'regras': regras_tecnicas_load()})
+
+@app.route('/api/regras_tecnicas', methods=['POST'])
+@auth.require_admin
+def regras_tecnicas_criar():
+    body = request.get_json(silent=True) or {}
+    u = auth.get_current_user() or {}
+    r = regras_tecnicas_add(body, autor=u.get('nome') or u.get('matricula') or 'admin')
+    if r.get('ok'):
+        return jsonify(r)
+    return jsonify({'error': r.get('erro', 'falha')}), 400
+
+@app.route('/api/regras_tecnicas/<int:id_r>', methods=['DELETE'])
+@auth.require_admin
+def regras_tecnicas_apagar(id_r):
+    if regras_tecnicas_remove(id_r):
+        return jsonify({'ok': True})
+    return jsonify({'error': 'nao encontrada'}), 404
+
+@app.route('/api/antipadroes', methods=['GET'])
+@auth.require_auth
+def antipadroes_listar():
+    return jsonify({'antipadroes': antipadroes_load()})
+
+@app.route('/api/antipadroes', methods=['POST'])
+@auth.require_admin
+def antipadroes_criar():
+    body = request.get_json(silent=True) or {}
+    u = auth.get_current_user() or {}
+    r = antipadroes_add(body.get('erro_a_evitar', ''), body.get('correcao', ''),
+                       autor=u.get('nome') or u.get('matricula') or 'admin')
+    if r.get('ok'):
+        return jsonify(r)
+    return jsonify({'error': r.get('erro', 'falha')}), 400
+
+@app.route('/api/antipadroes/<int:id_a>', methods=['DELETE'])
+@auth.require_admin
+def antipadroes_apagar(id_a):
+    if antipadroes_remove(id_a):
+        return jsonify({'ok': True})
+    return jsonify({'error': 'nao encontrado'}), 404
+
+@app.route('/api/admin/log_decisoes', methods=['GET'])
+@auth.require_admin
+def log_decisoes_listar():
+    log = kvstore.load('log_decisoes')
+    entradas = log.get('entradas', []) if isinstance(log, dict) else []
+    return jsonify({'entradas': entradas[:200]})
 
 # === API HELPDESK ===
 @app.route('/api/helpdesk', methods=['GET'])
