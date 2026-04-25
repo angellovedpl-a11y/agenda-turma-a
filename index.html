@@ -764,7 +764,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-25 v2.5 (eventos coloridos + Viriato cria)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-25 v2.5.1 (excluir nota no calendário)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -1826,7 +1826,12 @@ async function openDia(k){
           }).join("");
         }
         if(notas.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin:10px 0 6px">NOTAS</div>`;
-          html+=notas.map(n=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px"><div style="flex:1;min-width:0;font-size:12px">${escapeHtml((n.texto||"").replace(`[DIA ${k}] `,""))}</div></div>`).join("");
+          html+=notas.map(n=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid #94a3b8">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;color:var(--text)">${escapeHtml((n.texto||"").replace(`[DIA ${k}] `,""))}</div>
+              <button data-nid="${n.id}" class="nota-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir nota</button>
+            </div>
+          </div>`).join("");
         }
         list.innerHTML=html||`<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Nada agendado neste dia.</div>`;
         list.querySelectorAll(".ev-del").forEach(b=>{
@@ -1836,6 +1841,14 @@ async function openDia(k){
             const novos=(d2.eventos||[]).filter(e=>String(e.id)!==String(b.dataset.eid));
             await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
             await carregarEventosCache();showToast("Excluído");refresh();render();
+          };
+        });
+        list.querySelectorAll(".nota-del").forEach(b=>{
+          b.onclick=async()=>{
+            if(!confirm("Excluir esta nota?"))return;
+            const r=await apiFetch("/api/memoria/pessoal/"+encodeURIComponent(b.dataset.nid),{method:"DELETE"});
+            if(r.ok){showToast("Nota excluída");refresh();}
+            else showToast("❌ Falha ao excluir");
           };
         });
       }catch(e){if(e.message!=="auth")list.innerHTML='<div style="color:#ff8a8a">Erro ao carregar.</div>';}
