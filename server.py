@@ -32,6 +32,18 @@ SALAS = ['escala', 'eventos', 'documentos', 'checklist', 'biblioteca']
 MAX_MEMORIA_PESSOAL = 50
 MAX_FATOS_TURMA = 300
 
+# === WEB PUSH (notificacoes do celular) ===
+VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY', '')
+VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY', '')
+VAPID_SUBJECT = os.environ.get('VAPID_SUBJECT', 'mailto:admin@agenda.local')
+try:
+    from pywebpush import webpush, WebPushException
+    PUSH_AVAILABLE = bool(VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY)
+except Exception:
+    PUSH_AVAILABLE = False
+    webpush = None
+    WebPushException = Exception
+
 # Inicializa banco e migra JSONs antigos (uma unica vez por chave).
 import kvstore as _kv_init
 _kv_init.init_schema()
@@ -90,6 +102,96 @@ def mem_palace_load(sala: str) -> dict:
 
 def mem_palace_save(sala: str, data: dict):
     kvstore.save(f'sala:{sala}', data)
+
+# === WEB PUSH — assinaturas por usuario ===
+def push_subs_load(matricula: str) -> list:
+    d = kvstore.load(f'push_subs:{matricula}')
+    return d.get('subs', []) if isinstance(d, dict) else []
+
+def push_subs_save(matricula: str, subs: list):
+    kvstore.save(f'push_subs:{matricula}', {'subs': subs})
+
+def push_sub_add(matricula: str, sub: dict) -> bool:
+    if not isinstance(sub, dict) or not sub.get('endpoint'):
+        return False
+    subs = push_subs_load(matricula)
+    # dedupe por endpoint
+    subs = [s for s in subs if s.get('endpoint') != sub.get('endpoint')]
+    subs.append(sub)
+    push_subs_save(matricula, subs)
+    return True
+
+def push_sub_remove(matricula: str, endpoint: str) -> bool:
+    subs = push_subs_load(matricula)
+    novos = [s for s in subs if s.get('endpoint') != endpoint]
+    if len(novos) == len(subs):
+        return False
+    push_subs_save(matricula, novos)
+    return True
+
+def send_push_to_user(matricula: str, payload: dict) -> int:
+    """Envia push para todas as assinaturas do usuario. Retorna quantas chegaram."""
+    if not PUSH_AVAILABLE:
+        return 0
+    subs = push_subs_load(matricula)
+    if not subs:
+        return 0
+    enviadas = 0
+    expiradas = []
+    body = json.dumps(payload, ensure_ascii=False)
+    for sub in subs:
+        try:
+            webpush(
+                subscription_info=sub,
+                data=body,
+                vapid_private_key=VAPID_PRIVATE_KEY,
+                vapid_claims={'sub': VAPID_SUBJECT},
+                ttl=60 * 60 * 24,
+            )
+            enviadas += 1
+        except WebPushException as e:
+            code = getattr(getattr(e, 'response', None), 'status_code', None)
+            if code in (404, 410):
+                expiradas.append(sub.get('endpoint'))
+            else:
+                print(f'[push] erro {matricula}: {e}')
+        except Exception as e:
+            print(f'[push] erro inesperado {matricula}: {e}')
+    if expiradas:
+        novos = [s for s in subs if s.get('endpoint') not in expiradas]
+        push_subs_save(matricula, novos)
+    return enviadas
+
+def send_push_to_users(matriculas: list, payload: dict) -> int:
+    total = 0
+    for m in matriculas:
+        if m:
+            total += send_push_to_user(m, payload)
+    return total
+
+def send_push_async(matriculas, payload: dict):
+    """Dispara envio em thread de background pra nao travar o request HTTP."""
+    if not PUSH_AVAILABLE:
+        return
+    if isinstance(matriculas, str):
+        matriculas = [matriculas]
+    if not matriculas:
+        return
+    import threading as _th
+    def _run():
+        try:
+            send_push_to_users(matriculas, payload)
+        except Exception as _e:
+            print(f'[push] async erro: {_e}')
+    _th.Thread(target=_run, daemon=True).start()
+
+def listar_matriculas_aprovadas() -> list:
+    """Lista matriculas de usuarios aprovados (para broadcast do mural)."""
+    try:
+        users = auth.users_load()
+        return [m for m, u in users.items() if isinstance(u, dict) and u.get('status') == 'aprovado']
+    except Exception:
+        return []
 
 # === MEMPALACE — MEMORIA PESSOAL POR USUARIO ===
 def memoria_pessoal_load(matricula: str) -> list:
@@ -651,6 +753,46 @@ def api_logout():
 @app.route('/api/auth/me', methods=['GET'])
 def api_me():
     return auth.handle_me()
+
+# === WEB PUSH endpoints ===
+@app.route('/api/push/vapid-public-key', methods=['GET'])
+def api_push_vapid():
+    return jsonify({'publicKey': VAPID_PUBLIC_KEY, 'enabled': PUSH_AVAILABLE})
+
+@app.route('/api/push/subscribe', methods=['POST'])
+@auth.require_auth
+def api_push_subscribe():
+    u = request.current_user
+    data = request.json or {}
+    sub = data.get('subscription') or {}
+    if not sub.get('endpoint'):
+        return jsonify({'error': 'Subscription invalida'}), 400
+    ok = push_sub_add(u['matricula'], sub)
+    return jsonify({'ok': ok, 'total': len(push_subs_load(u['matricula']))})
+
+@app.route('/api/push/unsubscribe', methods=['POST'])
+@auth.require_auth
+def api_push_unsubscribe():
+    u = request.current_user
+    data = request.json or {}
+    endpoint = (data.get('endpoint') or '').strip()
+    if not endpoint:
+        return jsonify({'error': 'endpoint vazio'}), 400
+    ok = push_sub_remove(u['matricula'], endpoint)
+    return jsonify({'ok': ok})
+
+@app.route('/api/push/test', methods=['POST'])
+@auth.require_auth
+def api_push_test():
+    u = request.current_user
+    n = send_push_to_user(u['matricula'], {
+        'title': '🚂 Buzina de teste',
+        'body': 'Notificacoes ativadas! Esta e uma mensagem de teste.',
+        'kind': 'teste',
+        'url': '/',
+        'tag': 'teste'
+    })
+    return jsonify({'ok': True, 'enviadas': n})
 
 @app.route('/api/admin/pendentes', methods=['GET'])
 @auth.require_approver
@@ -1237,8 +1379,44 @@ def mem_update(sala):
     try:
         data = request.json or {}
         existing = mem_palace_load(sala)
+        # Detectar eventos novos no mural (broadcast push)
+        novos_eventos = []
+        if sala == 'eventos' and isinstance(data.get('eventos'), list):
+            antigos_ids = {str(e.get('id')) for e in (existing.get('eventos') or []) if isinstance(e, dict)}
+            for ev in data['eventos']:
+                if isinstance(ev, dict) and str(ev.get('id')) not in antigos_ids:
+                    novos_eventos.append(ev)
         existing.update(data)
         mem_palace_save(sala, existing)
+        # Disparar push para todos da turma exceto o autor
+        if novos_eventos:
+            try:
+                me = request.current_user
+                emojis = {'aniversario': '🎂', 'medico': '🏥', 'viagem': '✈️',
+                          'compromisso': '📋', 'hora_extra': '⏰', 'outro': '⭐'}
+                outros = [m for m in listar_matriculas_aprovadas() if m != me['matricula']]
+                for ev in novos_eventos:
+                    emoji = emojis.get(ev.get('tipo') or 'outro', '⭐')
+                    titulo = (ev.get('titulo') or 'Novo evento')[:80]
+                    data_ev = ev.get('data') or ''
+                    body_parts = [titulo]
+                    if data_ev:
+                        try:
+                            a, m, d = data_ev.split('-')
+                            body_parts.append(f'{d}/{m}/{a}')
+                        except Exception:
+                            pass
+                    if ev.get('descricao'):
+                        body_parts.append((ev.get('descricao') or '')[:100])
+                    send_push_async(outros, {
+                        'title': f'{emoji} Mural — {me.get("nome", "Turma A")}',
+                        'body': ' • '.join(body_parts),
+                        'kind': 'mural',
+                        'tag': f'mural-{ev.get("id")}',
+                        'url': '/?secao=eventos'
+                    })
+            except Exception as _e:
+                print(f'[push] falha mural: {_e}')
         return jsonify({'ok': True, 'sala': sala})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -1624,6 +1802,21 @@ def chat_msg_enviar(cid):
         }
     msgs.append(novo)
     _chat_msgs_save(cid, msgs)
+    # Notificar outros participantes da conversa via push
+    try:
+        conv = _chat_get_conv(cid, me['matricula'])
+        outros = [m for m in (conv.get('participantes') or []) if m and m != me['matricula']] if conv else []
+        if outros:
+            preview = (texto or ('📎 ' + (anexo.get('nome') if isinstance(anexo, dict) else 'Anexo')))[:120]
+            send_push_async(outros, {
+                'title': f'💬 {me.get("nome", "Mensagem nova")}',
+                'body': preview,
+                'kind': 'chat',
+                'tag': f'chat-{cid}',
+                'url': f'/?chat={cid}'
+            })
+    except Exception as _e:
+        print(f'[push] falha ao notificar chat: {_e}')
     return jsonify({'ok': True, 'mensagem': novo})
 
 @app.route('/api/chat/conversa/<cid>/lida', methods=['POST'])

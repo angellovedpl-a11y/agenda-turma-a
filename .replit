@@ -50,3 +50,10 @@ build = ["sh", "-c", "unset PIP_USER PYTHONUSERBASE && export PIP_USER=0 && pyth
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 60000
+
+[userenv]
+
+[userenv.shared]
+VAPID_PUBLIC_KEY = "BPFe0JDoj9iQOSlmSVcsmpoxr7TPgw2BU3leCDRP-lteynUQS6LFqfI2rwY8mIh16ZEzpHQY6e9hCfiCYMBhX2g"
+VAPID_PRIVATE_KEY = "ZQQnc2cVOuLnmzd9Z81HPgZNoA8VgiGtZ1gfIPhYTcc"
+VAPID_SUBJECT = "mailto:angellovedpl@users.noreply.replit.com"

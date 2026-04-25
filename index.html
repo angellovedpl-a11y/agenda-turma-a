@@ -713,6 +713,10 @@ body.banner-visible .viriato-fab{display:none}
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="16" y2="7"/><line x1="9" y1="11" x2="16" y2="11"/></svg>
       <span>Manual <span style="color:var(--muted);font-size:11px">(PDF)</span></span>
     </a>
+    <button class="mp-item" id="mpNotif" role="menuitem" type="button">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span id="mpNotifLbl">🔔 Ativar notificações</span>
+    </button>
     <a class="mp-item" href="https://sistemaprontos.com.br/auth/realms/vale/protocol/openid-connect/auth?client_id=portal-web&redirect_uri=https%3A%2F%2Fvale-portal.sistemaprontos.com.br%2F&state=304bd04b-028f-4842-8b51-6ed3b9457203&response_mode=fragment&response_type=code&scope=openid&nonce=a6b798ce-327b-4823-8ad8-b118a8d9b2e7" target="_blank" rel="noopener noreferrer">
       <img src="/assets/prontos.png" alt="Prontos"/>
       <span>Prontos <span style="color:var(--muted);font-size:11px">(nova aba)</span></span>
@@ -764,7 +768,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-25 v2.5.1 (excluir nota no calendário)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-25 v2.6 (notificações push + buzina do trem)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -2337,8 +2341,131 @@ window.renderViriato=function(){
   });
 };
 
+// ===== WEB PUSH (notificacoes do celular + buzina) =====
+let SW_REG=null;
+let PUSH_VAPID=null;
+function urlBase64ToUint8Array(b64){
+  const pad="=".repeat((4-b64.length%4)%4);
+  const base=(b64+pad).replace(/-/g,"+").replace(/_/g,"/");
+  const raw=atob(base);
+  const arr=new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
+  return arr;
+}
+async function registerSW(){
+  if(!("serviceWorker" in navigator))return null;
+  try{
+    SW_REG=await navigator.serviceWorker.register("/sw.js",{scope:"/"});
+    return SW_REG;
+  }catch(e){console.warn("SW register falhou:",e);return null;}
+}
+async function getVapidKey(){
+  if(PUSH_VAPID)return PUSH_VAPID;
+  try{
+    const r=await fetch("/api/push/vapid-public-key");
+    const d=await r.json();
+    if(d.enabled && d.publicKey){PUSH_VAPID=d.publicKey;return PUSH_VAPID;}
+  }catch(_){}
+  return null;
+}
+async function pushIsSubscribed(){
+  if(!SW_REG)return false;
+  try{const s=await SW_REG.pushManager.getSubscription();return !!s;}catch(_){return false;}
+}
+async function enablePushNotifications(){
+  if(!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)){
+    showToast("❌ Seu navegador nao suporta notificacoes push");return false;
+  }
+  if(!CURRENT_USER){showToast("Faca login primeiro");return false;}
+  if(!SW_REG){await registerSW();}
+  if(!SW_REG){showToast("❌ Service Worker nao registrado");return false;}
+  const key=await getVapidKey();
+  if(!key){showToast("❌ Servidor sem chave VAPID");return false;}
+  let perm=Notification.permission;
+  if(perm==="default"){perm=await Notification.requestPermission();}
+  if(perm!=="granted"){showToast("❌ Permissao negada nas configuracoes do navegador");return false;}
+  try{
+    let sub=await SW_REG.pushManager.getSubscription();
+    if(!sub){
+      sub=await SW_REG.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(key)});
+    }
+    const r=await apiFetch("/api/push/subscribe",{method:"POST",body:JSON.stringify({subscription:sub.toJSON()})});
+    if(r.ok){
+      showToast("✅ Notificacoes ativadas! Tocando buzina de teste...");
+      tocarBuzina();
+      // dispara push de teste do servidor
+      setTimeout(()=>{apiFetch("/api/push/test",{method:"POST",body:"{}"});},1200);
+      atualizarBotaoNotif();
+      return true;
+    }
+    showToast("❌ Falha ao registrar no servidor");return false;
+  }catch(e){console.warn(e);showToast("❌ Erro: "+e.message);return false;}
+}
+async function disablePushNotifications(){
+  if(!SW_REG)return;
+  try{
+    const sub=await SW_REG.pushManager.getSubscription();
+    if(sub){
+      await apiFetch("/api/push/unsubscribe",{method:"POST",body:JSON.stringify({endpoint:sub.endpoint})});
+      await sub.unsubscribe();
+    }
+    showToast("Notificacoes desativadas");atualizarBotaoNotif();
+  }catch(e){showToast("Erro: "+e.message);}
+}
+async function atualizarBotaoNotif(){
+  const lbl=document.getElementById("mpNotifLbl");
+  if(!lbl)return;
+  if(!("Notification" in window)){lbl.textContent="🔕 Sem suporte";return;}
+  const subed=await pushIsSubscribed();
+  if(Notification.permission==="granted" && subed){lbl.textContent="🔔 Notificacoes ativas — desativar";}
+  else if(Notification.permission==="denied"){lbl.textContent="🔕 Bloqueadas (libere no navegador)";}
+  else{lbl.textContent="🔔 Ativar notificacoes";}
+}
+
+// audio buzina (cache)
+let _BUZINA=null;
+function tocarBuzina(){
+  try{
+    if(!_BUZINA){_BUZINA=new Audio("/buzina_trem.mp3");_BUZINA.volume=0.85;}
+    _BUZINA.currentTime=0;
+    const p=_BUZINA.play();
+    if(p&&p.catch)p.catch(()=>{/* navegador pode bloquear sem gesto */});
+  }catch(_){}
+}
+
+// receber mensagens do service worker (push em foreground / clique em notificacao)
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.addEventListener("message",(ev)=>{
+    const m=ev.data||{};
+    if(m.type==="push"){
+      tocarBuzina();
+      const p=m.payload||{};
+      if(p.title||p.body){showToast((p.title||"")+(p.body?" — "+p.body:""));}
+      // recarrega caches relevantes
+      if(p.kind==="mural"){carregarEventosCache().then(()=>{if(S.section==="eventos"||S.section==="calendario")render();});}
+    } else if(m.type==="notification_click"){
+      tocarBuzina();
+      if(m.url && m.url.includes("chat")){S.section="chat";saveLS();render();}
+      else if(m.url && m.url.includes("eventos")){S.section="eventos";saveLS();render();}
+    }
+  });
+}
+
 // ===== Boot =====
-loadMe().then(()=>{/* token validado */});
+loadMe().then(async()=>{
+  await registerSW();
+  atualizarBotaoNotif();
+  // hook do botao do menu
+  const btn=document.getElementById("mpNotif");
+  if(btn){
+    btn.onclick=async(e)=>{
+      e.preventDefault();
+      const subed=await pushIsSubscribed();
+      if(subed && Notification.permission==="granted"){await disablePushNotifications();}
+      else{await enablePushNotifications();}
+    };
+  }
+});
 
 render();
 </script>
