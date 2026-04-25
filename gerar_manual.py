@@ -154,7 +154,7 @@ def capa_canvas(canvas, doc):
     canvas.drawCentredString(W/2, rodape_h - 1.0*cm, "Criado por Angelo Silva")
     canvas.setFont("Helvetica", 9)
     canvas.setFillColor(HexColor("#e8f4f3"))
-    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 2.2   •   Abril de 2026")
+    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 2.5   •   Abril de 2026")
 
     canvas.restoreState()
 
@@ -279,7 +279,7 @@ story.append(Paragraph(
 
 story.append(Paragraph("2.3. O que cada item do menu faz", H2))
 story.append(Paragraph(
-    "Na versão atual (2.2), os botões principais ficam dentro de um <b>popup que abre pelo "
+    "Na versão atual (2.5), os botões principais ficam dentro de um <b>popup que abre pelo "
     "ícone da Porta 🚪</b> no topo da tela, ao lado do botão de tema (sol/lua). Toque na "
     "Porta e o menu desce com estes itens:", P))
 def badge(label, bg, fg=white):
@@ -416,21 +416,24 @@ story.append(nota("Conversas pessoais ou em pequeno grupo não vão aqui — vã
 # 5.2 Eventos no calendário (mantido)
 story.append(Paragraph("5.2. Eventos no calendário (médico, viagem, hora extra)", H2))
 story.append(Paragraph(
-    "Independente do Mural, cada dia do calendário aceita os seus <b>eventos pessoais</b>. "
+    "Independente do Mural, cada dia do calendário aceita os <b>eventos da turma</b>. "
     "Toque em qualquer dia (no mês ou no calendário anual) para abrir o detalhe do dia e criar "
-    "um evento. Os tipos disponíveis são:", P))
-story.append(li("🎂 <b>Aniversário</b> — basta cadastrar uma vez; o app repete automaticamente todo ano 🔁."))
-story.append(li("🏥 <b>Médico</b> — consultas, ASO periódico, exames complementares."))
-story.append(li("✈ <b>Viagem</b> — viagens pessoais ou a serviço."))
-story.append(li("📋 <b>Compromisso</b> — qualquer compromisso pessoal (cartório, escola dos filhos, reunião)."))
-story.append(li("⏰ <b>Hora Extra</b> — registro de horas trabalhadas além da escala."))
-story.append(li("⭐ <b>Outro</b> — para o que não se encaixa nos demais."))
+    "um evento. Cada tipo tem uma <b>cor própria</b> que aparece como pontinho no calendário, "
+    "facilitando enxergar de longe o que vem pela frente:", P))
+story.append(li("🎂 <b>Aniversário</b> (rosa) — basta cadastrar uma vez; o app repete automaticamente todo ano 🔁."))
+story.append(li("🏥 <b>Médico</b> (vermelho) — consultas, ASO periódico, exames complementares."))
+story.append(li("✈ <b>Viagem</b> (azul) — viagens pessoais ou a serviço."))
+story.append(li("📋 <b>Compromisso</b> (verde) — reunião, treinamento, escola dos filhos, audiência."))
+story.append(li("⏰ <b>Hora Extra</b> (amarelo) — cobertura de colega, plantão extra, troca de escala."))
+story.append(li("⭐ <b>Outro</b> (cinza) — para o que não se encaixa nos demais."))
 story.append(Paragraph(
-    "Cada evento aparece direto no cartão do dia e também na lista geral (botão "
-    "<b>📋 Eventos</b>). Você pode editar ou apagar tocando nele.", P))
-story.append(nota("Para registrar troca de turno ou cobertura de colega, use o tipo <b>Compromisso</b> "
-                  "ou <b>Outro</b> e descreva no texto (ex.: 'Cobertura do João'). Útil quando o "
-                  "supervisor pergunta meses depois quem cobriu quem."))
+    "Cada evento aparece direto no cartão do dia e também no <b>📋 MURAL DA TURMA</b>, "
+    "ordenado do mais novo para o mais antigo. Para apagar um evento, abra o Mural e use o "
+    "botão <b>Excluir</b> ao lado dele.", P))
+story.append(nota("Você também pode pedir pro Viriato anotar pra você (veja capítulo 10.5): "
+                  "diga <i>“anota na agenda pra turma: cobertura do João dia 26”</i> e ele cria "
+                  "o evento sozinho, com a cor certa. Se disser <i>“anota pra mim”</i>, ele "
+                  "guarda como lembrete pessoal e nada vai pro mural compartilhado."))
 
 # 6. Chat
 story.append(Paragraph("6. Chat — conversas e grupos da turma", H1))
@@ -590,6 +593,55 @@ story.append(aviso("Imagens soltas (JPG/PNG) <b>não</b> são lidas. Se for uma 
                    "como PDF antes de subir — assim o OCR é acionado automaticamente. Detalhes na "
                    "tabela do capítulo 7.1."))
 
+story.append(Paragraph("10.5. Pedindo pro Viriato anotar na agenda", H2))
+story.append(Paragraph(
+    "O Viriato sabe criar evento na agenda direto pela conversa. O critério é <b>literal</b> "
+    "e foi pensado pra não gerar confusão entre lembrete pessoal e mural da turma:", P))
+story.append(li("<i>“Anota <b>pra mim</b> na agenda: levar EPI quinta-feira”</i> → vira "
+                "<b>lembrete pessoal</b> (só você vê, não aparece no mural)."))
+story.append(li("<i>“Anota na agenda <b>pra turma</b>: cobertura do João dia 26”</i> → vira "
+                "<b>evento no mural</b> (todos da turma enxergam, com a cor do tipo certo)."))
+story.append(li("Se você falar de qualquer outra forma (sem dizer “pra mim” nem “pra turma”), "
+                "ele pergunta antes de salvar — não chuta."))
+story.append(nota("O Viriato escolhe a cor sozinho com base no que você disse (consulta = "
+                  "vermelho, viagem = azul, HE = amarelo, etc.) — você não precisa indicar."))
+
+story.append(Paragraph("10.6. Memória pessoal e fatos da turma", H2))
+story.append(Paragraph(
+    "O Viriato tem dois tipos de memória que ele vai criando ao longo das conversas:", P))
+story.append(li("<b>Memória pessoal</b> — coisas que só dizem respeito a você (preferência, "
+                "data importante, contexto individual). Só você consulta."))
+story.append(li("<b>Fatos da turma</b> — conhecimento operacional compartilhado (regra, "
+                "capacidade de linha, info técnica). Aparece pra qualquer colega que perguntar."))
+story.append(Paragraph(
+    "Quando um colega comum pede pra <i>“salvar isso aí”</i>, a sugestão entra numa <b>fila "
+    "de aprovação</b> que o admin libera — assim não polui o conhecimento da turma com "
+    "dados errados. Quando é o admin que pede, vai direto.", P))
+
+story.append(Paragraph("10.7. Modo deliberativo (segurança e operação)", H2))
+story.append(Paragraph(
+    "Quando você faz uma pergunta sobre <b>segurança</b>, <b>norma operacional</b>, <b>freios</b>, "
+    "<b>pressões</b>, <b>L201/L030</b>, <b>manobra</b>, <b>AMV</b>, etc., o Viriato muda de modo "
+    "automaticamente: ele consulta primeiro as <b>regras técnicas</b> que o admin cadastrou "
+    "(com peso de confiança, condição de borda e fonte) e os <b>anti-padrões</b> registrados "
+    "(erros que ele já cometeu e foi corrigido), e só depois responde — citando a fonte sempre "
+    "que possível.", P))
+story.append(nota("Cada pergunta crítica fica registrada num log auditável que só o admin vê. "
+                  "Isso permite descobrir quais assuntos a turma mais consulta e quais regras "
+                  "técnicas ainda faltam ser cadastradas."))
+
+story.append(Paragraph("10.8. Instalando o app na tela inicial do celular", H2))
+story.append(Paragraph(
+    "O app pode ser <b>instalado na tela inicial</b> (vira ícone igual a um aplicativo nativo, "
+    "preto com a letra A amarela) e roda em <b>tela cheia</b>, sem a barra de endereço do "
+    "navegador. O caminho:", P))
+story.append(li("<b>Android (Chrome):</b> abra o app, toque nos três pontinhos (canto superior "
+                "direito) e escolha <b>“Instalar app”</b> ou <b>“Adicionar à tela inicial”</b>."))
+story.append(li("<b>iPhone (Safari):</b> abra o app, toque no botão de compartilhar (quadrado "
+                "com seta pra cima) e escolha <b>“Adicionar à Tela de Início”</b>."))
+story.append(nota("Depois de instalado, o app abre como qualquer outro do celular — sem barra "
+                  "de endereço, em tela inteira, com o ícone preto e amarelo da turma."))
+
 # 9. Painel admin
 story.append(Paragraph("11. Painel do administrador", H1))
 story.append(Paragraph(
@@ -597,10 +649,24 @@ story.append(Paragraph(
     "<b>administrador principal</b> (Angelo Silva) e até <b>3 aprovadores</b> indicados por "
     "ele. Somente estes 4 podem aprovar novos usuários — ninguém mais.", P))
 story.append(Paragraph("11.1. O que essas 4 pessoas podem fazer", H2))
-story.append(li("<b>Aprovar</b> ou <b>Negar</b> novos cadastros (aparecem com badge no 👑)."))
-story.append(li("<b>Promover</b> outro usuário a aprovador (somente o admin principal pode fazer isso, e o limite é 3)."))
-story.append(li("<b>Resetar a senha</b> de qualquer colega — aparece um código temporário de 4 dígitos para você passar pelo WhatsApp ou pessoalmente."))
-story.append(li("<b>Remover</b> usuários que saíram da turma."))
+story.append(Paragraph(
+    "O Painel administrativo abre em <b>seis abas</b>, cada uma cuidando de uma parte do app:", P))
+story.append(li("<b>⏳ Cadastros</b> — aprovar ou negar quem está pedindo acesso."))
+story.append(li("<b>🧠 Memorizações</b> — fila de fatos/lembretes que o Viriato sugeriu salvar a "
+                "partir das conversas dos colegas (aprovar ou descartar antes de virar fato da turma)."))
+story.append(li("<b>👥 Usuários</b> — promover ou despromover aprovador (limite de 3, só o admin "
+                "principal faz isso) e resetar senha (gera um código temporário de 4 dígitos para "
+                "passar pelo WhatsApp ou pessoalmente)."))
+story.append(li("<b>🧪 Regras técnicas</b> — cadastrar regras operacionais que o Viriato vai usar "
+                "no modo deliberativo (conceito, regra de ouro, condição de borda, peso de "
+                "confiança e fonte). Essas regras viram a verdade auditável do app."))
+story.append(li("<b>🚫 Anti-padrões</b> — registrar erros que o Viriato já cometeu e a correção "
+                "certa, pra ele <b>nunca repetir</b> aquele erro."))
+story.append(li("<b>📋 Log Viriato</b> — auditoria das perguntas críticas (segurança/operação): "
+                "data, autor, pergunta e quais regras foram consultadas. Aparece um aviso laranja "
+                "quando uma pergunta crítica é feita e <b>nenhuma regra técnica</b> está "
+                "cadastrada pra ela — sinal de que falta cadastro."))
+
 story.append(Paragraph("11.2. Aprovação de cadastros", H2))
 story.append(Paragraph(
     "Quando alguém se cadastra, aparece uma bolinha vermelha com o número de pendentes no botão "
@@ -608,6 +674,23 @@ story.append(Paragraph(
     "<b>Negar</b>. Negar é definitivo: a pessoa vai precisar se cadastrar de novo se for engano.", P))
 story.append(aviso("Antes de aprovar, confirme pessoalmente que a matrícula bate com a pessoa. "
                    "Quem entra aqui tem acesso à escala e aos eventos da turma."))
+
+story.append(Paragraph("11.3. Cadastrando uma regra técnica", H2))
+story.append(Paragraph(
+    "Na aba <b>🧪 Regras técnicas</b> tem um pequeno formulário com cinco campos:", P))
+story.append(li("<b>Conceito</b> — nome curto da regra (ex.: <i>“Pressão de alívio L201”</i>)."))
+story.append(li("<b>Regra de ouro</b> — a regra completa, escrita do jeito operacional "
+                "(ex.: <i>“pressão mínima de alívio em L201 é 4,5 kgf/cm² para composições "
+                "acima de 80 vagões”</i>)."))
+story.append(li("<b>Condição de borda</b> (opcional) — quando a regra <b>não</b> vale "
+                "(ex.: <i>“só para tração diesel acima de 6 unidades”</i>)."))
+story.append(li("<b>Peso de confiança</b> — número entre 0,0 e 1,0. Use 0,9 quando você tem "
+                "certeza, 0,7 quando é inferência, abaixo disso é melhor não cadastrar."))
+story.append(li("<b>Fonte</b> — de onde veio (ACT 2024 art. 47, manual interno, conversa com "
+                "fulano, etc.) — fica visível pra qualquer colega que receber a resposta."))
+story.append(nota("Sempre que o Viriato responder uma pergunta crítica, ele vai citar a fonte "
+                  "que estiver na regra técnica usada. Isso fecha o ciclo entre conhecimento e "
+                  "responsabilidade."))
 
 # 10. Esqueci a senha
 story.append(Paragraph("12. Esqueci minha senha — e agora?", H1))
@@ -739,9 +822,9 @@ story.append(Paragraph(
     "ninguém lembra de cor, o documento que vence sem avisar, a troca de turno que fica solta no "
     "WhatsApp, o checklist que esquecemos no fim do dia.", P))
 story.append(Paragraph(
-    "Foi um projeto feito <b>de maquinista para maquinistas</b>, sem ajuda de empresa, sem "
-    "patrocínio, sem prazo. Só com vontade de deixar a vida da turma um pouquinho mais "
-    "organizada — e, quem sabe, servir de exemplo de que dá pra ir além do volante.", P))
+    "Foi um projeto feito <b>de maquinista para maquinistas</b>, sem patrocínio e sem prazo. "
+    "Só com vontade de deixar a vida da turma um pouquinho mais organizada — e, quem sabe, "
+    "servir de exemplo de que dá pra ir além do volante.", P))
 
 story.append(Paragraph("Agradecimentos especiais", H2))
 
