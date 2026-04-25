@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#000000"/>
+  <text x="256" y="256"
+        font-family="'IBM Plex Sans', 'DejaVu Sans', 'Arial Black', sans-serif"
+        font-weight="900"
+        font-size="360"
+        fill="#fbbf24"
+        text-anchor="middle"
+        dominant-baseline="central">A</text>
+</svg>
