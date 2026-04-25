@@ -573,7 +573,9 @@ body.banner-visible .viriato-fab{display:none}
 .vw-close:hover{color:var(--neon);border-color:var(--neon)}
 
 .vw-body{
-  flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;
+  flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:14px 14px 20px;display:flex;flex-direction:column;gap:10px;
 }
 .vw-body::-webkit-scrollbar{width:5px}
 .vw-body::-webkit-scrollbar-thumb{background:#1d2030;border-radius:3px}
@@ -584,6 +586,7 @@ body.banner-visible .viriato-fab{display:none}
 
 .vw-input{
   display:flex;gap:10px;padding:14px 14px;border-top:1px solid var(--border);background:#0a0c11;
+  flex-shrink:0;align-items:center;
 }
 .vw-input input{
   flex:1;background:#15171d;border:1px solid var(--border);border-radius:12px;
