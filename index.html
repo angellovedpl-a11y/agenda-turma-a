@@ -344,6 +344,10 @@ body.sec-chat .main{padding:0!important;overflow:hidden!important;height:100dvh!
 .day.outside{opacity:.32}
 .day .num{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--text)}
 .day .lbl{font-family:var(--mono);font-size:9px;letter-spacing:1.6px;font-weight:600}
+.day .evs{position:absolute;bottom:4px;left:0;right:0;display:flex;justify-content:center;gap:3px;flex-wrap:wrap;padding:0 3px;pointer-events:none}
+.day .evs .evdot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.day{position:relative}
+.day.fer{outline:2px solid #7c3aed66;outline-offset:-2px}
 .day.folga{border-color:#00e67655;background:linear-gradient(160deg,#0d1f15,#0f1410)}
 .day.folga .lbl{color:var(--neon)}
 .day.trab{border-color:#f5a62333;background:linear-gradient(160deg,#1a1410,#15110d)}
@@ -746,12 +750,36 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-24 v2.4 (scroll chat)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-25 v2.5 (eventos coloridos + Viriato cria)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const MESES3=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 const DOW=["DOM","SEG","TER","QUA","QUI","SEX","SAB"];
+const EVENTO_TIPOS={
+  aniversario:{emoji:"🎂",label:"Aniversário",cor:"#ec4899",rec:true},
+  medico:     {emoji:"🏥",label:"Médico",     cor:"#ef4444"},
+  viagem:     {emoji:"✈️",label:"Viagem",     cor:"#3b82f6"},
+  compromisso:{emoji:"📋",label:"Compromisso",cor:"#7c3aed"},
+  hora_extra: {emoji:"⏰",label:"Hora Extra", cor:"#fbbf24"},
+  outro:      {emoji:"⭐",label:"Outro",      cor:"#94a3b8"}
+};
+function evTipoInfo(t){return EVENTO_TIPOS[t]||EVENTO_TIPOS.outro;}
+let EVENTOS_CACHE=[];
+async function carregarEventosCache(){
+  try{const r=await apiFetch("/api/mem/eventos");const d=await r.json();EVENTOS_CACHE=d.eventos||[];}catch(e){EVENTOS_CACHE=[];}
+}
+function eventosNoDia(k){
+  // k = "YYYY-MM-DD"
+  const [a,m,d]=k.split("-");
+  const mmdd=`${m}-${d}`;
+  return EVENTOS_CACHE.filter(e=>{
+    if(!e.data)return false;
+    if(e.data===k)return true;
+    if(e.tipo==="aniversario"&&e.data.slice(5)===mmdd)return true;
+    return false;
+  });
+}
 const DOW_FULL=["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
 const DOW_MINI=["D","S","T","Q","Q","S","S"];
 
@@ -860,7 +888,10 @@ function renderMensal(){
     const today=k===HOJE_KEY;
     const fer=FER[k]?"fer":"";
     const ferNome=FER[k]||"";
-    html+=`<div class="day ${fol?"folga":"trab"} ${today?"today":""} ${fer}" data-k="${k}" role="button" tabindex="0" title="${ferNome}"><span class="num">${d}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
+    const evs=eventosNoDia(k);
+    const evDots=evs.length?`<span class="evs">${evs.slice(0,5).map(e=>`<span class="evdot" style="background:${evTipoInfo(e.tipo).cor}" title="${escapeHtml(evTipoInfo(e.tipo).label)}: ${escapeHtml(e.titulo||"")}"></span>`).join("")}</span>`:"";
+    const titParts=[ferNome,...evs.map(e=>`${evTipoInfo(e.tipo).emoji} ${e.titulo||""}`)].filter(Boolean);
+    html+=`<div class="day ${fol?"folga":"trab"} ${today?"today":""} ${fer}" data-k="${k}" role="button" tabindex="0" title="${escapeHtml(titParts.join(" • "))}"><span class="num">${d}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span>${evDots}</div>`;
   }
   // completar grid
   const total=startOffset+diasMes;
@@ -1012,26 +1043,34 @@ function render(){
   c.innerHTML=S.view==="mensal"?renderMensal():renderAnual();
   document.getElementById("rightPanel").innerHTML=renderRight();
   attachViriatoBanner();
+  if(CURRENT_USER){
+    carregarEventosCache().then(()=>{
+      if(S.section==="calendario"||!S.section){
+        const c2=document.getElementById("content");
+        if(c2)c2.innerHTML=S.view==="mensal"?renderMensal():renderAnual();
+        bindCalNav();
+      }
+    });
+  }
 
   // tabs
   document.querySelectorAll(".tab").forEach(t=>{
     t.classList.toggle("active",t.dataset.view===S.view);
   });
 
-  // navegação mensal
+  bindCalNav();
+}
+function bindCalNav(){
   const pm=document.getElementById("prevMes");
   if(pm)pm.onclick=()=>{S.curMes--;if(S.curMes<0){S.curMes=11;S.curAno--;}saveLS();render();};
   const nm=document.getElementById("nextMes");
   if(nm)nm.onclick=()=>{S.curMes++;if(S.curMes>11){S.curMes=0;S.curAno++;}saveLS();render();};
-  // navegação anual
   const pa=document.getElementById("prevAno");
   if(pa)pa.onclick=()=>{S.curAno--;saveLS();render();};
   const na=document.getElementById("nextAno");
   if(na)na.onclick=()=>{S.curAno++;saveLS();render();};
-  // hoje
   const bh=document.getElementById("btnHoje");
   if(bh)bh.onclick=()=>{S.curMes=HOJE.getMonth();S.curAno=HOJE.getFullYear();saveLS();render();};
-  // clique nos dias do calendário
   document.querySelectorAll(".mini-day[data-k],.day[data-k]").forEach(d=>{
     d.style.cursor="pointer";
     d.onclick=()=>openDia(d.dataset.k);
@@ -1133,6 +1172,10 @@ function renderViriatoFull(c){
           if(ok)showToast("✅ "+ok+" item(s) salvo(s) na memória");
           if(pe)showToast("⏳ "+pe+" sugestão(ões) enviada(s) para aprovação do admin");
         }
+        if(d.eventos_criados && d.eventos_criados.length){
+          showToast("📅 "+d.eventos_criados.length+" evento(s) adicionado(s) à agenda");
+          await carregarEventosCache();
+        }
       }
     }catch(e){S.history.push({role:"assistant",content:"Erro de conexão: "+e.message});}
     S.viriatoTyping=false;
@@ -1218,6 +1261,10 @@ function renderViriato(){
           const ok=d.memoria_salva.length-pe;
           if(ok)showToast("✅ "+ok+" item(s) salvo(s) na memória");
           if(pe)showToast("⏳ "+pe+" sugestão(ões) enviada(s) para aprovação do admin");
+        }
+        if(d.eventos_criados && d.eventos_criados.length){
+          showToast("📅 "+d.eventos_criados.length+" evento(s) adicionado(s) à agenda");
+          await carregarEventosCache();
         }
       }
     }catch(e){
@@ -1752,14 +1799,31 @@ async function openDia(k){
         const notas=(dMem.pessoal||[]).filter(p=>(p.texto||"").startsWith(`[DIA ${k}]`));
         let html="";
         if(evs.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px">EVENTOS</div>`;
-          html+=evs.map(e=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px">
-            <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">${escapeHtml(e.titulo)}</div>${e.hora?`<div style="color:var(--muted);font-size:11px">⏰ ${escapeHtml(e.hora)}</div>`:""}${e.descricao?`<div style="font-size:12px;color:var(--text);margin-top:3px">${escapeHtml(e.descricao)}</div>`:""}</div>
-          </div>`).join("");
+          html+=evs.map(e=>{
+            const ti=evTipoInfo(e.tipo);
+            return `<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid ${ti.cor}">
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:600;font-size:13px"><span style="color:${ti.cor}">${ti.emoji} ${escapeHtml(ti.label)}</span> · ${escapeHtml(e.titulo||"")}</div>
+                ${e.hora?`<div style="color:var(--muted);font-size:11px">⏰ ${escapeHtml(e.hora)}</div>`:""}
+                ${e.descricao?`<div style="font-size:12px;color:var(--text);margin-top:3px">${escapeHtml(e.descricao)}</div>`:""}
+                <button data-eid="${e.id}" class="ev-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir</button>
+              </div>
+            </div>`;
+          }).join("");
         }
         if(notas.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin:10px 0 6px">NOTAS</div>`;
           html+=notas.map(n=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px"><div style="flex:1;min-width:0;font-size:12px">${escapeHtml((n.texto||"").replace(`[DIA ${k}] `,""))}</div></div>`).join("");
         }
         list.innerHTML=html||`<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Nada agendado neste dia.</div>`;
+        list.querySelectorAll(".ev-del").forEach(b=>{
+          b.onclick=async()=>{
+            if(!confirm("Excluir este evento?"))return;
+            const r2=await apiFetch("/api/mem/eventos");const d2=await r2.json();
+            const novos=(d2.eventos||[]).filter(e=>String(e.id)!==String(b.dataset.eid));
+            await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
+            await carregarEventosCache();showToast("Excluído");refresh();render();
+          };
+        });
       }catch(e){if(e.message!=="auth")list.innerHTML='<div style="color:#ff8a8a">Erro ao carregar.</div>';}
     }
     refresh();
@@ -1782,26 +1846,34 @@ async function openDia(k){
   });
 }
 function openEventoForm(dataPre){
+  const tiposOpts=Object.entries(EVENTO_TIPOS).map(([k,v])=>`<option value="${k}">${v.emoji} ${v.label}</option>`).join("");
   openModal("Novo Evento",`
-    <div class="modal-fld"><label>Título</label><input id="eTit"/></div>
+    <div class="modal-fld"><label>Tipo</label>
+      <select id="eTipo" style="width:100%;padding:10px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:14px">${tiposOpts}</select>
+    </div>
+    <div class="modal-fld"><label>Título</label><input id="eTit" placeholder="Ex.: Consulta cardiologista"/></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="modal-fld"><label>Data</label><input id="eData" type="date" value="${dataPre||new Date().toISOString().slice(0,10)}"/></div>
       <div class="modal-fld"><label>Hora (opcional)</label><input id="eHora" type="time"/></div>
     </div>
     <div class="modal-fld"><label>Descrição</label><textarea id="eDesc" rows="4"></textarea></div>
+    <div id="eDicaRec" style="display:none;font-size:12px;color:var(--text-mute);margin-bottom:10px;padding:8px 10px;background:rgba(236,72,153,.12);border-radius:8px">🔁 Aniversários repetem automaticamente todo ano.</div>
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
       <button id="eSave" class="btn-primary">SALVAR</button>
     </div>
   `,()=>{
+    const sel=document.getElementById("eTipo");
+    const dica=document.getElementById("eDicaRec");
+    sel.onchange=()=>{dica.style.display=sel.value==="aniversario"?"block":"none";};
     document.getElementById("eSave").onclick=async()=>{
-      const ev={id:Date.now(),titulo:document.getElementById("eTit").value.trim(),data:document.getElementById("eData").value,hora:document.getElementById("eHora").value,descricao:document.getElementById("eDesc").value.trim(),autor:CURRENT_USER&&CURRENT_USER.nome||""};
+      const ev={id:Date.now(),tipo:sel.value,titulo:document.getElementById("eTit").value.trim(),data:document.getElementById("eData").value,hora:document.getElementById("eHora").value,descricao:document.getElementById("eDesc").value.trim(),autor:CURRENT_USER&&CURRENT_USER.nome||""};
       if(!ev.titulo||!ev.data){showToast("Título e data são obrigatórios");return;}
       const r=await apiFetch("/api/mem/eventos");
       const d=await r.json();
       const novos=(d.eventos||[]).concat([ev]);
       await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
-      closeModal();showToast("✅ Evento criado");render();
+      closeModal();showToast("✅ Evento criado");await carregarEventosCache();render();
     };
   });
 }

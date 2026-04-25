@@ -117,6 +117,33 @@ def memoria_pessoal_remove(matricula: str, id_entrada: int) -> bool:
     kvstore.save(f'memoria:{matricula}', {'entradas': novo})
     return True
 
+# === MEMPALACE — EVENTOS DA AGENDA (com tipo) ===
+EVENTO_TIPOS_VALIDOS = ('aniversario', 'medico', 'viagem', 'compromisso', 'hora_extra', 'outro')
+
+def evento_add(tipo: str, titulo: str, data: str, hora: str = '', descricao: str = '', autor: str = '') -> dict:
+    titulo = (titulo or '').strip()[:200]
+    if not titulo:
+        return {'ok': False, 'erro': 'Titulo vazio'}
+    if not re.match(r'^\d{4}-\d{2}-\d{2}$', (data or '').strip()):
+        return {'ok': False, 'erro': 'Data invalida (use YYYY-MM-DD)'}
+    if tipo not in EVENTO_TIPOS_VALIDOS:
+        tipo = 'outro'
+    hora = (hora or '').strip()[:8]
+    descricao = (descricao or '').strip()[:1000]
+    sala = mem_palace_load('eventos')
+    evs = sala.get('eventos', []) or []
+    import time as _t
+    novo = {
+        'id': int(_t.time() * 1000),
+        'tipo': tipo, 'titulo': titulo, 'data': data,
+        'hora': hora, 'descricao': descricao,
+        'autor': autor or '',
+    }
+    evs.append(novo)
+    sala['eventos'] = evs
+    mem_palace_save('eventos', sala)
+    return {'ok': True, 'evento': novo}
+
 # === MEMPALACE — FATOS COMPARTILHADOS DA TURMA ===
 def fatos_load() -> list:
     d = kvstore.load('fatos_turma')
@@ -690,6 +717,19 @@ def claude_chat():
             '- O <texto curto> DEVE ser uma frase declarativa autocontida, sem "voce disse" ou "lembrei que" — apenas O FATO em si.\n'
             '- Voce PODE emitir VARIOS marcadores se houver varios pontos a salvar (um por linha).\n'
             '- O marcador NAO aparece para o usuario (e removido). Entao escreva normalmente sua resposta humana ANTES do marcador.\n\n'
+            '### CRIAR EVENTOS NA AGENDA ###\n'
+            'Se o usuario pedir para AGENDAR/MARCAR/ANOTAR um compromisso, consulta, viagem, aniversario, hora extra, etc., '
+            'voce DEVE emitir ao final da resposta UM marcador (em linha separada):\n\n'
+            '  [SALVAR_EVENTO tipo=<TIPO> data=YYYY-MM-DD hora=HH:MM] <titulo curto>\n\n'
+            'TIPOS validos: aniversario | medico | viagem | compromisso | hora_extra | outro\n'
+            'A "hora=" e OPCIONAL (omita o "hora=HH:MM" se nao foi informada).\n'
+            'A data DEVE estar no formato YYYY-MM-DD. Se o usuario disser "amanha", "sexta", "dia 15 do mes que vem", '
+            f'CALCULE a data exata (hoje e {time.strftime("%Y-%m-%d")}, dia da semana: {time.strftime("%A")}).\n'
+            'Exemplos:\n'
+            '  [SALVAR_EVENTO tipo=medico data=2026-05-12 hora=14:30] Consulta cardiologista\n'
+            '  [SALVAR_EVENTO tipo=aniversario data=1985-08-23] Aniversario do meu filho Pedro\n'
+            '  [SALVAR_EVENTO tipo=hora_extra data=2026-04-26] Cobertura do Joao na L201\n'
+            'Confirme em texto humano ANTES do marcador (ex.: "Pronto, anotei sua consulta...").\n\n'
         )
         if pediu_salvar:
             full_system += (
@@ -733,6 +773,29 @@ def claude_chat():
                 if r.get('ok'):
                     salvos.append({'tipo': tipo, 'texto': conteudo, 'status': 'pendente'})
         texto_limpo = marcador.sub('', texto_resp)
+
+        eventos_criados = []
+        marcador_ev = re.compile(
+            r'\[\s*SALVAR[_ ]EVENTO\s+'
+            r'tipo\s*=\s*([a-z_]+)\s+'
+            r'data\s*=\s*(\d{4}-\d{2}-\d{2})'
+            r'(?:\s+hora\s*=\s*(\d{1,2}:\d{2}))?'
+            r'\s*\]\s*[:\-]?\s*([^\n\[]+)',
+            re.IGNORECASE
+        )
+        for m in marcador_ev.finditer(texto_limpo):
+            tipo_ev = (m.group(1) or '').lower().strip()
+            data_ev = m.group(2)
+            hora_ev = m.group(3) or ''
+            titulo_ev = re.sub(r'\s+', ' ', m.group(4)).strip().rstrip('.').strip()
+            if not titulo_ev:
+                continue
+            r_ev = evento_add(tipo_ev, titulo_ev, data_ev, hora_ev,
+                              descricao=f'Criado pelo Viriato a pedido de {nome_user or matricula_user}',
+                              autor=nome_user or matricula_user)
+            if r_ev.get('ok'):
+                eventos_criados.append(r_ev['evento'])
+        texto_limpo = marcador_ev.sub('', texto_limpo)
         texto_limpo = re.sub(r'\n[ \t]*\n[ \t]*\n+', '\n\n', texto_limpo).strip()
 
         if pediu_salvar and not salvos:
@@ -798,7 +861,8 @@ def claude_chat():
             texto_limpo = texto_limpo + ''.join(partes)
 
         return jsonify({'text': texto_limpo, 'trechos_usados': len(trechos),
-                        'memoria_salva': salvos})
+                        'memoria_salva': salvos,
+                        'eventos_criados': eventos_criados})
     except Exception as e:
         err = str(e)
         if "FREE_CLOUD_BUDGET_EXCEEDED" in err:
