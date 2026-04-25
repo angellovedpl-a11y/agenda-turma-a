@@ -837,13 +837,17 @@ story.append(Paragraph(
     "e pelo <i>vibe coding</i> — sem ele, este aplicativo simplesmente não existiria.", P))
 
 story.append(Paragraph(
-    "À <b>Coordenação</b>, na pessoa da <b>Jéssica</b>, pela confiança, pelo apoio e por "
-    "acreditar que uma boa ideia pode vir de qualquer lugar — inclusive da cabine.", P))
+    "À <b>Jéssica</b>, pela oportunidade de implantação deste <i>Kaizen</i>, como uma "
+    "ferramenta da Turma A.", P))
+
+story.append(Paragraph(
+    "À <b>Yvana Viegas</b>, pela confiança, pelo apoio e por acreditar que uma boa ideia "
+    "pode vir de qualquer lugar — inclusive da cabine.", P))
 
 story.append(Paragraph(
     "Aos amigos que doaram tempo, ouvido e crítica construtiva ao longo do caminho:", P))
 
-amigos = ["Ivana Viegas", "Glória Mulato", "Geidher Aurélio", "Rafael Melo",
+amigos = ["Glória Mulato", "Geidher Aurélio", "Rafael Melo",
           "Carlos Deleon", "Bruno Anderson", "Micael Viana", "Marcos Lima", "Arthur Diniz"]
 for nome in amigos:
     story.append(li("<b>" + nome + "</b>"))
