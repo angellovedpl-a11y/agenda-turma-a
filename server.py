@@ -493,7 +493,9 @@ def buscar_fatos(query: str, top_k: int = 8) -> list:
 
 _anthropic_client = Anthropic(
     api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),
-    base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL")
+    base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL"),
+    timeout=45.0,
+    max_retries=1
 )
 
 # === OCR VIA CLAUDE VISION (fallback para PDFs escaneados) ===
@@ -1917,4 +1919,4 @@ def diag_biblioteca():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
