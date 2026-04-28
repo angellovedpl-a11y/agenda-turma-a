@@ -711,14 +711,6 @@ body.banner-visible .viriato-fab{display:none}
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="7" cy="9" r="1" fill="currentColor"/><line x1="11" y1="9" x2="18" y2="9"/><circle cx="7" cy="14" r="1" fill="currentColor"/><line x1="11" y1="14" x2="18" y2="14"/></svg>
       <span>Mural da Turma</span>
     </button>
-    <button class="mp-item" data-sec="pessoais" role="menuitem">
-      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-      <span>Meus Eventos <span style="color:var(--muted);font-size:11px">(privado)</span></span>
-    </button>
-    <button class="mp-item" data-sec="diario" role="menuitem">
-      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h12a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/><line x1="8" y1="9" x2="15" y2="9"/><line x1="8" y1="13" x2="15" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-      <span>Diário de Bordo <span style="color:var(--muted);font-size:11px">(privado)</span></span>
-    </button>
     <button class="mp-item" data-sec="chat" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 17h-6l-4 3v-3H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><path d="M8 11h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-4 3v-3"/></svg>
       <span>Chat</span>
@@ -792,7 +784,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-28 v3.3 (PWA fullscreen + icone novo)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-28 v3.4 (menu enxuto + Diario/MeusEventos no clique do dia)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -2030,8 +2022,9 @@ async function openDia(k){
     ${ferBlock}
     <div style="margin-bottom:12px;padding:8px 12px;background:${fol?"rgba(59,231,153,.1)":"rgba(255,138,76,.1)"};border-radius:8px;font-size:12px;color:${fol?"var(--neon)":"var(--orange)"}">${fol?"🟢 Folga":"🟠 Trabalho"}</div>
     <div id="diaList" style="margin-bottom:14px;max-height:240px;overflow:auto"><div style="color:var(--muted);font-size:13px">Carregando...</div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-      <button id="diaEv" class="btn-primary" style="font-size:12px;padding:10px 6px">+ Evento</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button id="diaEv" class="btn-primary" style="font-size:12px;padding:10px 6px">📢 Mural</button>
+      <button id="diaPess" class="btn-secondary" style="font-size:12px;padding:10px 6px">🔒 Meus Eventos</button>
       <button id="diaDiario" class="btn-secondary" style="font-size:12px;padding:10px 6px">📓 Diário</button>
       <button id="diaNota" class="btn-secondary" style="font-size:12px;padding:10px 6px">📝 Nota</button>
     </div>
@@ -2039,11 +2032,12 @@ async function openDia(k){
     async function refresh(){
       const list=document.getElementById("diaList");
       try{
-        const [rEv,rPess,rMem]=await Promise.all([apiFetch("/api/mem/eventos"),apiFetch("/api/eventos-pessoais"),apiFetch("/api/memoria")]);
-        const dEv=await rEv.json();const dPess=await rPess.json();const dMem=await rMem.json();
+        const [rEv,rPess,rMem,rDi]=await Promise.all([apiFetch("/api/mem/eventos"),apiFetch("/api/eventos-pessoais"),apiFetch("/api/memoria"),apiFetch("/api/diario")]);
+        const dEv=await rEv.json();const dPess=await rPess.json();const dMem=await rMem.json();const dDi=await rDi.json();
         const evs=(dEv.eventos||[]).filter(e=>e.data===k);
         const evsPess=(dPess.eventos||[]).filter(e=>e.data===k);
         const notas=(dMem.pessoal||[]).filter(p=>(p.texto||"").startsWith(`[DIA ${k}]`));
+        const diarios=(dDi.entradas||[]).filter(d=>d.data===k);
         const renderEv=(e,pess)=>{
           const ti=evTipoInfo(e.tipo);
           const tag=pess?'<span style="color:var(--neon);font-size:10px;background:rgba(0,230,118,.15);padding:1px 6px;border-radius:4px;margin-left:6px">🔒 PRIVADO</span>':'';
@@ -2071,6 +2065,20 @@ async function openDia(k){
             </div>
           </div>`).join("");
         }
+        if(diarios.length){html+=`<div style="font-size:11px;color:var(--neon);letter-spacing:1px;margin:10px 0 6px">📓 DIÁRIO DE BORDO</div>`;
+          html+=diarios.map(di=>{
+            const anx=(di.anexos||[]).length;
+            const anxBadge=anx?`<span style="font-size:10px;color:var(--muted);margin-left:6px">📎 ${anx}</span>`:"";
+            const txt=(di.texto||"").trim();
+            const preview=txt.length>140?escapeHtml(txt.slice(0,140))+"...":escapeHtml(txt||"(sem texto)");
+            return `<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid var(--neon)">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;color:var(--text);white-space:pre-wrap">${preview}${anxBadge}</div>
+                <button data-did="${di.id}" class="di-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir entrada</button>
+              </div>
+            </div>`;
+          }).join("");
+        }
         list.innerHTML=html||`<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Nada agendado neste dia.</div>`;
         list.querySelectorAll(".ev-del").forEach(b=>{
           b.onclick=async()=>{
@@ -2090,11 +2098,22 @@ async function openDia(k){
             else showToast("❌ Falha ao excluir");
           };
         });
+        list.querySelectorAll(".di-del").forEach(b=>{
+          b.onclick=async()=>{
+            if(!confirm("Excluir esta entrada do diário?"))return;
+            const r=await apiFetch("/api/diario");const d=await r.json();
+            const novos=(d.entradas||[]).filter(x=>String(x.id)!==String(b.dataset.did));
+            const r2=await apiFetch("/api/diario",{method:"POST",body:JSON.stringify({entradas:novos})});
+            if(r2.ok){showToast("Entrada excluída");refresh();}
+            else showToast("❌ Falha ao excluir");
+          };
+        });
       }catch(e){if(e.message!=="auth")list.innerHTML='<div style="color:#ff8a8a">Erro ao carregar.</div>';}
     }
     refresh();
     document.getElementById("diaEv").onclick=()=>{closeModal();openEventoForm(k);};
-    document.getElementById("diaDiario").onclick=()=>{closeModal();setSection("diario");openDiarioForm(k);};
+    document.getElementById("diaPess").onclick=()=>{closeModal();openEventoForm(k,{pessoal:true});};
+    document.getElementById("diaDiario").onclick=()=>{closeModal();openDiarioForm(k);};
     document.getElementById("diaNota").onclick=()=>{
       const t=prompt(`Nota para ${dataBr}:`);
       if(!t||!t.trim())return;

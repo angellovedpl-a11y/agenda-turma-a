@@ -129,3 +129,18 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 3. **Saves do diário sem corrida e sem segurar conexão durante IO**: `kvstore.with_lock(<chave>)` usa `pg_advisory_xact_lock` e *cede* a conexão. O `diario_save` faz uploads ao Object Storage **fora** do lock (FASE 1), entra no lock só pro read-modify-write (FASE 2), e limpa órfãos depois (FASE 3). `kvstore.load`/`save` aceitam `conn=...` pra reusar a do lock — gasta 1 conexão por save, não 3.
 4. **Token na query string**: `Referrer-Policy: same-origin` aplicado globalmente via `@app.after_request` — token de auth nunca vai no header `Referer` de site externo.
 5. **Streaming de download**: a lib `replit.object_storage` só oferece `download_as_bytes` (sem stream nativo). Mitigado pelo cap de 8 MB por anexo + cache de 1 h no navegador.
+
+## v3.4 — Reorganização do menu (2026-04-28)
+
+**Mudanças de UX:**
+- Removidos do menu lateral: "Meus Eventos" e "Diário de Bordo".
+- Esses dois fluxos passaram a ser acessados **só pelo modal de clique no dia** (4 botões em grid 2x2):
+  1. 📢 Mural (post público pra turma)
+  2. 🔒 Meus Eventos (evento privado naquela data)
+  3. 📓 Diário (entrada de diário daquela data)
+  4. 📝 Nota (lembrete rápido)
+- O modal de dia agora também **lista as entradas de Diário** existentes naquele dia (com preview de texto, contagem de anexos e botão de excluir), além das que já mostrava (Mural, Meus Eventos privados, Notas).
+- O botão Diário no modal **não navega mais** pra `setSection("diario")` — abre direto o formulário de criação. Mesmo padrão pra Meus Eventos.
+- As funções `renderPessoais` e `renderDiario` continuam intactas no código (acessíveis via `S.section`), mas sem entrada no menu.
+
+**Menu lateral agora**: Calendário, Mural da Turma, Chat, Acervo, Configurações, Manual (PDF), Ativar notificações, Prontos.
