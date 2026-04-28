@@ -185,6 +185,57 @@ def send_push_async(matriculas, payload: dict):
             print(f'[push] async erro: {_e}')
     _th.Thread(target=_run, daemon=True).start()
 
+# === ESCALA TURMA A (port da formula JS) ===
+# REF: 22/04/2026 = 1o dia de TRABALHO do par. Ciclo: trab,trab,folga,folga (2x2)
+from datetime import date as _date, timedelta as _td, timezone as _tz
+_REF_TURMA_A = _date(2026, 4, 22)
+_MA_TZ = _tz(_td(hours=-3))  # Sao Luis / MA - UTC-3 sem horario de verao
+
+def is_dia_trabalho_turma_a(d: _date) -> bool:
+    diff = (d - _REF_TURMA_A).days
+    return ((diff % 4) + 4) % 4 < 2  # primeiros 2 dias do ciclo = trabalho
+
+def _now_maranhao():
+    return datetime.now(_MA_TZ)
+
+# === LEMBRETE PRONTOS (12:00 e 14:45 nos dias de trabalho) ===
+def _lembrete_prontos_loop():
+    """Loop de fundo: dispara push pros aprovados as 12:00 e 14:45 em dias de trabalho da Turma A."""
+    SLOTS = ('12:00', '14:45')
+    print('[lembrete-prontos] agendador iniciado (12:00 e 14:45 MA, dias de trabalho Turma A)')
+    while True:
+        try:
+            now = _now_maranhao()
+            today = now.date()
+            if is_dia_trabalho_turma_a(today):
+                hhmm = now.strftime('%H:%M')
+                if hhmm in SLOTS:
+                    key = f'lembretes_prontos:{today.isoformat()}'
+                    state = kvstore.load(key) or {}
+                    enviados = state.get('enviados', []) or []
+                    if hhmm not in enviados:
+                        matriculas = listar_matriculas_aprovadas()
+                        if matriculas:
+                            send_push_async(matriculas, {
+                                'title': '🤖 Viriato',
+                                'body': 'Lembrou de fazer o Prontos?',
+                                'kind': 'lembrete_prontos',
+                                'tag': f'prontos-{today.isoformat()}-{hhmm.replace(":","")}',
+                                'url': '/'
+                            })
+                            print(f'[lembrete-prontos] disparado as {hhmm} pra {len(matriculas)} usuario(s)')
+                        enviados.append(hhmm)
+                        state['enviados'] = enviados
+                        kvstore.save(key, state)
+        except Exception as _e:
+            print(f'[lembrete-prontos] erro no loop: {_e}')
+        time.sleep(45)
+
+def iniciar_lembrete_prontos():
+    import threading as _th
+    t = _th.Thread(target=_lembrete_prontos_loop, daemon=True, name='lembrete-prontos')
+    t.start()
+
 def listar_matriculas_aprovadas() -> list:
     """Lista matriculas de usuarios aprovados (para broadcast do mural)."""
     try:
@@ -1942,4 +1993,5 @@ def diag_biblioteca():
     })
 
 if __name__ == '__main__':
+    iniciar_lembrete_prontos()
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
