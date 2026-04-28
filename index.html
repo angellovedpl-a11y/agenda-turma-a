@@ -700,6 +700,10 @@ body.banner-visible .viriato-fab{display:none}
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
       <span>Meus Eventos <span style="color:var(--muted);font-size:11px">(privado)</span></span>
     </button>
+    <button class="mp-item" data-sec="diario" role="menuitem">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h12a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/><line x1="8" y1="9" x2="15" y2="9"/><line x1="8" y1="13" x2="15" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+      <span>Diário de Bordo <span style="color:var(--muted);font-size:11px">(privado)</span></span>
+    </button>
     <button class="mp-item" data-sec="chat" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 17h-6l-4 3v-3H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><path d="M8 11h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-4 3v-3"/></svg>
       <span>Chat</span>
@@ -773,7 +777,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-28 v2.9 (Meus Eventos privados + lembrete Prontos + ícone novo)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-28 v3.0 (Diário de Bordo com câmera/galeria/arquivo)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -1061,6 +1065,7 @@ function render(){
     document.getElementById("rightPanel").style.display="none";
     if(S.section==="eventos")renderEventos(c);
     else if(S.section==="pessoais")renderPessoais(c);
+    else if(S.section==="diario")renderDiario(c);
     else if(S.section==="acervo")renderAcervo(c);
     else if(S.section==="chat")renderChat(c);
     else if(S.section==="viriato")renderViriatoFull(c);
@@ -1624,6 +1629,165 @@ async function renderPessoais(c){
   }catch(e){if(e.message!=="auth")document.getElementById("pessBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
 }
 
+// ===== DIARIO DE BORDO (privado, com câmera/galeria/arquivo) =====
+async function _compressImage(file, maxDim=1280, quality=0.7){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.width, h=img.height;
+      if(w>maxDim || h>maxDim){
+        if(w>h){h=Math.round(h*maxDim/w);w=maxDim;}
+        else{w=Math.round(w*maxDim/h);h=maxDim;}
+      }
+      const cv=document.createElement("canvas");
+      cv.width=w;cv.height=h;
+      cv.getContext("2d").drawImage(img,0,0,w,h);
+      cv.toBlob(blob=>{
+        if(!blob){reject(new Error("Falha ao comprimir"));return;}
+        const r=new FileReader();
+        r.onload=()=>resolve({b64:r.result.split(",")[1],mimetype:"image/jpeg",size:blob.size});
+        r.readAsDataURL(blob);
+      },"image/jpeg",quality);
+    };
+    img.onerror=()=>reject(new Error("Imagem inválida"));
+    img.src=URL.createObjectURL(file);
+  });
+}
+async function _fileToB64(file){
+  return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res({b64:r.result.split(",")[1],mimetype:file.type||"application/octet-stream",size:file.size});r.onerror=rej;r.readAsDataURL(file);});
+}
+function _formatBytes(n){if(n<1024)return n+" B";if(n<1024*1024)return (n/1024).toFixed(0)+" KB";return (n/1024/1024).toFixed(1)+" MB";}
+function _isImage(mt){return (mt||"").startsWith("image/");}
+function _brDate(s){if(!s)return"";const [a,m,d]=s.split("-");return `${d}/${m}/${a}`;}
+
+async function renderDiario(c){
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📓 DIÁRIO DE BORDO</div><button id="diNew" class="btn-primary">+ NOVA ENTRADA</button></div>
+    <div style="font-size:12px;color:var(--text-mute);padding:0 14px 10px">Anote o que rolou no seu dia de manobra. Anexe fotos, prints, arquivos. <b>Tudo privado</b> — só você vê.</div>
+    <div class="pg-body" id="diBody"><div style="color:var(--muted)">Carregando...</div></div>`;
+  document.getElementById("diNew").onclick=()=>openDiarioForm();
+  if(!await requireAuth()){document.getElementById("diBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login pra ver seu diário.</div>';return;}
+  try{
+    const r=await apiFetch("/api/diario");
+    const d=await r.json();
+    const ents=(d.entradas||[]).slice().sort((a,b)=>(b.data||"").localeCompare(a.data||"")||(Number(b.id)||0)-(Number(a.id)||0));
+    const body=document.getElementById("diBody");
+    if(!ents.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhuma entrada ainda.<br/>Toque em <b>+ NOVA ENTRADA</b> pra começar.</div>';return;}
+    body.innerHTML=ents.map(e=>{
+      const anx=(e.anexos||[]);
+      const thumbs=anx.map((a,i)=>{
+        if(_isImage(a.mimetype)){
+          return `<img class="di-thumb" data-eid="${e.id}" data-idx="${i}" src="data:${a.mimetype};base64,${a.b64}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)"/>`;
+        }
+        return `<a href="data:${a.mimetype};base64,${a.b64}" download="${escapeHtml(a.nome||"arquivo")}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:80px;height:80px;background:var(--card);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:10px;padding:6px;text-align:center;gap:4px"><div style="font-size:24px">📄</div><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%">${escapeHtml((a.nome||"arquivo").slice(0,18))}</div></a>`;
+      }).join("");
+      return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:8px">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:14px;color:var(--neon)">📓 ${escapeHtml(_brDate(e.data))}</div>
+            ${e.texto?`<div style="margin-top:6px;color:var(--text);font-size:13px;line-height:1.5;white-space:pre-wrap">${escapeHtml(e.texto)}</div>`:""}
+          </div>
+          <button class="btn-danger" data-id="${e.id}">Excluir</button>
+        </div>
+        ${thumbs?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${thumbs}</div>`:""}
+      </div>`;
+    }).join("");
+    body.querySelectorAll("button.btn-danger").forEach(b=>{
+      b.onclick=async()=>{
+        if(!confirm("Excluir esta entrada do diário?"))return;
+        const novos=ents.filter(x=>String(x.id)!==String(b.dataset.id));
+        await apiFetch("/api/diario",{method:"POST",body:JSON.stringify({entradas:novos})});
+        renderDiario(c);
+      };
+    });
+    body.querySelectorAll(".di-thumb").forEach(im=>{
+      im.onclick=()=>{
+        const ent=ents.find(x=>String(x.id)===String(im.dataset.eid));
+        if(!ent)return;
+        const a=ent.anexos[im.dataset.idx];
+        if(!a)return;
+        const ov=document.createElement("div");
+        ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out";
+        ov.innerHTML=`<img src="data:${a.mimetype};base64,${a.b64}" style="max-width:100%;max-height:100%;object-fit:contain"/>`;
+        ov.onclick=()=>document.body.removeChild(ov);
+        document.body.appendChild(ov);
+      };
+    });
+  }catch(e){if(e.message!=="auth")document.getElementById("diBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
+}
+
+function openDiarioForm(dataPre){
+  let pendentes=[]; // {nome, mimetype, b64, size}
+  openModal("Nova Entrada do Diário 📓",`
+    <div style="font-size:12px;color:var(--neon);margin-bottom:10px;padding:8px 10px;background:rgba(0,230,118,.10);border-radius:8px">🔒 Privado — só você vê esta entrada.</div>
+    <div class="modal-fld"><label>Data</label><input id="diData" type="date" value="${dataPre||new Date().toISOString().slice(0,10)}"/></div>
+    <div class="modal-fld"><label>O que aconteceu?</label><textarea id="diTxt" rows="5" placeholder="Ex.: Manobra do trem 1234, problema na chave 7..."></textarea></div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:12px;color:var(--text-mute);margin-bottom:6px">Anexos (fotos, prints, PDFs)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+        <button type="button" id="diCam" class="btn-secondary" style="font-size:12px;padding:10px 4px">📷 Câmera</button>
+        <button type="button" id="diImg" class="btn-secondary" style="font-size:12px;padding:10px 4px">🖼️ Galeria</button>
+        <button type="button" id="diArq" class="btn-secondary" style="font-size:12px;padding:10px 4px">📎 Arquivo</button>
+      </div>
+      <input type="file" id="diInpCam" accept="image/*" capture="environment" style="display:none"/>
+      <input type="file" id="diInpImg" accept="image/*" multiple style="display:none"/>
+      <input type="file" id="diInpArq" accept=".pdf,.txt,.doc,.docx" multiple style="display:none"/>
+      <div id="diPrev" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button id="diSave" class="btn-primary">SALVAR</button>
+    </div>
+  `,()=>{
+    const prev=document.getElementById("diPrev");
+    function redrawPrev(){
+      if(!pendentes.length){prev.innerHTML="";return;}
+      prev.innerHTML=pendentes.map((a,i)=>{
+        const thumb=_isImage(a.mimetype)
+          ?`<img src="data:${a.mimetype};base64,${a.b64}" style="width:64px;height:64px;object-fit:cover;border-radius:6px"/>`
+          :`<div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);border-radius:6px;font-size:24px">📄</div>`;
+        return `<div style="position:relative">${thumb}
+          <button data-i="${i}" class="rmAnx" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#ff5555;color:#fff;border:none;cursor:pointer;font-size:14px;line-height:1">×</button>
+          <div style="font-size:9px;color:var(--muted);text-align:center;margin-top:2px">${_formatBytes(a.size)}</div>
+        </div>`;
+      }).join("");
+      prev.querySelectorAll(".rmAnx").forEach(b=>b.onclick=()=>{pendentes.splice(Number(b.dataset.i),1);redrawPrev();});
+    }
+    async function adicionar(file, comprimir){
+      try{
+        const a = comprimir && _isImage(file.type)
+          ? await _compressImage(file)
+          : await _fileToB64(file);
+        a.nome = file.name || (comprimir?"foto.jpg":"arquivo");
+        if(a.size > 8*1024*1024){showToast("❌ Arquivo grande demais ("+_formatBytes(a.size)+", máx 8 MB)");return;}
+        pendentes.push(a);
+        redrawPrev();
+      }catch(e){showToast("❌ Falha ao processar: "+e.message);}
+    }
+    const inpCam=document.getElementById("diInpCam");
+    const inpImg=document.getElementById("diInpImg");
+    const inpArq=document.getElementById("diInpArq");
+    document.getElementById("diCam").onclick=()=>inpCam.click();
+    document.getElementById("diImg").onclick=()=>inpImg.click();
+    document.getElementById("diArq").onclick=()=>inpArq.click();
+    inpCam.onchange=async()=>{for(const f of inpCam.files)await adicionar(f,true);inpCam.value="";};
+    inpImg.onchange=async()=>{for(const f of inpImg.files)await adicionar(f,true);inpImg.value="";};
+    inpArq.onchange=async()=>{for(const f of inpArq.files)await adicionar(f,false);inpArq.value="";};
+    document.getElementById("diSave").onclick=async()=>{
+      const data=document.getElementById("diData").value;
+      const texto=document.getElementById("diTxt").value.trim();
+      if(!data){showToast("Data é obrigatória");return;}
+      if(!texto && !pendentes.length){showToast("Escreva algo ou anexe um arquivo");return;}
+      const novaEntrada={id:Date.now(),data,texto,anexos:pendentes};
+      const r=await apiFetch("/api/diario");
+      const d=await r.json();
+      const novos=(d.entradas||[]).concat([novaEntrada]);
+      const r2=await apiFetch("/api/diario",{method:"POST",body:JSON.stringify({entradas:novos})});
+      if(r2.ok){closeModal();showToast("📓 Entrada salva");if(S.section==="diario")renderDiario(document.getElementById("content"));}
+      else{const dd=await r2.json().catch(()=>({}));showToast("❌ "+(dd.error||"Falha ao salvar"));}
+    };
+  });
+}
+
 // ===== CHAT =====
 let CHAT_CONV=null, CHAT_POLL=null, CHAT_LAST_TS=0;
 function _stopChatPoll(){if(CHAT_POLL){clearInterval(CHAT_POLL);CHAT_POLL=null;}}
@@ -1851,10 +2015,9 @@ async function openDia(k){
     <div id="diaList" style="margin-bottom:14px;max-height:240px;overflow:auto"><div style="color:var(--muted);font-size:13px">Carregando...</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
       <button id="diaEv" class="btn-primary" style="font-size:12px;padding:10px 6px">+ Evento</button>
-      <button id="diaArq" class="btn-secondary" style="font-size:12px;padding:10px 6px">📎 Anexar</button>
+      <button id="diaDiario" class="btn-secondary" style="font-size:12px;padding:10px 6px">📓 Diário</button>
       <button id="diaNota" class="btn-secondary" style="font-size:12px;padding:10px 6px">📝 Nota</button>
     </div>
-    <input type="file" id="diaFile" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" style="display:none"/>
   `,async()=>{
     async function refresh(){
       const list=document.getElementById("diaList");
@@ -1914,16 +2077,7 @@ async function openDia(k){
     }
     refresh();
     document.getElementById("diaEv").onclick=()=>{closeModal();openEventoForm(k);};
-    const fi=document.getElementById("diaFile");
-    document.getElementById("diaArq").onclick=()=>fi.click();
-    fi.onchange=async()=>{
-      const f=fi.files[0];if(!f)return;
-      const b64=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.readAsDataURL(f);});
-      const r=await apiFetch("/api/biblioteca/upload",{method:"POST",body:JSON.stringify({nome:`[DIA ${k}] ${f.name}`,data:b64,mimetype:f.type})});
-      const d=await r.json();
-      if(r.ok){showToast(`✅ Anexado (${d.chunks} trechos)`);refresh();}
-      else showToast("❌ "+(d.error||"Falha"));
-    };
+    document.getElementById("diaDiario").onclick=()=>{closeModal();setSection("diario");openDiarioForm(k);};
     document.getElementById("diaNota").onclick=()=>{
       const t=prompt(`Nota para ${dataBr}:`);
       if(!t||!t.trim())return;
@@ -2334,12 +2488,12 @@ async function openAdmin(){
 function setSection(sec){
   S.section=sec;
   document.querySelectorAll(".mp-item[data-sec]").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
-  ["sec-calendario","sec-eventos","sec-pessoais","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+  ["sec-calendario","sec-eventos","sec-pessoais","sec-diario","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
   document.body.classList.add("sec-"+sec);
   render();
 }
 S.section=S.section||"calendario";
-["sec-calendario","sec-eventos","sec-pessoais","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+["sec-calendario","sec-eventos","sec-pessoais","sec-diario","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
 document.body.classList.add("sec-"+S.section);
 // Menu ⋮ wiring
 (function(){

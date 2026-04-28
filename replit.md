@@ -85,3 +85,13 @@ PWA recebe notificações reais mesmo com o app fechado e celular bloqueado:
 ## Deployment
 
 Configured as a **static** deployment with `publicDir: "."`.
+
+## Diário de Bordo (privado, v3.0)
+
+Aba **📓 Diário de Bordo** no menu lateral, entre "Meus Eventos" e "Chat Turma".
+- **Backend** (`server.py`): helpers `diario_load/save` + endpoints `GET/POST /api/diario` (auth obrigatório). Armazenado em `kvstore` na chave `diario:<matricula>` — escopo individual, sem broadcast.
+- **Frontend** (`index.html`): `renderDiario(c)` lista entradas ordenadas por data desc, com texto + thumbs de anexos (clicar abre fullscreen). Botão "Excluir" por entrada.
+- **Nova entrada** (`openDiarioForm(dataPre)`): date picker, textarea, 3 botões — **📷 Câmera** (`capture="environment"`), **🖼️ Galeria** (multi), **📎 Arquivo** (.pdf, .txt, .doc, .docx). Imagens são comprimidas client-side via canvas (`_compressImage`, max 1280px / JPEG q0.7) antes de virar base64. Limite 8 MB por anexo. Anexos guardados inline como base64 dentro da própria entrada.
+- **Botão "Diário" no popup do dia**: trocou o antigo "Anexar" (que mandava pra biblioteca compartilhada). Agora navega pra aba Diário e abre o formulário com a data pré-preenchida.
+- **Privacidade por design**: entradas do diário NÃO disparam push, NÃO entram na biblioteca/Mem Palace, NÃO são listadas pra outros usuários.
+- **Limitação conhecida (a evoluir)**: POST envia a lista inteira a cada save. Tudo bem por enquanto (limite Flask 80 MB), mas pra diários grandes (50+ entradas com fotos) vai ficar lento. Próxima iteração: paginação + endpoint incremental.

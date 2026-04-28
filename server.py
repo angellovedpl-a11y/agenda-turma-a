@@ -312,6 +312,21 @@ def eventos_pessoais_save(matricula: str, data: dict):
         eventos = []
     kvstore.save(f'eventos_pessoais:{matricula}', {'eventos': eventos})
 
+# === DIARIO DE BORDO (privado, por usuario, com anexos inline) ===
+def diario_load(matricula: str) -> dict:
+    d = kvstore.load(f'diario:{matricula}')
+    if not isinstance(d, dict):
+        return {'entradas': []}
+    if not isinstance(d.get('entradas'), list):
+        d['entradas'] = []
+    return d
+
+def diario_save(matricula: str, data: dict):
+    entradas = data.get('entradas') or []
+    if not isinstance(entradas, list):
+        entradas = []
+    kvstore.save(f'diario:{matricula}', {'entradas': entradas})
+
 # === MEMPALACE — FATOS COMPARTILHADOS DA TURMA ===
 def fatos_load() -> list:
     d = kvstore.load('fatos_turma')
@@ -1467,6 +1482,20 @@ def eventos_pessoais_post():
     u = request.current_user
     data = request.json or {}
     eventos_pessoais_save(u['matricula'], data)
+    return jsonify({'ok': True})
+
+@app.route('/api/diario', methods=['GET'])
+@auth.require_auth
+def diario_get():
+    u = request.current_user
+    return jsonify(diario_load(u['matricula']))
+
+@app.route('/api/diario', methods=['POST'])
+@auth.require_auth
+def diario_post():
+    u = request.current_user
+    data = request.json or {}
+    diario_save(u['matricula'], data)
     return jsonify({'ok': True})
 
 @app.route('/api/mem/<sala>', methods=['GET'])
