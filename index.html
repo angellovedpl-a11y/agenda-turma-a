@@ -777,7 +777,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-28 v3.0 (Diário de Bordo com câmera/galeria/arquivo)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-28 v3.1 (Diário com Object Storage + pool DB)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -1672,13 +1672,15 @@ async function renderDiario(c){
     const ents=(d.entradas||[]).slice().sort((a,b)=>(b.data||"").localeCompare(a.data||"")||(Number(b.id)||0)-(Number(a.id)||0));
     const body=document.getElementById("diBody");
     if(!ents.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhuma entrada ainda.<br/>Toque em <b>+ NOVA ENTRADA</b> pra começar.</div>';return;}
+    const _tok=getToken();
     body.innerHTML=ents.map(e=>{
       const anx=(e.anexos||[]);
       const thumbs=anx.map((a,i)=>{
+        const url=a.key?`/api/diario/anexo?key=${encodeURIComponent(a.key)}&t=${encodeURIComponent(_tok)}`:(a.b64?`data:${a.mimetype};base64,${a.b64}`:"");
         if(_isImage(a.mimetype)){
-          return `<img class="di-thumb" data-eid="${e.id}" data-idx="${i}" src="data:${a.mimetype};base64,${a.b64}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)"/>`;
+          return `<img class="di-thumb" data-eid="${e.id}" data-idx="${i}" src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy"/>`;
         }
-        return `<a href="data:${a.mimetype};base64,${a.b64}" download="${escapeHtml(a.nome||"arquivo")}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:80px;height:80px;background:var(--card);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:10px;padding:6px;text-align:center;gap:4px"><div style="font-size:24px">📄</div><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%">${escapeHtml((a.nome||"arquivo").slice(0,18))}</div></a>`;
+        return `<a href="${url}" download="${escapeHtml(a.nome||"arquivo")}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:80px;height:80px;background:var(--card);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:10px;padding:6px;text-align:center;gap:4px"><div style="font-size:24px">📄</div><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%">${escapeHtml((a.nome||"arquivo").slice(0,18))}</div></a>`;
       }).join("");
       return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:8px">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">

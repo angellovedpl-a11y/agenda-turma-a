@@ -312,7 +312,12 @@ def eventos_pessoais_save(matricula: str, data: dict):
         eventos = []
     kvstore.save(f'eventos_pessoais:{matricula}', {'eventos': eventos})
 
-# === DIARIO DE BORDO (privado, por usuario, com anexos inline) ===
+# === DIARIO DE BORDO (privado, por usuario, anexos no Object Storage) ===
+import object_storage as _obj
+import base64 as _b64
+DIARIO_OBJ_PREFIX = 'diario'
+DIARIO_MAX_ANEXO_BYTES = 8 * 1024 * 1024  # 8 MB por anexo (ja comprimidos no client)
+
 def diario_load(matricula: str) -> dict:
     d = kvstore.load(f'diario:{matricula}')
     if not isinstance(d, dict):
@@ -321,11 +326,91 @@ def diario_load(matricula: str) -> dict:
         d['entradas'] = []
     return d
 
-def diario_save(matricula: str, data: dict):
-    entradas = data.get('entradas') or []
-    if not isinstance(entradas, list):
-        entradas = []
-    kvstore.save(f'diario:{matricula}', {'entradas': entradas})
+def _diario_collect_keys(entradas) -> set:
+    keys = set()
+    for e in entradas or []:
+        for a in (e or {}).get('anexos') or []:
+            k = (a or {}).get('key')
+            if k:
+                keys.add(k)
+    return keys
+
+def diario_save(matricula: str, data: dict) -> dict:
+    """Recebe entradas com anexos contendo `b64` (novos) ou `key` (existentes).
+    Faz upload dos b64 pro Object Storage e salva soh metadados no Postgres.
+    Deleta do Object Storage anexos que nao estao mais em nenhuma entrada.
+    Retorna dict com possiveis erros por entrada."""
+    entradas_in = data.get('entradas') or []
+    if not isinstance(entradas_in, list):
+        entradas_in = []
+    # Estado anterior pra detectar deletados
+    anteriores = diario_load(matricula).get('entradas') or []
+    keys_antes = _diario_collect_keys(anteriores)
+
+    erros = []
+    entradas_out = []
+    for e in entradas_in:
+        if not isinstance(e, dict):
+            continue
+        eid = e.get('id') or int(time.time() * 1000)
+        anexos_in = e.get('anexos') or []
+        anexos_out = []
+        for idx, a in enumerate(anexos_in):
+            if not isinstance(a, dict):
+                continue
+            # Se ja tem key (anexo antigo), passa direto
+            if a.get('key') and not a.get('b64'):
+                anexos_out.append({
+                    'key': a['key'],
+                    'nome': a.get('nome') or 'arquivo',
+                    'mimetype': a.get('mimetype') or 'application/octet-stream',
+                    'size': int(a.get('size') or 0),
+                })
+                continue
+            # Tem b64 -> faz upload
+            b64_str = a.get('b64')
+            if not b64_str:
+                continue
+            try:
+                raw = _b64.b64decode(b64_str)
+            except Exception as ex:
+                erros.append(f'anexo {idx}: base64 invalido ({ex})')
+                continue
+            if len(raw) > DIARIO_MAX_ANEXO_BYTES:
+                erros.append(f'anexo {idx}: maior que limite ({len(raw)} bytes)')
+                continue
+            mt = a.get('mimetype') or 'application/octet-stream'
+            nome = a.get('nome') or 'arquivo'
+            key = _obj.make_key(DIARIO_OBJ_PREFIX, matricula, eid, idx, nome)
+            ok = _obj.upload_bytes(key, raw, content_type=mt)
+            if not ok:
+                erros.append(f'anexo {idx}: falha no upload')
+                continue
+            anexos_out.append({
+                'key': key,
+                'nome': nome,
+                'mimetype': mt,
+                'size': len(raw),
+            })
+        entradas_out.append({
+            'id': eid,
+            'data': e.get('data') or '',
+            'texto': (e.get('texto') or '').strip(),
+            'anexos': anexos_out,
+        })
+
+    # Salva metadados (sem b64) no Postgres
+    kvstore.save(f'diario:{matricula}', {'entradas': entradas_out})
+
+    # Limpa anexos orfaos do Object Storage (que estavam antes e nao estao mais)
+    keys_depois = _diario_collect_keys(entradas_out)
+    orfaos = keys_antes - keys_depois
+    for k in orfaos:
+        # Garante que a key pertence ao usuario antes de deletar (defesa em profundidade)
+        if _obj.key_belongs_to(k, DIARIO_OBJ_PREFIX, matricula):
+            _obj.delete(k)
+
+    return {'ok': True, 'erros': erros, 'orfaos_removidos': len(orfaos)}
 
 # === MEMPALACE — FATOS COMPARTILHADOS DA TURMA ===
 def fatos_load() -> list:
@@ -1495,8 +1580,39 @@ def diario_get():
 def diario_post():
     u = request.current_user
     data = request.json or {}
-    diario_save(u['matricula'], data)
-    return jsonify({'ok': True})
+    res = diario_save(u['matricula'], data)
+    return jsonify(res)
+
+@app.route('/api/diario/anexo', methods=['GET'])
+@auth.require_auth
+def diario_anexo():
+    """Serve um anexo do diario. So o dono acessa (key tem que comecar com diario/<matricula>/)."""
+    u = request.current_user
+    key = (request.args.get('key') or '').strip()
+    if not _obj.key_belongs_to(key, DIARIO_OBJ_PREFIX, u['matricula']):
+        return jsonify({'error': 'acesso negado'}), 403
+    try:
+        raw = _obj.download_bytes(key)
+    except Exception as e:
+        return jsonify({'error': f'arquivo nao encontrado: {e}'}), 404
+    # mimetype: tenta achar pela entrada do diario; fallback pra octet-stream
+    mt = 'application/octet-stream'
+    nome = key.rsplit('/', 1)[-1]
+    try:
+        for e in (diario_load(u['matricula']).get('entradas') or []):
+            for a in (e.get('anexos') or []):
+                if a.get('key') == key:
+                    mt = a.get('mimetype') or mt
+                    nome = a.get('nome') or nome
+                    break
+    except Exception:
+        pass
+    from flask import send_file
+    import io
+    resp = send_file(io.BytesIO(raw), mimetype=mt, download_name=nome)
+    # Cache curto no navegador (anexo raramente muda; se mudar, key muda tambem)
+    resp.headers['Cache-Control'] = 'private, max-age=3600'
+    return resp
 
 @app.route('/api/mem/<sala>', methods=['GET'])
 @auth.require_auth

@@ -40,19 +40,78 @@ def _ensure_psycopg2():
 _ensure_psycopg2()
 import psycopg2
 from psycopg2.extras import Json
+from psycopg2 import pool as _pgpool
+from contextlib import contextmanager
 
 _DB_URL = os.environ.get('DATABASE_URL', '')
 _lock = threading.Lock()
+
+# Pool de conexoes threadsafe. Min=2 mantem aquecidas, Max=20 limita por worker
+# (com 2 workers gunicorn = 40 conexoes max, abaixo do limite padrao do Postgres).
+_POOL_MIN = int(os.environ.get('KV_POOL_MIN', '2'))
+_POOL_MAX = int(os.environ.get('KV_POOL_MAX', '20'))
+_pool = None
+_pool_lock = threading.Lock()
 
 
 class KVStoreError(Exception):
     pass
 
 
+def _get_pool():
+    global _pool
+    if _pool is not None:
+        return _pool
+    with _pool_lock:
+        if _pool is not None:
+            return _pool
+        if not _DB_URL:
+            raise RuntimeError('DATABASE_URL nao configurada')
+        _pool = _pgpool.ThreadedConnectionPool(_POOL_MIN, _POOL_MAX, _DB_URL)
+        print(f'[kvstore] pool criado (min={_POOL_MIN}, max={_POOL_MAX})')
+        return _pool
+
+
+@contextmanager
 def _connect():
+    """Pega uma conexao do pool e devolve ao final. Compativel com o uso
+    antigo `with _connect() as conn`."""
     if not _DB_URL:
         raise RuntimeError('DATABASE_URL nao configurada')
-    return psycopg2.connect(_DB_URL)
+    pool = _get_pool()
+    conn = pool.getconn()
+    try:
+        yield conn
+        # Sucesso: se houver transacao pendente, comita (mantem comportamento
+        # antigo do `with psycopg2.connect()` que comita ao sair sem erro).
+        try:
+            if not conn.autocommit and conn.status == psycopg2.extensions.STATUS_IN_TRANSACTION:
+                conn.commit()
+        except Exception:
+            pass
+    except Exception:
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        raise
+    finally:
+        try:
+            pool.putconn(conn)
+        except Exception:
+            pass
+
+
+def close_pool():
+    """Fecha o pool. Util pra testes e desligamento limpo."""
+    global _pool
+    with _pool_lock:
+        if _pool is not None:
+            try:
+                _pool.closeall()
+            except Exception:
+                pass
+            _pool = None
 
 
 def init_schema():

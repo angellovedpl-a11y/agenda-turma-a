@@ -118,7 +118,13 @@ def get_token_from_request():
     auth = request.headers.get('Authorization', '')
     if auth.startswith('Bearer '):
         return auth[7:].strip()
-    return request.headers.get('X-Auth-Token', '').strip() or None
+    h = request.headers.get('X-Auth-Token', '').strip()
+    if h:
+        return h
+    # Fallback: query param `t` (necessario pra <img src="..."> e downloads,
+    # que nao permitem header customizado). Soh use em GET de recurso privado.
+    q = (request.args.get('t') or '').strip()
+    return q or None
 
 
 def get_current_user():
