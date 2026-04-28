@@ -1091,6 +1091,20 @@ def claude_chat():
             )
         full_system += '========================================\n'
 
+        full_system += (
+            '\n### TOM DE VOZ E FORMATACAO ###\n'
+            'Voce conversa com ferroviarios da Turma A no celular, em portugues do Brasil natural e direto.\n'
+            'REGRAS DE ESCRITA (cumpra TODAS):\n'
+            '- Resposta CURTA: 1 a 4 frases na maioria dos casos. So expanda quando o usuario pedir detalhe ou for tecnico critico.\n'
+            '- NAO use markdown: NADA de **negrito**, *italico*, ## titulos, listas com - ou *. Escreva em prosa.\n'
+            '- Se precisar listar, use frases separadas por ponto, ou no maximo 1) 2) 3) inline.\n'
+            '- NAO deixe linhas em branco duplas/triplas. Maximo UMA linha em branco entre paragrafos.\n'
+            '- Linguagem coloquial de colega de trabalho (nao formal, nao corporativo). Ex.: "Beleza, anotei aqui." em vez de "Conforme solicitado, procedi com o registro."\n'
+            '- Sem aspas decorativas, sem emojis em excesso (no maximo 1 por resposta, so se realmente couber).\n'
+            '- Se a resposta tiver numeros tecnicos, integre na frase ("a L030 comporta 253 GDTs") em vez de tabela.\n'
+            '### FIM TOM ###\n'
+        )
+
         response = _anthropic_client.messages.create(
             model="claude-haiku-4-5",
             max_tokens=8192,
@@ -1186,7 +1200,16 @@ def claude_chat():
                 if r_rg.get('ok'):
                     regras_sugeridas.append({'conceito': sugestao['conceito'], 'status': 'pendente'})
         texto_limpo = marcador_rg.sub('', texto_limpo)
-        texto_limpo = re.sub(r'\n[ \t]*\n[ \t]*\n+', '\n\n', texto_limpo).strip()
+        # Faxina pos-processamento: remove markdown e excesso de espacos pra resposta sair fluida
+        texto_limpo = re.sub(r'^#{1,6}\s+', '', texto_limpo, flags=re.MULTILINE)
+        texto_limpo = re.sub(r'\*\*([^*\n]+)\*\*', r'\1', texto_limpo)
+        texto_limpo = re.sub(r'(?<!\w)\*([^*\n]+)\*(?!\w)', r'\1', texto_limpo)
+        texto_limpo = re.sub(r'__([^_\n]+)__', r'\1', texto_limpo)
+        texto_limpo = re.sub(r'^[ \t]*[-*+][ \t]+', '', texto_limpo, flags=re.MULTILINE)
+        texto_limpo = re.sub(r'^[ \t]*>[ \t]?', '', texto_limpo, flags=re.MULTILINE)
+        texto_limpo = re.sub(r'`{1,3}([^`\n]+)`{1,3}', r'\1', texto_limpo)
+        texto_limpo = re.sub(r'[ \t]+\n', '\n', texto_limpo)
+        texto_limpo = re.sub(r'\n{3,}', '\n\n', texto_limpo).strip()
 
         if pediu_salvar and not salvos:
             try:
