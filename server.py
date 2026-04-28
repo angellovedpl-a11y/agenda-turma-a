@@ -297,6 +297,21 @@ def evento_add(tipo: str, titulo: str, data: str, hora: str = '', descricao: str
     mem_palace_save('eventos', sala)
     return {'ok': True, 'evento': novo}
 
+# === EVENTOS PESSOAIS (privados, por usuario, sem broadcast) ===
+def eventos_pessoais_load(matricula: str) -> dict:
+    d = kvstore.load(f'eventos_pessoais:{matricula}')
+    if not isinstance(d, dict):
+        return {'eventos': []}
+    if not isinstance(d.get('eventos'), list):
+        d['eventos'] = []
+    return d
+
+def eventos_pessoais_save(matricula: str, data: dict):
+    eventos = data.get('eventos') or []
+    if not isinstance(eventos, list):
+        eventos = []
+    kvstore.save(f'eventos_pessoais:{matricula}', {'eventos': eventos})
+
 # === MEMPALACE — FATOS COMPARTILHADOS DA TURMA ===
 def fatos_load() -> list:
     d = kvstore.load('fatos_turma')
@@ -1440,6 +1455,20 @@ def biblioteca_buscar():
     return jsonify({'trechos': buscar_chunks(query, biblioteca, top_k=data.get('top_k', 3))})
 
 # === API MEM CRUD ===
+@app.route('/api/eventos-pessoais', methods=['GET'])
+@auth.require_auth
+def eventos_pessoais_get():
+    u = request.current_user
+    return jsonify(eventos_pessoais_load(u['matricula']))
+
+@app.route('/api/eventos-pessoais', methods=['POST'])
+@auth.require_auth
+def eventos_pessoais_post():
+    u = request.current_user
+    data = request.json or {}
+    eventos_pessoais_save(u['matricula'], data)
+    return jsonify({'ok': True})
+
 @app.route('/api/mem/<sala>', methods=['GET'])
 @auth.require_auth
 def mem_get(sala):

@@ -696,6 +696,10 @@ body.banner-visible .viriato-fab{display:none}
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="7" cy="9" r="1" fill="currentColor"/><line x1="11" y1="9" x2="18" y2="9"/><circle cx="7" cy="14" r="1" fill="currentColor"/><line x1="11" y1="14" x2="18" y2="14"/></svg>
       <span>Mural da Turma</span>
     </button>
+    <button class="mp-item" data-sec="pessoais" role="menuitem">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      <span>Meus Eventos <span style="color:var(--muted);font-size:11px">(privado)</span></span>
+    </button>
     <button class="mp-item" data-sec="chat" role="menuitem">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 17h-6l-4 3v-3H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><path d="M8 11h8a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H10l-4 3v-3"/></svg>
       <span>Chat</span>
@@ -769,7 +773,7 @@ body.banner-visible .viriato-fab{display:none}
 <div id="viriatoWin"></div>
 
 <script>
-console.log("%c[Agenda Turma A] Build: 2026-04-28 v2.8 (lembrete Prontos + ícone novo v2)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
+console.log("%c[Agenda Turma A] Build: 2026-04-28 v2.9 (Meus Eventos privados + lembrete Prontos + ícone novo)", "background:#00e676;color:#001a0c;padding:3px 8px;border-radius:6px;font-weight:700");
 // ===== Constantes =====
 const FER={"2026-01-01":"Confraternizacao Universal","2026-04-03":"Paixao de Cristo","2026-04-05":"Pascoa","2026-04-21":"Tiradentes","2026-05-01":"Dia do Trabalho","2026-06-04":"Corpus Christi","2026-09-07":"Independencia do Brasil","2026-10-12":"N.Sra.Aparecida","2026-11-02":"Finados","2026-11-15":"Proclamacao da Republica","2026-11-20":"Consciencia Negra","2026-12-25":"Natal"};
 const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
@@ -785,19 +789,22 @@ const EVENTO_TIPOS={
 };
 function evTipoInfo(t){return EVENTO_TIPOS[t]||EVENTO_TIPOS.outro;}
 let EVENTOS_CACHE=[];
+let EVENTOS_PESS_CACHE=[];
 async function carregarEventosCache(){
   try{const r=await apiFetch("/api/mem/eventos");const d=await r.json();EVENTOS_CACHE=d.eventos||[];}catch(e){EVENTOS_CACHE=[];}
+  try{const r=await apiFetch("/api/eventos-pessoais");const d=await r.json();EVENTOS_PESS_CACHE=(d.eventos||[]).map(e=>Object.assign({},e,{_pessoal:true}));}catch(e){EVENTOS_PESS_CACHE=[];}
 }
 function eventosNoDia(k){
-  // k = "YYYY-MM-DD"
+  // k = "YYYY-MM-DD" — junta mural + pessoais
   const [a,m,d]=k.split("-");
   const mmdd=`${m}-${d}`;
-  return EVENTOS_CACHE.filter(e=>{
+  const filtra=e=>{
     if(!e.data)return false;
     if(e.data===k)return true;
     if(e.tipo==="aniversario"&&e.data.slice(5)===mmdd)return true;
     return false;
-  });
+  };
+  return EVENTOS_CACHE.filter(filtra).concat(EVENTOS_PESS_CACHE.filter(filtra));
 }
 const DOW_FULL=["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
 const DOW_MINI=["D","S","T","Q","Q","S","S"];
@@ -1053,6 +1060,7 @@ function render(){
   if(S.section && S.section!=="calendario"){
     document.getElementById("rightPanel").style.display="none";
     if(S.section==="eventos")renderEventos(c);
+    else if(S.section==="pessoais")renderPessoais(c);
     else if(S.section==="acervo")renderAcervo(c);
     else if(S.section==="chat")renderChat(c);
     else if(S.section==="viriato")renderViriatoFull(c);
@@ -1578,6 +1586,44 @@ async function renderEventos(c){
     });
   }catch(e){if(e.message!=="auth")document.getElementById("evBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
 }
+
+// ===== EVENTOS PESSOAIS (privados, só do usuário) =====
+async function renderPessoais(c){
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">🔒 MEUS EVENTOS</div><button id="pessNew" class="btn-primary">+ NOVO</button></div>
+    <div style="font-size:12px;color:var(--text-mute);padding:0 14px 10px">Eventos privados — só você vê. Não vai pro mural nem notifica a turma.</div>
+    <div class="pg-body" id="pessBody"><div style="color:var(--muted)">Carregando...</div></div>`;
+  document.getElementById("pessNew").onclick=()=>openEventoForm(null,{pessoal:true});
+  if(!await requireAuth()){document.getElementById("pessBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login pra ver seus eventos.</div>';return;}
+  try{
+    const r=await apiFetch("/api/eventos-pessoais");
+    const d=await r.json();
+    const evs=(d.eventos||[]).slice().sort((a,b)=>(a.data||"").localeCompare(b.data||""));
+    const body=document.getElementById("pessBody");
+    if(!evs.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum evento pessoal ainda.<br/>Toque em <b>+ NOVO</b> pra adicionar.</div>';return;}
+    body.innerHTML=evs.map(e=>{
+      const ti=evTipoInfo(e.tipo);
+      return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:6px;border-left:3px solid ${ti.cor}">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:14px"><span style="color:${ti.cor}">${ti.emoji} ${escapeHtml(ti.label)}</span> · ${escapeHtml(e.titulo||"")}</div>
+            <div style="color:var(--muted);font-size:12px;margin-top:4px">📅 ${escapeHtml(e.data||"")}${e.hora?" · ⏰ "+escapeHtml(e.hora):""}</div>
+            ${e.descricao?`<div style="margin-top:6px;color:var(--text);font-size:13px;line-height:1.5">${escapeHtml(e.descricao)}</div>`:""}
+          </div>
+          <button class="btn-danger" data-id="${e.id}">Excluir</button>
+        </div>
+      </div>`;
+    }).join("");
+    body.querySelectorAll("button.btn-danger").forEach(b=>{
+      b.onclick=async()=>{
+        if(!confirm("Excluir este evento pessoal?"))return;
+        const novos=evs.filter(x=>String(x.id)!==String(b.dataset.id));
+        await apiFetch("/api/eventos-pessoais",{method:"POST",body:JSON.stringify({eventos:novos})});
+        await carregarEventosCache();renderPessoais(c);
+      };
+    });
+  }catch(e){if(e.message!=="auth")document.getElementById("pessBody").innerHTML='<div style="color:#ff8a8a">Erro: '+escapeHtml(e.message)+'</div>';}
+}
+
 // ===== CHAT =====
 let CHAT_CONV=null, CHAT_POLL=null, CHAT_LAST_TS=0;
 function _stopChatPoll(){if(CHAT_POLL){clearInterval(CHAT_POLL);CHAT_POLL=null;}}
@@ -1813,23 +1859,29 @@ async function openDia(k){
     async function refresh(){
       const list=document.getElementById("diaList");
       try{
-        const [rEv,rMem]=await Promise.all([apiFetch("/api/mem/eventos"),apiFetch("/api/memoria")]);
-        const dEv=await rEv.json();const dMem=await rMem.json();
+        const [rEv,rPess,rMem]=await Promise.all([apiFetch("/api/mem/eventos"),apiFetch("/api/eventos-pessoais"),apiFetch("/api/memoria")]);
+        const dEv=await rEv.json();const dPess=await rPess.json();const dMem=await rMem.json();
         const evs=(dEv.eventos||[]).filter(e=>e.data===k);
+        const evsPess=(dPess.eventos||[]).filter(e=>e.data===k);
         const notas=(dMem.pessoal||[]).filter(p=>(p.texto||"").startsWith(`[DIA ${k}]`));
+        const renderEv=(e,pess)=>{
+          const ti=evTipoInfo(e.tipo);
+          const tag=pess?'<span style="color:var(--neon);font-size:10px;background:rgba(0,230,118,.15);padding:1px 6px;border-radius:4px;margin-left:6px">🔒 PRIVADO</span>':'';
+          return `<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid ${ti.cor}">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:13px"><span style="color:${ti.cor}">${ti.emoji} ${escapeHtml(ti.label)}</span> · ${escapeHtml(e.titulo||"")}${tag}</div>
+              ${e.hora?`<div style="color:var(--muted);font-size:11px">⏰ ${escapeHtml(e.hora)}</div>`:""}
+              ${e.descricao?`<div style="font-size:12px;color:var(--text);margin-top:3px">${escapeHtml(e.descricao)}</div>`:""}
+              <button data-eid="${e.id}" data-pess="${pess?1:0}" class="ev-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir</button>
+            </div>
+          </div>`;
+        };
         let html="";
-        if(evs.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px">EVENTOS</div>`;
-          html+=evs.map(e=>{
-            const ti=evTipoInfo(e.tipo);
-            return `<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid ${ti.cor}">
-              <div style="flex:1;min-width:0">
-                <div style="font-weight:600;font-size:13px"><span style="color:${ti.cor}">${ti.emoji} ${escapeHtml(ti.label)}</span> · ${escapeHtml(e.titulo||"")}</div>
-                ${e.hora?`<div style="color:var(--muted);font-size:11px">⏰ ${escapeHtml(e.hora)}</div>`:""}
-                ${e.descricao?`<div style="font-size:12px;color:var(--text);margin-top:3px">${escapeHtml(e.descricao)}</div>`:""}
-                <button data-eid="${e.id}" class="ev-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir</button>
-              </div>
-            </div>`;
-          }).join("");
+        if(evs.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin-bottom:6px">📋 MURAL DA TURMA</div>`;
+          html+=evs.map(e=>renderEv(e,false)).join("");
+        }
+        if(evsPess.length){html+=`<div style="font-size:11px;color:var(--neon);letter-spacing:1px;margin:10px 0 6px">🔒 MEUS EVENTOS</div>`;
+          html+=evsPess.map(e=>renderEv(e,true)).join("");
         }
         if(notas.length){html+=`<div style="font-size:11px;color:var(--text-mute);letter-spacing:1px;margin:10px 0 6px">NOTAS</div>`;
           html+=notas.map(n=>`<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid #94a3b8">
@@ -1843,9 +1895,10 @@ async function openDia(k){
         list.querySelectorAll(".ev-del").forEach(b=>{
           b.onclick=async()=>{
             if(!confirm("Excluir este evento?"))return;
-            const r2=await apiFetch("/api/mem/eventos");const d2=await r2.json();
+            const ep=b.dataset.pess==="1"?"/api/eventos-pessoais":"/api/mem/eventos";
+            const r2=await apiFetch(ep);const d2=await r2.json();
             const novos=(d2.eventos||[]).filter(e=>String(e.id)!==String(b.dataset.eid));
-            await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
+            await apiFetch(ep,{method:"POST",body:JSON.stringify({eventos:novos})});
             await carregarEventosCache();showToast("Excluído");refresh();render();
           };
         });
@@ -1878,9 +1931,17 @@ async function openDia(k){
     };
   });
 }
-function openEventoForm(dataPre){
+function openEventoForm(dataPre,opts){
+  opts=opts||{};
+  const pessoal=!!opts.pessoal;
+  const endpoint=pessoal?"/api/eventos-pessoais":"/api/mem/eventos";
+  const titulo=pessoal?"Novo Evento Pessoal 🔒":"Novo Post no Mural";
+  const aviso=pessoal
+    ?'<div style="font-size:12px;color:var(--neon);margin-bottom:10px;padding:8px 10px;background:rgba(0,230,118,.10);border-radius:8px">🔒 Este evento é privado. Só você vai ver.</div>'
+    :'<div style="font-size:12px;color:#fbbf24;margin-bottom:10px;padding:8px 10px;background:rgba(251,191,36,.10);border-radius:8px">📢 Este post vai pro mural e a turma toda recebe notificação.</div>';
   const tiposOpts=Object.entries(EVENTO_TIPOS).map(([k,v])=>`<option value="${k}">${v.emoji} ${v.label}</option>`).join("");
-  openModal("Novo Evento",`
+  openModal(titulo,`
+    ${aviso}
     <div class="modal-fld"><label>Tipo</label>
       <select id="eTipo" style="width:100%;padding:10px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:14px">${tiposOpts}</select>
     </div>
@@ -1902,11 +1963,11 @@ function openEventoForm(dataPre){
     document.getElementById("eSave").onclick=async()=>{
       const ev={id:Date.now(),tipo:sel.value,titulo:document.getElementById("eTit").value.trim(),data:document.getElementById("eData").value,hora:document.getElementById("eHora").value,descricao:document.getElementById("eDesc").value.trim(),autor:CURRENT_USER&&CURRENT_USER.nome||""};
       if(!ev.titulo||!ev.data){showToast("Título e data são obrigatórios");return;}
-      const r=await apiFetch("/api/mem/eventos");
+      const r=await apiFetch(endpoint);
       const d=await r.json();
       const novos=(d.eventos||[]).concat([ev]);
-      await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
-      closeModal();showToast("✅ Evento criado");await carregarEventosCache();render();
+      await apiFetch(endpoint,{method:"POST",body:JSON.stringify({eventos:novos})});
+      closeModal();showToast(pessoal?"🔒 Evento pessoal criado":"✅ Post enviado ao mural");await carregarEventosCache();render();
     };
   });
 }
@@ -2273,12 +2334,12 @@ async function openAdmin(){
 function setSection(sec){
   S.section=sec;
   document.querySelectorAll(".mp-item[data-sec]").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
-  ["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+  ["sec-calendario","sec-eventos","sec-pessoais","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
   document.body.classList.add("sec-"+sec);
   render();
 }
 S.section=S.section||"calendario";
-["sec-calendario","sec-eventos","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+["sec-calendario","sec-eventos","sec-pessoais","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
 document.body.classList.add("sec-"+S.section);
 // Menu ⋮ wiring
 (function(){
