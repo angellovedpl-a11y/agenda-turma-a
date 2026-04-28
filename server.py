@@ -26,6 +26,12 @@ def _presence_track():
     except Exception:
         pass
 
+@app.after_request
+def _security_headers(resp):
+    # Evita vazar URL completa (com ?t=<token>) em links externos
+    resp.headers.setdefault('Referrer-Policy', 'same-origin')
+    return resp
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 HELPDESK_DIR = os.path.join(os.path.dirname(__file__), 'helpdesk')
 SALAS = ['escala', 'eventos', 'documentos', 'checklist', 'biblioteca']
@@ -162,11 +168,41 @@ def send_push_to_user(matricula: str, payload: dict) -> int:
         push_subs_save(matricula, novos)
     return enviadas
 
+_PUSH_FANOUT_WORKERS = int(os.environ.get('PUSH_FANOUT_WORKERS', '20'))
+_push_executor = None
+_push_executor_lock = __import__('threading').Lock()
+
+def _get_push_executor():
+    global _push_executor
+    if _push_executor is not None:
+        return _push_executor
+    with _push_executor_lock:
+        if _push_executor is None:
+            from concurrent.futures import ThreadPoolExecutor
+            _push_executor = ThreadPoolExecutor(
+                max_workers=_PUSH_FANOUT_WORKERS,
+                thread_name_prefix='push-fanout',
+            )
+            print(f'[push] pool de envio paralelo criado ({_PUSH_FANOUT_WORKERS} workers)')
+        return _push_executor
+
 def send_push_to_users(matriculas: list, payload: dict) -> int:
+    """Envia push em paralelo (ate PUSH_FANOUT_WORKERS simultaneos).
+    Retorna o total de notificacoes efetivamente enviadas."""
+    alvos = [m for m in (matriculas or []) if m]
+    if not alvos:
+        return 0
+    # Caso pequeno: nao paga overhead do pool
+    if len(alvos) <= 2:
+        return sum(send_push_to_user(m, payload) for m in alvos)
+    pool = _get_push_executor()
+    futs = [pool.submit(send_push_to_user, m, payload) for m in alvos]
     total = 0
-    for m in matriculas:
-        if m:
-            total += send_push_to_user(m, payload)
+    for f in futs:
+        try:
+            total += f.result(timeout=15)
+        except Exception as e:
+            print(f'[push] falha no worker: {e}')
     return total
 
 def send_push_async(matriculas, payload: dict):
@@ -339,16 +375,20 @@ def diario_save(matricula: str, data: dict) -> dict:
     """Recebe entradas com anexos contendo `b64` (novos) ou `key` (existentes).
     Faz upload dos b64 pro Object Storage e salva soh metadados no Postgres.
     Deleta do Object Storage anexos que nao estao mais em nenhuma entrada.
-    Retorna dict com possiveis erros por entrada."""
+    Retorna dict com possiveis erros por entrada.
+
+    Estrategia (evita pool starvation):
+      1) Faz TODOS os uploads pro Object Storage SEM segurar conexao do DB
+      2) Toma o advisory lock por usuario apenas pra read-modify-write atomico
+      3) Limpa orfaos depois, fora do lock
+    """
     entradas_in = data.get('entradas') or []
     if not isinstance(entradas_in, list):
         entradas_in = []
-    # Estado anterior pra detectar deletados
-    anteriores = diario_load(matricula).get('entradas') or []
-    keys_antes = _diario_collect_keys(anteriores)
 
+    # ---- FASE 1: uploads (FORA de qualquer lock/conexao DB) ----
     erros = []
-    entradas_out = []
+    entradas_processadas = []
     for e in entradas_in:
         if not isinstance(e, dict):
             continue
@@ -358,7 +398,6 @@ def diario_save(matricula: str, data: dict) -> dict:
         for idx, a in enumerate(anexos_in):
             if not isinstance(a, dict):
                 continue
-            # Se ja tem key (anexo antigo), passa direto
             if a.get('key') and not a.get('b64'):
                 anexos_out.append({
                     'key': a['key'],
@@ -367,7 +406,6 @@ def diario_save(matricula: str, data: dict) -> dict:
                     'size': int(a.get('size') or 0),
                 })
                 continue
-            # Tem b64 -> faz upload
             b64_str = a.get('b64')
             if not b64_str:
                 continue
@@ -386,23 +424,24 @@ def diario_save(matricula: str, data: dict) -> dict:
             if not ok:
                 erros.append(f'anexo {idx}: falha no upload')
                 continue
-            anexos_out.append({
-                'key': key,
-                'nome': nome,
-                'mimetype': mt,
-                'size': len(raw),
-            })
-        entradas_out.append({
+            anexos_out.append({'key': key, 'nome': nome, 'mimetype': mt, 'size': len(raw)})
+        entradas_processadas.append({
             'id': eid,
             'data': e.get('data') or '',
             'texto': (e.get('texto') or '').strip(),
             'anexos': anexos_out,
         })
 
-    # Salva metadados (sem b64) no Postgres
-    kvstore.save(f'diario:{matricula}', {'entradas': entradas_out})
+    # ---- FASE 2: read-modify-write atomico (lock SO aqui, rapido) ----
+    # Reusa a conn do lock pra evitar pool starvation: 1 conn por save (nao 3)
+    entradas_out = entradas_processadas
+    chave = f'diario:{matricula}'
+    with kvstore.with_lock(chave) as conn:
+        anteriores = (kvstore.load(chave, conn=conn) or {}).get('entradas') or []
+        keys_antes = _diario_collect_keys(anteriores)
+        kvstore.save(chave, {'entradas': entradas_out}, conn=conn)
 
-    # Limpa anexos orfaos do Object Storage (que estavam antes e nao estao mais)
+    # ---- FASE 3: limpa orfaos (FORA do lock — operacao de IO no Object Storage) ----
     keys_depois = _diario_collect_keys(entradas_out)
     orfaos = keys_antes - keys_depois
     for k in orfaos:

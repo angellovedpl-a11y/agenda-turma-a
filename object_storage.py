@@ -9,10 +9,12 @@ import re
 import io
 import time
 
+_BUCKET_ID = os.environ.get('DEFAULT_OBJECT_STORAGE_BUCKET_ID', '').strip() or None
 try:
     from replit.object_storage import Client
-    _client = Client()
+    _client = Client(bucket_id=_BUCKET_ID) if _BUCKET_ID else Client()
     _enabled = True
+    print(f'[object_storage] cliente inicializado (bucket={_BUCKET_ID or "default"})')
 except Exception as _e:
     print(f'[object_storage] indisponivel: {_e}')
     _client = None

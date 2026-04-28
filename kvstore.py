@@ -50,8 +50,13 @@ _lock = threading.Lock()
 # (com 2 workers gunicorn = 40 conexoes max, abaixo do limite padrao do Postgres).
 _POOL_MIN = int(os.environ.get('KV_POOL_MIN', '2'))
 _POOL_MAX = int(os.environ.get('KV_POOL_MAX', '20'))
+# Timeout pra esperar uma conexao livre quando o pool esta cheio. Sem isso
+# o ThreadedConnectionPool joga PoolError imediato (nao bloqueia).
+_POOL_ACQUIRE_TIMEOUT = float(os.environ.get('KV_POOL_ACQUIRE_TIMEOUT', '10'))
 _pool = None
 _pool_lock = threading.Lock()
+# Semaforo bloqueia threads quando o pool esta lotado, ao inves de errar
+_pool_semaphore = threading.BoundedSemaphore(_POOL_MAX)
 
 
 class KVStoreError(Exception):
@@ -75,11 +80,22 @@ def _get_pool():
 @contextmanager
 def _connect():
     """Pega uma conexao do pool e devolve ao final. Compativel com o uso
-    antigo `with _connect() as conn`."""
+    antigo `with _connect() as conn`. Detecta conexoes mortas (apos restart
+    do Postgres, por exemplo) e descarta com close=True ao inves de devolver
+    ao pool."""
     if not _DB_URL:
         raise RuntimeError('DATABASE_URL nao configurada')
     pool = _get_pool()
-    conn = pool.getconn()
+    # Bloqueia ate ter slot livre (evita PoolError quando ha picos de
+    # concorrencia maiores que _POOL_MAX). Timeout pra nao prender pra sempre.
+    if not _pool_semaphore.acquire(timeout=_POOL_ACQUIRE_TIMEOUT):
+        raise KVStoreError(f'pool esgotado ({_POOL_MAX}) apos {_POOL_ACQUIRE_TIMEOUT}s aguardando')
+    try:
+        conn = pool.getconn()
+    except Exception:
+        _pool_semaphore.release()
+        raise
+    bad = False
     try:
         yield conn
         # Sucesso: se houver transacao pendente, comita (mantem comportamento
@@ -89,6 +105,14 @@ def _connect():
                 conn.commit()
         except Exception:
             pass
+    except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+        bad = True
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        print(f'[kvstore] conexao morta detectada, sera descartada: {e}')
+        raise
     except Exception:
         try:
             conn.rollback()
@@ -97,9 +121,39 @@ def _connect():
         raise
     finally:
         try:
-            pool.putconn(conn)
+            if not bad and conn.closed:
+                bad = True
+            pool.putconn(conn, close=bad)
         except Exception:
-            pass
+            try:
+                conn.close()
+            except Exception:
+                pass
+        finally:
+            _pool_semaphore.release()
+
+
+@contextmanager
+def with_lock(key: str):
+    """Grab um pg_advisory_xact_lock baseado em hash da chave. Serializa
+    operacoes concorrentes que mexem na mesma chave (ex: load-modify-save
+    do mesmo usuario em workers/threads diferentes). Auto-libera no commit.
+
+    YIELDS a conexao: passe ela pra load(key, conn=...) e save(key, val, conn=...)
+    pra reusar a mesma conexao (evita pool starvation: 1 conn por save, nao 3)."""
+    if not _DB_URL:
+        with _lock:
+            yield None
+        return
+    import hashlib
+    h = hashlib.sha1(key.encode('utf-8')).digest()
+    a = int.from_bytes(h[:4], 'big', signed=True)
+    b = int.from_bytes(h[4:8], 'big', signed=True)
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT pg_advisory_xact_lock(%s, %s)', (a, b))
+        yield conn
+        # commit ao sair do _connect() solta o advisory lock automaticamente
 
 
 def close_pool():
@@ -133,26 +187,35 @@ def init_schema():
         print(f'[kvstore] erro init_schema: {e}')
 
 
-def load(key: str, raise_on_error: bool = False) -> dict:
+def _do_load(conn, key):
+    with conn.cursor() as cur:
+        cur.execute('SELECT value FROM kv_store WHERE key = %s', (key,))
+        row = cur.fetchone()
+        if not row:
+            return {}
+        v = row[0]
+        if isinstance(v, (dict, list)):
+            return v
+        if isinstance(v, str):
+            try:
+                return json.loads(v)
+            except Exception:
+                return {}
+        return {}
+
+
+def load(key: str, raise_on_error: bool = False, conn=None) -> dict:
+    """Carrega valor JSON. Se `conn` for passado, reusa essa conexao (util
+    dentro de `with_lock` pra evitar pegar nova conexao do pool)."""
     if not _DB_URL:
         if raise_on_error:
             raise KVStoreError('DATABASE_URL nao configurada')
         return {}
     try:
-        with _connect() as conn, conn.cursor() as cur:
-            cur.execute('SELECT value FROM kv_store WHERE key = %s', (key,))
-            row = cur.fetchone()
-            if not row:
-                return {}
-            v = row[0]
-            if isinstance(v, (dict, list)):
-                return v
-            if isinstance(v, str):
-                try:
-                    return json.loads(v)
-                except Exception:
-                    return {}
-            return {}
+        if conn is not None:
+            return _do_load(conn, key)
+        with _connect() as c:
+            return _do_load(c, key)
     except Exception as e:
         print(f'[kvstore] erro load({key}): {e}')
         if raise_on_error:
@@ -160,30 +223,40 @@ def load(key: str, raise_on_error: bool = False) -> dict:
         return {}
 
 
-def save(key: str, value, raise_on_error: bool = False) -> bool:
+def _do_save(conn, key, value):
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            INSERT INTO kv_store (key, value, updated_at)
+            VALUES (%s, %s, NOW())
+            ON CONFLICT (key) DO UPDATE
+            SET value = EXCLUDED.value, updated_at = NOW()
+            """,
+            (key, Json(value)),
+        )
+
+
+def save(key: str, value, raise_on_error: bool = False, conn=None) -> bool:
+    """Grava valor JSON. Se `conn` for passado, reusa essa conexao (precisa
+    estar dentro de `with_lock` ou outro contexto que ja fara commit)."""
     if not _DB_URL:
         if raise_on_error:
             raise KVStoreError('DATABASE_URL nao configurada')
         return False
-    with _lock:
-        try:
-            with _connect() as conn, conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO kv_store (key, value, updated_at)
-                    VALUES (%s, %s, NOW())
-                    ON CONFLICT (key) DO UPDATE
-                    SET value = EXCLUDED.value, updated_at = NOW()
-                    """,
-                    (key, Json(value)),
-                )
-                conn.commit()
+    try:
+        if conn is not None:
+            _do_save(conn, key, value)
+            # NAO commita aqui — quem detem a conn (with_lock/_connect) commita
             return True
-        except Exception as e:
-            print(f'[kvstore] erro save({key}): {e}')
-            if raise_on_error:
-                raise KVStoreError(str(e))
-            return False
+        with _connect() as c:
+            _do_save(c, key, value)
+            c.commit()
+        return True
+    except Exception as e:
+        print(f'[kvstore] erro save({key}): {e}')
+        if raise_on_error:
+            raise KVStoreError(str(e))
+        return False
 
 
 def migrar_de_arquivo(key: str, path: str) -> bool:

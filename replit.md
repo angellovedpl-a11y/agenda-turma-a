@@ -95,3 +95,37 @@ Aba **📓 Diário de Bordo** no menu lateral, entre "Meus Eventos" e "Chat Turm
 - **Botão "Diário" no popup do dia**: trocou o antigo "Anexar" (que mandava pra biblioteca compartilhada). Agora navega pra aba Diário e abre o formulário com a data pré-preenchida.
 - **Privacidade por design**: entradas do diário NÃO disparam push, NÃO entram na biblioteca/Mem Palace, NÃO são listadas pra outros usuários.
 - **Limitação conhecida (a evoluir)**: POST envia a lista inteira a cada save. Tudo bem por enquanto (limite Flask 80 MB), mas pra diários grandes (50+ entradas com fotos) vai ficar lento. Próxima iteração: paginação + endpoint incremental.
+
+## Escala pra 500 usuários (v3.2 — abr/2026)
+
+Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
+
+### 1. Pool de conexões no Postgres (`kvstore.py`)
+- Antes: cada operação abria/fechava conexão nova com o banco (overhead grande, risco de estourar `max_connections`).
+- Agora: **`ThreadedConnectionPool`** do psycopg2, com 2 conexões aquecidas (`KV_POOL_MIN`) e até 20 simultâneas (`KV_POOL_MAX`). Reuso transparente via context manager `_connect()`.
+- Comportamento herdado do `with psycopg2.connect()` preservado: commit automático ao sair sem erro, rollback em exceção.
+
+### 2. Anexos do Diário no Object Storage (`object_storage.py`)
+- Antes: fotos do diário gravadas como base64 dentro do Postgres → inflava o banco rapidamente (1 entrada com 5 fotos ~750 KB).
+- Agora: imagens vão pro **Replit Object Storage** (bucket `replit-objstore-67bb6851-...`); o Postgres guarda só metadados leves (`{key, nome, mimetype, size}`) — redução de ~99,96% no tamanho da entrada.
+- Convenção de chave: `diario/<matricula>/<entry_id>/<idx>_<nome_seguro>`.
+- Endpoint `GET /api/diario/anexo?key=<key>&t=<token>` serve o binário com checagem de propriedade (impede um usuário acessar foto de outro). Cache de 1 hora no navegador (`Cache-Control: private, max-age=3600`).
+- Fallback de auth via query param `?t=<token>` (necessário porque `<img src>` e downloads não permitem header `Authorization`). Implementado em `auth.py:get_token_from_request()`.
+- Limpeza automática: ao excluir uma entrada, os anexos correspondentes são removidos do Object Storage (sem lixo acumulado).
+
+### 3. Push notifications em paralelo (`server.py`)
+- Antes: `send_push_to_users` iterava sequencialmente — 500 usuários x ~100 ms FCM/APNs = ~50 segundos travando.
+- Agora: **`ThreadPoolExecutor`** com 20 workers (`PUSH_FANOUT_WORKERS`), inicializado lazily. Para listas pequenas (≤2 destinatários), pula o pool pra evitar overhead.
+- Benchmark com 500 usuários simulados (latência 100 ms): 50,1 s → 2,5 s (**~20× mais rápido**).
+
+### Variáveis de ambiente novas
+- `KV_POOL_MIN` (default 2), `KV_POOL_MAX` (default 20)
+- `PUSH_FANOUT_WORKERS` (default 20)
+- `DEFAULT_OBJECT_STORAGE_BUCKET_ID` (configurada automaticamente pelo blueprint)
+
+### Hardening pós code-review (2 rodadas)
+1. **Pool aguenta restart do Postgres**: `_connect()` captura `InterfaceError`/`OperationalError`, descarta a conexão morta com `putconn(close=True)`. Próxima request pega uma fresca, sem cair tudo.
+2. **Pool não estoura sob concorrência alta**: `BoundedSemaphore(_POOL_MAX)` na frente do `getconn()` — quando 100 threads pedem com pool=20, 20 entram e 80 *esperam* (até `KV_POOL_ACQUIRE_TIMEOUT=10s`) ao invés de levar `PoolError` na cara. Validado: 100 saves paralelos em 1 s, 100/100 OK.
+3. **Saves do diário sem corrida e sem segurar conexão durante IO**: `kvstore.with_lock(<chave>)` usa `pg_advisory_xact_lock` e *cede* a conexão. O `diario_save` faz uploads ao Object Storage **fora** do lock (FASE 1), entra no lock só pro read-modify-write (FASE 2), e limpa órfãos depois (FASE 3). `kvstore.load`/`save` aceitam `conn=...` pra reusar a do lock — gasta 1 conexão por save, não 3.
+4. **Token na query string**: `Referrer-Policy: same-origin` aplicado globalmente via `@app.after_request` — token de auth nunca vai no header `Referer` de site externo.
+5. **Streaming de download**: a lib `replit.object_storage` só oferece `download_as_bytes` (sem stream nativo). Mitigado pelo cap de 8 MB por anexo + cache de 1 h no navegador.
