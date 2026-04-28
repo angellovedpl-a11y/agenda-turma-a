@@ -22,8 +22,8 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Agenda Turma A';
   const options = {
     body: data.body || '',
-    icon: '/icon-192-v2.png',
-    badge: '/icon-192-v2.png',
+    icon: '/icon-192-v2.png?v=3',
+    badge: '/icon-192-v2.png?v=3',
     tag: data.tag || 'agenda-turma',
     renotify: true,
     requireInteraction: false,
