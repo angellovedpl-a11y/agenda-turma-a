@@ -158,3 +158,24 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - **`KEYWORDS_CRITICAS` enxutas:** removidos termos genéricos do PT-BR que disparariam Modo Deliberativo em conversa não-técnica (`vale`, `baixo`, `cima`, `partida(s)`, `chegada(s)`, `carga`, `descarga`, `embarque`, `desembarque`, `trem(s)`, `mineiro(s)`). Ex.: "Pode me lembrar da partida do jogo?" não vira mais pergunta crítica.
 - **Sinônimos só na query:** a expansão de `_SINONIMOS_BUSCA` agora é aplicada **só do lado da query**, não do lado dos fatos. Evita falso positivo do tipo: fato sobre "corte de madeira" casando com pergunta sobre "separação de trem" porque ambos seriam expandidos para o mesmo conjunto.
 - **Limiar mínimo de score 1.0** em `buscar_fatos`: matches de só-substring (score 0.5) eram ruído — agora exige pelo menos um token-match real ou substring forte (>=1.5).
+
+## v3.7 — Re-ranking semântico via Claude (2026-04-29)
+
+**Por que:** A infraestrutura de IA paga via créditos do Replit não oferece API de embeddings. Pra ter ganho semântico sem precisar de chave externa de OpenAI/Gemini, foi implementado re-ranking pelo próprio Claude Haiku 4.5.
+
+**Como funciona:**
+1. `/api/claude` faz busca por palavra-chave com rede mais larga: `buscar_chunks(top_k=15)` e `buscar_fatos(top_k=25)`.
+2. Os candidatos viram uma lista numerada e vão pro Haiku com a pergunta original. Cada candidato recebe uma nota 0-10 de relevância. JSON estruturado.
+3. Filtra fora qualquer candidato com nota < 2.0 (ruído). Pega os 10 fatos + 6 trechos com nota mais alta.
+4. **Fallback robusto:** se o Haiku falhar, der timeout, ou zerar tudo, volta pra ordenação por keyword. Nunca quebra a resposta principal.
+
+**Função:** `rerank_candidatos(query, fatos, chunks, top_fatos=10, top_chunks=6)` — server.py linha ~944.
+
+**Custo/latência:** +1 chamada Haiku por pergunta (~R$ 0,002, +400-700ms). Skipa a chamada se total de candidatos ≤ top_k (não vale o overhead).
+
+**Resultado esperado:** Resolve ~80% dos casos de "ele não achou na memória mesmo tendo o fato" porque Claude entende contexto/sinônimos sem precisar de tabela manual de sinônimos.
+
+**Refinamentos pós-revisão (mesmo dia):**
+- **Cliente Anthropic dedicado pro re-rank** com `timeout=8.0s` e `max_retries=0` (vs. 45s/1retry do cliente principal). Evita que um Haiku lento segure o worker do Gunicorn por até 45s e sufoque os outros 499 usuários — pior caso agora é 8s e cai pro fallback keyword.
+- **Fallback granular por modalidade:** se o re-rank zerar só os fatos (mas tinha candidatos por keyword), mantemos os fatos pela ordem keyword. Mesma lógica pros chunks. Antes, se o Claude desse nota baixa só pra uma das duas, perdíamos contexto silenciosamente.
+- **Logs de observabilidade:** cada chamada do re-rank loga `[rerank] ok em XXXms (F:N C:N de TOTAL)` ou `[rerank] falhou em XXXms (TipoErro: msg), keyword fallback`. Permite acompanhar p50/p95 e taxa de fallback em produção.

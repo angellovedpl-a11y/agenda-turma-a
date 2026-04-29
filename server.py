@@ -938,6 +938,115 @@ def buscar_chunks(query: str, biblioteca: dict, top_k: int = 3) -> list:
     scored.sort(key=lambda x: -x[0])
     return [{'doc': s[1], 'categoria': s[2], 'idx': s[3], 'trecho': s[4]} for s in scored[:top_k]]
 
+# === RE-RANKING SEMANTICO VIA CLAUDE ===
+# Pega N candidatos (fatos + chunks) achados por keyword e pede pro Haiku
+# pontuar relevancia 0-10 em relacao a pergunta. Devolve so os mais relevantes.
+# Custo: 1 chamada Haiku extra por pergunta (~R$ 0,002).
+def _truncar(s: str, n: int) -> str:
+    s = (s or '').strip()
+    return s if len(s) <= n else s[:n - 1] + '…'
+
+# Cliente dedicado pro re-rank com timeout curto: nao deixa um Haiku lento
+# segurar o worker do Gunicorn por ate 45s (default do cliente principal).
+_anthropic_rerank_client = None
+def _get_rerank_client():
+    global _anthropic_rerank_client
+    if _anthropic_rerank_client is None:
+        _anthropic_rerank_client = Anthropic(
+            api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),
+            base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL"),
+            timeout=8.0,
+            max_retries=0
+        )
+    return _anthropic_rerank_client
+
+def rerank_candidatos(query: str, fatos: list, chunks: list,
+                       top_fatos: int = 10, top_chunks: int = 6) -> tuple:
+    """Re-ranking semantico via Claude Haiku.
+    Devolve (fatos_filtrados, chunks_filtrados) ordenados por relevancia.
+    Fallback granular: se a chamada falhar ou se o rerank zerar uma das
+    modalidades, mantemos a ordem keyword apenas daquela modalidade.
+    """
+    query = (query or '').strip()
+    if not query or (not fatos and not chunks):
+        return fatos[:top_fatos], chunks[:top_chunks]
+    # Se ja tem pouco candidato, nao vale a chamada extra
+    total = len(fatos) + len(chunks)
+    if total <= max(top_fatos, top_chunks):
+        return fatos[:top_fatos], chunks[:top_chunks]
+
+    itens = []  # (id_local, tipo, original_idx, snippet)
+    for i, f in enumerate(fatos):
+        snippet = _truncar(f.get('texto', ''), 280)
+        itens.append((len(itens), 'F', i, snippet))
+    for i, c in enumerate(chunks):
+        rotulo = f"[{c.get('doc','?')}] {c.get('trecho','')}"
+        snippet = _truncar(rotulo, 320)
+        itens.append((len(itens), 'C', i, snippet))
+
+    linhas = '\n'.join(f"{idl}|{tp}|{snip}" for idl, tp, _oi, snip in itens)
+    prompt = (
+        f"PERGUNTA: {_truncar(query, 400)}\n\n"
+        f"CANDIDATOS (cada linha: id|tipo|texto):\n{linhas}\n\n"
+        "Tarefa: pontue de 0 a 10 quanto cada candidato AJUDA a responder a pergunta.\n"
+        "0 = irrelevante. 10 = responde direto. 5 = relacionado mas tangencial.\n"
+        "Considere sinonimos do dominio ferroviario (separacao=corte=despacho; "
+        "minerio=GDT=vagao de minerio; recepcao=VV01-VV06; etc).\n"
+        "Devolva APENAS um JSON deste formato (sem markdown, sem comentario):\n"
+        '{"s":[{"id":0,"n":8},{"id":1,"n":2},...]}\n'
+        "Inclua TODOS os ids, mesmo os com nota baixa."
+    )
+    t0 = time.time()
+    try:
+        resp = _get_rerank_client().messages.create(
+            model='claude-haiku-4-5',
+            max_tokens=2000,
+            messages=[{'role': 'user', 'content': prompt}]
+        )
+        txt = resp.content[0].text.strip()
+        m = re.search(r'\{.*\}', txt, re.DOTALL)
+        if not m:
+            try: print(f'[rerank] sem JSON na resposta ({(time.time()-t0)*1000:.0f}ms), keyword fallback')
+            except Exception: pass
+            return fatos[:top_fatos], chunks[:top_chunks]
+        parsed = json.loads(m.group(0))
+        scores_raw = parsed.get('s') or []
+        scores = {}
+        for s in scores_raw:
+            try:
+                scores[int(s.get('id'))] = float(s.get('n', 0))
+            except (TypeError, ValueError):
+                continue
+        # Aplica scores
+        fatos_scored = []
+        chunks_scored = []
+        for idl, tp, oi, _snip in itens:
+            sc = scores.get(idl, 0.0)
+            if sc < 2.0:  # corte minimo: nada com nota < 2 entra
+                continue
+            if tp == 'F':
+                fatos_scored.append((sc, fatos[oi]))
+            else:
+                chunks_scored.append((sc, chunks[oi]))
+        fatos_scored.sort(key=lambda x: -x[0])
+        chunks_scored.sort(key=lambda x: -x[0])
+        out_f = [f for _s, f in fatos_scored[:top_fatos]]
+        out_c = [c for _s, c in chunks_scored[:top_chunks]]
+        # Fallback POR MODALIDADE: se o rerank zerou fatos mas tinha
+        # candidatos, mantem ordem keyword pra nao perder contexto util.
+        # Mesma logica pros chunks.
+        if not out_f and fatos:
+            out_f = fatos[:top_fatos]
+        if not out_c and chunks:
+            out_c = chunks[:top_chunks]
+        try: print(f'[rerank] ok em {(time.time()-t0)*1000:.0f}ms (F:{len(out_f)} C:{len(out_c)} de {total})')
+        except Exception: pass
+        return out_f, out_c
+    except Exception as e:
+        try: print(f'[rerank] falhou em {(time.time()-t0)*1000:.0f}ms ({type(e).__name__}: {e}), keyword fallback')
+        except Exception: pass
+        return fatos[:top_fatos], chunks[:top_chunks]
+
 # === CATEGORIZACAO VIA CLAUDE ===
 def categorizar_doc(nome: str, amostra: str) -> dict:
     try:
@@ -1137,7 +1246,8 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
-        trechos = buscar_chunks(ultima, biblioteca, top_k=6) if ultima else []
+        # Rede mais larga na busca por keyword pra dar material pro re-rank
+        trechos = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
 
         u = request.current_user
         matricula_user = u.get('matricula', '')
@@ -1145,7 +1255,15 @@ def claude_chat():
         role_user = u.get('role', '')
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
-        fatos_relev = buscar_fatos(ultima, top_k=12) if ultima else []
+        fatos_relev = buscar_fatos(ultima, top_k=25) if ultima else []
+
+        # Re-ranking semantico: pega os candidatos por keyword e pede pro
+        # Haiku pontuar relevancia de verdade. Custo: +1 chamada Haiku (~R$ 0,002).
+        if ultima and (fatos_relev or trechos):
+            fatos_relev, trechos = rerank_candidatos(
+                ultima, fatos_relev, trechos,
+                top_fatos=10, top_chunks=6
+            )
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''
