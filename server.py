@@ -474,6 +474,11 @@ def fatos_add(texto: str, matricula: str, nome: str, ala: str = 'geral', sala: s
     fatos.insert(0, novo)
     fatos = fatos[:MAX_FATOS_TURMA]
     kvstore.save('fatos_turma', {'fatos': fatos})
+    # FASE 2: hook de indexacao assincrona (silencioso, daemon thread)
+    try:
+        _indexar_async(novo['id'], 'fato', ala_n, sala_n, texto)
+    except Exception:
+        pass
     return {'ok': True, 'fato': novo}
 
 def fatos_remove(id_fato: int) -> bool:
@@ -525,6 +530,14 @@ def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
     regras.insert(0, nova)
     regras = regras[:200]
     kvstore.save('regras_tecnicas', {'regras': regras})
+    # FASE 2: hook de indexacao assincrona (silencioso, daemon thread)
+    try:
+        _conteudo_emb = (nova.get('conceito', '') + '. '
+                         + nova.get('regra_de_ouro', '') + '. '
+                         + (nova.get('condicao_de_borda') or ''))
+        _indexar_async(nova['id'], 'regra', ala, sala, _conteudo_emb)
+    except Exception:
+        pass
     return {'ok': True, 'regra': nova}
 
 def regras_tecnicas_remove(id_r: int) -> bool:
@@ -605,6 +618,189 @@ def buscar_regras_tecnicas(query: str, top_k: int = 4,
             scored.append((score, r))
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
     return [s[1] for s in scored[:top_k]]
+
+# === FASE 2 MemPalace — busca semantica via pgvector ===
+# IMPORTANTE: SOMENTE ADITIVO. Nao altera nenhum fluxo existente.
+# - Tabela palace_embeddings com vector(256) (caminho fallback TF-IDF caseiro)
+# - SQL puro com cast ::vector (nao depende do pacote pgvector Python)
+# - Indexacao assincrona em thread daemon (nao bloqueia save)
+# - Toda funcao tolera ausencia de pgvector/erro/tabela: retorna [] silenciosamente
+# - Nao altera busca por palavras-chave (regras_tecnicas/fatos) existente
+import hashlib as _hashlib
+import math as _math
+import threading as _threading
+
+_PALACE_EMBED_DIM = 256
+_PALACE_FLAG_LOCK = _threading.Lock()
+_palace_db_disponivel = None  # tri-state: None=nao testado, True=ok, False=indisponivel
+
+def _palace_health_check() -> bool:
+    """Testa uma vez se pgvector + tabela palace_embeddings existem. Cacheado."""
+    global _palace_db_disponivel
+    with _PALACE_FLAG_LOCK:
+        if _palace_db_disponivel is not None:
+            return _palace_db_disponivel
+        try:
+            with kvstore._connect() as conn, conn.cursor() as cur:
+                cur.execute("SELECT 1 FROM pg_extension WHERE extname='vector'")
+                if not cur.fetchone():
+                    print('[fase2] extension vector ausente; busca semantica desativada')
+                    _palace_db_disponivel = False
+                    return False
+                cur.execute("SELECT to_regclass('public.palace_embeddings')")
+                row = cur.fetchone()
+                if not (row and row[0]):
+                    print('[fase2] tabela palace_embeddings ausente; busca semantica desativada')
+                    _palace_db_disponivel = False
+                    return False
+                _palace_db_disponivel = True
+                return True
+        except Exception as e:
+            print(f'[fase2] health check falhou (sera desativado): {e}')
+            _palace_db_disponivel = False
+            return False
+
+def _tokens_norm_p2(texto: str) -> list:
+    """Tokeniza pra TF-IDF: lower, alfanum, descarta tokens com len < 2."""
+    if not texto:
+        return []
+    out = []
+    cur = []
+    for ch in (texto or '').lower():
+        if ch.isalnum():
+            cur.append(ch)
+        else:
+            if cur:
+                w = ''.join(cur)
+                if len(w) >= 2:
+                    out.append(w)
+                cur = []
+    if cur:
+        w = ''.join(cur)
+        if len(w) >= 2:
+            out.append(w)
+    return out
+
+def gerar_embedding(texto: str) -> list:
+    """Gera vetor de _PALACE_EMBED_DIM dim para o texto.
+    Arvore de fallback (segundo a spec da Fase 2):
+      1. anthropic.embeddings  -> nao disponivel na versao atual do SDK
+      2. openai text-embedding-3-small -> exigiria 1536d e mudaria a tabela; pular
+      3. fallback TF-IDF caseiro 256d com hashing de tokens (stdlib only)
+    Sempre retorna lista de floats com tamanho _PALACE_EMBED_DIM. Nunca lanca."""
+    try:
+        # opcao 1: anthropic.embeddings (defensivo; SDK atual nao tem)
+        try:
+            _client = Anthropic()
+            if hasattr(_client, 'embeddings') and hasattr(_client.embeddings, 'create'):
+                r = _client.embeddings.create(model='claude-haiku-3-5', input=texto)
+                v = getattr(r, 'embedding', None)
+                if v and len(v) == _PALACE_EMBED_DIM:
+                    return list(v)
+        except Exception:
+            pass
+        # opcao 2: openai (so se OPENAI_API_KEY existir; spec proibe pedir).
+        # Mesmo se existir, text-embedding-3-small produz 1536d — incompativel
+        # com vector(256). Manter aqui apenas como respeito a spec; cair em fallback.
+        # opcao 3: fallback TF-IDF hashing 256d normalizado (sempre roda)
+        tokens = _tokens_norm_p2(texto)
+        if not tokens:
+            return [0.0] * _PALACE_EMBED_DIM
+        counts = {}
+        for t in tokens:
+            counts[t] = counts.get(t, 0) + 1
+        vec = [0.0] * _PALACE_EMBED_DIM
+        total = float(len(tokens))
+        for tok, cnt in counts.items():
+            h = _hashlib.md5(tok.encode('utf-8')).digest()
+            b1 = int.from_bytes(h[0:2], 'big') % _PALACE_EMBED_DIM
+            b2 = int.from_bytes(h[2:4], 'big') % _PALACE_EMBED_DIM
+            s1 = 1.0 if (h[4] & 1) == 0 else -1.0
+            s2 = 1.0 if (h[4] & 2) == 0 else -1.0
+            tf = cnt / total
+            vec[b1] += s1 * tf
+            vec[b2] += s2 * tf
+        norm = _math.sqrt(sum(x * x for x in vec))
+        if norm > 0:
+            vec = [x / norm for x in vec]
+        return vec
+    except Exception as e:
+        print(f'[fase2] gerar_embedding fallback total: {e}')
+        return [0.0] * _PALACE_EMBED_DIM
+
+def _embed_to_pg(vec: list) -> str:
+    """Converte lista Python -> literal '[v1,v2,...]' aceito por vector(N) no SQL."""
+    return '[' + ','.join(f'{float(x):.6f}' for x in vec) + ']'
+
+def _indexar_no_palace(id_item, tipo: str, ala: str, sala: str, conteudo: str):
+    """INSERT/UPDATE em palace_embeddings. Roda em thread daemon. Silencioso em erro."""
+    try:
+        if not _palace_health_check():
+            return
+        if not (conteudo or '').strip():
+            return
+        emb = gerar_embedding(conteudo)
+        emb_lit = _embed_to_pg(emb)
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, criado_em)
+                VALUES (%s, %s, %s, %s, %s, %s::vector, NOW())
+                ON CONFLICT (id) DO UPDATE
+                SET tipo = EXCLUDED.tipo,
+                    ala = EXCLUDED.ala,
+                    sala = EXCLUDED.sala,
+                    conteudo = EXCLUDED.conteudo,
+                    embedding = EXCLUDED.embedding,
+                    criado_em = NOW()
+                """,
+                (str(id_item), tipo, (ala or 'geral'), (sala or 'geral'),
+                 (conteudo or '')[:2000], emb_lit),
+            )
+    except Exception as e:
+        print(f'[fase2] _indexar_no_palace falhou (id={id_item} tipo={tipo}): {e}')
+
+def _indexar_async(id_item, tipo, ala, sala, conteudo):
+    """Dispara _indexar_no_palace em thread daemon (nao bloqueia o caller)."""
+    try:
+        t = _threading.Thread(
+            target=_indexar_no_palace,
+            args=(id_item, tipo, ala, sala, conteudo),
+            daemon=True,
+        )
+        t.start()
+    except Exception as e:
+        print(f'[fase2] _indexar_async nao disparou: {e}')
+
+def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
+    """Busca por similaridade vetorial. Retorna [] silenciosamente em erro/indisponibilidade."""
+    if not query or not (query or '').strip():
+        return []
+    try:
+        if not _palace_health_check():
+            return []
+        emb = gerar_embedding(query)
+        emb_lit = _embed_to_pg(emb)
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT id, tipo, conteudo, 1 - (embedding <=> %s::vector) AS score
+                FROM palace_embeddings
+                WHERE (%s::text IS NULL OR ala = %s)
+                  AND (%s::text IS NULL OR sala = %s)
+                ORDER BY score DESC
+                LIMIT %s
+                """,
+                (emb_lit, ala, ala, sala, sala, int(n)),
+            )
+            rows = cur.fetchall()
+        return [{'id': str(r[0]), 'tipo': r[1], 'conteudo': r[2], 'score': float(r[3])}
+                for r in rows]
+    except Exception as e:
+        print(f'[fase2] busca_semantica falhou: {e}')
+        return []
+
+# === FIM FASE 2 MemPalace ===
 
 # === MEMPALACE — ANTI-PADROES (correcoes do admin viram bloqueios) ===
 def antipadroes_load() -> list:
@@ -1174,6 +1370,21 @@ def claude_chat():
         # ativo). ala_user fica None ate definicao do mapeamento matricula->turma.
         fatos_relev = buscar_fatos(ultima, top_k=4,
                                    query_para_sala=ultima) if ultima else []
+        # FASE 2 MemPalace: busca semantica antes da deduplicacao com keywords.
+        # Tudo silencioso/aditivo: se pgvector indisponivel ou tabela vazia,
+        # mem_alta=[] e o fluxo segue identico ao da Fase 1.
+        try:
+            _salas_p2 = _coletar_salas_conhecidas(fatos_load() + regras_tecnicas_load())
+            _det_p2 = _detectar_salas_na_query(ultima or '', _salas_p2)
+            _sala_p2 = next(iter(_det_p2)) if _det_p2 else None
+        except Exception:
+            _sala_p2 = None
+        mem_semantica = busca_semantica(ultima, ala=None, sala=_sala_p2, n=5) if ultima else []
+        mem_alta = [m for m in mem_semantica if float(m.get('score', 0) or 0) >= 0.70]
+        ids_semanticos = {str(m.get('id')) for m in mem_alta}
+        if ids_semanticos:
+            # Dedup: remove de fatos_relev itens que ja vao via [mem]
+            fatos_relev = [f for f in fatos_relev if str(f.get('id')) not in ids_semanticos]
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''
@@ -1201,6 +1412,15 @@ def claude_chat():
             for e in memoria_pess[:30]:
                 prefixo += f"- [{e.get('data','')}] {e.get('texto','')}\n"
             prefixo += '### FIM MEMORIA PESSOAL ###\n\n'
+        # FASE 2 MemPalace: bloco de itens recuperados por busca semantica
+        # (score >= 0.70). Vai ANTES do bloco de fatos/regras pra ter prioridade.
+        if mem_alta:
+            prefixo += '### MEMPALACE — ITENS SEMANTICAMENTE RELEVANTES ###\n'
+            prefixo += 'Itens recuperados por similaridade vetorial. PRIORIZE: sao os mais aderentes a pergunta.\n'
+            for _m in mem_alta:
+                _conteudo_m = (_m.get('conteudo', '') or '')[:500]
+                prefixo += f"[mem] ({_m.get('tipo','?')}, score={_m.get('score',0):.2f}): {_conteudo_m}\n"
+            prefixo += '### FIM MEMPALACE ###\n\n'
         if fatos_relev:
             prefixo += '### FATOS APRENDIDOS DA TURMA (conhecimento compartilhado) ###\n'
             prefixo += 'Fatos validados pela equipe. Sao verdadeiros e devem ser citados quando relevantes. '
