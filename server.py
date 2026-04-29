@@ -2496,6 +2496,49 @@ def diag_health():
         'helpdesk_guias': len(helpdesk_load())
     })
 
+@app.route('/api/palace/status', methods=['GET'])
+@auth.require_auth
+def palace_status():
+    """Diagnostico FASE 2 MemPalace: extension, tabela, contagem, distribuicao por tipo/ala/sala.
+    Sem dados sensiveis (apenas agregados). Tolerante a falhas: nunca lanca."""
+    info = {
+        'fase': 2,
+        'embed_dim': _PALACE_EMBED_DIM,
+        'embedding_engine': 'tfidf_hashing_md5',
+        'pgvector_extension': False,
+        'tabela_exists': False,
+        'health_check_ok': False,
+        'total_itens': 0,
+        'por_tipo': {},
+        'por_ala_top': [],
+        'por_sala_top': [],
+        'mais_recente': None,
+        'threshold_busca': 0.70,
+    }
+    try:
+        info['health_check_ok'] = _palace_health_check()
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM pg_extension WHERE extname='vector'")
+            info['pgvector_extension'] = cur.fetchone() is not None
+            cur.execute("SELECT to_regclass('public.palace_embeddings')")
+            row = cur.fetchone()
+            info['tabela_exists'] = bool(row and row[0])
+            if info['tabela_exists']:
+                cur.execute("SELECT count(*) FROM palace_embeddings")
+                info['total_itens'] = int(cur.fetchone()[0])
+                cur.execute("SELECT tipo, count(*) FROM palace_embeddings GROUP BY tipo ORDER BY 2 DESC")
+                info['por_tipo'] = {r[0]: int(r[1]) for r in cur.fetchall()}
+                cur.execute("SELECT ala, count(*) FROM palace_embeddings GROUP BY ala ORDER BY 2 DESC LIMIT 10")
+                info['por_ala_top'] = [{'ala': r[0], 'qtd': int(r[1])} for r in cur.fetchall()]
+                cur.execute("SELECT sala, count(*) FROM palace_embeddings GROUP BY sala ORDER BY 2 DESC LIMIT 10")
+                info['por_sala_top'] = [{'sala': r[0], 'qtd': int(r[1])} for r in cur.fetchall()]
+                cur.execute("SELECT MAX(criado_em) FROM palace_embeddings")
+                mr = cur.fetchone()[0]
+                info['mais_recente'] = mr.isoformat() if mr else None
+    except Exception as e:
+        info['erro'] = f'{type(e).__name__}: {e}'
+    return jsonify(info)
+
 @app.route('/api/diag/biblioteca', methods=['GET'])
 @auth.require_auth
 def diag_biblioteca():

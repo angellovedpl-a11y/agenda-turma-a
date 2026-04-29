@@ -179,7 +179,57 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - Suite de 8 testes validada: marcador antigo (compat), exemplo do dono, ordem trocada, só ala, case misto, marcador mínimo, ala/sala depois de fonte, multi-marcadores.
 - ⚠️ DORMENTE até decisão do dono: o **system prompt do Viriato NÃO foi alterado** (a regra principal proíbe). Hoje o Viriato emite marcadores sem `ala`/`sala` → caem nos defaults. O parser está pronto pra receber, basta uma fase futura instruir o Viriato.
 
-**Item 5 — `instrucoes_viriato.md` documenta a sintaxe nova (`instrucoes_viriato.md:151-186`)**
+## v3.5 — FASE 2 MemPalace (busca semântica via pgvector) (2026-04-29)
+
+**Regra-mãe mantida**: nada existente foi alterado. Adições puras + hooks tolerantes a falha (try/except em torno do call assíncrono → save NUNCA quebra por falha de embedding).
+
+**Schema (DB dev — PROD AINDA NÃO TEM)**
+- `CREATE EXTENSION IF NOT EXISTS vector;`
+- Tabela `palace_embeddings(id text PK, tipo text, ala text, sala text, conteudo text, embedding vector(256), criado_em timestamptz)` com índices em `ala`, `sala`, `tipo`.
+- Estado prod (29/abr/2026): **PENDENTE** — health check é tolerante (retorna False silencioso, fluxo segue como Fase 1). Antes do próximo deploy: rodar o SQL acima manualmente no banco prod.
+
+**Caminho de embedding**
+- Anthropic SDK não expõe `.embeddings` na versão instalada → fallback.
+- OpenAI key ausente (e mesmo se houver, `text-embedding-3-small` produz 1536d → incompatível com `vector(256)`).
+- **Fallback ativo**: TF-IDF caseiro 256d (md5 hashing 2 buckets/token, sinal pseudo-aleatório, normalização L2). Usa só stdlib. Determinístico, sem custo de API.
+- Limitação conhecida: cos similarity entre sinônimos diretos fica ~0.5–0.6, abaixo do threshold 0.70 da spec → bloco `[mem]` aparece pouco na prática. Sem regressão (cai pra busca por keywords da Fase 1).
+
+**Funções aditivas (`server.py:612-810`)**
+- `_palace_health_check()` cacheia tri-state (None/True/False) com Lock.
+- `gerar_embedding(texto)` → 256d, nunca lança.
+- `_embed_to_pg(vec)` → literal `'[v1,v2,...]'` aceito por `vector(N)` no SQL puro (não depende do pacote `pgvector` Python, que está bloqueado por PEP 668).
+- `_indexar_no_palace(id, tipo, ala, sala, conteudo)` → `INSERT ... ON CONFLICT (id) DO UPDATE`.
+- `_indexar_async(...)` → dispara em `Thread(daemon=True)` (não bloqueia o caller).
+- `busca_semantica(query, ala=None, sala=None, n=5)` → SQL com `1 - (embedding <=> %s::vector) AS score`, ORDER BY score DESC.
+
+**Hooks (apenas duas chamadas, ambas em try/except silencioso)**
+- `fatos_add` (~linha 480): após `kvstore.save`, `_indexar_async(id, 'fato', ala, sala, texto)`.
+- `regras_tecnicas_add` (~linha 536): após save, `_indexar_async(id, 'regra', ala, sala, conceito+regra+borda)`.
+
+**Integração no system prompt do Viriato (`server.py:1376-1426`)**
+- Antes da montagem dos blocos de contexto: `mem_semantica = busca_semantica(ultima, sala=detectada, n=5)` → filtra por `score >= 0.70` (`mem_alta`).
+- Dedup: ids semânticos saem de `fatos_relev` (atenção: regras_relev NÃO é deduplicada — pode duplicar se a mesma regra entrar via [mem] e via keyword; ruído de prompt, não regressão).
+- Bloco novo entre MEMORIA PESSOAL e FATOS APRENDIDOS:
+  ```
+  ### MEMPALACE — ITENS SEMANTICAMENTE RELEVANTES ###
+  [mem] (fato, score=0.72): conteúdo até 500 chars
+  ### FIM MEMPALACE ###
+  ```
+
+**Rota nova: `GET /api/palace/status` (`server.py:2502`)** — *não estava na spec original; criada sob demanda*
+- `@auth.require_auth` (qualquer usuário aprovado pode ver — só agregados, sem dados sensíveis).
+- Retorna: `pgvector_extension`, `tabela_exists`, `health_check_ok`, `total_itens`, `por_tipo`, `por_ala_top`, `por_sala_top`, `mais_recente`, `threshold_busca` (0.7), `embed_dim` (256), `embedding_engine` (`tfidf_hashing_md5`).
+- Tolerante a erro: nunca lança; em falha popula `info['erro']`.
+
+**Achados do code review (registrados, NÃO corrigidos — aguardando decisão do dono)**
+- **Severo**: J (órfãos) — fato/regra removido deixa embedding órfão na `palace_embeddings`. `fatos_remove` e `regras_tecnicas_remove` precisam de `DELETE FROM palace_embeddings WHERE id = %s` (puramente aditivo, baixo risco).
+- **Médio**: F (colisão de id) — `int(time()*1000)` pode colidir em burst; sobrescreveria embedding de outro item silenciosamente. Mitigação: prefixar id no palace (`'fato:'+id`, `'regra:'+id`) sem mudar id principal.
+- **Médio**: A (thread daemon sem limite) — burst de saves cria N threads disputando pool de 20 conexões com timeout 10s. Mitigação: trocar por `ThreadPoolExecutor` global (igual `PUSH_FANOUT_WORKERS`).
+- **Operacional**: B (cache de health grudado em `False`) — se a tabela for criada DEPOIS do boot, cada worker fica com False até restart. Aceitar (deploy é controlado) ou expor `?reload=1` no /api/palace/status.
+- **Baixo**: D (threshold alto pro TF-IDF caseiro) — observabilidade ajudaria; sem impacto em correção.
+- **Baixo (futuro multi-turma)**: E (`ala=None` na busca) — hoje Turma A única, mas vira risco de vazamento cross-tenant quando mapeamento matrícula→turma existir.
+
+**Item 5 (Fase 1) — `instrucoes_viriato.md` documenta a sintaxe nova (`instrucoes_viriato.md:151-186`)**
 - Atualizado APENAS a seção 6 (Sintaxe SALVAR_REGRA), de forma puramente aditiva:
   - Sintaxe formal (linha 161) ganhou `| ala="<contexto, opcional>" | sala="<tema, opcional>"` no fim.
   - Adicionado um segundo bloco de exemplo (linhas 169-172) com o caso "Separação VV" usando `ala`/`sala`. O exemplo original da pressão de alívio L201 continua intacto.
