@@ -2085,11 +2085,13 @@ async function openDia(k){
         const diarios=(dDi.entradas||[]).filter(d=>d.data===k);
         const renderEv=(e,pess)=>{
           const ti=evTipoInfo(e.tipo);
-          const tag=pess?'<span style="color:var(--neon);font-size:10px;background:rgba(0,230,118,.15);padding:1px 6px;border-radius:4px;margin-left:6px">🔒 PRIVADO</span>':'';
+          const chip=`<span class="cal-legend-item" style="font-size:11px;padding:2px 8px"><span class="cl-dot" style="background:${ti.cor}"></span><span class="cl-emo">${ti.emoji}</span><span class="cl-lbl">${escapeHtml(ti.label)}</span></span>`;
+          const tag=pess?'<span style="color:var(--neon);font-size:10px;background:rgba(0,230,118,.15);padding:2px 8px;border-radius:999px">🔒 PRIVADO</span>':'';
           return `<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid ${ti.cor}">
             <div style="flex:1;min-width:0">
-              <div style="font-weight:600;font-size:13px"><span style="color:${ti.cor}">${ti.emoji} ${escapeHtml(ti.label)}</span> · ${escapeHtml(e.titulo||"")}${tag}</div>
-              ${e.hora?`<div style="color:var(--muted);font-size:11px">⏰ ${escapeHtml(e.hora)}</div>`:""}
+              <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px">${chip}${tag}</div>
+              <div style="font-weight:600;font-size:13px;color:var(--text)">${escapeHtml(e.titulo||"")}</div>
+              ${e.hora?`<div style="color:var(--muted);font-size:11px;margin-top:2px">⏰ ${escapeHtml(e.hora)}</div>`:""}
               ${e.descricao?`<div style="font-size:12px;color:var(--text);margin-top:3px">${escapeHtml(e.descricao)}</div>`:""}
               <button data-eid="${e.id}" data-pess="${pess?1:0}" class="ev-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir</button>
             </div>
