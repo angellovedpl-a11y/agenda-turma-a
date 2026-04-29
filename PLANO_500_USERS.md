@@ -56,16 +56,22 @@ Suportar **500 usuários simultâneos** com boa performance, mantendo todas as f
 
 ---
 
-#### ETAPA 3 — Cache de busca semântica COM invalidação
+#### ETAPA 3 — Cache de RESULTADO de busca semântica ❌ DESCARTADA
 
-**Objetivo:** evitar reembedar queries repetidas, mas garantir que escrita no MemPalace invalida o cache (regra "MemPalace lembra do que acabei de te contar").
+**Status:** avaliada em 2026-04-29 e **descartada por ganho marginal**.
 
-- [ ] Em `server.py`, completar `_busca_cache_set` (já tem `_busca_cache={}`, lock e `_busca_cache_get`): gravar `{ts, result}` com TTL 300s
-- [ ] Mudar a chave do cache para `(matricula, hash(query))` — NÃO compartilhar cache entre usuários
-- [ ] Adicionar `_busca_cache_invalidar(matricula)`: limpa entradas dessa matrícula
-- [ ] Plugar invalidação em TODA escrita do MemPalace: `palace_add`, `palace_update`, `palace_delete`, qualquer rota que muda `kvstore`
-- [ ] Plugar `_busca_cache_get`/`_busca_cache_set` dentro de `busca_semantica` (antes de chamar `_embed_text`)
-- [ ] Aceite: query repetida pelo mesmo user em < 5min vai pro cache; após `palace_add`, próxima busca do mesmo user vai pro DB
+**Premissa errada da versão anterior deste plano:** dizia "completar `_busca_cache_set` (já existe `_busca_cache={}`, lock e `_busca_cache_get`)". Verificado em `server.py` — esses helpers **não existem**. O que existe é:
+
+- `_chat_conversas_cache` (linha 2479) → cache da rota `/api/chat/conversas` (Bloco B), outra coisa
+- `_embed_para_busca` com `@lru_cache(maxsize=128)` (linha 854) → cacheia o **embedding** da query, não o resultado
+
+**Por que descartar:**
+
+1. **Ganho marginal:** o custo pesado da `busca_semantica` é o hash TF-IDF do embedding, e isso **já está cacheado** (`_embed_para_busca` lru_cache 128). A query SQL em `pgvector` com `LIMIT 5` é tipicamente <100ms.
+2. **Risco de regressão:** invalidação correta exige plugar em 6 rotas de escrita (`/api/memoria/pessoal` POST/DELETE, `/api/memoria/fato` POST/DELETE, `/api/admin/memoria/pendentes/<id>/aprovar`, `/api/admin/memoria/pendentes/<id>/negar`). Esquecer uma = "MemPalace esqueceu o que você acabou de contar" — quebra de regra-mãe.
+3. **Anti-backlog já existe:** `_palace_busca_inflight` (`BoundedSemaphore`) + timeout 800ms já blindam o caller contra picos.
+
+**Conclusão:** Fase 3 Bloco D já cobre o hot path. Reabrir só se métricas reais (ETAPA 5) mostrarem que `busca_semantica` virou gargalo p95.
 
 ---
 
