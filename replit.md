@@ -189,3 +189,19 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 **O que ficou:** todas as melhorias da v3.6 continuam (sinônimos só na query, KEYWORDS_CRITICAS enxutas, score mínimo 1.0). Voltou para `buscar_chunks(top_k=6)` e `buscar_fatos(top_k=12)`. A função `rerank_candidatos()` permanece no código mas não é mais chamada pelo `/api/claude`.
 
 **Aprendizado:** re-ranking sem ground-truth no domínio específico é arriscado. Solução melhor pro futuro: **HyDE** (reescrever a pergunta como se fosse uma resposta ideal antes de buscar) ou **embeddings reais** quando uma API estiver disponível via integration.
+
+## v3.8 — Anti-alucinação reforçada (2026-04-29)
+
+**Por que:** Mesmo depois de reverter o re-rank, Viriato continuou alucinando — caso reportado: pergunta sobre "separação do trem de minério" → ele inventou nome de pátio errado (TFPM como sinônimo de Recepção), citou "regras de freio do ROF" inexistentes, descreveu sequência de manobra com palpite. Diagnóstico: o **prompt** estava empurrando ele a "usar tudo que sabe" pra evitar dizer "não sei", e ele preenchia com conhecimento ferroviário genérico do treinamento.
+
+**Mudanças:**
+1. **`instrucoes_viriato.md` § 3.5 reescrita como REGRA DE OURO ANTI-ALUCINAÇÃO** (~50 linhas). Define explicitamente:
+   - Conhecimento ferroviário genérico do treinamento NÃO é fonte válida.
+   - Para procedimento operacional (manobra, separação, corte, freio, etc.), só descrever se aparecer LITERAL na fonte injetada.
+   - Resposta honesta admitindo lacuna > resposta longa errada.
+   - Lista explícita de proibições: inventar nome de pátio/norma/sigla, "completar" com palpite plausível, citar valores não-fundamentados.
+2. **Modo Deliberativo (server.py linha ~1311) reforçado** com item 5: regra crítica anti-alucinação repetida no prompt de operação técnica/segurança. Redundância proposital — quando a pergunta dispara `pergunta_critica`, a instrução vem nos dois lugares.
+
+**Não muda:** infraestrutura de busca (segue keyword puro da v3.6/v3.7.1), modos de resposta, fluxo geral.
+
+**Resultado esperado:** Em vez de inventar procedimento, Viriato fala "esse procedimento ainda não tem na minha memória, me ensina como funciona aí no campo?" — comportamento mais útil pra construir base de conhecimento confiável da turma.

@@ -1305,6 +1305,13 @@ def claude_chat():
                 '2) Audite essa resposta contra as REGRAS TECNICAS abaixo, condicoes de borda, limites numericos e ANTI-PADROES.\n'
                 '3) Se houver conflito, a regra com maior peso_de_confianca prevalece. Cite a fonte.\n'
                 '4) Se faltar dado, diga "nao tenho certeza" em vez de inventar numero.\n'
+                '5) REGRA CRITICA ANTI-ALUCINACAO: voce NAO PODE descrever procedimento operacional (manobra, '
+                'separacao, corte, freio, embarque, sequencia de qualquer atividade) usando conhecimento '
+                'ferroviario generico do seu treinamento. SO descreva o procedimento se ele aparecer LITERAL '
+                'em alguma fonte injetada neste prompt (memoria do usuario, fatos da turma, biblioteca, regras tecnicas ou o manual instrucoes_viriato.md). '
+                'Se nao tiver, fale honestamente que nao tem aquele procedimento gravado e pede pro colega ensinar. '
+                'PROIBIDO inventar nomes de patio, nomes de norma (ROF, MROF, IT-XXX, etc.), siglas, valores numericos, '
+                'sequencia de passos. Melhor uma resposta curta admitindo lacuna do que uma longa errada.\n'
                 'Sua resposta ao usuario deve ser DIRETA e curta - nao mostre o processo Sistema 1/2 explicitamente, '
                 'apenas a conclusao auditada. NAO use rotulos tipo [Via Beta] ou [Conclusao].\n'
             )
