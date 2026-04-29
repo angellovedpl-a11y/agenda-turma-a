@@ -221,13 +221,27 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - Retorna: `pgvector_extension`, `tabela_exists`, `health_check_ok`, `total_itens`, `por_tipo`, `por_ala_top`, `por_sala_top`, `mais_recente`, `threshold_busca` (0.7), `embed_dim` (256), `embedding_engine` (`tfidf_hashing_md5`).
 - Tolerante a erro: nunca lança; em falha popula `info['erro']`.
 
-**Achados do code review (registrados, NÃO corrigidos — aguardando decisão do dono)**
-- **Severo**: J (órfãos) — fato/regra removido deixa embedding órfão na `palace_embeddings`. `fatos_remove` e `regras_tecnicas_remove` precisam de `DELETE FROM palace_embeddings WHERE id = %s` (puramente aditivo, baixo risco).
-- **Médio**: F (colisão de id) — `int(time()*1000)` pode colidir em burst; sobrescreveria embedding de outro item silenciosamente. Mitigação: prefixar id no palace (`'fato:'+id`, `'regra:'+id`) sem mudar id principal.
-- **Médio**: A (thread daemon sem limite) — burst de saves cria N threads disputando pool de 20 conexões com timeout 10s. Mitigação: trocar por `ThreadPoolExecutor` global (igual `PUSH_FANOUT_WORKERS`).
-- **Operacional**: B (cache de health grudado em `False`) — se a tabela for criada DEPOIS do boot, cada worker fica com False até restart. Aceitar (deploy é controlado) ou expor `?reload=1` no /api/palace/status.
-- **Baixo**: D (threshold alto pro TF-IDF caseiro) — observabilidade ajudaria; sem impacto em correção.
-- **Baixo (futuro multi-turma)**: E (`ala=None` na busca) — hoje Turma A única, mas vira risco de vazamento cross-tenant quando mapeamento matrícula→turma existir.
+**Hardening pós code-review (aplicado na mesma sessão)**
+
+| Achado | Status | Solução |
+|---|---|---|
+| **J (severo)** órfãos após `_remove` | ✅ corrigido | `_indexar_remove(id)` submetido ao pool dispara `DELETE FROM palace_embeddings WHERE id = %s OR id = %s` (apaga formato novo prefixado E formato legado, por idempotência). Hook em `fatos_remove` e `regras_tecnicas_remove` em try/except silencioso. |
+| **F (médio)** colisão de id `int(time()*1000)` | ✅ corrigido | Id no palace agora é prefixado (`'fato:<id>'`, `'regra:<id>'`). Ids principais em `fatos_load`/`regras_tecnicas_load` permanecem `int` — só a chave da `palace_embeddings` muda. |
+| **A (médio)** threads daemon sem limite | ✅ corrigido | `_get_palace_executor()` lazy → `ThreadPoolExecutor(max_workers=PALACE_INDEX_WORKERS)`, default 4 workers. Reaproveitado por `_indexar_async` e `_indexar_remove`. Mesmo padrão do `_get_push_executor`. |
+| **C (baixo)** dedup só em fatos | ✅ corrigido junto | Ids semânticos agora separados por tipo (`ids_sem_fatos`, `ids_sem_regras`) e cada conjunto deduplica seu lado. `regras_relev` também filtrada. |
+| **B (operacional)** cache de health grudado | aceito | Deploy é controlado e a tabela é criada antes via script SQL; se acontecer, basta restart dos workers. Não exposto reload por enquanto. |
+| **D (baixo)** threshold alto pro TF-IDF | aceito | Observabilidade fica pra próxima fase; sem impacto correcional. |
+| **E (futuro)** sem filtro por ala | postergado | Mapeamento matrícula→turma ainda indefinido; vira risco só quando houver multi-turma. |
+
+**Dedup com prefixos no system prompt (`server.py:~1442`)**
+- `ids_sem_fatos = {id.split(':',1)[-1] for m in mem_alta if m['tipo']=='fato'}` (idem `ids_sem_regras`).
+- `.split(':',1)[-1]` tolera entradas legadas sem prefixo (caso já existam embeddings antigos sem prefixar — backward-compat).
+
+**Variável de ambiente nova**
+- `PALACE_INDEX_WORKERS` (default 4) — tamanho do pool de threads de indexação.
+
+**Script SQL pra prod**
+- `migrations/fase2_palace_embeddings.sql` — idempotente (`CREATE EXTENSION IF NOT EXISTS`, `CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`). Inclui validação pós-execução e instruções pra ativar índice ANN (HNSW/IVFFlat) caso a tabela passe de ~10k linhas no futuro.
 
 **Item 5 (Fase 1) — `instrucoes_viriato.md` documenta a sintaxe nova (`instrucoes_viriato.md:151-186`)**
 - Atualizado APENAS a seção 6 (Sintaxe SALVAR_REGRA), de forma puramente aditiva:

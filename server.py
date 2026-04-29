@@ -474,9 +474,10 @@ def fatos_add(texto: str, matricula: str, nome: str, ala: str = 'geral', sala: s
     fatos.insert(0, novo)
     fatos = fatos[:MAX_FATOS_TURMA]
     kvstore.save('fatos_turma', {'fatos': fatos})
-    # FASE 2: hook de indexacao assincrona (silencioso, daemon thread)
+    # FASE 2: hook de indexacao assincrona (pool, silencioso). Id prefixado
+    # ('fato:<id>') pra evitar colisao com regras quando ON CONFLICT bater.
     try:
-        _indexar_async(novo['id'], 'fato', ala_n, sala_n, texto)
+        _indexar_async(f"fato:{novo['id']}", 'fato', ala_n, sala_n, texto)
     except Exception:
         pass
     return {'ok': True, 'fato': novo}
@@ -487,6 +488,11 @@ def fatos_remove(id_fato: int) -> bool:
     if len(novo) == len(fatos):
         return False
     kvstore.save('fatos_turma', {'fatos': novo})
+    # FASE 2: remove embedding orfao no palace (async, silencioso)
+    try:
+        _indexar_remove(f"fato:{id_fato}")
+    except Exception:
+        pass
     return True
 
 # === MEMPALACE — REGRAS TECNICAS (synaptic_weights) ===
@@ -530,12 +536,13 @@ def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
     regras.insert(0, nova)
     regras = regras[:200]
     kvstore.save('regras_tecnicas', {'regras': regras})
-    # FASE 2: hook de indexacao assincrona (silencioso, daemon thread)
+    # FASE 2: hook de indexacao assincrona (pool, silencioso). Id prefixado
+    # ('regra:<id>') pra evitar colisao com fatos no ON CONFLICT.
     try:
         _conteudo_emb = (nova.get('conceito', '') + '. '
                          + nova.get('regra_de_ouro', '') + '. '
                          + (nova.get('condicao_de_borda') or ''))
-        _indexar_async(nova['id'], 'regra', ala, sala, _conteudo_emb)
+        _indexar_async(f"regra:{nova['id']}", 'regra', ala, sala, _conteudo_emb)
     except Exception:
         pass
     return {'ok': True, 'regra': nova}
@@ -546,6 +553,11 @@ def regras_tecnicas_remove(id_r: int) -> bool:
     if len(novo) == len(regras):
         return False
     kvstore.save('regras_tecnicas', {'regras': novo})
+    # FASE 2: remove embedding orfao no palace (async, silencioso)
+    try:
+        _indexar_remove(f"regra:{id_r}")
+    except Exception:
+        pass
     return True
 
 # === FASE 1 MemPalace — helpers de prioridade por ala/sala ===
@@ -760,17 +772,60 @@ def _indexar_no_palace(id_item, tipo: str, ala: str, sala: str, conteudo: str):
     except Exception as e:
         print(f'[fase2] _indexar_no_palace falhou (id={id_item} tipo={tipo}): {e}')
 
+_PALACE_INDEX_WORKERS = int(os.environ.get('PALACE_INDEX_WORKERS', '4'))
+_palace_executor = None
+_palace_executor_lock = _threading.Lock()
+
+def _get_palace_executor():
+    """Pool dedicado pra indexacao MemPalace. Limita threads concorrentes
+    (evita estourar pool de conexoes do kvstore em burst de saves).
+    Inicializacao lazy, mesmo padrao de _get_push_executor."""
+    global _palace_executor
+    if _palace_executor is not None:
+        return _palace_executor
+    with _palace_executor_lock:
+        if _palace_executor is None:
+            from concurrent.futures import ThreadPoolExecutor
+            _palace_executor = ThreadPoolExecutor(
+                max_workers=_PALACE_INDEX_WORKERS,
+                thread_name_prefix='palace-idx',
+            )
+            print(f'[fase2] pool de indexacao criado ({_PALACE_INDEX_WORKERS} workers)')
+        return _palace_executor
+
 def _indexar_async(id_item, tipo, ala, sala, conteudo):
-    """Dispara _indexar_no_palace em thread daemon (nao bloqueia o caller)."""
+    """Submete _indexar_no_palace ao pool de indexacao (nao bloqueia caller).
+    Pool limitado evita pressao excessiva sobre pool de conexoes em burst."""
     try:
-        t = _threading.Thread(
-            target=_indexar_no_palace,
-            args=(id_item, tipo, ala, sala, conteudo),
-            daemon=True,
-        )
-        t.start()
+        pool = _get_palace_executor()
+        pool.submit(_indexar_no_palace, id_item, tipo, ala, sala, conteudo)
     except Exception as e:
-        print(f'[fase2] _indexar_async nao disparou: {e}')
+        print(f'[fase2] _indexar_async nao submeteu: {e}')
+
+def _apagar_no_palace(id_item: str):
+    """Worker que remove embedding(s) do palace. Apaga tanto a chave prefixada
+    (formato novo: 'fato:123', 'regra:456') quanto a chave id-puro (formato
+    legado, pre-correcao de colisao) por idempotencia. Silencioso em erro."""
+    try:
+        if not _palace_health_check():
+            return
+        id_str = str(id_item)
+        legacy_id = id_str.split(':', 1)[-1] if ':' in id_str else id_str
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "DELETE FROM palace_embeddings WHERE id = %s OR id = %s",
+                (id_str, legacy_id),
+            )
+    except Exception as e:
+        print(f'[fase2] _apagar_no_palace falhou (id={id_item}): {e}')
+
+def _indexar_remove(id_item: str):
+    """Submete remocao de embedding ao pool (nao bloqueia caller). Silencioso."""
+    try:
+        pool = _get_palace_executor()
+        pool.submit(_apagar_no_palace, id_item)
+    except Exception as e:
+        print(f'[fase2] _indexar_remove nao submeteu: {e}')
 
 def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
     """Busca por similaridade vetorial. Retorna [] silenciosamente em erro/indisponibilidade."""
@@ -1381,10 +1436,16 @@ def claude_chat():
             _sala_p2 = None
         mem_semantica = busca_semantica(ultima, ala=None, sala=_sala_p2, n=5) if ultima else []
         mem_alta = [m for m in mem_semantica if float(m.get('score', 0) or 0) >= 0.70]
-        ids_semanticos = {str(m.get('id')) for m in mem_alta}
-        if ids_semanticos:
+        # Ids no palace vem prefixados ('fato:123', 'regra:456'). Separa por
+        # tipo pra dedup independente de fatos_relev e regras_relev.
+        # `.split(':',1)[-1]` tolera tambem entradas legadas sem prefixo.
+        ids_sem_fatos = {str(m.get('id', '')).split(':', 1)[-1]
+                         for m in mem_alta if m.get('tipo') == 'fato'}
+        ids_sem_regras = {str(m.get('id', '')).split(':', 1)[-1]
+                          for m in mem_alta if m.get('tipo') == 'regra'}
+        if ids_sem_fatos:
             # Dedup: remove de fatos_relev itens que ja vao via [mem]
-            fatos_relev = [f for f in fatos_relev if str(f.get('id')) not in ids_semanticos]
+            fatos_relev = [f for f in fatos_relev if str(f.get('id')) not in ids_sem_fatos]
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''
@@ -1432,6 +1493,9 @@ def claude_chat():
         modo_critico = pergunta_critica(ultima)
         regras_relev = buscar_regras_tecnicas(ultima, top_k=4,
                                               query_para_sala=ultima) if modo_critico else []
+        # FASE 2: dedup tambem das regras (achado C do code review)
+        if ids_sem_regras and regras_relev:
+            regras_relev = [r for r in regras_relev if str(r.get('id')) not in ids_sem_regras]
         antipadroes = antipadroes_load() if modo_critico else []
         if modo_critico:
             prefixo += '### MODO DELIBERATIVO ATIVO (Sistema 2) ###\n'
