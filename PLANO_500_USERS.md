@@ -75,9 +75,58 @@ Suportar **500 usuários simultâneos** com boa performance, mantendo todas as f
 
 ---
 
-#### ETAPA 4 — Ativar `_get_user_ala()` nos callsites (multi-turma)
+#### ETAPA 4 — Rate limiting por matrícula via Postgres ✅ IMPLEMENTADA
+
+**Objetivo:** proteger o app de cliente bugado / bot / pico repentino sem bloquear usuário legítimo. Storage Postgres = limite preciso entre os 2 workers gunicorn (in-memory teria 2x sub-ótimo).
+
+**Implementação (módulo `ratelimit.py` novo + 3 edits em `server.py`):**
+
+- [x] Tabela `ratelimit_buckets(matricula, rota, bucket_min, count, PK composta)` — janela fixa de 1 minuto
+- [x] `check_and_increment` atômico via `INSERT ... ON CONFLICT DO UPDATE ... RETURNING count` (1 round-trip)
+- [x] **FAIL-OPEN:** qualquer erro do banco retorna `(allowed=True)` — rate limiter nunca derruba o app
+- [x] Cleanup probabilístico (1 a cada `RATELIMIT_CLEANUP_EVERY=500` requests, remove buckets > 10 min) — sem cron
+- [x] Decorator `@ratelimit.rate_limit(N, env_var=..., route_key=...)` aplicado **depois** de `@auth.require_auth`
+- [x] Resposta 429 com headers `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining` + corpo JSON em PT-BR coloquial
+- [x] Kill switch operacional: `RATELIMIT_ENABLED=0` desliga tudo
+
+**Limites aplicados:**
+
+| Rota | Limite/min/matrícula | Var de env |
+|---|---|---|
+| `POST /api/claude` (Viriato chatbot) | **20** | `RATELIMIT_CLAUDE_PER_MIN` |
+| `GET /api/chat/conversas` (polling) | **120** | `RATELIMIT_CHAT_CONVERSAS_PER_MIN` |
+
+**Justificativa dos números:**
+- Viriato 20/min: chat humano não digita 20 perguntas em 1 min. Acima disso é bot/bug. Protege orçamento Anthropic.
+- Polling 120/min: cliente faz 4 req/min (15s) — margem de 30x cobre múltiplas abas + retry burst.
+
+**Fora do escopo desta ETAPA:** rate limit em `/api/auth/login` (anti-brute-force por IP) — vira ETAPA 4b se virar problema.
+
+**Vars de env novas:**
+- `RATELIMIT_ENABLED` (default `1`) — kill switch
+- `RATELIMIT_CLAUDE_PER_MIN` (default 20)
+- `RATELIMIT_CHAT_CONVERSAS_PER_MIN` (default 120)
+- `RATELIMIT_CLEANUP_EVERY` (default 500) — frequência do cleanup
+- `RATELIMIT_CLEANUP_KEEP_MIN` (default 10) — minutos de histórico mantidos
+
+**Aceite:**
+- 21ª chamada na mesma minute window em `/api/claude` retorna `429` com `Retry-After` ✅ validado
+- Banco fora → fail-open (request passa, log warning) — não derruba app
+
+**Limitação conhecida (janela fixa):**
+- Algoritmo de janela fixa de 1 min permite **burst de até 2x** no boundary entre minutos (ex: 20 chamadas no segundo 59 + 20 chamadas no segundo 0 = 40 em 2s, ainda dentro do limite de cada minuto). Aceito como trade-off de simplicidade. Migrar para sliding window só se métricas reais (ETAPA 6) mostrarem abuso no boundary.
+
+**Hardening pós architect review:**
+- Parser seguro de env vars (`_parse_int_env`) com fallback + clamp `>= 1` — evita `ZeroDivisionError` em `RATELIMIT_CLEANUP_EVERY=0` (que viraria fail-open global silencioso) e `ValueError` no import com valor não-numérico.
+- Contador de fail-opens com log amostrado (1ª ocorrência + a cada `RATELIMIT_FAILOPEN_LOG_EVERY=100`) — torna "limiter inoperante" detectável sem floodar logs.
+
+---
+
+#### ETAPA 5 — Ativar `_get_user_ala()` nos callsites (multi-turma)
 
 **Objetivo:** Item E da Fase 3 está implementado estruturalmente mas NÃO plugado nas rotas. Sem isso o app continua tratando todo mundo como Turma A.
+
+> **Nota:** baixa prioridade enquanto app for single-tenant Turma A. Re-priorizar quando houver decisão concreta de adicionar Turma B.
 
 - [ ] Identificar todos os callsites que hoje assumem `'A'` hardcoded (grep `'A'` em rotas que filtram por turma)
 - [ ] Substituir por `_get_user_ala(matricula)` em cada rota
@@ -86,7 +135,7 @@ Suportar **500 usuários simultâneos** com boa performance, mantendo todas as f
 
 ---
 
-#### ETAPA 5 — Observabilidade + smoke test final
+#### ETAPA 6 — Observabilidade + smoke test final
 
 **Objetivo:** garantir que dá pra ver o que tá acontecendo sob carga e validar o conjunto.
 

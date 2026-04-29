@@ -285,9 +285,25 @@ Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carg
 - Função existe pra centralizar o mapeamento; **nenhum callsite foi alterado pra usar ela** porque os dados antigos do palace estão indexados com `ala='geral'` (default de `fatos_add`/`regras_tecnicas_add`), e filtrar por `'turma_a'` agora quebraria a busca em prod.
 - Pra ativar multi-turma de verdade no futuro: (1) popular `_USER_ALA_MAP`; (2) backfill `UPDATE palace_embeddings SET ala='turma_a' WHERE ala='geral'`; (3) trocar default em `fatos_add`/`regras_tecnicas_add`; (4) trocar callsite de `busca_semantica` em `claude_chat`.
 
+**Bloco F — Rate limiting por matrícula** (`ratelimit.py` novo + 3 edits `server.py`)
+- Storage compartilhado em **Postgres** (tabela própria `ratelimit_buckets` com PK composta `(matricula, rota, bucket_min)`) — limite preciso entre os 2 workers gunicorn (in-memory daria 2x sub-ótimo).
+- Atômico: `INSERT ... ON CONFLICT DO UPDATE ... RETURNING count` (1 round-trip por request limitado).
+- Janela fixa de 1 min. Cleanup probabilístico (1 a cada 500 requests, remove > 10 min) → sem cron.
+- **FAIL-OPEN:** qualquer erro do banco → `(allowed=True)`. Rate limiter NUNCA derruba o app (antipadrão clássico).
+- Decorator `@ratelimit.rate_limit(N, env_var=..., route_key=...)` aplicado DEPOIS de `@auth.require_auth`.
+- 429 com `Retry-After` + `X-RateLimit-*` headers + corpo JSON em PT-BR coloquial.
+- Kill switch operacional: `RATELIMIT_ENABLED=0` desliga tudo.
+- Limites aplicados: `/api/claude` (Viriato) **20/min/matrícula** (`RATELIMIT_CLAUDE_PER_MIN`); `/api/chat/conversas` (polling) **120/min/matrícula** (`RATELIMIT_CHAT_CONVERSAS_PER_MIN`).
+- Schema criado no startup (`ratelimit.init_schema()` logo após `kvstore.init_schema()`).
+
 **Variáveis de ambiente novas (todas com default sensato)**
 - `PALACE_BUSCA_TIMEOUT=0.8` — timeout em segundos pra busca semântica
 - `PALACE_BUSCA_WORKERS=2` — workers do pool de busca (semaphore in-flight = workers*2)
+- `RATELIMIT_ENABLED=1` — kill switch global (0 desliga rate limit)
+- `RATELIMIT_CLAUDE_PER_MIN=20` — limite Viriato por matrícula
+- `RATELIMIT_CHAT_CONVERSAS_PER_MIN=120` — limite polling de conversas
+- `RATELIMIT_CLEANUP_EVERY=500` — frequência do cleanup probabilístico
+- `RATELIMIT_CLEANUP_KEEP_MIN=10` — minutos de histórico mantidos na tabela
 - `CHAT_CONVERSAS_CACHE_TTL=5` — TTL em segundos do cache de `/api/chat/conversas`
 - `KV_POOL_MAX=32` — tamanho do pool de conexões Postgres do kvstore
 

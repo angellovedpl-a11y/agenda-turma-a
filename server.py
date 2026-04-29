@@ -53,6 +53,11 @@ except Exception:
 # Inicializa banco e migra JSONs antigos (uma unica vez por chave).
 import kvstore as _kv_init
 _kv_init.init_schema()
+
+# Rate limiting por matricula (Fase 3, ETAPA 4). Tabela dedicada,
+# fail-open em qualquer erro (rate limiter NUNCA derruba o app).
+import ratelimit
+ratelimit.init_schema()
 for _k, _f in [
     ('users', os.path.join(DATA_DIR, 'users.json')),
     ('sessions', os.path.join(DATA_DIR, 'sessions.json')),
@@ -1500,6 +1505,7 @@ def api_reset_senha(matricula):
 
 @app.route('/api/claude', methods=['POST'])
 @auth.require_auth
+@ratelimit.rate_limit(20, env_var='RATELIMIT_CLAUDE_PER_MIN', route_key='claude')
 def claude_chat():
     try:
         data = request.json or {}
@@ -2494,6 +2500,7 @@ def _chat_conversas_cache_invalidar(matriculas=None):
 
 @app.route('/api/chat/conversas', methods=['GET'])
 @auth.require_auth
+@ratelimit.rate_limit(120, env_var='RATELIMIT_CHAT_CONVERSAS_PER_MIN', route_key='chat_conversas')
 def chat_conversas():
     me = request.current_user['matricula']
     inm = request.headers.get('If-None-Match')
