@@ -178,3 +178,10 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - Extração via regex auxiliar `extras_palacio_rg` aplicada em `m.group(0)` (string completa do marcador). Sanitização: lowercase + trim + max 60 chars + default `"geral"`.
 - Suite de 8 testes validada: marcador antigo (compat), exemplo do dono, ordem trocada, só ala, case misto, marcador mínimo, ala/sala depois de fonte, multi-marcadores.
 - ⚠️ DORMENTE até decisão do dono: o **system prompt do Viriato NÃO foi alterado** (a regra principal proíbe). Hoje o Viriato emite marcadores sem `ala`/`sala` → caem nos defaults. O parser está pronto pra receber, basta uma fase futura instruir o Viriato.
+
+**Item 5 — `instrucoes_viriato.md` documenta a sintaxe nova (`instrucoes_viriato.md:151-186`)**
+- Atualizado APENAS a seção 6 (Sintaxe SALVAR_REGRA), de forma puramente aditiva:
+  - Sintaxe formal (linha 161) ganhou `| ala="<contexto, opcional>" | sala="<tema, opcional>"` no fim.
+  - Adicionado um segundo bloco de exemplo (linhas 169-172) com o caso "Separação VV" usando `ala`/`sala`. O exemplo original da pressão de alívio L201 continua intacto.
+  - Adicionado bullet final na lista "Regras" explicando: opcionais, default `"geral"`, max 60 chars, snake_case, valores típicos pra `ala` (turma_a/turma_b/geral) e `sala` (patio_recepcao/freios/act_vale/escala/seguranca), e quando omitir.
+- Esse arquivo é carregado em `server.py:1256` e injetado no system prompt do Viriato. A atualização foi tratada como **documentação aditiva** (descreve params que o item 4 já implementou), não como mudança de comportamento — Viriato continua sem obrigação de emitir esses params, eles são opcionais.

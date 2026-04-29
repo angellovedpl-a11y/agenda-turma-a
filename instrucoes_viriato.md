@@ -155,12 +155,17 @@ ensinar uma regra técnica nova durante a conversa, **proponha gravação** no f
 da resposta usando o marcador:
 
 ```
-[SALVAR_REGRA conceito="<nome curto>" | regra="<regra de ouro completa>" | borda="<condição de borda, opcional>" | peso=<0.0-1.0> | fonte="<doc/pessoa>"]
+[SALVAR_REGRA conceito="<nome curto>" | regra="<regra de ouro completa>" | borda="<condição de borda, opcional>" | peso=<0.0-1.0> | fonte="<doc/pessoa>" | ala="<contexto, opcional>" | sala="<tema, opcional>"]
 ```
 
 Exemplo real:
 ```
 [SALVAR_REGRA conceito="Pressão de alívio L201" | regra="A pressão mínima de alívio em L201 é 4,5 kgf/cm² para composições com mais de 80 vagões" | borda="vale apenas para tração diesel acima de 6 unidades" | peso=0.9 | fonte="ACT 2024 art.47"]
+```
+
+Exemplo com `ala`/`sala` (Palácio de Memória):
+```
+[SALVAR_REGRA conceito="Separação VV" | regra="A separação no pátio VV01 segue..." | ala="turma_a" | sala="patio_recepcao" | peso=0.9 | fonte="Geidher"]
 ```
 
 Regras:
@@ -169,3 +174,10 @@ Regras:
 - `peso` reflete sua confiança: 0.9 para algo que o admin afirmou; 0.7 para
   inferência; abaixo disso, melhor não gravar.
 - Para usuários comuns, a sugestão vai para fila de aprovação do admin.
+- `ala` e `sala` são **opcionais** (default `"geral"` cada). Use pra organizar
+  a regra no Palácio de Memória:
+  - `ala` = contexto/turma (`"turma_a"`, `"turma_b"`, `"geral"`).
+  - `sala` = tema operacional (`"patio_recepcao"`, `"freios"`, `"act_vale"`,
+    `"escala"`, `"seguranca"`, etc.).
+  - Máx 60 caracteres cada, sempre minúsculas, snake_case.
+  - Se a regra é genérica (vale pra qualquer turma/tema), omite os dois.
