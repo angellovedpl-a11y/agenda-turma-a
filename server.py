@@ -613,6 +613,19 @@ KEYWORDS_CRITICAS = {
     'l201', 'l202', 'l006', 'l007', 'l008', 'l030',
     'pneumatico', 'pneumático', 'vacuo', 'vácuo', 'ar', 'reservatorio', 'reservatório',
     'truque', 'caboose', 'pinhao', 'pinhão', 'kpa', 'psi', 'mpa',
+    # === Vocabulario operacional do dia-a-dia da Turma A (TFPM/Sao Luis) ===
+    # NAO incluir aqui termos genericos do PT-BR (vale, baixo, cima, partida,
+    # chegada, carga) — disparariam Modo Deliberativo em conversa nao-tecnica.
+    'separacao', 'separação', 'separar', 'corte', 'cortes', 'cortar',
+    'recepcao', 'recepção', 'despacho', 'despachar', 'despachos',
+    'formacao', 'formação', 'classificacao', 'classificação', 'triagem',
+    'pera', 'pêra', 'virador', 'viradores', 'vv', 'vv01', 'vv02', 'vv03', 'vv04', 'vv05', 'vv06',
+    'granel', 'pier', 'tm2', 'tfpm', 'mineroduto',
+    'minerio', 'minério',
+    'lote', 'lotes', 'estacionamento', 'estacionamentos',
+    'gdu', 'gdus',
+    'act', 'plr', 'stefem',
+    'circulacao', 'circulação', 'trafego', 'tráfego', 'avancado', 'avançado',
 }
 
 def pergunta_critica(texto: str) -> bool:
@@ -673,11 +686,36 @@ def _expandir_tokens(tokens):
             out.add('l' + t.zfill(3))
     return out
 
-def buscar_fatos(query: str, top_k: int = 8) -> list:
+_SINONIMOS_BUSCA = {
+    'separacao': {'corte', 'cortes', 'despacho', 'separar', 'separacao', 'separação'},
+    'separação': {'corte', 'cortes', 'despacho', 'separar', 'separacao', 'separação'},
+    'corte': {'separacao', 'separação', 'despacho', 'cortar', 'cortes'},
+    'minerio': {'gdt', 'gdts', 'minerio', 'minério', 'mineiro', 'vagao', 'vagão'},
+    'minério': {'gdt', 'gdts', 'minerio', 'minério', 'mineiro', 'vagao', 'vagão'},
+    'recepcao': {'vv', 'vv01', 'vv02', 'vv03', 'vv04', 'vv05', 'vv06', 'recepção'},
+    'recepção': {'vv', 'vv01', 'vv02', 'vv03', 'vv04', 'vv05', 'vv06', 'recepcao'},
+    'trem': {'composicao', 'composição', 'trens', 'lote', 'lotes'},
+    'trens': {'composicao', 'composição', 'trem', 'lote', 'lotes'},
+    'patio': {'pátio', 'patios', 'pátios'},
+    'pátio': {'patio', 'patios', 'pátios'},
+    'manobra': {'manobras', 'corte', 'separacao', 'despacho'},
+}
+
+def _expandir_sinonimos(tokens):
+    out = set(tokens)
+    for t in list(tokens):
+        if t in _SINONIMOS_BUSCA:
+            out |= _SINONIMOS_BUSCA[t]
+    return out
+
+def buscar_fatos(query: str, top_k: int = 12) -> list:
     qtokens_base = set(tokenize(query))
     if not qtokens_base:
         return []
-    qtokens = _expandir_tokens(qtokens_base)
+    # Expandimos sinonimos SO no lado da query (evita falso positivo:
+    # um fato sobre "corte de madeira" nao deve casar com "separacao de trem"
+    # so porque expandiriamos "corte" -> "separacao" tambem no lado do fato).
+    qtokens = _expandir_sinonimos(_expandir_tokens(qtokens_base))
     qlower = (query or '').lower()
     fatos = fatos_load()
     scored = []
@@ -691,7 +729,9 @@ def buscar_fatos(query: str, top_k: int = 8) -> list:
         for qt in qtokens_base:
             if len(qt) >= 3 and qt in ftxt_low:
                 score += 0.5
-        if score > 0:
+        # Limiar minimo: score 0.5 (so substring) e ruido — exigir pelo
+        # menos um token-match de verdade (>=1.0) ou substring forte (>=1.5).
+        if score >= 1.0:
             scored.append((score, f))
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
     return [s[1] for s in scored[:top_k]]
@@ -1105,7 +1145,7 @@ def claude_chat():
         role_user = u.get('role', '')
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
-        fatos_relev = buscar_fatos(ultima, top_k=4) if ultima else []
+        fatos_relev = buscar_fatos(ultima, top_k=12) if ultima else []
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''

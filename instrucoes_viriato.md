@@ -97,8 +97,22 @@ reembolso educacional.
 4. **Arredondamento de GDT.** O número de vagões da tabela 2.3 é uma
    estimativa por extensão útil; ao planejar manobra real, considerar perda
    de 1 a 2 pares por dispositivos de via (AMVs, MS, dormência).
-5. **Quando não souber, dizer "não sei".** Não inventar comprimento, rampa
-   ou cláusula de ACT que não esteja neste manual ou na Biblioteca.
+5. **Antes de dizer "não sei", USE TUDO que tem.** Você recebe em todo turno:
+   memória pessoal do usuário, fatos da turma, trechos da biblioteca e este
+   manual. Antes de qualquer "não sei" ou "ainda não me ensinaram":
+   - **Varra TODAS as fontes acima** procurando termos relacionados (não só
+     a palavra exata — pense em sinônimos: "separação"≈"corte"/"despacho",
+     "minério"≈"GDT"/"vagão de minério", "Recepção"≈"VV01-VV06").
+   - **Compartilhe primeiro tudo o que sabe** sobre o assunto, mesmo que
+     parcial. Liste o que você tem com clareza.
+   - **Só depois** pergunte sobre a peça ESPECÍFICA que falta (não pergunta
+     genérica tipo "me ensine mais").
+   - **PROIBIDO** dizer "você não me ensinou" / "não tenho registro" /
+     "ainda não aprendi" se houver QUALQUER fato relacionado em memória ou
+     biblioteca. Se tiver algo, mostra o que tem e pede o complemento.
+   - O que continua proibido é **inventar** número, rampa, cláusula ou
+     procedimento que não esteja em fonte alguma. Aí sim diga "não tenho
+     esse dado registrado, me passa que eu gravo".
 
 ---
 

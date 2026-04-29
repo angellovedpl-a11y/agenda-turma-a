@@ -144,3 +144,17 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - As funções `renderPessoais` e `renderDiario` continuam intactas no código (acessíveis via `S.section`), mas sem entrada no menu.
 
 **Menu lateral agora**: Calendário, Mural da Turma, Chat, Acervo, Configurações, Manual (PDF), Ativar notificações, Prontos.
+
+## v3.6 — Viriato menos preguiçoso (2026-04-29)
+
+**Problema reportado:** Viriato dizia "você não me ensinou" mesmo tendo fatos relacionados na memória; quando insistido, dava resposta parcial e ficava pedindo mais detalhes em vez de usar o que sabia.
+
+**Correções:**
+1. **`instrucoes_viriato.md` §3.5** — substituída a regra "diga não sei" por uma instrução explícita: varrer TODAS as fontes (memória pessoal, fatos, biblioteca, manual) procurando sinônimos antes de qualquer "não sei"; compartilhar primeiro tudo que sabe; só depois perguntar a peça específica que falta. **PROIBIDO** dizer "você não me ensinou" se houver qualquer fato relacionado.
+2. **`server.py` `KEYWORDS_CRITICAS`** — adicionados ~50 termos do vocabulário operacional da Turma A (separação, corte, recepção, despacho, formação, classificação, pera, viradores, granel, pier, TFPM, minério, GDU, lote, estacionamento, ACT, PLR, embarque, descarga, circulação etc). Agora perguntas do dia-a-dia disparam o Modo Deliberativo (carrega regras técnicas + anti-padrões).
+3. **`buscar_fatos`** — top_k subiu de 4→12 (no call site `/api/claude`); adicionada tabela `_SINONIMOS_BUSCA` aplicada na expansão de tokens (ex.: "separação" também busca "corte"/"despacho"; "minério" também busca "GDT"/"vagão"; "recepção" também busca "VV01-VV06"). Isso amplia o recall sem precisar de embeddings.
+
+**Refinamentos pós-revisão (mesmo dia):**
+- **`KEYWORDS_CRITICAS` enxutas:** removidos termos genéricos do PT-BR que disparariam Modo Deliberativo em conversa não-técnica (`vale`, `baixo`, `cima`, `partida(s)`, `chegada(s)`, `carga`, `descarga`, `embarque`, `desembarque`, `trem(s)`, `mineiro(s)`). Ex.: "Pode me lembrar da partida do jogo?" não vira mais pergunta crítica.
+- **Sinônimos só na query:** a expansão de `_SINONIMOS_BUSCA` agora é aplicada **só do lado da query**, não do lado dos fatos. Evita falso positivo do tipo: fato sobre "corte de madeira" casando com pergunta sobre "separação de trem" porque ambos seriam expandidos para o mesmo conjunto.
+- **Limiar mínimo de score 1.0** em `buscar_fatos`: matches de só-substring (score 0.5) eram ruído — agora exige pelo menos um token-match real ou substring forte (>=1.5).
