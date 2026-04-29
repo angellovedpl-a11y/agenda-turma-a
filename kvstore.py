@@ -46,10 +46,12 @@ from contextlib import contextmanager
 _DB_URL = os.environ.get('DATABASE_URL', '')
 _lock = threading.Lock()
 
-# Pool de conexoes threadsafe. Min=2 mantem aquecidas, Max=20 limita por worker
-# (com 2 workers gunicorn = 40 conexoes max, abaixo do limite padrao do Postgres).
+# Pool de conexoes threadsafe. Min=2 mantem aquecidas, Max=32 limita por worker.
+# Fase 3 (escalabilidade 500 users): com 2 workers gunicorn gthread x 8 threads
+# = ate 16 reqs simultaneas por worker. Pool 32/worker da folga; 2 x 32 = 64
+# conexoes totais, abaixo do limite 100 do Postgres Replit. Tunavel via env.
 _POOL_MIN = int(os.environ.get('KV_POOL_MIN', '2'))
-_POOL_MAX = int(os.environ.get('KV_POOL_MAX', '20'))
+_POOL_MAX = int(os.environ.get('KV_POOL_MAX', '32'))
 # Timeout pra esperar uma conexao livre quando o pool esta cheio. Sem isso
 # o ThreadedConnectionPool joga PoolError imediato (nao bloqueia).
 _POOL_ACQUIRE_TIMEOUT = float(os.environ.get('KV_POOL_ACQUIRE_TIMEOUT', '10'))

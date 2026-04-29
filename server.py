@@ -827,35 +827,161 @@ def _indexar_remove(id_item: str):
     except Exception as e:
         print(f'[fase2] _indexar_remove nao submeteu: {e}')
 
+# === FASE 3: cache LRU em embedding de busca + timeout + metricas ===
+# Sob 500 users simultaneos, busca_semantica vira hot path (1 call por turno
+# do Viriato). Sem cache, mesma query "viagem maputo" digitada por N users
+# gera N hashings TF-IDF identicos. Sem timeout, palace lento (lock,
+# manutencao do Postgres, etc) trava resposta do Viriato. Tudo aditivo:
+# erro/timeout cai pro mesmo retorno [] que ja existia (sem regressao).
+from functools import lru_cache as _lru_cache
+
+_PALACE_BUSCA_TIMEOUT = float(os.environ.get('PALACE_BUSCA_TIMEOUT', '0.8'))
+_PALACE_BUSCA_WORKERS = int(os.environ.get('PALACE_BUSCA_WORKERS', '2'))
+# Semaphore: limita in-flight busca_semantica a (workers * 2). Fix do achado
+# do code review da Fase 3: sem isso, em timeout do Future.result() a thread
+# continua executando e a fila do ThreadPoolExecutor cresce sem limite sob
+# carga + palace lento. Com semaphore, calls excedentes caem em [] na hora,
+# sem encher fila. Permit (workers * 2) = 1 executando + 1 esperando, reflete
+# o headroom realista (latencia normal <100ms, timeout 800ms).
+_PALACE_BUSCA_INFLIGHT_MAX = max(1, _PALACE_BUSCA_WORKERS * 2)
+_palace_busca_inflight = _threading.BoundedSemaphore(_PALACE_BUSCA_INFLIGHT_MAX)
+_palace_busca_executor = None
+_palace_busca_executor_lock = _threading.Lock()
+_palace_metrics = {'buscas_total': 0, 'cache_hits': 0, 'timeouts': 0,
+                   'fallback_silencioso': 0, 'rejeitadas_backlog': 0}
+_palace_metrics_lock = _threading.Lock()
+
+@_lru_cache(maxsize=128)
+def _embed_para_busca(texto: str) -> tuple:
+    """Cache LRU pras queries do Viriato (mesmo texto digitado por varios users
+    nao re-hashing). Tuple porque lru_cache exige retorno hashable. Truncado
+    em 500 chars na chamada pra limitar cardinalidade do cache."""
+    return tuple(gerar_embedding(texto))
+
+def _get_palace_busca_executor():
+    """Pool dedicado pra buscas (separado da indexacao). 2 workers basta porque
+    cada call dura <100ms; serve so pra encapsular timeout via Future.result()."""
+    global _palace_busca_executor
+    if _palace_busca_executor is not None:
+        return _palace_busca_executor
+    with _palace_busca_executor_lock:
+        if _palace_busca_executor is None:
+            from concurrent.futures import ThreadPoolExecutor
+            _palace_busca_executor = ThreadPoolExecutor(
+                max_workers=_PALACE_BUSCA_WORKERS,
+                thread_name_prefix='palace-busca',
+            )
+            print(f'[fase3] pool de busca semantica criado ({_PALACE_BUSCA_WORKERS} workers, timeout {_PALACE_BUSCA_TIMEOUT}s)')
+        return _palace_busca_executor
+
+def _busca_semantica_sync(query, ala, sala, n):
+    """Implementacao sincrona — executada via pool com timeout pra blindar caller."""
+    ci_before = _embed_para_busca.cache_info().hits
+    emb = list(_embed_para_busca(query[:500]))
+    ci_after = _embed_para_busca.cache_info().hits
+    if ci_after > ci_before:
+        with _palace_metrics_lock:
+            _palace_metrics['cache_hits'] += 1
+    emb_lit = _embed_to_pg(emb)
+    with kvstore._connect() as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT id, tipo, conteudo, 1 - (embedding <=> %s::vector) AS score
+            FROM palace_embeddings
+            WHERE (%s::text IS NULL OR ala = %s)
+              AND (%s::text IS NULL OR sala = %s)
+            ORDER BY score DESC
+            LIMIT %s
+            """,
+            (emb_lit, ala, ala, sala, sala, int(n)),
+        )
+        rows = cur.fetchall()
+    return [{'id': str(r[0]), 'tipo': r[1], 'conteudo': r[2], 'score': float(r[3])}
+            for r in rows]
+
+def _busca_semantica_release(query, ala, sala, n):
+    """Wrapper que SEMPRE libera o semaphore quando a thread termina,
+    mesmo que o caller ja tenha desistido por timeout. Isso evita que a
+    fila do executor acumule jobs zumbi sob carga."""
+    try:
+        return _busca_semantica_sync(query, ala, sala, n)
+    finally:
+        try:
+            _palace_busca_inflight.release()
+        except ValueError:
+            pass  # Defesa: ja liberado em algum branch de erro raro
+
 def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
-    """Busca por similaridade vetorial. Retorna [] silenciosamente em erro/indisponibilidade."""
+    """Busca por similaridade vetorial. Retorna [] silenciosamente em erro/timeout/indisponibilidade.
+    FASE 3: timeout PALACE_BUSCA_TIMEOUT (default 0.8s) + cache LRU em embedding +
+    semaphore pra limitar in-flight (anti-backlog)."""
     if not query or not (query or '').strip():
         return []
+    with _palace_metrics_lock:
+        _palace_metrics['buscas_total'] += 1
     try:
         if not _palace_health_check():
             return []
-        emb = gerar_embedding(query)
-        emb_lit = _embed_to_pg(emb)
-        with kvstore._connect() as conn, conn.cursor() as cur:
-            cur.execute(
-                """
-                SELECT id, tipo, conteudo, 1 - (embedding <=> %s::vector) AS score
-                FROM palace_embeddings
-                WHERE (%s::text IS NULL OR ala = %s)
-                  AND (%s::text IS NULL OR sala = %s)
-                ORDER BY score DESC
-                LIMIT %s
-                """,
-                (emb_lit, ala, ala, sala, sala, int(n)),
-            )
-            rows = cur.fetchall()
-        return [{'id': str(r[0]), 'tipo': r[1], 'conteudo': r[2], 'score': float(r[3])}
-                for r in rows]
+        # ANTI-BACKLOG: rejeita imediatamente se ja tem PALACE_BUSCA_INFLIGHT_MAX
+        # buscas em voo. Sem isso, palace lento + 500 users => fila do executor
+        # cresce sem limite (timeouts NAO cancelam a thread em execucao).
+        if not _palace_busca_inflight.acquire(blocking=False):
+            with _palace_metrics_lock:
+                _palace_metrics['rejeitadas_backlog'] += 1
+                _palace_metrics['fallback_silencioso'] += 1
+            return []
+        # Try amplo: cobre tanto _get_palace_busca_executor() quanto pool.submit().
+        # Sem isso, se _get_palace_busca_executor() falhar (cenario raro mas
+        # possivel: PALACE_BUSCA_WORKERS<=0, OOM, etc) o semaphore vaza um
+        # permit. Aqui garante release explicito antes de re-raise.
+        try:
+            from concurrent.futures import TimeoutError as _FutTimeout
+            pool = _get_palace_busca_executor()
+            future = pool.submit(_busca_semantica_release, query, ala, sala, n)
+        except Exception:
+            try:
+                _palace_busca_inflight.release()
+            except ValueError:
+                pass
+            raise
+        try:
+            return future.result(timeout=_PALACE_BUSCA_TIMEOUT)
+        except _FutTimeout:
+            # NAO releaseamos o semaphore aqui — _busca_semantica_release
+            # libera quando a thread terminar. Isso garante que a contagem
+            # in-flight reflita carga real, nao desistencias do caller.
+            with _palace_metrics_lock:
+                _palace_metrics['timeouts'] += 1
+                _palace_metrics['fallback_silencioso'] += 1
+            print(f'[fase3] busca_semantica timeout {_PALACE_BUSCA_TIMEOUT}s; fallback silencioso')
+            return []
     except Exception as e:
+        with _palace_metrics_lock:
+            _palace_metrics['fallback_silencioso'] += 1
         print(f'[fase2] busca_semantica falhou: {e}')
         return []
 
 # === FIM FASE 2 MemPalace ===
+
+# === FASE 3: mapeamento matricula -> ala (achado E do code review) ===
+# Centraliza o mapeamento de usuario->ala pra que multi-turma futuro seja
+# uma alteracao localizada. Hoje single-tenant Turma A: NAO aplicado em
+# busca_semantica/fatos_add ainda porque dados antigos estao com ala='geral'
+# (default de fatos_add). Quando virar multi-turma de verdade:
+#   1. Popular _USER_ALA_MAP (via env, users.json, ou tabela dedicada)
+#   2. Backfill: UPDATE palace_embeddings SET ala='turma_a' WHERE ala='geral';
+#      e mesmo update no kv_store de fatos/regras
+#   3. Mudar default de fatos_add/regras_tecnicas_add p/ _get_user_ala(matricula)
+#   4. Mudar callsite de busca_semantica p/ ala=_get_user_ala(matricula)
+_USER_ALA_MAP = {}  # matricula(str) -> ala(str). Vazio = default p/ todos.
+
+def _get_user_ala(matricula) -> str:
+    """Retorna a 'ala' MemPalace do usuario. Pra single-tenant retorna
+    'turma_a'; quando _USER_ALA_MAP for populado, leva em conta o mapeamento.
+    Aceita None (cai no default)."""
+    if matricula is None:
+        return 'turma_a'
+    return _USER_ALA_MAP.get(str(matricula), 'turma_a')
 
 # === MEMPALACE — ANTI-PADROES (correcoes do admin viram bloqueios) ===
 def antipadroes_load() -> list:
@@ -2346,10 +2472,44 @@ def _strip_anexo_data(m):
         m2['anexo'] = {'nome': a.get('nome'), 'mimetype': a.get('mimetype'), 'tem': True}
     return m2
 
+# FASE 3: cache curto + ETag pra polling de /api/chat/conversas (15s/user x 500
+# users = 33 req/s). TTL 5s + 304 Not Modified cortam ~95% do trabalho real.
+import hashlib as _hashlib_chat
+_CHAT_CONVERSAS_CACHE_TTL = float(os.environ.get('CHAT_CONVERSAS_CACHE_TTL', '5'))
+_chat_conversas_cache = {}  # matricula -> (expires_at, payload_dict, etag)
+_chat_conversas_cache_lock = _threading.Lock()
+
+def _chat_conversas_cache_invalidar(matriculas=None):
+    """Invalida cache pra um conjunto de matriculas (ou todos se None).
+    Chamar sempre que uma mensagem nova for inserida ou conversa criada."""
+    try:
+        with _chat_conversas_cache_lock:
+            if matriculas is None:
+                _chat_conversas_cache.clear()
+            else:
+                for m in matriculas:
+                    _chat_conversas_cache.pop(m, None)
+    except Exception:
+        pass
+
 @app.route('/api/chat/conversas', methods=['GET'])
 @auth.require_auth
 def chat_conversas():
     me = request.current_user['matricula']
+    inm = request.headers.get('If-None-Match')
+    now = time.time()
+    # Tenta cache (TTL curto: aceita pequena defasagem em troca de carga muito menor)
+    with _chat_conversas_cache_lock:
+        cached = _chat_conversas_cache.get(me)
+    if cached and cached[0] > now:
+        _exp, payload, etag = cached
+        if inm == etag:
+            return ('', 304, {'ETag': etag, 'Cache-Control': 'private, max-age=5'})
+        resp = jsonify(payload)
+        resp.headers['ETag'] = etag
+        resp.headers['Cache-Control'] = 'private, max-age=5'
+        return resp
+    # Cache miss: recalcula
     convs = _chat_conversas_load()
     lido = _chat_lido_load(me)
     minhas = []
@@ -2377,7 +2537,21 @@ def chat_conversas():
             'criada_em': c.get('criada_em')
         })
     minhas.sort(key=lambda c: float((c.get('ultima') or {}).get('ts', c.get('criada_em', 0))), reverse=True)
-    return jsonify({'conversas': minhas})
+    payload = {'conversas': minhas}
+    try:
+        etag = '"' + _hashlib_chat.md5(
+            json.dumps(payload, sort_keys=True, default=str).encode('utf-8')
+        ).hexdigest()[:16] + '"'
+    except Exception:
+        etag = '"nocache"'
+    with _chat_conversas_cache_lock:
+        _chat_conversas_cache[me] = (now + _CHAT_CONVERSAS_CACHE_TTL, payload, etag)
+    if inm == etag:
+        return ('', 304, {'ETag': etag, 'Cache-Control': 'private, max-age=5'})
+    resp = jsonify(payload)
+    resp.headers['ETag'] = etag
+    resp.headers['Cache-Control'] = 'private, max-age=5'
+    return resp
 
 @app.route('/api/chat/conversa', methods=['POST'])
 @auth.require_auth
@@ -2578,8 +2752,21 @@ def palace_status():
         'por_sala_top': [],
         'mais_recente': None,
         'threshold_busca': 0.70,
+        'busca_timeout_s': _PALACE_BUSCA_TIMEOUT,
+        'metrics': {},
+        'embed_cache': {},
     }
     try:
+        with _palace_metrics_lock:
+            info['metrics'] = dict(_palace_metrics)
+        try:
+            ci = _embed_para_busca.cache_info()
+            info['embed_cache'] = {
+                'hits': ci.hits, 'misses': ci.misses,
+                'currsize': ci.currsize, 'maxsize': ci.maxsize,
+            }
+        except Exception:
+            pass
         info['health_check_ok'] = _palace_health_check()
         with kvstore._connect() as conn, conn.cursor() as cur:
             cur.execute("SELECT 1 FROM pg_extension WHERE extname='vector'")

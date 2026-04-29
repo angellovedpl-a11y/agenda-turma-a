@@ -249,3 +249,52 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
   - Adicionado um segundo bloco de exemplo (linhas 169-172) com o caso "Separação VV" usando `ala`/`sala`. O exemplo original da pressão de alívio L201 continua intacto.
   - Adicionado bullet final na lista "Regras" explicando: opcionais, default `"geral"`, max 60 chars, snake_case, valores típicos pra `ala` (turma_a/turma_b/geral) e `sala` (patio_recepcao/freios/act_vale/escala/seguranca), e quando omitir.
 - Esse arquivo é carregado em `server.py:1256` e injetado no system prompt do Viriato. A atualização foi tratada como **documentação aditiva** (descreve params que o item 4 já implementou), não como mudança de comportamento — Viriato continua sem obrigação de emitir esses params, eles são opcionais.
+
+---
+
+## FASE 3 — Escalabilidade pra 500 usuários simultâneos (29/04/2026)
+
+Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carga real de prod.
+
+**Bloco A — Gunicorn gthread + keep-alive** (`.replit` via deployConfig)
+- `--worker-class=gthread --threads=8 --keep-alive=5` adicionados.
+- Mantidos `--workers=2 --timeout=120 --bind=0.0.0.0:5000`.
+- Antes (sync, 2 workers): só 2 requests simultâneos. Agora (gthread 2x8): 16 requests simultâneos sem aumentar memória.
+- `--keep-alive=5` reaproveita conexões TCP do polling do app (chat 15s, presença, badges).
+
+**Bloco B — ETag + cache curto em `/api/chat/conversas`** (`server.py:2434`)
+- Cache module-level `_chat_conversas_cache: {matricula -> (expires_at, payload, etag)}` com `_threading.Lock()`.
+- TTL `CHAT_CONVERSAS_CACHE_TTL` (default 5s). Polling de 15s/user × 500 users = 33 req/s; com TTL 5s, ~95% das chamadas viram lookup em dict.
+- ETag = `md5(json.dumps(payload, sort_keys=True))[:16]`. Suporte a `If-None-Match` retorna `304 Not Modified` sem body.
+- Helper `_chat_conversas_cache_invalidar(matriculas=None)` definido em `server.py:2421` mas **NÃO plugado ainda** nos endpoints de mutação (envio de mensagem, criação de conversa, marcação de lida). Defasagem real máxima = TTL 5s, aceitável dado que polling roda a 15s. Plug nos handlers de mutação fica como follow-up se a defasagem virar reclamação real de UX.
+
+**Bloco C — Pool kvstore 20 → 32** (`kvstore.py`)
+- `_POOL_MAX` default `20 → 32`. Tunável via `KV_POOL_MAX`.
+- Cálculo de capacidade: `2 workers × 32 conexões = 64`, ainda bem abaixo do limite ~100 do Postgres do Replit.
+
+**Bloco D — MemPalace busca semântica blindada** (`server.py:833+`)
+- Cache LRU `_embed_para_busca` (`maxsize=128`, query truncada em 500 chars). Mesma query digitada por N users vira 1 hash TF-IDF em vez de N.
+- Pool dedicado `_palace_busca_executor` (`PALACE_BUSCA_WORKERS=2`), separado do pool de indexação.
+- Timeout `PALACE_BUSCA_TIMEOUT` (default 0.8s) via `Future.result(timeout=...)`. Em timeout: fallback silencioso `[]` + métrica + log `[fase3]`.
+- **Anti-backlog (fix do code review):** `BoundedSemaphore(workers*2 = 4)`. Como `Future.result(timeout=...)` só desiste do caller — a thread continua executando — sem isso a fila do executor cresceria sem limite sob carga + palace lento. Calls que excedem o limite caem em `[]` imediatamente e incrementam `rejeitadas_backlog`. Wrapper `_busca_semantica_release` garante que o semaphore libera quando a thread termina (não quando o caller desiste).
+- Métricas `_palace_metrics = {buscas_total, cache_hits, timeouts, fallback_silencioso, rejeitadas_backlog}` com lock próprio.
+- `/api/palace/status` ganhou campos: `busca_timeout_s`, `metrics`, `embed_cache` (cache_info do LRU).
+
+**Bloco E — Multi-turma estruturado mas não ativado** (`server.py:925+`)
+- `_get_user_ala(matricula)` retorna sempre `'turma_a'` por enquanto (single-tenant). `_USER_ALA_MAP` vazio.
+- Função existe pra centralizar o mapeamento; **nenhum callsite foi alterado pra usar ela** porque os dados antigos do palace estão indexados com `ala='geral'` (default de `fatos_add`/`regras_tecnicas_add`), e filtrar por `'turma_a'` agora quebraria a busca em prod.
+- Pra ativar multi-turma de verdade no futuro: (1) popular `_USER_ALA_MAP`; (2) backfill `UPDATE palace_embeddings SET ala='turma_a' WHERE ala='geral'`; (3) trocar default em `fatos_add`/`regras_tecnicas_add`; (4) trocar callsite de `busca_semantica` em `claude_chat`.
+
+**Variáveis de ambiente novas (todas com default sensato)**
+- `PALACE_BUSCA_TIMEOUT=0.8` — timeout em segundos pra busca semântica
+- `PALACE_BUSCA_WORKERS=2` — workers do pool de busca (semaphore in-flight = workers*2)
+- `CHAT_CONVERSAS_CACHE_TTL=5` — TTL em segundos do cache de `/api/chat/conversas`
+- `KV_POOL_MAX=32` — tamanho do pool de conexões Postgres do kvstore
+
+**Smoke tests aplicados**
+- ETag ciclo completo: 200 + ETag → 304 com If-None-Match → 200 do cache (mesmo ETag).
+- Cache LRU registra hit em query repetida; métrica `cache_hits` incrementa.
+- Timeout forçado (0.0001s) cai em fallback silencioso, métrica `timeouts` incrementa.
+- Anti-backlog: 8 chamadas concorrentes com palace lento (sleep 2s) → 4 entram no executor, 4 caem em `rejeitadas_backlog`; depois das zumbis terminarem o semaphore volta a 4/4.
+- `/api/palace/status` mostra todos os campos novos.
+- Boot ok: `[kvstore] pool criado (min=2, max=32)`, `/api/auth/me 200`, `/api/chat/conversas 200`.
