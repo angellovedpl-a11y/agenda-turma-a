@@ -144,3 +144,29 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - As funções `renderPessoais` e `renderDiario` continuam intactas no código (acessíveis via `S.section`), mas sem entrada no menu.
 
 **Menu lateral agora**: Calendário, Mural da Turma, Chat, Acervo, Configurações, Manual (PDF), Ativar notificações, Prontos.
+
+## v3.5 — FASE 1 MemPalace (palácio de memória, em andamento) (2026-04-29)
+
+**Regra-mãe da fase**: nada de busca, system prompt, rotas ou comportamento do Viriato foi alterado. Tudo aditivo.
+
+**Item 1 — campos `ala`/`sala` em regras técnicas (`server.py:496`)**
+- `regras_tecnicas_add(regra)` aceita 2 campos novos opcionais no dict: `ala` (contexto/turma) e `sala` (tema operacional).
+- Sanitização: lowercase + trim + max 60 chars + default `"geral"` se vazio.
+- Persistidos no dict da regra ao lado de `conceito`, `regra_de_ouro`, etc.
+
+**Item 2 — campos `ala`/`sala` em fatos da turma (`server.py:462`)**
+- `fatos_add(texto, matricula, nome, ala='geral', sala='geral')` aceita 2 params nomeados opcionais no fim da assinatura.
+- Mesma sanitização do item 1. Os 4 callers existentes (chamada com 3 args posicionais) caem nos defaults — comportamento inalterado.
+
+**Item 3 — busca prioriza por `ala`/`sala` sem descartar nada (`server.py:541-610` e `737-765`)**
+- Helpers aditivos: `_coletar_salas_conhecidas`, `_detectar_salas_na_query`, `_palacio_bonus`.
+- `buscar_regras_tecnicas` e `buscar_fatos` ganharam dois params opcionais: `ala_user=None` e `query_para_sala=None`.
+- Quando ambos são `None`, ou quando nada bate, o bonus de cada item é 0 → ordenação **idêntica** à anterior (validado em teste com 3 fatos).
+- Score de prioridade aditivo:
+  - `+2.0` se `item.sala` está nas salas detectadas na query
+  - `+1.0` se `item.ala == ala_user`
+  - `+0.5` se `item.ala == "geral"` (fallback genérico)
+- "Salas detectadas" = nomes de `sala` conhecidos (excluindo `"geral"`) que aparecem como substring na `query_para_sala` (case-insensitive, com `_` ↔ espaço).
+- **Nada é descartado**: items de outras alas/salas continuam no resultado, só ficam mais embaixo.
+- Call sites (`server.py:1178` e `1216`) passam `query_para_sala=ultima` → bullet 1 ATIVO.
+- `ala_user` deixado como `None` nos callers → bullet 2 DORMENTE até definição do mapeamento matrícula→turma (não há campo `turma` no perfil hoje; o app é "Agenda Turma A" então a Turma A é implícita por design — aguardando decisão do dono se ativar `ala_user="turma_a"` por default ou se adicionar campo explícito no perfil).

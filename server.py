@@ -535,13 +535,57 @@ def regras_tecnicas_remove(id_r: int) -> bool:
     kvstore.save('regras_tecnicas', {'regras': novo})
     return True
 
-def buscar_regras_tecnicas(query: str, top_k: int = 4) -> list:
+# === FASE 1 MemPalace — helpers de prioridade por ala/sala ===
+# IMPORTANTE: helpers SOMENTE aditivos. O comportamento atual da busca
+# (palavras-chave, expansao, peso_de_confianca, ordenacao base) NAO mudou.
+# Quando query_para_sala=None E ala_user=None, o bonus eh 0 para todos os
+# itens e a ordenacao final fica identica a anterior.
+def _coletar_salas_conhecidas(items: list) -> set:
+    out = set()
+    for it in items:
+        s = (it.get('sala') or '').strip().lower()
+        if s and s != 'geral':
+            out.add(s)
+    return out
+
+def _detectar_salas_na_query(query: str, salas_conhecidas: set) -> set:
+    if not query or not salas_conhecidas:
+        return set()
+    qlow = (query or '').lower()
+    qlow_sp = qlow.replace('_', ' ')
+    detectadas = set()
+    for sala in salas_conhecidas:
+        sala_sp = sala.replace('_', ' ')
+        if sala in qlow or sala_sp in qlow_sp:
+            detectadas.add(sala)
+    return detectadas
+
+def _palacio_bonus(item: dict, salas_detectadas: set, ala_user) -> float:
+    bonus = 0.0
+    item_sala = (item.get('sala') or '').strip().lower()
+    item_ala = (item.get('ala') or '').strip().lower()
+    if salas_detectadas and item_sala in salas_detectadas:
+        bonus += 2.0
+    if ala_user:
+        au = ala_user.strip().lower()
+        if au and item_ala == au:
+            bonus += 1.0
+        elif au and item_ala == 'geral':
+            bonus += 0.5
+    return bonus
+
+def buscar_regras_tecnicas(query: str, top_k: int = 4,
+                           ala_user=None, query_para_sala=None) -> list:
     qbase = set(tokenize(query))
     if not qbase:
         return []
     qexp = _expandir_tokens(qbase)
     qlow = (query or '').lower()
     regras = regras_tecnicas_load()
+    salas_detectadas = _detectar_salas_na_query(
+        query_para_sala if query_para_sala is not None else '',
+        _coletar_salas_conhecidas(regras)
+    )
     scored = []
     for r in regras:
         rtokens = set(r.get('tokens') or tokenize(
@@ -557,6 +601,7 @@ def buscar_regras_tecnicas(query: str, top_k: int = 4) -> list:
                 score += 0.7
         score *= (0.5 + 0.5 * float(r.get('peso_de_confianca', 1.0)))
         if score > 0:
+            score += _palacio_bonus(r, salas_detectadas, ala_user)
             scored.append((score, r))
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
     return [s[1] for s in scored[:top_k]]
@@ -686,13 +731,19 @@ def _expandir_tokens(tokens):
             out.add('l' + t.zfill(3))
     return out
 
-def buscar_fatos(query: str, top_k: int = 8) -> list:
+def buscar_fatos(query: str, top_k: int = 8,
+                 ala_user=None, query_para_sala=None) -> list:
     qtokens_base = set(tokenize(query))
     if not qtokens_base:
         return []
     qtokens = _expandir_tokens(qtokens_base)
     qlower = (query or '').lower()
     fatos = fatos_load()
+    # FASE 1 MemPalace: detecta salas conhecidas para reordenar (aditivo).
+    salas_detectadas = _detectar_salas_na_query(
+        query_para_sala if query_para_sala is not None else '',
+        _coletar_salas_conhecidas(fatos)
+    )
     scored = []
     for f in fatos:
         ftokens_base = set(f.get('tokens') or tokenize(f.get('texto', '')))
@@ -705,6 +756,7 @@ def buscar_fatos(query: str, top_k: int = 8) -> list:
             if len(qt) >= 3 and qt in ftxt_low:
                 score += 0.5
         if score > 0:
+            score += _palacio_bonus(f, salas_detectadas, ala_user)
             scored.append((score, f))
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
     return [s[1] for s in scored[:top_k]]
@@ -1118,7 +1170,10 @@ def claude_chat():
         role_user = u.get('role', '')
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
-        fatos_relev = buscar_fatos(ultima, top_k=4) if ultima else []
+        # FASE 1 MemPalace: passa a query como query_para_sala (bullet 1 do item 3
+        # ativo). ala_user fica None ate definicao do mapeamento matricula->turma.
+        fatos_relev = buscar_fatos(ultima, top_k=4,
+                                   query_para_sala=ultima) if ultima else []
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''
@@ -1155,7 +1210,8 @@ def claude_chat():
             prefixo += '### FIM FATOS ###\n\n'
 
         modo_critico = pergunta_critica(ultima)
-        regras_relev = buscar_regras_tecnicas(ultima, top_k=4) if modo_critico else []
+        regras_relev = buscar_regras_tecnicas(ultima, top_k=4,
+                                              query_para_sala=ultima) if modo_critico else []
         antipadroes = antipadroes_load() if modo_critico else []
         if modo_critico:
             prefixo += '### MODO DELIBERATIVO ATIVO (Sistema 2) ###\n'
