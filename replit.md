@@ -179,3 +179,13 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - **Cliente Anthropic dedicado pro re-rank** com `timeout=8.0s` e `max_retries=0` (vs. 45s/1retry do cliente principal). Evita que um Haiku lento segure o worker do Gunicorn por até 45s e sufoque os outros 499 usuários — pior caso agora é 8s e cai pro fallback keyword.
 - **Fallback granular por modalidade:** se o re-rank zerar só os fatos (mas tinha candidatos por keyword), mantemos os fatos pela ordem keyword. Mesma lógica pros chunks. Antes, se o Claude desse nota baixa só pra uma das duas, perdíamos contexto silenciosamente.
 - **Logs de observabilidade:** cada chamada do re-rank loga `[rerank] ok em XXXms (F:N C:N de TOTAL)` ou `[rerank] falhou em XXXms (TipoErro: msg), keyword fallback`. Permite acompanhar p50/p95 e taxa de fallback em produção.
+
+## v3.7.1 — Re-rank REVERTIDO (2026-04-29)
+
+**Por que reverteu:** em produção, a v3.7 PIOROU as respostas. O re-rank descartava chunks específicos e o Claude completava com conhecimento próprio (alucinação). Caso real reportado pelo usuário: pergunta sobre "separação do trem de minério no pátio de recepção" — Viriato inventou nome de pátio errado (TFPM), inventou que aplicava emergência, citou "regras de freio do ROF" sem fonte. Antes da v3.7, a resposta era mais factual.
+
+**Hipótese da causa:** o Claude Haiku, ao pontuar 0-10, descartava com nota baixa (<2) os chunks que tinham vocabulário técnico não-obvio para ele (matrículas de linha, nomes operacionais), sobrando só o material genérico. O modelo principal recebia contexto pobre e completava com conhecimento próprio em vez de admitir lacuna.
+
+**O que ficou:** todas as melhorias da v3.6 continuam (sinônimos só na query, KEYWORDS_CRITICAS enxutas, score mínimo 1.0). Voltou para `buscar_chunks(top_k=6)` e `buscar_fatos(top_k=12)`. A função `rerank_candidatos()` permanece no código mas não é mais chamada pelo `/api/claude`.
+
+**Aprendizado:** re-ranking sem ground-truth no domínio específico é arriscado. Solução melhor pro futuro: **HyDE** (reescrever a pergunta como se fosse uma resposta ideal antes de buscar) ou **embeddings reais** quando uma API estiver disponível via integration.

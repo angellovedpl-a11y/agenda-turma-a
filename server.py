@@ -1246,8 +1246,7 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
-        # Rede mais larga na busca por keyword pra dar material pro re-rank
-        trechos = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
+        trechos = buscar_chunks(ultima, biblioteca, top_k=6) if ultima else []
 
         u = request.current_user
         matricula_user = u.get('matricula', '')
@@ -1255,15 +1254,11 @@ def claude_chat():
         role_user = u.get('role', '')
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
-        fatos_relev = buscar_fatos(ultima, top_k=25) if ultima else []
-
-        # Re-ranking semantico: pega os candidatos por keyword e pede pro
-        # Haiku pontuar relevancia de verdade. Custo: +1 chamada Haiku (~R$ 0,002).
-        if ultima and (fatos_relev or trechos):
-            fatos_relev, trechos = rerank_candidatos(
-                ultima, fatos_relev, trechos,
-                top_fatos=10, top_chunks=6
-            )
+        fatos_relev = buscar_fatos(ultima, top_k=12) if ultima else []
+        # v3.7 (re-rank semantico via Haiku) REVERTIDO: estava induzindo
+        # alucinacao porque o filtro descartava chunks especificos e o
+        # Claude completava com conhecimento proprio. A funcao
+        # rerank_candidatos() continua no codigo, mas nao e mais chamada.
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''
