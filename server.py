@@ -613,19 +613,6 @@ KEYWORDS_CRITICAS = {
     'l201', 'l202', 'l006', 'l007', 'l008', 'l030',
     'pneumatico', 'pneumático', 'vacuo', 'vácuo', 'ar', 'reservatorio', 'reservatório',
     'truque', 'caboose', 'pinhao', 'pinhão', 'kpa', 'psi', 'mpa',
-    # === Vocabulario operacional do dia-a-dia da Turma A (TFPM/Sao Luis) ===
-    # NAO incluir aqui termos genericos do PT-BR (vale, baixo, cima, partida,
-    # chegada, carga) — disparariam Modo Deliberativo em conversa nao-tecnica.
-    'separacao', 'separação', 'separar', 'corte', 'cortes', 'cortar',
-    'recepcao', 'recepção', 'despacho', 'despachar', 'despachos',
-    'formacao', 'formação', 'classificacao', 'classificação', 'triagem',
-    'pera', 'pêra', 'virador', 'viradores', 'vv', 'vv01', 'vv02', 'vv03', 'vv04', 'vv05', 'vv06',
-    'granel', 'pier', 'tm2', 'tfpm', 'mineroduto',
-    'minerio', 'minério',
-    'lote', 'lotes', 'estacionamento', 'estacionamentos',
-    'gdu', 'gdus',
-    'act', 'plr', 'stefem',
-    'circulacao', 'circulação', 'trafego', 'tráfego', 'avancado', 'avançado',
 }
 
 def pergunta_critica(texto: str) -> bool:
@@ -686,36 +673,11 @@ def _expandir_tokens(tokens):
             out.add('l' + t.zfill(3))
     return out
 
-_SINONIMOS_BUSCA = {
-    'separacao': {'corte', 'cortes', 'despacho', 'separar', 'separacao', 'separação'},
-    'separação': {'corte', 'cortes', 'despacho', 'separar', 'separacao', 'separação'},
-    'corte': {'separacao', 'separação', 'despacho', 'cortar', 'cortes'},
-    'minerio': {'gdt', 'gdts', 'minerio', 'minério', 'mineiro', 'vagao', 'vagão'},
-    'minério': {'gdt', 'gdts', 'minerio', 'minério', 'mineiro', 'vagao', 'vagão'},
-    'recepcao': {'vv', 'vv01', 'vv02', 'vv03', 'vv04', 'vv05', 'vv06', 'recepção'},
-    'recepção': {'vv', 'vv01', 'vv02', 'vv03', 'vv04', 'vv05', 'vv06', 'recepcao'},
-    'trem': {'composicao', 'composição', 'trens', 'lote', 'lotes'},
-    'trens': {'composicao', 'composição', 'trem', 'lote', 'lotes'},
-    'patio': {'pátio', 'patios', 'pátios'},
-    'pátio': {'patio', 'patios', 'pátios'},
-    'manobra': {'manobras', 'corte', 'separacao', 'despacho'},
-}
-
-def _expandir_sinonimos(tokens):
-    out = set(tokens)
-    for t in list(tokens):
-        if t in _SINONIMOS_BUSCA:
-            out |= _SINONIMOS_BUSCA[t]
-    return out
-
-def buscar_fatos(query: str, top_k: int = 12) -> list:
+def buscar_fatos(query: str, top_k: int = 8) -> list:
     qtokens_base = set(tokenize(query))
     if not qtokens_base:
         return []
-    # Expandimos sinonimos SO no lado da query (evita falso positivo:
-    # um fato sobre "corte de madeira" nao deve casar com "separacao de trem"
-    # so porque expandiriamos "corte" -> "separacao" tambem no lado do fato).
-    qtokens = _expandir_sinonimos(_expandir_tokens(qtokens_base))
+    qtokens = _expandir_tokens(qtokens_base)
     qlower = (query or '').lower()
     fatos = fatos_load()
     scored = []
@@ -729,9 +691,7 @@ def buscar_fatos(query: str, top_k: int = 12) -> list:
         for qt in qtokens_base:
             if len(qt) >= 3 and qt in ftxt_low:
                 score += 0.5
-        # Limiar minimo: score 0.5 (so substring) e ruido — exigir pelo
-        # menos um token-match de verdade (>=1.0) ou substring forte (>=1.5).
-        if score >= 1.0:
+        if score > 0:
             scored.append((score, f))
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
     return [s[1] for s in scored[:top_k]]
@@ -937,115 +897,6 @@ def buscar_chunks(query: str, biblioteca: dict, top_k: int = 3) -> list:
                 scored.append((score, doc['nome'], doc.get('categoria', 'outros'), idx, chunk))
     scored.sort(key=lambda x: -x[0])
     return [{'doc': s[1], 'categoria': s[2], 'idx': s[3], 'trecho': s[4]} for s in scored[:top_k]]
-
-# === RE-RANKING SEMANTICO VIA CLAUDE ===
-# Pega N candidatos (fatos + chunks) achados por keyword e pede pro Haiku
-# pontuar relevancia 0-10 em relacao a pergunta. Devolve so os mais relevantes.
-# Custo: 1 chamada Haiku extra por pergunta (~R$ 0,002).
-def _truncar(s: str, n: int) -> str:
-    s = (s or '').strip()
-    return s if len(s) <= n else s[:n - 1] + '…'
-
-# Cliente dedicado pro re-rank com timeout curto: nao deixa um Haiku lento
-# segurar o worker do Gunicorn por ate 45s (default do cliente principal).
-_anthropic_rerank_client = None
-def _get_rerank_client():
-    global _anthropic_rerank_client
-    if _anthropic_rerank_client is None:
-        _anthropic_rerank_client = Anthropic(
-            api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),
-            base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL"),
-            timeout=8.0,
-            max_retries=0
-        )
-    return _anthropic_rerank_client
-
-def rerank_candidatos(query: str, fatos: list, chunks: list,
-                       top_fatos: int = 10, top_chunks: int = 6) -> tuple:
-    """Re-ranking semantico via Claude Haiku.
-    Devolve (fatos_filtrados, chunks_filtrados) ordenados por relevancia.
-    Fallback granular: se a chamada falhar ou se o rerank zerar uma das
-    modalidades, mantemos a ordem keyword apenas daquela modalidade.
-    """
-    query = (query or '').strip()
-    if not query or (not fatos and not chunks):
-        return fatos[:top_fatos], chunks[:top_chunks]
-    # Se ja tem pouco candidato, nao vale a chamada extra
-    total = len(fatos) + len(chunks)
-    if total <= max(top_fatos, top_chunks):
-        return fatos[:top_fatos], chunks[:top_chunks]
-
-    itens = []  # (id_local, tipo, original_idx, snippet)
-    for i, f in enumerate(fatos):
-        snippet = _truncar(f.get('texto', ''), 280)
-        itens.append((len(itens), 'F', i, snippet))
-    for i, c in enumerate(chunks):
-        rotulo = f"[{c.get('doc','?')}] {c.get('trecho','')}"
-        snippet = _truncar(rotulo, 320)
-        itens.append((len(itens), 'C', i, snippet))
-
-    linhas = '\n'.join(f"{idl}|{tp}|{snip}" for idl, tp, _oi, snip in itens)
-    prompt = (
-        f"PERGUNTA: {_truncar(query, 400)}\n\n"
-        f"CANDIDATOS (cada linha: id|tipo|texto):\n{linhas}\n\n"
-        "Tarefa: pontue de 0 a 10 quanto cada candidato AJUDA a responder a pergunta.\n"
-        "0 = irrelevante. 10 = responde direto. 5 = relacionado mas tangencial.\n"
-        "Considere sinonimos do dominio ferroviario (separacao=corte=despacho; "
-        "minerio=GDT=vagao de minerio; recepcao=VV01-VV06; etc).\n"
-        "Devolva APENAS um JSON deste formato (sem markdown, sem comentario):\n"
-        '{"s":[{"id":0,"n":8},{"id":1,"n":2},...]}\n'
-        "Inclua TODOS os ids, mesmo os com nota baixa."
-    )
-    t0 = time.time()
-    try:
-        resp = _get_rerank_client().messages.create(
-            model='claude-haiku-4-5',
-            max_tokens=2000,
-            messages=[{'role': 'user', 'content': prompt}]
-        )
-        txt = resp.content[0].text.strip()
-        m = re.search(r'\{.*\}', txt, re.DOTALL)
-        if not m:
-            try: print(f'[rerank] sem JSON na resposta ({(time.time()-t0)*1000:.0f}ms), keyword fallback')
-            except Exception: pass
-            return fatos[:top_fatos], chunks[:top_chunks]
-        parsed = json.loads(m.group(0))
-        scores_raw = parsed.get('s') or []
-        scores = {}
-        for s in scores_raw:
-            try:
-                scores[int(s.get('id'))] = float(s.get('n', 0))
-            except (TypeError, ValueError):
-                continue
-        # Aplica scores
-        fatos_scored = []
-        chunks_scored = []
-        for idl, tp, oi, _snip in itens:
-            sc = scores.get(idl, 0.0)
-            if sc < 2.0:  # corte minimo: nada com nota < 2 entra
-                continue
-            if tp == 'F':
-                fatos_scored.append((sc, fatos[oi]))
-            else:
-                chunks_scored.append((sc, chunks[oi]))
-        fatos_scored.sort(key=lambda x: -x[0])
-        chunks_scored.sort(key=lambda x: -x[0])
-        out_f = [f for _s, f in fatos_scored[:top_fatos]]
-        out_c = [c for _s, c in chunks_scored[:top_chunks]]
-        # Fallback POR MODALIDADE: se o rerank zerou fatos mas tinha
-        # candidatos, mantem ordem keyword pra nao perder contexto util.
-        # Mesma logica pros chunks.
-        if not out_f and fatos:
-            out_f = fatos[:top_fatos]
-        if not out_c and chunks:
-            out_c = chunks[:top_chunks]
-        try: print(f'[rerank] ok em {(time.time()-t0)*1000:.0f}ms (F:{len(out_f)} C:{len(out_c)} de {total})')
-        except Exception: pass
-        return out_f, out_c
-    except Exception as e:
-        try: print(f'[rerank] falhou em {(time.time()-t0)*1000:.0f}ms ({type(e).__name__}: {e}), keyword fallback')
-        except Exception: pass
-        return fatos[:top_fatos], chunks[:top_chunks]
 
 # === CATEGORIZACAO VIA CLAUDE ===
 def categorizar_doc(nome: str, amostra: str) -> dict:
@@ -1254,11 +1105,7 @@ def claude_chat():
         role_user = u.get('role', '')
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
-        fatos_relev = buscar_fatos(ultima, top_k=12) if ultima else []
-        # v3.7 (re-rank semantico via Haiku) REVERTIDO: estava induzindo
-        # alucinacao porque o filtro descartava chunks especificos e o
-        # Claude completava com conhecimento proprio. A funcao
-        # rerank_candidatos() continua no codigo, mas nao e mais chamada.
+        fatos_relev = buscar_fatos(ultima, top_k=4) if ultima else []
 
         docs = biblioteca.get('documentos', [])
         prefixo = ''
@@ -1305,13 +1152,6 @@ def claude_chat():
                 '2) Audite essa resposta contra as REGRAS TECNICAS abaixo, condicoes de borda, limites numericos e ANTI-PADROES.\n'
                 '3) Se houver conflito, a regra com maior peso_de_confianca prevalece. Cite a fonte.\n'
                 '4) Se faltar dado, diga "nao tenho certeza" em vez de inventar numero.\n'
-                '5) REGRA CRITICA ANTI-ALUCINACAO: voce NAO PODE descrever procedimento operacional (manobra, '
-                'separacao, corte, freio, embarque, sequencia de qualquer atividade) usando conhecimento '
-                'ferroviario generico do seu treinamento. SO descreva o procedimento se ele aparecer LITERAL '
-                'em alguma fonte injetada neste prompt (memoria do usuario, fatos da turma, biblioteca, regras tecnicas ou o manual instrucoes_viriato.md). '
-                'Se nao tiver, fale honestamente que nao tem aquele procedimento gravado e pede pro colega ensinar. '
-                'PROIBIDO inventar nomes de patio, nomes de norma (ROF, MROF, IT-XXX, etc.), siglas, valores numericos, '
-                'sequencia de passos. Melhor uma resposta curta admitindo lacuna do que uma longa errada.\n'
                 'Sua resposta ao usuario deve ser DIRETA e curta - nao mostre o processo Sistema 1/2 explicitamente, '
                 'apenas a conclusao auditada. NAO use rotulos tipo [Via Beta] ou [Conclusao].\n'
             )
