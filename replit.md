@@ -285,6 +285,15 @@ Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carg
 - Função existe pra centralizar o mapeamento; **nenhum callsite foi alterado pra usar ela** porque os dados antigos do palace estão indexados com `ala='geral'` (default de `fatos_add`/`regras_tecnicas_add`), e filtrar por `'turma_a'` agora quebraria a busca em prod.
 - Pra ativar multi-turma de verdade no futuro: (1) popular `_USER_ALA_MAP`; (2) backfill `UPDATE palace_embeddings SET ala='turma_a' WHERE ala='geral'`; (3) trocar default em `fatos_add`/`regras_tecnicas_add`; (4) trocar callsite de `busca_semantica` em `claude_chat`.
 
+**Bloco G — Observabilidade unificada** (`/api/admin/metrics` + getters em 3 módulos)
+- Endpoint **`GET /api/admin/metrics`** (`@auth.require_admin`) agrega métricas dos 4 subsistemas em 1 JSON. Cada bloco em try/except → subsistema quebrado não derruba o resto.
+- `ratelimit.get_metrics()` → `requests_total`, `blocked_total`, `failopens_total`, `enabled`, `cleanup_every`, `cleanup_keep_min`.
+- `kvstore.get_pool_stats()` → introspeção tolerante de `ThreadedConnectionPool._used/_pool` e `BoundedSemaphore._value`: `pool_min`, `pool_max`, `em_uso`, `livres_no_pool`, `semaphore_disponivel`, `semaphore_em_espera`.
+- `_chat_cache_metrics` (process-local) → `hits`, `misses`, `not_modified_304`, `tamanho_atual`, `ttl_s`, `hit_ratio`.
+- `_palace_metrics` (já existente) + `_embed_para_busca.cache_info()` (LRU do Bloco D).
+- Top-level: `uptime_s` (`_PROCESS_STARTED_AT`), `worker_pid` (distingue workers gunicorn).
+- **Métricas são process-local**: não agregadas entre os 2 workers gunicorn. Trade-off consciente — agregar custaria round-trip extra por request crítico; pra trend monitoring de degradação 1 worker basta. Admin pode chamar 2x e somar pra número absoluto.
+
 **Bloco F — Rate limiting por matrícula** (`ratelimit.py` novo + 3 edits `server.py`)
 - Storage compartilhado em **Postgres** (tabela própria `ratelimit_buckets` com PK composta `(matricula, rota, bucket_min)`) — limite preciso entre os 2 workers gunicorn (in-memory daria 2x sub-ótimo).
 - Atômico: `INSERT ... ON CONFLICT DO UPDATE ... RETURNING count` (1 round-trip por request limitado).

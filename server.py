@@ -58,6 +58,9 @@ _kv_init.init_schema()
 # fail-open em qualquer erro (rate limiter NUNCA derruba o app).
 import ratelimit
 ratelimit.init_schema()
+
+# Marca momento de subida do worker pra calcular uptime em /api/admin/metrics (ETAPA 6).
+_PROCESS_STARTED_AT = time.time()
 for _k, _f in [
     ('users', os.path.join(DATA_DIR, 'users.json')),
     ('sessions', os.path.join(DATA_DIR, 'sessions.json')),
@@ -2297,6 +2300,66 @@ def memoria_fato_del(id_f):
         return jsonify({'error': 'Apenas o autor ou admin pode remover'}), 403
     return jsonify({'ok': fatos_remove(id_f)})
 
+# === API ADMIN - METRICAS (ETAPA 6 observabilidade) ===
+@app.route('/api/admin/metrics', methods=['GET'])
+@auth.require_admin
+def admin_metrics():
+    """Agrega metricas dos varios subsistemas pra observabilidade sob carga.
+    NUNCA quebra: cada bloco em try/except (se um subsistema cai, os outros
+    continuam reportando).
+
+    IMPORTANTE — contadores process-local: cada worker gunicorn tem o seu
+    proprio. Se houver 2 workers, este endpoint cai em 1 deles aleatoriamente
+    (load balancer). Pra serie temporal correta no dashboard: agrupar por
+    `worker_pid` ou somar varias chamadas (cada chamada potencialmente atinge
+    um worker diferente). Decisao consciente: agregar via storage compartilhado
+    custaria round-trip extra por request critico — pra trend monitoring de
+    degradacao 1 worker basta."""
+    out = {'uptime_s': round(time.time() - _PROCESS_STARTED_AT, 1)}
+    # Pool de conexoes Postgres
+    try:
+        out['kvstore'] = kvstore.get_pool_stats()
+    except Exception as e:
+        out['kvstore'] = {'erro': str(e)}
+    # Rate limiter
+    try:
+        out['ratelimit'] = ratelimit.get_metrics()
+    except Exception as e:
+        out['ratelimit'] = {'erro': str(e)}
+    # MemPalace (busca semantica)
+    try:
+        with _palace_metrics_lock:
+            palace = dict(_palace_metrics)
+        # Cache do _embed_para_busca (LRU, criado no Bloco D)
+        try:
+            ci = _embed_para_busca.cache_info()
+            palace['embed_cache'] = {
+                'hits': ci.hits, 'misses': ci.misses,
+                'maxsize': ci.maxsize, 'currsize': ci.currsize,
+            }
+        except Exception:
+            palace['embed_cache'] = {'indisponivel': True}
+        out['palace'] = palace
+    except Exception as e:
+        out['palace'] = {'erro': str(e)}
+    # Cache do polling /api/chat/conversas (Bloco B)
+    try:
+        with _chat_cache_metrics_lock:
+            ccm = dict(_chat_cache_metrics)
+        with _chat_conversas_cache_lock:
+            ccm['tamanho_atual'] = len(_chat_conversas_cache)
+        ccm['ttl_s'] = _CHAT_CONVERSAS_CACHE_TTL
+        total = ccm['hits'] + ccm['misses']
+        if total > 0:
+            ccm['hit_ratio'] = round(ccm['hits'] / total, 3)
+        out['chat_conversas_cache'] = ccm
+    except Exception as e:
+        out['chat_conversas_cache'] = {'erro': str(e)}
+    # Worker info (gunicorn pode ter varios — endpoint cai em 1 deles aleatorio)
+    out['worker_pid'] = os.getpid()
+    return jsonify(out)
+
+
 # === API ADMIN - PENDENTES DE MEMORIZACAO ===
 @app.route('/api/admin/memoria/pendentes', methods=['GET'])
 @auth.require_admin
@@ -2484,6 +2547,9 @@ import hashlib as _hashlib_chat
 _CHAT_CONVERSAS_CACHE_TTL = float(os.environ.get('CHAT_CONVERSAS_CACHE_TTL', '5'))
 _chat_conversas_cache = {}  # matricula -> (expires_at, payload_dict, etag)
 _chat_conversas_cache_lock = _threading.Lock()
+# Metricas do cache pra /api/admin/metrics (ETAPA 6). Process-local.
+_chat_cache_metrics = {'hits': 0, 'misses': 0, 'not_modified_304': 0}
+_chat_cache_metrics_lock = _threading.Lock()
 
 def _chat_conversas_cache_invalidar(matriculas=None):
     """Invalida cache pra um conjunto de matriculas (ou todos se None).
@@ -2511,12 +2577,19 @@ def chat_conversas():
     if cached and cached[0] > now:
         _exp, payload, etag = cached
         if inm == etag:
+            with _chat_cache_metrics_lock:
+                _chat_cache_metrics['hits'] += 1
+                _chat_cache_metrics['not_modified_304'] += 1
             return ('', 304, {'ETag': etag, 'Cache-Control': 'private, max-age=5'})
+        with _chat_cache_metrics_lock:
+            _chat_cache_metrics['hits'] += 1
         resp = jsonify(payload)
         resp.headers['ETag'] = etag
         resp.headers['Cache-Control'] = 'private, max-age=5'
         return resp
     # Cache miss: recalcula
+    with _chat_cache_metrics_lock:
+        _chat_cache_metrics['misses'] += 1
     convs = _chat_conversas_load()
     lido = _chat_lido_load(me)
     minhas = []
@@ -2554,6 +2627,10 @@ def chat_conversas():
     with _chat_conversas_cache_lock:
         _chat_conversas_cache[me] = (now + _CHAT_CONVERSAS_CACHE_TTL, payload, etag)
     if inm == etag:
+        # Bug pego no architect review: faltava incrementar nas metricas
+        # (caminho 304 pos-recompute, distorcia hit_ratio do dashboard).
+        with _chat_cache_metrics_lock:
+            _chat_cache_metrics['not_modified_304'] += 1
         return ('', 304, {'ETag': etag, 'Cache-Control': 'private, max-age=5'})
     resp = jsonify(payload)
     resp.headers['ETag'] = etag

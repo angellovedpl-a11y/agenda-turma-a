@@ -299,3 +299,35 @@ def health() -> bool:
     except Exception as e:
         print(f'[kvstore] erro health: {e}')
         return False
+
+
+def get_pool_stats() -> dict:
+    """Stats do pool de conexoes pra observabilidade (/api/admin/metrics).
+    Acessa atributos privados do ThreadedConnectionPool/BoundedSemaphore —
+    tolera qualquer mudanca futura da lib retornando o que conseguir."""
+    stats = {
+        'pool_min': _POOL_MIN,
+        'pool_max': _POOL_MAX,
+        'acquire_timeout_s': _POOL_ACQUIRE_TIMEOUT,
+        'pool_inicializado': _pool is not None,
+    }
+    try:
+        if _pool is not None:
+            # ThreadedConnectionPool: _used = dict de conns em uso, _pool = lista de livres
+            used = getattr(_pool, '_used', None)
+            free = getattr(_pool, '_pool', None)
+            if used is not None:
+                stats['em_uso'] = len(used)
+            if free is not None:
+                stats['livres_no_pool'] = len(free)
+        # BoundedSemaphore._value: slots ainda disponiveis (privado mas estavel)
+        sem_avail = getattr(_pool_semaphore, '_value', None)
+        if sem_avail is not None:
+            stats['semaphore_disponivel'] = sem_avail
+            # Snapshot nao-atomico de `em_uso` e `sem_avail` pode dar negativo
+            # entre as 2 leituras — clamp pra evitar metrica visualmente errada.
+            espera = (_POOL_MAX - sem_avail) - stats.get('em_uso', 0)
+            stats['semaphore_em_espera'] = max(0, espera)
+    except Exception as e:
+        stats['erro_introspeccao'] = str(e)
+    return stats

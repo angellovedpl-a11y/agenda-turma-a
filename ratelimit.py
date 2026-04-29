@@ -86,6 +86,11 @@ _failopen_counter = 0
 _failopen_counter_lock = threading.Lock()
 _FAILOPEN_LOG_EVERY = _parse_int_env('RATELIMIT_FAILOPEN_LOG_EVERY', 100, minimum=1)
 
+# Metricas pra observabilidade (ETAPA 6) — incrementadas em check_and_increment.
+# Process-local (cada worker tem o seu); o /api/admin/metrics agrega via getter.
+_metrics = {'requests_total': 0, 'blocked_total': 0}
+_metrics_lock = threading.Lock()
+
 
 def _maybe_cleanup(now_bucket):
     """A cada CLEANUP_EVERY chamadas, remove buckets > CLEANUP_KEEP_MIN minutos.
@@ -118,6 +123,8 @@ def check_and_increment(matricula: str, rota: str, max_per_min: int) -> tuple:
     """
     if not _RL_ENABLED or not matricula or max_per_min <= 0:
         return (True, 0, 0)
+    with _metrics_lock:
+        _metrics['requests_total'] += 1
     now = int(time.time())
     bucket_min = now // 60
     try:
@@ -137,6 +144,8 @@ def check_and_increment(matricula: str, rota: str, max_per_min: int) -> tuple:
         _maybe_cleanup(bucket_min)
         if count > max_per_min:
             retry_after = max(1, 60 - (now % 60))
+            with _metrics_lock:
+                _metrics['blocked_total'] += 1
             return (False, count, retry_after)
         return (True, count, 0)
     except Exception as e:
@@ -196,3 +205,18 @@ def rate_limit(max_per_min: int, env_var: str = None, route_key: str = None):
             return fn(*a, **kw)
         return wrapped
     return decorator
+
+
+def get_metrics() -> dict:
+    """Snapshot das metricas pra /api/admin/metrics. Process-local — cada
+    worker gunicorn tem seu proprio contador (nao tenta agregar entre workers
+    pra evitar race condition + custo extra; admin pode chamar 2x e somar
+    se quiser, mas pra trend monitoring de 1 worker so ja basta)."""
+    with _metrics_lock:
+        m = dict(_metrics)
+    with _failopen_counter_lock:
+        m['failopens_total'] = _failopen_counter
+    m['enabled'] = _RL_ENABLED
+    m['cleanup_every'] = _CLEANUP_EVERY
+    m['cleanup_keep_min'] = _CLEANUP_KEEP_MIN
+    return m
