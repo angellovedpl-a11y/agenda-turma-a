@@ -456,15 +456,21 @@ def fatos_load() -> list:
     d = kvstore.load('fatos_turma')
     return d.get('fatos', []) if isinstance(d, dict) else []
 
-def fatos_add(texto: str, matricula: str, nome: str) -> dict:
+def fatos_add(texto: str, matricula: str, nome: str, ala: str = 'geral', sala: str = 'geral') -> dict:
     texto = (texto or '').strip()[:800]
     if len(texto) < 5:
         return {'ok': False, 'erro': 'Fato muito curto'}
     fatos = fatos_load()
     import time as _t
+    # FASE 1 MemPalace: campos opcionais ala/sala (default "geral").
+    # Apenas persistidos aqui; nenhum outro fluxo (busca, system prompt,
+    # rotas, comportamento do Viriato) foi alterado.
+    ala_n = (ala or '').strip().lower()[:60] or 'geral'
+    sala_n = (sala or '').strip().lower()[:60] or 'geral'
     novo = {'id': int(_t.time() * 1000), 'data': time.strftime('%Y-%m-%d'),
             'texto': texto, 'matricula': matricula, 'autor': nome or matricula,
-            'tokens': tokenize(texto)}
+            'tokens': tokenize(texto),
+            'ala': ala_n, 'sala': sala_n}
     fatos.insert(0, novo)
     fatos = fatos[:MAX_FATOS_TURMA]
     kvstore.save('fatos_turma', {'fatos': fatos})
