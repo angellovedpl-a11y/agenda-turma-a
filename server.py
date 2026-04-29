@@ -1437,15 +1437,31 @@ def claude_chat():
         texto_limpo = marcador_ev.sub('', texto_limpo)
 
         regras_sugeridas = []
+        # FASE 1 MemPalace: regex preserva os 5 grupos originais (conceito,
+        # regra, borda, peso, fonte) e ganha "slots" APENAS para ala/sala
+        # entre eles. Restringir a "ala|sala" (em vez de \w+) evita que o
+        # slot consuma "fonte=" e quebre o grupo 5. Marcadores antigos
+        # (sem ala/sala) continuam batendo identico ao comportamento anterior.
+        _slot_extras = r'(?:\s*\|\s*(?:ala|sala)\s*=\s*"[^"\n]*")*'
         marcador_rg = re.compile(
             r'\[\s*SALVAR[_ ]REGRA\s+'
             r'conceito\s*=\s*"([^"\n]+)"\s*\|\s*'
             r'regra\s*=\s*"([^"\n]+)"'
+            + _slot_extras +
             r'(?:\s*\|\s*borda\s*=\s*"([^"\n]*)")?'
+            + _slot_extras +
             r'(?:\s*\|\s*peso\s*=\s*(\d+(?:\.\d+)?))?'
+            + _slot_extras +
             r'(?:\s*\|\s*fonte\s*=\s*"([^"\n]*)")?'
+            + _slot_extras +
             r'\s*\]',
             re.IGNORECASE
+        )
+        # FASE 1 MemPalace: regex auxiliar pra extrair ala/sala em QUALQUER
+        # posicao do marcador (sem renumerar grupos da regex principal).
+        # Marcadores antigos sem ala/sala caem no default "geral".
+        extras_palacio_rg = re.compile(
+            r'\b(ala|sala)\s*=\s*"([^"\n]*)"', re.IGNORECASE
         )
         for m in marcador_rg.finditer(texto_limpo):
             try:
@@ -1453,12 +1469,20 @@ def claude_chat():
             except (ValueError, TypeError):
                 peso_val = 0.7
             peso_val = max(0.0, min(1.0, peso_val))
+            extras = {'ala': 'geral', 'sala': 'geral'}
+            for em in extras_palacio_rg.finditer(m.group(0)):
+                chave = em.group(1).lower()
+                valor = (em.group(2) or '').strip().lower()[:60]
+                if valor:
+                    extras[chave] = valor
             sugestao = {
                 'conceito': m.group(1),
                 'regra_de_ouro': m.group(2),
                 'condicao_de_borda': m.group(3) or '',
                 'peso_de_confianca': peso_val,
                 'fonte': m.group(5) or (nome_user or matricula_user),
+                'ala': extras['ala'],
+                'sala': extras['sala'],
             }
             if is_admin_user:
                 r_rg = regras_tecnicas_add(sugestao, autor=nome_user or matricula_user)

@@ -170,3 +170,11 @@ Preparativos pra suportar a entrada de 400 novos usuários (~500 ativos):
 - **Nada é descartado**: items de outras alas/salas continuam no resultado, só ficam mais embaixo.
 - Call sites (`server.py:1178` e `1216`) passam `query_para_sala=ultima` → bullet 1 ATIVO.
 - `ala_user` deixado como `None` nos callers → bullet 2 DORMENTE até definição do mapeamento matrícula→turma (não há campo `turma` no perfil hoje; o app é "Agenda Turma A" então a Turma A é implícita por design — aguardando decisão do dono se ativar `ala_user="turma_a"` por default ou se adicionar campo explícito no perfil).
+
+**Item 4 — parser do marcador `[SALVAR_REGRA ...]` aceita `ala`/`sala` (`server.py:1442-1490`)**
+- A regex original (`conceito | regra | borda? | peso? | fonte?`) ganhou "slots" `_slot_extras = (?:\s*\|\s*(?:ala|sala)\s*=\s*"...")*` entre cada par de campos. Os 5 grupos originais (1-5) **não foram renumerados** — código que usa `m.group(1..5)` continua intacto.
+- Slot restrito a `ala|sala` (em vez de `\w+`) pra evitar consumo acidental do campo `fonte=` (tentativa anterior com `\w+` quebrou o grupo 5 — corrigido).
+- Sintaxe livre: `ala="..."` e `sala="..."` podem aparecer em **qualquer posição** entre `regra` e `]`.
+- Extração via regex auxiliar `extras_palacio_rg` aplicada em `m.group(0)` (string completa do marcador). Sanitização: lowercase + trim + max 60 chars + default `"geral"`.
+- Suite de 8 testes validada: marcador antigo (compat), exemplo do dono, ordem trocada, só ala, case misto, marcador mínimo, ala/sala depois de fonte, multi-marcadores.
+- ⚠️ DORMENTE até decisão do dono: o **system prompt do Viriato NÃO foi alterado** (a regra principal proíbe). Hoje o Viriato emite marcadores sem `ala`/`sala` → caem nos defaults. O parser está pronto pra receber, basta uma fase futura instruir o Viriato.
