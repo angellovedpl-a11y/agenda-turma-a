@@ -496,6 +496,11 @@ def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
     except Exception:
         peso = 1.0
     import time as _t
+    # FASE 1 MemPalace: campos opcionais ala/sala (default "geral").
+    # Sao apenas persistidos aqui; nenhum outro fluxo (busca, system prompt,
+    # rotas, comportamento do Viriato) foi alterado.
+    ala = (regra.get('ala') or '').strip().lower()[:60] or 'geral'
+    sala = (regra.get('sala') or '').strip().lower()[:60] or 'geral'
     nova = {
         'id': int(_t.time() * 1000),
         'data': time.strftime('%Y-%m-%d'),
@@ -507,6 +512,8 @@ def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
         'erro_corrigido': (regra.get('erro_corrigido') or '').strip()[:400],
         'tokens': tokenize(conceito + ' ' + regra_ouro + ' ' + (regra.get('condicao_de_borda') or '')),
         'autor': autor,
+        'ala': ala,
+        'sala': sala,
     }
     regras = regras_tecnicas_load()
     regras.insert(0, nova)
