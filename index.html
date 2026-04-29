@@ -334,17 +334,43 @@ body.sec-chat #content{flex:1 1 0;min-height:0;display:flex;flex-direction:colum
 .btn-hoje:hover{border-color:var(--neon);color:var(--neon)}
 .month-actions{display:flex;align-items:center;gap:8px}
 .btn-legend{
+  position:relative;
   width:38px;height:38px;border-radius:10px;background:#141414;border:1px solid var(--border);
   color:var(--text-dim);font-family:var(--mono);font-size:16px;font-weight:700;
   display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;
 }
 .btn-legend:hover,.btn-legend.on{border-color:var(--neon);color:var(--neon)}
+.btn-legend.has-filter{border-color:var(--neon);color:var(--neon)}
+.btn-legend.has-filter::after{
+  content:"";position:absolute;top:5px;right:5px;width:9px;height:9px;
+  background:var(--neon);border-radius:50%;border:2px solid var(--card);
+  box-shadow:0 0 6px var(--neon);
+}
 [data-theme="light"] .btn-legend{background:var(--card)}
 .cal-legend{margin-top:14px;padding-top:14px;border-top:1px solid var(--border-soft)}
 .cal-legend[hidden]{display:none}
-.cal-legend-tit{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:var(--text-mute);font-weight:600;margin-bottom:10px;text-transform:uppercase}
-.cal-legend-items{display:flex;flex-wrap:wrap;gap:8px 14px}
+.cal-legend-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.cal-legend-tit{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:var(--text-mute);font-weight:600;text-transform:uppercase}
+.cal-legend-hint{font-size:11px;color:var(--text-mute);font-family:var(--sans)}
+.cal-legend-clear{
+  margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:1.4px;
+  background:transparent;border:1px solid var(--border-soft);color:var(--text-dim);
+  padding:5px 10px;border-radius:999px;cursor:pointer;text-transform:uppercase;
+  transition:all .15s;
+}
+.cal-legend-clear:hover{border-color:var(--neon);color:var(--neon)}
+.cal-legend-items{display:flex;flex-wrap:wrap;gap:8px 10px}
 .cal-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);background:var(--card-2);border:1px solid var(--border-soft);border-radius:999px;padding:4px 10px}
+button.cal-legend-item{cursor:pointer;font:inherit;transition:all .15s;outline:none}
+button.cal-legend-item:hover{border-color:var(--neon);color:var(--text)}
+button.cal-legend-item:focus-visible{box-shadow:0 0 0 2px var(--neon)}
+button.cal-legend-item.active{
+  border-color:var(--neon);color:var(--text);
+  background:rgba(0,230,118,.10);
+  box-shadow:inset 0 0 0 1px var(--neon);
+}
+button.cal-legend-item.off{opacity:.4}
+button.cal-legend-item.off:hover{opacity:.75}
 .cl-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 10px}
 .cl-emo{font-size:14px;line-height:1}
 .cl-lbl{font-family:var(--sans)}
@@ -860,11 +886,13 @@ const S={
   curAno:HOJE.getFullYear(),
   viriatoOpen:false,
   history:[],
+  evFilter:[],
 };
 function saveLS(){
   try{
     localStorage.setItem(LS_KEY,JSON.stringify({
-      view:S.view,curMes:S.curMes,curAno:S.curAno
+      view:S.view,curMes:S.curMes,curAno:S.curAno,
+      evFilter:Array.isArray(S.evFilter)?S.evFilter:[]
     }));
   }catch(e){}
 }
@@ -876,9 +904,27 @@ function loadLS(){
     if(d.view)S.view=d.view;
     if(typeof d.curMes==="number")S.curMes=d.curMes;
     if(typeof d.curAno==="number")S.curAno=d.curAno;
+    if(Array.isArray(d.evFilter))S.evFilter=d.evFilter.filter(t=>EVENTO_TIPOS[t]);
   }catch(e){}
 }
 loadLS();
+function passaFiltroEv(e){
+  if(!S.evFilter||!S.evFilter.length)return true;
+  const t=e&&e.tipo;
+  const efetivo=(t&&EVENTO_TIPOS[t])?t:"outro";
+  return S.evFilter.includes(efetivo);
+}
+function toggleEvFilter(t){
+  if(!Array.isArray(S.evFilter))S.evFilter=[];
+  const i=S.evFilter.indexOf(t);
+  if(i>=0)S.evFilter.splice(i,1);
+  else S.evFilter.push(t);
+  saveLS();
+}
+function clearEvFilter(){
+  S.evFilter=[];
+  saveLS();
+}
 
 // ===== Cálculos =====
 function diffDias(de,ate){
@@ -918,7 +964,8 @@ function renderMensal(){
   const startOffset=primeiro.getDay();
   const diasMes=new Date(ano,mes+1,0).getDate();
   const diasMesAnt=new Date(ano,mes,0).getDate();
-  const legendOpen=getLegendOpen();
+  const filterAtivo=Array.isArray(S.evFilter)&&S.evFilter.length>0;
+  const legendOpen=getLegendOpen()||filterAtivo;
 
   let html=`
     <div class="month-bar">
@@ -932,7 +979,7 @@ function renderMensal(){
         </button>
       </div>
       <div class="month-actions">
-        <button class="btn-legend ${legendOpen?"on":""}" id="btnLegend" aria-label="Legenda das cores dos eventos" aria-expanded="${legendOpen?"true":"false"}" aria-controls="calLegend" title="Legenda das cores dos eventos">?</button>
+        <button class="btn-legend ${legendOpen?"on":""} ${filterAtivo?"has-filter":""}" id="btnLegend" aria-label="${filterAtivo?'Filtro ativo — abrir legenda':'Legenda das cores dos eventos'}" aria-expanded="${legendOpen?"true":"false"}" aria-controls="calLegend" title="${filterAtivo?'Filtro ativo — toque para ajustar':'Legenda e filtro de tipos'}">?</button>
         <button class="btn-hoje" id="btnHoje">HOJE</button>
       </div>
     </div>
@@ -955,7 +1002,7 @@ function renderMensal(){
     const today=k===HOJE_KEY;
     const fer=FER[k]?"fer":"";
     const ferNome=FER[k]||"";
-    const evs=eventosNoDia(k);
+    const evs=eventosNoDia(k).filter(passaFiltroEv);
     const evDots=evs.length?`<span class="evs">${evs.slice(0,5).map(e=>`<span class="evdot" style="background:${evTipoInfo(e.tipo).cor}" title="${escapeHtml(evTipoInfo(e.tipo).label)}: ${escapeHtml(e.titulo||"")}"></span>`).join("")}</span>`:"";
     const titParts=[ferNome,...evs.map(e=>`${evTipoInfo(e.tipo).emoji} ${e.titulo||""}`)].filter(Boolean);
     html+=`<div class="day ${fol?"folga":"trab"} ${today?"today":""} ${fer}" data-k="${k}" role="button" tabindex="0" title="${escapeHtml(titParts.join(" • "))}"><span class="num">${d}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span>${evDots}</div>`;
@@ -968,11 +1015,26 @@ function renderMensal(){
     const fol=isFolga(dt);
     html+=`<div class="day outside ${fol?"folga":"trab"}"><span class="num">${i}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
   }
+  const chipsHtml=Object.entries(EVENTO_TIPOS).map(([key,t])=>{
+    const ativo=S.evFilter&&S.evFilter.includes(key);
+    const desligado=filterAtivo&&!ativo;
+    const cls=`cal-legend-item legend-btn${ativo?" active":""}${desligado?" off":""}`;
+    return `<button type="button" class="${cls}" data-tipo="${key}" aria-pressed="${ativo?"true":"false"}" title="${ativo?'Remover filtro: ':'Filtrar por: '}${escapeHtml(t.label)}"><span class="cl-dot" style="background:${t.cor}"></span><span class="cl-emo">${t.emoji}</span><span class="cl-lbl">${escapeHtml(t.label)}</span></button>`;
+  }).join("");
+  const filterCount=filterAtivo?S.evFilter.length:0;
+  const hint=filterAtivo
+    ?`<span class="cal-legend-hint">Mostrando ${filterCount} de ${Object.keys(EVENTO_TIPOS).length} tipos</span>`
+    :`<span class="cal-legend-hint">Toque em um tipo para filtrar</span>`;
+  const clearBtn=filterAtivo?`<button type="button" class="cal-legend-clear" id="calLegendClear" title="Mostrar todos os tipos">Limpar filtro</button>`:"";
   html+=`</div>
     <div class="cal-legend" id="calLegend"${legendOpen?"":" hidden"}>
-      <div class="cal-legend-tit">Cores dos eventos</div>
+      <div class="cal-legend-head">
+        <div class="cal-legend-tit">Cores dos eventos</div>
+        ${hint}
+        ${clearBtn}
+      </div>
       <div class="cal-legend-items">
-        ${Object.values(EVENTO_TIPOS).map(t=>`<span class="cal-legend-item"><span class="cl-dot" style="background:${t.cor}"></span><span class="cl-emo">${t.emoji}</span><span class="cl-lbl">${escapeHtml(t.label)}</span></span>`).join("")}
+        ${chipsHtml}
       </div>
     </div>
   </div>`;
@@ -1156,6 +1218,18 @@ function bindCalNav(){
     else{lg.setAttribute("hidden","");bl.classList.remove("on");bl.setAttribute("aria-expanded","false");}
     setLegendOpen(open);
   };
+  document.querySelectorAll(".legend-btn[data-tipo]").forEach(b=>{
+    b.addEventListener("click",(e)=>{
+      e.preventDefault();
+      const t=b.dataset.tipo;
+      if(!EVENTO_TIPOS[t])return;
+      toggleEvFilter(t);
+      setLegendOpen(true);
+      render();
+    });
+  });
+  const cc=document.getElementById("calLegendClear");
+  if(cc)cc.onclick=(e)=>{e.preventDefault();clearEvFilter();render();};
   document.querySelectorAll(".mini-day[data-k],.day[data-k]").forEach(d=>{
     d.style.cursor="pointer";
     d.onclick=()=>openDia(d.dataset.k);
@@ -2063,9 +2137,17 @@ async function openDia(k){
   const fol=isFolga(dt);
   const ferNome=FER[k]||"";
   const ferBlock=ferNome?`<div style="margin-bottom:10px;padding:10px 14px;background:rgba(124,58,237,.14);border:1px solid #7c3aed55;border-radius:10px;font-size:13px;color:var(--purple);font-weight:600">🎉 Feriado: ${ferNome}</div>`:"";
+  const filterAtivoDia=Array.isArray(S.evFilter)&&S.evFilter.length>0;
+  const filterChips=filterAtivoDia
+    ? S.evFilter.map(t=>{const ti=evTipoInfo(t);return `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--card-2);border:1px solid var(--border-soft);border-radius:999px;padding:2px 8px;font-size:11px;color:var(--text-dim)"><span style="width:8px;height:8px;border-radius:50%;background:${ti.cor}"></span><span>${ti.emoji}</span><span>${escapeHtml(ti.label)}</span></span>`}).join("")
+    : "";
+  const filterBanner=filterAtivoDia
+    ? `<div id="diaFilterBanner" style="margin-bottom:10px;padding:8px 12px;background:rgba(0,230,118,.08);border:1px solid #3be79955;border-radius:8px;font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-weight:600;color:var(--neon)">🔎 Filtro ativo:</span>${filterChips}<button type="button" id="diaClearFilter" style="margin-left:auto;background:transparent;border:1px solid var(--border-soft);color:var(--text-dim);padding:3px 10px;border-radius:999px;font-size:11px;cursor:pointer">Limpar</button></div>`
+    : "";
   openModal(`${dow}, ${dataBr}`,`
     ${ferBlock}
     <div style="margin-bottom:12px;padding:8px 12px;background:${fol?"rgba(59,231,153,.1)":"rgba(255,138,76,.1)"};border-radius:8px;font-size:12px;color:${fol?"var(--neon)":"var(--orange)"}">${fol?"🟢 Folga":"🟠 Trabalho"}</div>
+    ${filterBanner}
     <div id="diaList" style="margin-bottom:14px;max-height:240px;overflow:auto"><div style="color:var(--muted);font-size:13px">Carregando...</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <button id="diaEv" class="btn-primary" style="font-size:12px;padding:10px 6px">📢 Mural</button>
@@ -2079,8 +2161,8 @@ async function openDia(k){
       try{
         const [rEv,rPess,rMem,rDi]=await Promise.all([apiFetch("/api/mem/eventos"),apiFetch("/api/eventos-pessoais"),apiFetch("/api/memoria"),apiFetch("/api/diario")]);
         const dEv=await rEv.json();const dPess=await rPess.json();const dMem=await rMem.json();const dDi=await rDi.json();
-        const evs=(dEv.eventos||[]).filter(e=>e.data===k);
-        const evsPess=(dPess.eventos||[]).filter(e=>e.data===k);
+        const evs=(dEv.eventos||[]).filter(e=>e.data===k).filter(passaFiltroEv);
+        const evsPess=(dPess.eventos||[]).filter(e=>e.data===k).filter(passaFiltroEv);
         const notas=(dMem.pessoal||[]).filter(p=>(p.texto||"").startsWith(`[DIA ${k}]`));
         const diarios=(dDi.entradas||[]).filter(d=>d.data===k);
         const renderEv=(e,pess)=>{
@@ -2165,6 +2247,14 @@ async function openDia(k){
       const t=prompt(`Nota para ${dataBr}:`);
       if(!t||!t.trim())return;
       apiFetch("/api/memoria/pessoal",{method:"POST",body:JSON.stringify({texto:`[DIA ${k}] ${t.trim()}`})}).then(()=>{showToast("✅ Nota salva");refresh();});
+    };
+    const cf=document.getElementById("diaClearFilter");
+    if(cf)cf.onclick=()=>{
+      clearEvFilter();
+      const banner=document.getElementById("diaFilterBanner");
+      if(banner)banner.remove();
+      refresh();
+      render();
     };
   });
 }

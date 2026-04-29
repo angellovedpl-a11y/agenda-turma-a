@@ -298,3 +298,15 @@ Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carg
 - Anti-backlog: 8 chamadas concorrentes com palace lento (sleep 2s) → 4 entram no executor, 4 caem em `rejeitadas_backlog`; depois das zumbis terminarem o semaphore volta a 4/4.
 - `/api/palace/status` mostra todos os campos novos.
 - Boot ok: `[kvstore] pool criado (min=2, max=32)`, `/api/auth/me 200`, `/api/chat/conversas 200`.
+
+## Filtro de tipos no calendário (29/04/2026)
+
+A legenda de cores dos eventos no calendário mensal virou também um filtro interativo.
+
+- `S.evFilter` (array de chaves de `EVENTO_TIPOS`) é persistido em `localStorage` junto com o resto do estado da agenda. Vazio = mostrar todos os tipos.
+- Helpers em `index.html`: `passaFiltroEv(e)`, `toggleEvFilter(t)`, `clearEvFilter()`.
+- Cada chip da legenda (`.cal-legend-item.legend-btn`) é um `<button>` com `data-tipo` que alterna o filtro. Tipos selecionados ficam realçados; os não selecionados ficam esmaecidos quando há filtro ativo.
+- Botão "Limpar filtro" aparece no cabeçalho da legenda quando há tipos selecionados.
+- Ao ativar um filtro a legenda é forçada a abrir (`setLegendOpen(true)`) e o botão `?` ganha o ponto verde indicador (`.btn-legend.has-filter`).
+- O filtro também é aplicado em `openDia(k)`: tanto a lista do mural quanto a lista de eventos pessoais filtram por `passaFiltroEv`. Um banner mostra os tipos ativos e oferece um botão "Limpar" inline.
+- Notas e entradas do diário **não** são filtradas — o filtro é só de tipos de evento.
