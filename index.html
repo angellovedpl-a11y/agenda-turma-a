@@ -332,6 +332,26 @@ body.sec-chat #content{flex:1 1 0;min-height:0;display:flex;flex-direction:colum
   transition:all .15s;
 }
 .btn-hoje:hover{border-color:var(--neon);color:var(--neon)}
+.month-actions{display:flex;align-items:center;gap:8px}
+.btn-legend{
+  width:38px;height:38px;border-radius:10px;background:#141414;border:1px solid var(--border);
+  color:var(--text-dim);font-family:var(--mono);font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;
+}
+.btn-legend:hover,.btn-legend.on{border-color:var(--neon);color:var(--neon)}
+[data-theme="light"] .btn-legend{background:var(--card)}
+.cal-legend{margin-top:14px;padding-top:14px;border-top:1px solid var(--border-soft)}
+.cal-legend[hidden]{display:none}
+.cal-legend-tit{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;color:var(--text-mute);font-weight:600;margin-bottom:10px;text-transform:uppercase}
+.cal-legend-items{display:flex;flex-wrap:wrap;gap:8px 14px}
+.cal-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);background:var(--card-2);border:1px solid var(--border-soft);border-radius:999px;padding:4px 10px}
+.cl-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 10px}
+.cl-emo{font-size:14px;line-height:1}
+.cl-lbl{font-family:var(--sans)}
+@media (max-width:720px){
+  .cal-legend-item{font-size:12px;padding:3px 8px}
+  .btn-legend{width:34px;height:34px}
+}
 
 /* Calendário mensal */
 .cal-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
@@ -886,12 +906,19 @@ function calcResumoAnual(ano){
 }
 
 // ===== Render Mensal =====
+function getLegendOpen(){
+  try{return localStorage.getItem("turmaA_legendOpen")==="1";}catch(e){return false;}
+}
+function setLegendOpen(v){
+  try{localStorage.setItem("turmaA_legendOpen",v?"1":"0");}catch(e){}
+}
 function renderMensal(){
   const ano=S.curAno,mes=S.curMes;
   const primeiro=new Date(ano,mes,1);
   const startOffset=primeiro.getDay();
   const diasMes=new Date(ano,mes+1,0).getDate();
   const diasMesAnt=new Date(ano,mes,0).getDate();
+  const legendOpen=getLegendOpen();
 
   let html=`
     <div class="month-bar">
@@ -904,7 +931,10 @@ function renderMensal(){
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
-      <button class="btn-hoje" id="btnHoje">HOJE</button>
+      <div class="month-actions">
+        <button class="btn-legend ${legendOpen?"on":""}" id="btnLegend" aria-label="Legenda das cores dos eventos" aria-expanded="${legendOpen?"true":"false"}" aria-controls="calLegend" title="Legenda das cores dos eventos">?</button>
+        <button class="btn-hoje" id="btnHoje">HOJE</button>
+      </div>
     </div>
     <div class="cal-wrap">
       <div class="cal-dow">${DOW.map(d=>`<div>${d}</div>`).join("")}</div>
@@ -938,7 +968,14 @@ function renderMensal(){
     const fol=isFolga(dt);
     html+=`<div class="day outside ${fol?"folga":"trab"}"><span class="num">${i}</span><span class="lbl">${fol?"FOLGA":"TRAB"}</span></div>`;
   }
-  html+=`</div></div>`;
+  html+=`</div>
+    <div class="cal-legend" id="calLegend"${legendOpen?"":" hidden"}>
+      <div class="cal-legend-tit">Cores dos eventos</div>
+      <div class="cal-legend-items">
+        ${Object.values(EVENTO_TIPOS).map(t=>`<span class="cal-legend-item"><span class="cl-dot" style="background:${t.cor}"></span><span class="cl-emo">${t.emoji}</span><span class="cl-lbl">${escapeHtml(t.label)}</span></span>`).join("")}
+      </div>
+    </div>
+  </div>`;
   // Caixa "ESTA SEMANA" — 7 dias da semana corrente
   {
     const dow=HOJE.getDay();
@@ -1111,6 +1148,14 @@ function bindCalNav(){
   if(na)na.onclick=()=>{S.curAno++;saveLS();render();};
   const bh=document.getElementById("btnHoje");
   if(bh)bh.onclick=()=>{S.curMes=HOJE.getMonth();S.curAno=HOJE.getFullYear();saveLS();render();};
+  const bl=document.getElementById("btnLegend");
+  const lg=document.getElementById("calLegend");
+  if(bl&&lg)bl.onclick=()=>{
+    const open=lg.hasAttribute("hidden");
+    if(open){lg.removeAttribute("hidden");bl.classList.add("on");bl.setAttribute("aria-expanded","true");}
+    else{lg.setAttribute("hidden","");bl.classList.remove("on");bl.setAttribute("aria-expanded","false");}
+    setLegendOpen(open);
+  };
   document.querySelectorAll(".mini-day[data-k],.day[data-k]").forEach(d=>{
     d.style.cursor="pointer";
     d.onclick=()=>openDia(d.dataset.k);
