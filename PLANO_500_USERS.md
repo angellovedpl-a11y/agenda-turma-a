@@ -30,3 +30,10 @@ Suportar **500 usuários simultâneos** com boa performance, mantendo todas as f
 - [x] Fase 3: ThreadPoolExecutor dedicado com timeout 800ms + métricas (`_palace_metrics`)
 - [x] Banco de dados PostgreSQL de produção conectado
 - [x] Tarefa #14: Filtro de calendário por tipo de evento (aguardando "Apply changes")
+
+### 🔲 Pendente — executar nesta ordem
+
+#### ETAPA 1 — Aplicar tarefa #14 (filtro calendário)
+
+- [ ] Clicar em "Apply changes to main version" na tarefa #14 no painel do Replit Agent
+- [ ] Verificar que o deploy foi bem-sucedido
