@@ -487,18 +487,7 @@ def fatos_remove(id_fato: int) -> bool:
 # === MEMPALACE — REGRAS TECNICAS (synaptic_weights) ===
 # Estrutura rica para conhecimento crítico (segurança, normas operacionais).
 # Cada regra tem: regra_de_ouro, condicao_de_borda, peso_de_confianca, fonte, erro_corrigido.
-def nteudo) e faz INSERT/UPDATE na tabela palace_embeddings
-- Usar ON CONFLICT(id) DO UPDATE para reusar entradas existentes
-- Se falhar silenciosamente (pgvector não disponível, DB fora, etc.), logar com print e seguir — nunca propagar exceção para o caller
-
-**Ordem de implementação sugerida:**
-    1. Criar tabela palace_embeddings no banco
-    2. Implementar gerar_embedding com fallback TF-IDF se OPENAI_API_KEY ausente
-    3. Implementar busca_semantica
-    4. Adicionar hook nas funções de save
-    5. Integrar no contexto do Viriato
-    6. Testar com python3 inline antes de dar como pronto
-    _load() -> list:
+def regras_tecnicas_load() -> list:
     d = kvstore.load('regras_tecnicas')
     return d.get('regras', []) if isinstance(d, dict) else []
 
