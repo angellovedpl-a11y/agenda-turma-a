@@ -2384,23 +2384,36 @@ def biblioteca():
 @app.route('/api/biblioteca/upload', methods=['POST'])
 @auth.require_auth
 def biblioteca_upload():
+    t0 = time.time()
+    nome_log = ''
     try:
         data = request.json or {}
         nome = (data.get('nome') or '').strip()
         b64 = data.get('data') or ''
         mimetype = data.get('mimetype') or ''
         is_temp = bool(data.get('temp'))
+        nome_log = nome
         if not nome or not b64:
             return jsonify({'error': 'Nome e dados sao obrigatorios'}), 400
         if len(b64) > 70 * 1024 * 1024:
             return jsonify({'error': 'Arquivo muito grande (max 50MB)'}), 413
 
+        # Hotfix 30/04/2026: timing detalhado pra investigar erros em PDFs grandes.
+        # Antes, worker era morto pelo gunicorn (timeout=120s) sem deixar pista.
+        # Agora --timeout=600s + estes logs mostram exatamente onde o tempo vai.
+        print(f'[biblioteca_upload] inicio nome="{nome}" b64={len(b64)//1024}KB mime="{mimetype}" temp={is_temp}')
+
+        t1 = time.time()
         texto = extrair_texto_arquivo(b64, mimetype, nome)
+        print(f'[biblioteca_upload] extracao em {time.time()-t1:.1f}s, texto={len(texto)} chars')
+
         if not texto or len(texto.strip()) < 30:
             return jsonify({'error': 'Nao foi possivel extrair texto util do documento. PDFs digitalizados (imagem) nao sao suportados.'}), 400
 
+        t2 = time.time()
         chunks = fazer_chunks(texto)
         meta = categorizar_doc(nome, texto)
+        print(f'[biblioteca_upload] chunks+categorizar em {time.time()-t2:.1f}s, chunks={len(chunks)}')
         if is_temp:
             meta['categoria'] = 'temp'
             try:
@@ -2411,6 +2424,7 @@ def biblioteca_upload():
                     f.write(texto)
             except Exception:
                 pass
+        t3 = time.time()
         biblioteca = mem_palace_load('biblioteca')
         docs = biblioteca.get('documentos', [])
         doc_id = re.sub(r'[^a-z0-9]+', '-', nome.lower())[:60].strip('-') + '-' + str(int(time.time()))
@@ -2429,6 +2443,7 @@ def biblioteca_upload():
         if 'sala' not in biblioteca:
             biblioteca['sala'] = 'BIBLIOTECA'
         mem_palace_save('biblioteca', biblioteca)
+        print(f'[biblioteca_upload] save em {time.time()-t3:.1f}s, TOTAL={time.time()-t0:.1f}s nome="{nome}"')
         return jsonify({
             'ok': True,
             'id': doc_id,
@@ -2439,6 +2454,9 @@ def biblioteca_upload():
             'caracteres': len(texto)
         })
     except Exception as e:
+        import traceback
+        print(f'[biblioteca_upload] ERRO em {time.time()-t0:.1f}s nome="{nome_log}": {e}')
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 # === API BIBLIOTECA - REMOVER ===

@@ -337,6 +337,13 @@ Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carg
 - **Fix:** `--preload` faz o master importar `server.py` UMA vez; workers nascem prontos via fork (cópia-em-escrita instantânea). Bônus: economiza memória e abre menos conexões DB no boot. `PYTHONUNBUFFERED=1` flusha os `print()` em tempo real (antes ficavam em buffer e só apareciam após o primeiro request, escondendo logs de boot).
 - **Aditividade:** `--preload` é flag oficial do gunicorn desde 19.x; não altera comportamento da app, só a ordem de import. Reverter é trivial (remover a flag).
 
+**Hotfix upload de PDF grande** (`.replit [deployment].run` + `server.py:2386+`; 30/04/2026)
+- **Sintoma:** dono reportou X vermelho ao tentar adicionar apostila de 18,6 MB no acervo. Logs de prod das últimas 18h NÃO mostravam nenhum erro de `/api/biblioteca/upload` (request nunca completava — worker era morto antes).
+- **Causa raiz:** gunicorn estava com `--timeout=120s`. PDF grande passa por: pdfplumber página-por-página (50–300ms/página × N páginas), OCR seletivo via Vision se misto (3–10s por batch de 4 páginas) + Poppler render (1–3s/página) + categorização Claude + save no DB. PDF de 18,6 MB com ~200–500 páginas e algumas em scan facilmente passa de 200s. Worker era morto pelo gunicorn aos 120s e nem chegava no `except`, daí ZERO log no servidor e cliente recebia erro genérico.
+- **Fix 1 — `--timeout` 120 → 600s** no `.replit [deployment].run`. 10 min cobre apostilas razoáveis. PDFs realmente impossíveis ainda estouram com erro claro.
+- **Fix 2 — logs de timing** em `biblioteca_upload`: `[biblioteca_upload] inicio nome="..." b64=NkB`, `extracao em Xs`, `chunks+categorizar em Ys`, `save em Zs, TOTAL=Ws`. Em qualquer erro futuro fica óbvio onde o tempo foi (extração? OCR? save?). Erro com `traceback.print_exc()` pra capturar exceções silenciosas.
+- **Aditividade:** comportamento de PDFs pequenos inalterado (só ganham logs). Limites de tamanho (Flask 80MB, função 70MB do b64) inalterados. Reverter é trivial.
+
 **Variáveis de ambiente novas (todas com default sensato)**
 - `PALACE_BUSCA_TIMEOUT=0.8` — timeout em segundos pra busca semântica
 - `PALACE_BUSCA_WORKERS=2` — workers do pool de busca (semaphore in-flight = workers*2)
