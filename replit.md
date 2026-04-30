@@ -331,6 +331,12 @@ Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carg
 - **Custo:** OCR seletivo cap em `max_paginas_ocr=80` páginas/PDF (proteção contra PDF onde 200 páginas são imagens — cairia no cenário scan completo). Cada batch = 4 páginas em 1 chamada Haiku (mesmo padrão do OCR full).
 - **Validação:** smoke test em 3 cenários — PDF digital normal preserva extração + ganhou marcadores; PDF misto detecta página falha e dispara OCR seletivo só nela; PDF totalmente em branco mantém OCR full. Architect review PASS.
 
+**Hotfix gunicorn `--preload` + `PYTHONUNBUFFERED=1`** (`.replit [deployment].run`; 30/04/2026)
+- **Sintoma:** após o deploy do Bloco I, prod parou de responder (curl em `agenda-turma-a.replit.app` retornava 0 bytes em 12s, logs paravam em "Booting worker with pid"). Re-publicar não resolveu.
+- **Causa raiz (NÃO relacionada às mudanças do Bloco I):** com `--worker-class=gthread` (Bloco A da Fase 3) sem `--preload`, cada worker importa `server.py` individualmente após o fork. Boot local em CPU rápida = 6s; em Reserved VM 0.5–1 vCPU = 30–60s competindo entre 2 workers. Health check do load balancer dropa o container antes do boot completar, marca como unhealthy, nunca encaminha tráfego.
+- **Fix:** `--preload` faz o master importar `server.py` UMA vez; workers nascem prontos via fork (cópia-em-escrita instantânea). Bônus: economiza memória e abre menos conexões DB no boot. `PYTHONUNBUFFERED=1` flusha os `print()` em tempo real (antes ficavam em buffer e só apareciam após o primeiro request, escondendo logs de boot).
+- **Aditividade:** `--preload` é flag oficial do gunicorn desde 19.x; não altera comportamento da app, só a ordem de import. Reverter é trivial (remover a flag).
+
 **Variáveis de ambiente novas (todas com default sensato)**
 - `PALACE_BUSCA_TIMEOUT=0.8` — timeout em segundos pra busca semântica
 - `PALACE_BUSCA_WORKERS=2` — workers do pool de busca (semaphore in-flight = workers*2)
