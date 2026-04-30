@@ -925,6 +925,7 @@ function clearEvFilter(){
   S.evFilter=[];
   saveLS();
 }
+function tipoEfetivoEv(t){return (t&&EVENTO_TIPOS[t])?t:"outro";}
 
 // ===== Cálculos =====
 function diffDias(de,ate){
@@ -2295,7 +2296,30 @@ function openEventoForm(dataPre,opts){
       const novos=(d.eventos||[]).concat([ev]);
       await apiFetch(endpoint,{method:"POST",body:JSON.stringify({eventos:novos})});
       closeModal();showToast(pessoal?"🔒 Evento pessoal criado":"✅ Post enviado ao mural");await carregarEventosCache();render();
+      const efetivo=tipoEfetivoEv(ev.tipo);
+      if(Array.isArray(S.evFilter)&&S.evFilter.length&&!S.evFilter.includes(efetivo)){
+        promptAjustarFiltroEv(efetivo);
+      }
     };
+  });
+}
+function promptAjustarFiltroEv(tipo){
+  const info=evTipoInfo(tipo);
+  const ativos=(S.evFilter||[]).map(t=>{const i=evTipoInfo(t);return `${i.emoji} ${i.label}`;}).join(", ");
+  openModal("Filtro está escondendo o novo evento",`
+    <div style="font-size:14px;line-height:1.5;margin-bottom:14px">
+      Seu evento <b>${info.emoji} ${escapeHtml(info.label)}</b> foi salvo, mas o filtro do calendário está mostrando só: <b>${escapeHtml(ativos)}</b>.
+      <br><br>Por isso ele não vai aparecer no calendário enquanto o filtro estiver assim. O que você quer fazer?
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button id="fAdd" class="btn-primary">➕ Incluir ${escapeHtml(info.emoji+" "+info.label)} no filtro</button>
+      <button id="fClr" class="btn-secondary">🧹 Limpar filtro (mostrar todos os tipos)</button>
+      <button id="fKeep" class="btn-secondary">Manter filtro como está</button>
+    </div>
+  `,()=>{
+    document.getElementById("fAdd").onclick=()=>{toggleEvFilter(tipo);closeModal();render();};
+    document.getElementById("fClr").onclick=()=>{clearEvFilter();closeModal();render();};
+    document.getElementById("fKeep").onclick=()=>{closeModal();};
   });
 }
 
