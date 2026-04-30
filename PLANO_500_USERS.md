@@ -122,16 +122,59 @@ Suportar **500 usuários simultâneos** com boa performance, mantendo todas as f
 
 ---
 
-#### ETAPA 5 — Ativar `_get_user_ala()` nos callsites (multi-turma)
+#### ETAPA 5 — Multi-turma plugado com interruptor seguro ✅ IMPLEMENTADA
 
-**Objetivo:** Item E da Fase 3 está implementado estruturalmente mas NÃO plugado nas rotas. Sem isso o app continua tratando todo mundo como Turma A.
+**Objetivo:** preparar a estrutura pra Turma B/C/D (decisão concreta tomada em 30/04/2026 — os 500 users vão ser pra todas as turmas juntas), SEM quebrar a memória dos ~500 usuários atuais que estão indexados com `ala='geral'`.
 
-> **Nota:** baixa prioridade enquanto app for single-tenant Turma A. Re-priorizar quando houver decisão concreta de adicionar Turma B.
+**Estratégia central — código entra DORMENTE no deploy:**
+- Comportamento idêntico ao atual até o admin (1) rodar o backfill, (2) ativar a flag explicitamente.
+- Sem flag ativa: `_ala_for_query()=None` (busca vê tudo, igual hoje) e `_ala_for_save()='geral'` (default histórico preservado).
+- Com flag ativa: `_ala_for_query/save = _get_user_ala(matricula)` filtra por turma.
+- Cache local 30s da flag pra não bater no DB a cada chat (hot path).
 
-- [ ] Identificar todos os callsites que hoje assumem `'A'` hardcoded (grep `'A'` em rotas que filtram por turma)
-- [ ] Substituir por `_get_user_ala(matricula)` em cada rota
-- [ ] Validar que admin (Angelo, 497444) continua vendo todas as turmas
-- [ ] Aceite: usuário de outra turma futura vê só os próprios eventos; admin vê tudo
+**Implementação (1 arquivo, server.py, tudo aditivo):**
+- [x] **Tabela `user_ala_map`** (TEXT PK, padrão consistente com `kv_store`/`ratelimit_buckets`): `matricula TEXT PRIMARY KEY, ala TEXT, atualizado_em BIGINT, atualizado_por TEXT`. Criada via `_init_user_ala_table()` no import.
+- [x] **`_USER_ALA_MAP` carregado** da tabela no startup via `_load_user_ala_map_from_db()` + `_USER_ALA_MAP_LOCK` (RLock thread-safe). Recarregado após cada upsert/delete **+ TTL 30s com lazy reload em `_get_user_ala()`** (fix architect: garante propagação cross-worker dos upserts em ≤30s sem broadcast).
+- [x] **`_multi_turma_ativo()`** lê flag de `kv_store['_multi_turma_ativo']`, cache 30s. **FAIL-CLOSED (fix architect):** em erro de DB, PRESERVA o último valor conhecido (mesmo se cache expirou). Caso contrário, falha transitória do DB poderia virar fail-open: flag estava `True`, DB cai por 5min → função retornaria `False` → `_ala_for_query` retornaria `None` → busca não filtraria → vazamento entre turmas. Só defaulta `False` no cold start (cache nunca preenchido).
+- [x] **`_ala_for_query(matricula)`** e **`_ala_for_save(matricula)`** — funções intermediárias que respeitam a flag. Plugadas em `fatos_add()`, `regras_tecnicas_add()`, `buscar_fatos()`, `busca_semantica()`, `buscar_regras_tecnicas()` no fluxo do Viriato.
+- [x] **Filtro por ala dentro de `buscar_fatos`/`buscar_regras_tecnicas`** (fix architect): `if ala_user and (item.get('ala') or 'geral') != ala_user: continue` no início do loop de scoring. Sem isso, busca por palavras-chave vazaria dados entre turmas mesmo com flag ativa (`busca_semantica` já filtrava no SQL, mas keyword search ficou pendente).
+- [x] **`_backfill_ala_geral_to_turma_a(force=False)`** — idempotente via flag `_backfill_ala_geral_to_turma_a_v1` em kv_store + `pg_advisory_xact_lock` (`kvstore.with_lock`) pra serializar entre os 2 workers gunicorn. Backfilla 3 lugares: `palace_embeddings` (UPDATE direto), `fatos_turma` (load+modify+save), `regras_tecnicas` (load+modify+save). Não toca `pendentes_memoria` (não tem coluna `ala`). **Atomicidade (fix architect):** só marca `done=True` se TODAS as 3 seções completaram sem erro; se alguma falhar, retorna `ok=False, erros=[...]` SEM marcar flag — próxima chamada re-executa. **Erros silenciosos (fix architect):** `kvstore.load/save` chamados com `raise_on_error=True` + checagem do retorno de `save` (que default vira `False` em erro) — sem isso, um erro real do DB viraria silenciosamente "n=0 OK" e marcaria done sem ter migrado nada. Tolera legado sem campo `ala` (trata como `'geral'`).
+
+**Endpoints admin novos (todos `@auth.require_admin`):**
+- `GET /api/admin/user-ala` — lista mapeamentos
+- `POST /api/admin/user-ala` body `{matricula, ala}` — upsert
+- `DELETE /api/admin/user-ala/<matricula>` — remove (cai pro default `'turma_a'`)
+- `GET /api/admin/multi-turma/status` — `{ativo, backfill_done, mapeamentos_count, contadores}`
+- `POST /api/admin/multi-turma/backfill` body opcional `{force: true}` — roda backfill
+- `POST /api/admin/multi-turma/ativar` body `{ativo: true|false}` — liga/desliga flag. **PROTEÇÃO:** `ativo=true` retorna `409 backfill_pendente` se backfill ainda não rodou (evita matar memória de todos os usuários por descuido).
+
+**Procedimento operacional pra ativar multi-turma em prod (Angelo):**
+1. Deploy do código (zero impacto — flag desativada por default).
+2. `POST /api/admin/multi-turma/backfill` (uma vez). Resposta traz contadores. Se vier `ok=False, erros=[...]`, investiga e re-roda (não marca done). Confirmar `ok=True` antes de seguir.
+3. **Pra cada** matrícula da Turma B/C/D (cadastrar TODAS antes do passo 4): `POST /api/admin/user-ala {matricula, ala: 'turma_b'}`. Importante: cadastrar antes de ativar evita que durante a janela de propagação (até 30s entre workers) usuários da Turma B sejam tratados como `turma_a` por default.
+4. `POST /api/admin/multi-turma/ativar {ativo: true}`. Cache local 30s pode demorar pra propagar entre os 2 workers — esperar 30-60s antes de validar.
+5. Pra reverter: `POST /api/admin/multi-turma/ativar {ativo: false}` (volta ao comportamento atual; `palace_embeddings` continua com `ala='turma_a'` mas o WHERE não filtra).
+
+**Janela de propagação cross-worker (consciente):**
+- Flag `_multi_turma_ativo`: até 30s entre os 2 workers gunicorn (cache TTL).
+- Mapeamentos `_USER_ALA_MAP`: até 30s (lazy reload no `_get_user_ala`).
+- Durante a janela, **um** worker pode estar com comportamento antigo enquanto o outro já filtra. **Mitigação operacional:** sempre cadastrar matrículas ANTES de ativar a flag (passo 3 antes do 4), e esperar 30-60s após ativar antes de testar.
+- Trade-off consciente: alternativa seria broadcast cross-worker (Postgres NOTIFY/LISTEN), o que adiciona complexidade pra ganho marginal num app que ativa a flag <1x por mês.
+
+**Aceite (validado em dev):**
+- [x] App sobe sem regressão: GET `/` → 200, todos endpoints atuais OK
+- [x] Tabela `user_ala_map` criada no startup
+- [x] `_USER_ALA_MAP` carregado (0 mapeamentos em dev, vazio = OK)
+- [x] 6 endpoints admin retornam 401 sem auth
+- [x] Backfill 1ª chamada: `ok=True`. 2ª chamada: `skipped: 'ja executado'`. 3ª com `force=True`: re-executa. (Idempotência OK)
+- [x] Sem flag: `_ala_for_query=None`, `_ala_for_save='geral'` (comportamento atual preservado)
+- [x] Com flag: `_ala_for_query='turma_a'`, `_ala_for_save='turma_a'` (multi-turma ativa)
+- [x] `_multi_turma_invalidar_cache()` força releitura imediata após toggle
+- [x] **Filtro keyword (fix architect):** `buscar_fatos('pneu', ala_user=None)` retorna 3 fatos (mistos), `ala_user='turma_a'` retorna só 2, `ala_user='turma_b'` retorna só 1. Sem `ala_user`, comportamento idêntico ao anterior. Mesmo aceite pra `buscar_regras_tecnicas`.
+- [x] **TTL cross-worker (fix architect):** `_get_user_ala` faz lazy reload quando `_USER_ALA_MAP_TS` > TTL. Cache fresco preservado dentro do TTL. Após TTL expira, próxima chamada recarrega.
+- [x] **Atomicidade backfill (fix architect):** com erro forçado em uma seção (`fatos_turma: boom-simulado`), retorna `ok=False, erros=[...]` e flag NÃO é marcada como done. Próxima chamada re-executa.
+- [x] **Flag fail-CLOSED (fix architect 2):** com cache `True` conhecido + DB caindo, `_multi_turma_ativo()` retorna `True` (preserva último valor), NÃO `False` (que seria fail-open). Cold start com DB caído defaulta `False`.
+- [x] **Erro silencioso de save (fix architect 2):** `kvstore.save` retornando `False` em fatos_turma é capturado (`save retornou False`), retorna `ok=False`, flag NÃO marcada como done.
 
 ---
 
@@ -180,7 +223,7 @@ Suportar **500 usuários simultâneos** com boa performance, mantendo todas as f
 | 2. gunicorn validar | ok (já estava) |
 | 3. cache busca semântica | descartada (ganho marginal) |
 | 4. Rate limiting | ✅ implementada + architect PASS |
-| 5. Multi-turma `_get_user_ala` | postergada (single-tenant ainda) |
+| 5. Multi-turma `_get_user_ala` | ✅ implementada (interruptor seguro, código dormente até admin ativar) |
 | 6. Observabilidade | ✅ implementada |
 
 ---

@@ -464,15 +464,18 @@ def fatos_load() -> list:
     d = kvstore.load('fatos_turma')
     return d.get('fatos', []) if isinstance(d, dict) else []
 
-def fatos_add(texto: str, matricula: str, nome: str, ala: str = 'geral', sala: str = 'geral') -> dict:
+def fatos_add(texto: str, matricula: str, nome: str, ala=None, sala: str = 'geral') -> dict:
     texto = (texto or '').strip()[:800]
     if len(texto) < 5:
         return {'ok': False, 'erro': 'Fato muito curto'}
     fatos = fatos_load()
     import time as _t
     # FASE 1 MemPalace: campos opcionais ala/sala (default "geral").
-    # Apenas persistidos aqui; nenhum outro fluxo (busca, system prompt,
-    # rotas, comportamento do Viriato) foi alterado.
+    # FASE 3 ETAPA 5: se caller nao especifica ala, decide via flag multi_turma.
+    # Quando flag desativada (default), _ala_for_save retorna 'geral' = comportamento
+    # historico preservado.
+    if ala is None:
+        ala = _ala_for_save(matricula)
     ala_n = (ala or '').strip().lower()[:60] or 'geral'
     sala_n = (sala or '').strip().lower()[:60] or 'geral'
     novo = {'id': int(_t.time() * 1000), 'data': time.strftime('%Y-%m-%d'),
@@ -510,7 +513,7 @@ def regras_tecnicas_load() -> list:
     d = kvstore.load('regras_tecnicas')
     return d.get('regras', []) if isinstance(d, dict) else []
 
-def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
+def regras_tecnicas_add(regra: dict, autor: str = '', matricula=None) -> dict:
     conceito = (regra.get('conceito') or '').strip()[:120]
     regra_ouro = (regra.get('regra_de_ouro') or '').strip()[:600]
     if len(conceito) < 3 or len(regra_ouro) < 5:
@@ -522,9 +525,12 @@ def regras_tecnicas_add(regra: dict, autor: str = '') -> dict:
         peso = 1.0
     import time as _t
     # FASE 1 MemPalace: campos opcionais ala/sala (default "geral").
-    # Sao apenas persistidos aqui; nenhum outro fluxo (busca, system prompt,
-    # rotas, comportamento do Viriato) foi alterado.
-    ala = (regra.get('ala') or '').strip().lower()[:60] or 'geral'
+    # FASE 3 ETAPA 5: se caller nao especifica ala (ou veio o default 'geral'),
+    # decide via flag multi_turma. Sem flag, mantem 'geral' = comportamento atual.
+    ala = (regra.get('ala') or '').strip().lower()[:60]
+    if not ala or ala == 'geral':
+        ala = _ala_for_save(matricula)
+    ala = ala or 'geral'
     sala = (regra.get('sala') or '').strip().lower()[:60] or 'geral'
     nova = {
         'id': int(_t.time() * 1000),
@@ -621,6 +627,11 @@ def buscar_regras_tecnicas(query: str, top_k: int = 4,
     )
     scored = []
     for r in regras:
+        # FASE 3 ETAPA 5 (fix architect): filtra por ala QUANDO ala_user definido.
+        # Sem flag multi-turma, ala_user=None e o filtro nao executa (comportamento
+        # atual preservado). Com flag, evita vazamento entre turmas via keyword.
+        if ala_user and (r.get('ala') or 'geral') != ala_user:
+            continue
         rtokens = set(r.get('tokens') or tokenize(
             r.get('conceito', '') + ' ' + r.get('regra_de_ouro', '') + ' ' + r.get('condicao_de_borda', '')
         ))
@@ -981,15 +992,245 @@ def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
 #      e mesmo update no kv_store de fatos/regras
 #   3. Mudar default de fatos_add/regras_tecnicas_add p/ _get_user_ala(matricula)
 #   4. Mudar callsite de busca_semantica p/ ala=_get_user_ala(matricula)
+import threading as _multi_threading
 _USER_ALA_MAP = {}  # matricula(str) -> ala(str). Vazio = default p/ todos.
+_USER_ALA_MAP_LOCK = _multi_threading.RLock()
+# FASE 3 ETAPA 5 (fix architect): TTL no cache do mapa, propaga upsert
+# entre os 2 workers gunicorn em <=30s sem precisar broadcast.
+_USER_ALA_MAP_TS = 0.0
+_USER_ALA_MAP_TTL = 30.0
 
 def _get_user_ala(matricula) -> str:
     """Retorna a 'ala' MemPalace do usuario. Pra single-tenant retorna
     'turma_a'; quando _USER_ALA_MAP for populado, leva em conta o mapeamento.
-    Aceita None (cai no default)."""
+    Aceita None (cai no default).
+    FASE 3 ETAPA 5: lazy reload se cache > TTL (propaga upserts cross-worker)."""
     if matricula is None:
         return 'turma_a'
-    return _USER_ALA_MAP.get(str(matricula), 'turma_a')
+    now = time.time()
+    with _USER_ALA_MAP_LOCK:
+        idade = now - _USER_ALA_MAP_TS
+    if idade > _USER_ALA_MAP_TTL:
+        _load_user_ala_map_from_db()
+    with _USER_ALA_MAP_LOCK:
+        return _USER_ALA_MAP.get(str(matricula), 'turma_a')
+
+# === FASE 3 ETAPA 5: multi-turma — interruptor seguro + tabela + backfill ===
+# Estrategia: o codigo entra "dormente" no deploy. Comportamento idêntico ao
+# atual ate que o admin (1) rode o backfill, (2) ative a flag explicitamente.
+# Sem flag ativa, _ala_for_query/save retornam None/'geral' — exatamente o
+# que o codigo fazia antes. ZERO regressao por default.
+
+def _init_user_ala_table():
+    """Cria tabela user_ala_map se nao existir. Aditivo, sem regressao.
+    Padrao TEXT PK consistente com kv_store/ratelimit_buckets."""
+    if not kvstore._DB_URL:
+        return
+    try:
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS user_ala_map (
+                    matricula TEXT PRIMARY KEY,
+                    ala TEXT NOT NULL,
+                    atualizado_em BIGINT NOT NULL,
+                    atualizado_por TEXT
+                )
+            """)
+            conn.commit()
+    except Exception as e:
+        print(f'[multi-turma] init_user_ala_table falhou (ignorado): {e}')
+
+def _load_user_ala_map_from_db():
+    """Recarrega _USER_ALA_MAP da tabela. Chamado no startup, apos POST/DELETE
+    em /api/admin/user-ala, e a cada TTL via _get_user_ala (propaga cross-worker).
+    Fail-soft: se DB cair, mantem cache atual (e adia proxima tentativa por TTL)."""
+    global _USER_ALA_MAP, _USER_ALA_MAP_TS
+    novo = {}
+    try:
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute("SELECT matricula, ala FROM user_ala_map")
+            for m, a in cur.fetchall():
+                novo[str(m)] = str(a)
+        with _USER_ALA_MAP_LOCK:
+            tamanho_antigo = len(_USER_ALA_MAP)
+            ts_antigo = _USER_ALA_MAP_TS
+            _USER_ALA_MAP = novo
+            _USER_ALA_MAP_TS = time.time()
+        # Log so na 1a carga (startup) ou quando mudou tamanho — evita floodar
+        # logs a cada TTL com a mesma info ("0 mapeamentos" repetido).
+        if ts_antigo == 0 or len(novo) != tamanho_antigo:
+            print(f'[multi-turma] _USER_ALA_MAP carregado: {len(novo)} mapeamentos')
+    except Exception as e:
+        # Atualiza TS mesmo em erro pra nao martelar o DB a cada chat se
+        # o pool tiver problema. Cache atual fica preservado (fail-soft).
+        with _USER_ALA_MAP_LOCK:
+            _USER_ALA_MAP_TS = time.time()
+        print(f'[multi-turma] load_user_ala_map_from_db falhou (mantem cache): {e}')
+
+# Cache de 30s pra flag, evita query a cada chat. Propagacao entre workers
+# em ate 30s. Decisao consciente: chat e hot-path, vale o trade-off.
+_MULTI_TURMA_FLAG_CACHE = {'val': None, 'ts': 0.0}
+_MULTI_TURMA_FLAG_TTL = 30.0
+_MULTI_TURMA_FLAG_LOCK = _multi_threading.RLock()
+
+def _multi_turma_ativo() -> bool:
+    """True se admin ativou a flag. Default False = comportamento atual
+    (single-tenant Turma A, sem filtro de ala). Cache local 30s.
+    FAIL-CLOSED (fix architect): em erro de DB, PRESERVA o ultimo valor
+    conhecido (mesmo expirado). Se a flag estava True e o DB cai, NAO
+    desliga o filtro — caso contrario seria fail-open, expondo dados de
+    outras turmas durante a falha. So defaulta False no cold start
+    (cache nunca preenchido)."""
+    now = time.time()
+    with _MULTI_TURMA_FLAG_LOCK:
+        cached_val = _MULTI_TURMA_FLAG_CACHE['val']
+        cached_ts = _MULTI_TURMA_FLAG_CACHE['ts']
+    if cached_val is not None and (now - cached_ts) < _MULTI_TURMA_FLAG_TTL:
+        return cached_val
+    try:
+        d = kvstore.load('_multi_turma_ativo', raise_on_error=True) or {}
+        val = bool(d.get('ativo', False))
+        with _MULTI_TURMA_FLAG_LOCK:
+            _MULTI_TURMA_FLAG_CACHE['val'] = val
+            _MULTI_TURMA_FLAG_CACHE['ts'] = now
+        return val
+    except Exception as e:
+        # Fail-closed: se ja leu antes, mantem ultimo valor (NAO atualiza TS
+        # — proxima chamada tenta de novo). Se nunca leu (cold start), False.
+        if cached_val is not None:
+            print(f'[multi-turma] flag DB erro (preserva ultimo valor={cached_val}): {e}')
+            return cached_val
+        print(f'[multi-turma] flag DB erro no cold start (default False): {e}')
+        return False
+
+def _multi_turma_invalidar_cache():
+    """Forca releitura na proxima chamada (apos POST /multi-turma/ativar)."""
+    with _MULTI_TURMA_FLAG_LOCK:
+        _MULTI_TURMA_FLAG_CACHE['val'] = None
+        _MULTI_TURMA_FLAG_CACHE['ts'] = 0.0
+
+def _ala_for_query(matricula):
+    """Retorna ala pra filtrar busca/bonus, ou None pra preservar comportamento
+    atual (sem filtro, ve tudo). Quando flag desativada (default), SEMPRE None
+    — busca_semantica/bonus se comportam exatamente como antes."""
+    if not _multi_turma_ativo():
+        return None
+    return _get_user_ala(matricula)
+
+def _ala_for_save(matricula) -> str:
+    """Retorna ala pra gravar em fatos/regras novos. Quando flag desativada
+    (default), retorna 'geral' — preserva o default historico, NAO cria
+    dados orfaos pre-backfill."""
+    if not _multi_turma_ativo():
+        return 'geral'
+    return _get_user_ala(matricula)
+
+# Flag idempotente do backfill (chave kv_store dedicada).
+_BACKFILL_ALA_FLAG_KEY = '_backfill_ala_geral_to_turma_a_v1'
+
+def _backfill_ala_geral_to_turma_a(force: bool = False) -> dict:
+    """Backfill IDEMPOTENTE: 'geral' -> 'turma_a' em palace_embeddings,
+    fatos_turma e regras_tecnicas. Usa advisory lock pra serializar entre
+    workers gunicorn. Marca flag em kv_store quando termina; segunda chamada
+    sem force=True retorna {skipped: True}."""
+    out = {'palace_embeddings': 0, 'fatos_turma': 0, 'regras_tecnicas': 0}
+    # Lock + idempotencia atomica via with_lock (pega advisory_xact_lock).
+    # FIX architect: so marca done=True se TODAS as 3 secoes completaram
+    # sem erro. Se qualquer falhar, retorna ok=False e flag NAO e marcada,
+    # entao proxima chamada re-executa. Idempotencia preservada
+    # (UPDATE WHERE ala='geral' ja e naturalmente idempotente).
+    # FIX architect 2: usa raise_on_error=True em load/save pra que erros
+    # silenciosos do kvstore (que default retornam {}/False) propaguem
+    # como excecao e abortem o backfill ao inves de marcar done indevidamente.
+    try:
+        with kvstore.with_lock(_BACKFILL_ALA_FLAG_KEY) as conn:
+            flag = kvstore.load(_BACKFILL_ALA_FLAG_KEY, raise_on_error=True, conn=conn) or {}
+            if flag.get('done') and not force:
+                return {'skipped': True, 'reason': 'ja executado',
+                        'em': flag.get('em'), 'contadores_anteriores': flag.get('contadores', {})}
+            erros = []
+            # 1) palace_embeddings (UPDATE direto, naturalmente idempotente)
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        "UPDATE palace_embeddings SET ala='turma_a' WHERE ala='geral'"
+                    )
+                    out['palace_embeddings'] = cur.rowcount or 0
+            except Exception as e:
+                out['palace_embeddings_erro'] = str(e)
+                erros.append(f'palace_embeddings: {e}')
+            # 2) fatos_turma (load+modify+save). raise_on_error=True garante
+            # que erro de DB nao vire silenciosamente {}/False (que viraria
+            # "n=0 OK" e marcaria done sem ter migrado nada).
+            try:
+                d = kvstore.load('fatos_turma', raise_on_error=True, conn=conn) or {}
+                fatos = d.get('fatos', []) if isinstance(d, dict) else []
+                n = 0
+                for f in fatos:
+                    # Tolera legado sem campo 'ala' (trata como 'geral')
+                    if (f.get('ala') or 'geral') == 'geral':
+                        f['ala'] = 'turma_a'
+                        n += 1
+                if n:
+                    ok_save = kvstore.save('fatos_turma', {'fatos': fatos},
+                                            raise_on_error=True, conn=conn)
+                    if not ok_save:
+                        raise RuntimeError('save retornou False')
+                out['fatos_turma'] = n
+            except Exception as e:
+                out['fatos_turma_erro'] = str(e)
+                erros.append(f'fatos_turma: {e}')
+            # 3) regras_tecnicas (load+modify+save). Mesma protecao.
+            try:
+                d = kvstore.load('regras_tecnicas', raise_on_error=True, conn=conn) or {}
+                regras = d.get('regras', []) if isinstance(d, dict) else []
+                n = 0
+                for r in regras:
+                    if (r.get('ala') or 'geral') == 'geral':
+                        r['ala'] = 'turma_a'
+                        n += 1
+                if n:
+                    ok_save = kvstore.save('regras_tecnicas', {'regras': regras},
+                                            raise_on_error=True, conn=conn)
+                    if not ok_save:
+                        raise RuntimeError('save retornou False')
+                out['regras_tecnicas'] = n
+            except Exception as e:
+                out['regras_tecnicas_erro'] = str(e)
+                erros.append(f'regras_tecnicas: {e}')
+            # SO marca flag se 100% das secoes deram OK
+            if erros:
+                out['ok'] = False
+                out['erros'] = erros
+                out['mensagem'] = ('Backfill parcial: nao marcado como done. '
+                                    'Re-rode o endpoint depois de investigar.')
+                return out
+            ok_flag = kvstore.save(_BACKFILL_ALA_FLAG_KEY, {
+                'done': True,
+                'em': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'contadores': out,
+                'forced': bool(force),
+            }, raise_on_error=True, conn=conn)
+            if not ok_flag:
+                # Save da flag falhou silenciosamente: NAO retorna ok=True,
+                # backfill em si rodou mas nao foi registrado. Proxima chamada
+                # re-executa (idempotente).
+                out['ok'] = False
+                out['erro'] = 'save da flag retornou False; rode novamente'
+                return out
+        out['ok'] = True
+        return out
+    except Exception as e:
+        out['ok'] = False
+        out['erro'] = str(e)
+        return out
+
+# Inicializa tabela e carrega cache no import (1x por worker).
+try:
+    _init_user_ala_table()
+    _load_user_ala_map_from_db()
+except Exception as _e:
+    print(f'[multi-turma] init de modulo falhou (continua): {_e}')
 
 # === MEMPALACE — ANTI-PADROES (correcoes do admin viram bloqueios) ===
 def antipadroes_load() -> list:
@@ -1131,6 +1372,11 @@ def buscar_fatos(query: str, top_k: int = 8,
     )
     scored = []
     for f in fatos:
+        # FASE 3 ETAPA 5 (fix architect): filtra por ala QUANDO ala_user definido.
+        # Sem flag multi-turma, ala_user=None e o filtro nao executa (comportamento
+        # atual preservado). Com flag, evita vazamento entre turmas via keyword.
+        if ala_user and (f.get('ala') or 'geral') != ala_user:
+            continue
         ftokens_base = set(f.get('tokens') or tokenize(f.get('texto', '')))
         ftokens = _expandir_tokens(ftokens_base)
         if not ftokens:
@@ -1557,8 +1803,10 @@ def claude_chat():
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
         # FASE 1 MemPalace: passa a query como query_para_sala (bullet 1 do item 3
-        # ativo). ala_user fica None ate definicao do mapeamento matricula->turma.
+        # ativo). FASE 3 ETAPA 5: ala_user vem de _ala_for_query — None se flag
+        # multi_turma desativada (comportamento atual), ala do user se ativa.
         fatos_relev = buscar_fatos(ultima, top_k=4,
+                                   ala_user=_ala_for_query(matricula_user),
                                    query_para_sala=ultima) if ultima else []
         # FASE 2 MemPalace: busca semantica antes da deduplicacao com keywords.
         # Tudo silencioso/aditivo: se pgvector indisponivel ou tabela vazia,
@@ -1569,7 +1817,8 @@ def claude_chat():
             _sala_p2 = next(iter(_det_p2)) if _det_p2 else None
         except Exception:
             _sala_p2 = None
-        mem_semantica = busca_semantica(ultima, ala=None, sala=_sala_p2, n=5) if ultima else []
+        mem_semantica = busca_semantica(ultima, ala=_ala_for_query(matricula_user),
+                                         sala=_sala_p2, n=5) if ultima else []
         mem_alta = [m for m in mem_semantica if float(m.get('score', 0) or 0) >= 0.70]
         # Ids no palace vem prefixados ('fato:123', 'regra:456'). Separa por
         # tipo pra dedup independente de fatos_relev e regras_relev.
@@ -1627,6 +1876,7 @@ def claude_chat():
 
         modo_critico = pergunta_critica(ultima)
         regras_relev = buscar_regras_tecnicas(ultima, top_k=4,
+                                              ala_user=_ala_for_query(matricula_user),
                                               query_para_sala=ultima) if modo_critico else []
         # FASE 2: dedup tambem das regras (achado C do code review)
         if ids_sem_regras and regras_relev:
@@ -1904,7 +2154,8 @@ def claude_chat():
                 'sala': extras['sala'],
             }
             if is_admin_user:
-                r_rg = regras_tecnicas_add(sugestao, autor=nome_user or matricula_user)
+                r_rg = regras_tecnicas_add(sugestao, autor=nome_user or matricula_user,
+                                           matricula=matricula_user)
                 if r_rg.get('ok'):
                     regras_sugeridas.append({'conceito': sugestao['conceito'], 'status': 'salvo'})
             else:
@@ -2300,6 +2551,142 @@ def memoria_fato_del(id_f):
         return jsonify({'error': 'Apenas o autor ou admin pode remover'}), 403
     return jsonify({'ok': fatos_remove(id_f)})
 
+# === API ADMIN - MULTI-TURMA (ETAPA 5: gerencia mapeamento + flag + backfill) ===
+@app.route('/api/admin/user-ala', methods=['GET'])
+@auth.require_admin
+def admin_user_ala_list():
+    """Lista todos os mapeamentos matricula->ala. Retorna tambem o cache local."""
+    try:
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT matricula, ala, atualizado_em, atualizado_por "
+                "FROM user_ala_map ORDER BY ala, matricula"
+            )
+            linhas = [
+                {'matricula': r[0], 'ala': r[1],
+                 'atualizado_em': int(r[2]) if r[2] is not None else None,
+                 'atualizado_por': r[3]}
+                for r in cur.fetchall()
+            ]
+        with _USER_ALA_MAP_LOCK:
+            cache_size = len(_USER_ALA_MAP)
+        return jsonify({'mapeamentos': linhas, 'total': len(linhas), 'cache_local': cache_size})
+    except Exception as e:
+        return jsonify({'error': f'falha_db: {e}'}), 500
+
+@app.route('/api/admin/user-ala', methods=['POST'])
+@auth.require_admin
+def admin_user_ala_upsert():
+    """Upsert de mapeamento. Body: {matricula, ala}. Recarrega cache."""
+    data = request.get_json(silent=True) or {}
+    matricula = str(data.get('matricula') or '').strip()
+    ala = str(data.get('ala') or '').strip().lower()[:60]
+    if not matricula or not ala:
+        return jsonify({'error': 'matricula e ala obrigatorios'}), 400
+    u = request.current_user
+    try:
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO user_ala_map (matricula, ala, atualizado_em, atualizado_por)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (matricula) DO UPDATE
+                SET ala = EXCLUDED.ala,
+                    atualizado_em = EXCLUDED.atualizado_em,
+                    atualizado_por = EXCLUDED.atualizado_por
+                """,
+                (matricula, ala, int(time.time()), u.get('matricula') or 'admin')
+            )
+            conn.commit()
+        _load_user_ala_map_from_db()
+        return jsonify({'ok': True, 'matricula': matricula, 'ala': ala})
+    except Exception as e:
+        return jsonify({'error': f'falha_db: {e}'}), 500
+
+@app.route('/api/admin/user-ala/<matricula>', methods=['DELETE'])
+@auth.require_admin
+def admin_user_ala_delete(matricula):
+    """Remove mapeamento; matricula cai pro default 'turma_a'."""
+    matricula = str(matricula or '').strip()
+    if not matricula:
+        return jsonify({'error': 'matricula obrigatoria'}), 400
+    try:
+        with kvstore._connect() as conn, conn.cursor() as cur:
+            cur.execute("DELETE FROM user_ala_map WHERE matricula = %s", (matricula,))
+            removidos = cur.rowcount or 0
+            conn.commit()
+        _load_user_ala_map_from_db()
+        return jsonify({'ok': True, 'removidos': removidos})
+    except Exception as e:
+        return jsonify({'error': f'falha_db: {e}'}), 500
+
+@app.route('/api/admin/multi-turma/status', methods=['GET'])
+@auth.require_admin
+def admin_multi_turma_status():
+    """Status da multi-turma: flag ativa? backfill rodou? quantos mapeamentos?
+    Use ANTES de ativar a flag pra confirmar que backfill ja foi feito."""
+    out = {'ativo': False, 'backfill_done': False}
+    try:
+        d = kvstore.load('_multi_turma_ativo') or {}
+        out['ativo'] = bool(d.get('ativo', False))
+        out['ativado_em'] = d.get('ativado_em')
+        out['ativado_por'] = d.get('ativado_por')
+    except Exception as e:
+        out['ativo_erro'] = str(e)
+    try:
+        bf = kvstore.load(_BACKFILL_ALA_FLAG_KEY) or {}
+        out['backfill_done'] = bool(bf.get('done'))
+        out['backfill_em'] = bf.get('em')
+        out['backfill_contadores'] = bf.get('contadores', {})
+    except Exception as e:
+        out['backfill_erro'] = str(e)
+    with _USER_ALA_MAP_LOCK:
+        out['mapeamentos_count'] = len(_USER_ALA_MAP)
+    return jsonify(out)
+
+@app.route('/api/admin/multi-turma/ativar', methods=['POST'])
+@auth.require_admin
+def admin_multi_turma_ativar():
+    """Liga/desliga a flag de multi-turma. Pra LIGAR, exige backfill_done=True
+    (protecao: evita ativar sem backfill e quebrar memoria de todos os usuarios).
+    Body: {ativo: true|false}."""
+    data = request.get_json(silent=True) or {}
+    ativo = bool(data.get('ativo'))
+    u = request.current_user
+    if ativo:
+        bf = kvstore.load(_BACKFILL_ALA_FLAG_KEY) or {}
+        if not bf.get('done'):
+            return jsonify({
+                'error': 'backfill_pendente',
+                'mensagem': 'Rode POST /api/admin/multi-turma/backfill antes de ativar.'
+            }), 409
+    try:
+        # raise_on_error=True + checagem de retorno: evita falso positivo
+        # (endpoint dizer "ok" quando o save falhou silenciosamente).
+        ok_save = kvstore.save('_multi_turma_ativo', {
+            'ativo': ativo,
+            'ativado_em': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'ativado_por': u.get('matricula') or 'admin',
+        }, raise_on_error=True)
+        if not ok_save:
+            return jsonify({'error': 'save retornou False; nada persistido'}), 500
+        _multi_turma_invalidar_cache()
+        return jsonify({'ok': True, 'ativo': ativo,
+                        'aviso': 'Cache local 30s pode demorar pra propagar entre workers.'})
+    except Exception as e:
+        return jsonify({'error': f'falha_save: {e}'}), 500
+
+@app.route('/api/admin/multi-turma/backfill', methods=['POST'])
+@auth.require_admin
+def admin_multi_turma_backfill():
+    """Roda o backfill 'geral'->'turma_a' em palace_embeddings, fatos_turma e
+    regras_tecnicas. Idempotente (flag em kv_store). Body opcional: {force: true}
+    pra re-executar. Use UMA vez antes de ativar a flag."""
+    data = request.get_json(silent=True) or {}
+    force = bool(data.get('force'))
+    res = _backfill_ala_geral_to_turma_a(force=force)
+    return jsonify(res)
+
 # === API ADMIN - METRICAS (ETAPA 6 observabilidade) ===
 @app.route('/api/admin/metrics', methods=['GET'])
 @auth.require_admin
@@ -2406,7 +2793,8 @@ def regras_tecnicas_listar():
 def regras_tecnicas_criar():
     body = request.get_json(silent=True) or {}
     u = auth.get_current_user() or {}
-    r = regras_tecnicas_add(body, autor=u.get('nome') or u.get('matricula') or 'admin')
+    r = regras_tecnicas_add(body, autor=u.get('nome') or u.get('matricula') or 'admin',
+                            matricula=u.get('matricula'))
     if r.get('ok'):
         return jsonify(r)
     return jsonify({'error': r.get('erro', 'falha')}), 400
