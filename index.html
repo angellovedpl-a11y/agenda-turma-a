@@ -471,6 +471,20 @@ button.cal-legend-item.off:hover{opacity:.75}
 .event-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-soft)}
 .event-row:last-child{border-bottom:none;padding-bottom:0}
 .event-row:first-of-type{padding-top:0}
+.prox-ev-sep{font-family:var(--mono);font-size:9px;letter-spacing:1.8px;color:var(--text-mute);text-transform:uppercase;margin-top:14px;padding-top:10px;border-top:1px solid var(--border-soft)}
+.panel-filter-hint{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding:6px 10px;background:rgba(0,230,118,.08);border:1px solid #3be79944;border-radius:8px;font-size:11px;color:var(--text-dim)}
+.panel-filter-hint button{background:transparent;border:1px solid var(--border-soft);color:var(--text-dim);padding:2px 8px;border-radius:999px;font-size:10px;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.panel-filter-hint button:hover{border-color:var(--neon);color:var(--neon)}
+.prox-ev-list{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.prox-ev-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card-2);border:1px solid var(--border-soft);border-radius:10px;cursor:pointer;transition:border-color .15s}
+.prox-ev-row:hover{border-color:var(--neon)}
+.prox-ev-row:focus-visible{outline:none;border-color:var(--neon);box-shadow:0 0 0 2px rgba(0,230,118,.3)}
+.prox-ev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.prox-ev-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.prox-ev-tit{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.prox-ev-data{font-family:var(--mono);font-size:10px;color:var(--text-mute);letter-spacing:.6px}
+.prox-ev-empty{margin-top:8px;padding:10px;font-size:12px;color:var(--text-mute);text-align:center;background:var(--card-2);border:1px dashed var(--border-soft);border-radius:8px}
+.ev-priv{font-size:10px;opacity:.8}
 .ev-info{display:flex;flex-direction:column;gap:2px}
 .ev-tipo{font-family:var(--mono);font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--text-mute)}
 .ev-data{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text)}
@@ -940,6 +954,26 @@ function proxData(predicate){
   }
   return null;
 }
+// Lista de próximos eventos (mural + pessoais), respeitando S.evFilter.
+// Retorna até `limit` itens dentro dos próximos `maxDias` dias.
+function proxEventos(maxDias,limit){
+  maxDias=maxDias||60;limit=limit||5;
+  const lista=[];
+  const seen=new Set();
+  const base=new Date(HOJE.getFullYear(),HOJE.getMonth(),HOJE.getDate());
+  for(let i=0;i<maxDias;i++){
+    const d=new Date(base);d.setDate(base.getDate()+i);
+    const k=toKey(d);
+    eventosNoDia(k).filter(passaFiltroEv).forEach(e=>{
+      const uid=(e._pessoal?"p:":"m:")+(e.id!=null?e.id:e.titulo+"|"+e.data)+"@"+k;
+      if(seen.has(uid))return;
+      seen.add(uid);
+      lista.push({ev:e,dt:d,k});
+    });
+    if(lista.length>=limit)break;
+  }
+  return lista.slice(0,limit);
+}
 function calcResumoAnual(ano){
   let f=0,t=0;
   for(let m=0;m<12;m++){
@@ -1116,6 +1150,29 @@ function renderRight(){
   const pctF=Math.round(resumo.f/resumo.total*100);
   const pctT=100-pctF;
 
+  // Lista de próximos eventos (mural + pessoais), respeitando o filtro do calendário
+  const filterAtivoR=Array.isArray(S.evFilter)&&S.evFilter.length>0;
+  const proxEvs=proxEventos(60,5);
+  const filterHintR=filterAtivoR
+    ?`<div class="panel-filter-hint"><span>🔎 Filtro ativo (${S.evFilter.length}/${Object.keys(EVENTO_TIPOS).length})</span><button type="button" id="rightClearFilter" title="Mostrar todos os tipos">Limpar</button></div>`
+    :"";
+  const proxEvsHtml=proxEvs.length
+    ? proxEvs.map(({ev,dt,k})=>{
+        const ti=evTipoInfo(ev.tipo);
+        const dias=diffDias(HOJE,dt);
+        const diasLbl=dias===0?"HOJE":dias===1?"AMANHÃ":dias+" DIAS";
+        const dataLbl=dt.getDate().toString().padStart(2,"0")+" "+MESES3[dt.getMonth()];
+        const pessTag=ev._pessoal?'<span class="ev-priv" title="Evento pessoal">🔒</span>':"";
+        return `<div class="prox-ev-row" data-k="${k}" role="button" tabindex="0" title="${escapeHtml(ti.label)}: ${escapeHtml(ev.titulo||"")}">
+          <span class="prox-ev-dot" style="background:${ti.cor}"></span>
+          <div class="prox-ev-info">
+            <div class="prox-ev-tit">${ti.emoji} ${escapeHtml(ev.titulo||ti.label)} ${pessTag}</div>
+            <div class="prox-ev-data">${dataLbl} · ${diasLbl}</div>
+          </div>
+        </div>`;
+      }).join("")
+    : `<div class="prox-ev-empty">${filterAtivoR?"Nenhum evento futuro com este filtro.":"Nenhum evento futuro nos próximos 60 dias."}</div>`;
+
   return `
     <div class="panel">
       <div class="panel-tit">Status Hoje</div>
@@ -1144,6 +1201,9 @@ function renderRight(){
         </div>
         <div class="ev-count folga">${pfDias}<small>DIAS</small></div>
       </div>
+      <div class="prox-ev-sep">Compromissos</div>
+      ${filterHintR}
+      <div class="prox-ev-list">${proxEvsHtml}</div>
     </div>
 
     <div class="panel">
@@ -1187,6 +1247,8 @@ function render(){
       if(S.section==="calendario"||!S.section){
         const c2=document.getElementById("content");
         if(c2)c2.innerHTML=S.view==="mensal"?renderMensal():renderAnual();
+        const rp=document.getElementById("rightPanel");
+        if(rp)rp.innerHTML=renderRight();
         bindCalNav();
         attachViriatoBanner();
       }
@@ -1231,6 +1293,12 @@ function bindCalNav(){
   });
   const cc=document.getElementById("calLegendClear");
   if(cc)cc.onclick=(e)=>{e.preventDefault();clearEvFilter();render();};
+  const rcf=document.getElementById("rightClearFilter");
+  if(rcf)rcf.onclick=(e)=>{e.preventDefault();clearEvFilter();render();};
+  document.querySelectorAll(".prox-ev-row[data-k]").forEach(r=>{
+    r.onclick=()=>openDia(r.dataset.k);
+    r.onkeydown=(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openDia(r.dataset.k);}};
+  });
   document.querySelectorAll(".mini-day[data-k],.day[data-k]").forEach(d=>{
     d.style.cursor="pointer";
     d.onclick=()=>openDia(d.dataset.k);
@@ -1662,18 +1730,61 @@ async function requireAuth(){
 }
 
 // ===== EVENTOS =====
+function renderMuralFilterBar(){
+  const filterAtivo=Array.isArray(S.evFilter)&&S.evFilter.length>0;
+  const chipsHtml=Object.entries(EVENTO_TIPOS).map(([key,t])=>{
+    const ativo=S.evFilter&&S.evFilter.includes(key);
+    const desligado=filterAtivo&&!ativo;
+    const cls=`cal-legend-item legend-btn-mural${ativo?" active":""}${desligado?" off":""}`;
+    return `<button type="button" class="${cls}" data-tipo="${key}" aria-pressed="${ativo?"true":"false"}" title="${ativo?'Remover filtro: ':'Filtrar por: '}${escapeHtml(t.label)}"><span class="cl-dot" style="background:${t.cor}"></span><span class="cl-emo">${t.emoji}</span><span class="cl-lbl">${escapeHtml(t.label)}</span></button>`;
+  }).join("");
+  const filterCount=filterAtivo?S.evFilter.length:0;
+  const hint=filterAtivo
+    ?`<span class="cal-legend-hint">Mostrando ${filterCount} de ${Object.keys(EVENTO_TIPOS).length} tipos</span>`
+    :`<span class="cal-legend-hint">Toque em um tipo para filtrar</span>`;
+  const clearBtn=filterAtivo?`<button type="button" class="cal-legend-clear" id="muralLegendClear" title="Mostrar todos os tipos">Limpar filtro</button>`:"";
+  return `<div class="cal-legend" style="margin-top:0;padding-top:0;border-top:none;padding:10px 14px 0">
+    <div class="cal-legend-head">
+      <div class="cal-legend-tit">Filtrar por tipo</div>
+      ${hint}
+      ${clearBtn}
+    </div>
+    <div class="cal-legend-items">${chipsHtml}</div>
+  </div>`;
+}
+function bindMuralFilterChips(c){
+  document.querySelectorAll(".legend-btn-mural[data-tipo]").forEach(b=>{
+    b.addEventListener("click",(e)=>{
+      e.preventDefault();
+      const t=b.dataset.tipo;
+      if(!EVENTO_TIPOS[t])return;
+      toggleEvFilter(t);
+      renderEventos(c);
+    });
+  });
+  const cl=document.getElementById("muralLegendClear");
+  if(cl)cl.onclick=(e)=>{e.preventDefault();clearEvFilter();renderEventos(c);};
+}
 async function renderEventos(c){
-  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📋 MURAL DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO POST</button></div><div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;
+  c.innerHTML=`<div class="pg-head"><div class="pg-tit">📋 MURAL DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO POST</button></div>${renderMuralFilterBar()}<div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;
   document.getElementById("evNew").onclick=()=>openEventoForm();
+  bindMuralFilterChips(c);
   if(!await requireAuth()){document.getElementById("evBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login para ver os eventos.</div>';return;}
   try{
     const r=await apiFetch("/api/mem/eventos");
     const d=await r.json();
-    const evs=(d.eventos||[]).slice().sort((a,b)=>(Number(b.id)||0)-(Number(a.id)||0));
+    const evsAll=(d.eventos||[]).slice().sort((a,b)=>(Number(b.id)||0)-(Number(a.id)||0));
+    const evs=evsAll.filter(passaFiltroEv);
     const body=document.getElementById("evBody");
-    if(!evs.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum evento ainda. Clique em + NOVO EVENTO.</div>';return;}
+    if(!evsAll.length){body.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Nenhum evento ainda. Clique em + NOVO POST.</div>';return;}
+    if(!evs.length){
+      const filterAtivo=Array.isArray(S.evFilter)&&S.evFilter.length>0;
+      body.innerHTML=`<div style="color:var(--muted);padding:20px;text-align:center">${filterAtivo?"Nenhum post com este filtro.<br/><span style=\"font-size:12px\">Ajuste os tipos acima ou limpe o filtro.</span>":"Nenhum evento ainda."}</div>`;
+      return;
+    }
     const meuMat=CURRENT_USER&&CURRENT_USER.matricula;
     body.innerHTML=evs.map(e=>{
+      const ti=evTipoInfo(e.tipo);
       const reac=e.reacoes||{};
       const barra=REACTION_EMOJIS.map(emo=>{
         const lst=reac[emo]||[];
@@ -1683,9 +1794,10 @@ async function renderEventos(c){
           <span class="rx-emo">${emo}</span>${cnt?`<span class="rx-cnt">${cnt}</span>`:""}
         </button>`;
       }).join("");
-      return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:10px">
+      return `<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:10px;border-left:3px solid ${ti.cor}">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
           <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px"><span class="cal-legend-item" style="font-size:11px;padding:2px 8px"><span class="cl-dot" style="background:${ti.cor}"></span><span class="cl-emo">${ti.emoji}</span><span class="cl-lbl">${escapeHtml(ti.label)}</span></span></div>
             <div style="font-weight:600;font-size:14px">${escapeHtml(e.titulo||"")}</div>
             <div style="color:var(--muted);font-size:12px;margin-top:4px">📅 ${escapeHtml(e.data||"")} ${e.hora?"· ⏰ "+escapeHtml(e.hora):""}</div>
             ${e.descricao?`<div style="margin-top:6px;color:var(--text);font-size:13px;line-height:1.5">${escapeHtml(e.descricao)}</div>`:""}
@@ -1699,7 +1811,7 @@ async function renderEventos(c){
     body.querySelectorAll("button.btn-danger").forEach(b=>{
       b.onclick=async()=>{
         if(!confirm("Excluir este evento?"))return;
-        const novos=evs.filter(x=>x.id!=b.dataset.id);
+        const novos=evsAll.filter(x=>x.id!=b.dataset.id);
         await apiFetch("/api/mem/eventos",{method:"POST",body:JSON.stringify({eventos:novos})});
         renderEventos(c);
       };
