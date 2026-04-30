@@ -1400,22 +1400,26 @@ _anthropic_client = Anthropic(
 )
 
 # === OCR VIA CLAUDE VISION (fallback para PDFs escaneados) ===
-def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 80) -> str:
-    try:
-        from pdf2image import convert_from_bytes
-    except ImportError:
-        return ''
-    try:
-        images = convert_from_bytes(raw, dpi=150, fmt='png',
-                                    first_page=1, last_page=max_pages)
-    except Exception:
-        return ''
+def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
+    """OCR de uma lista de imagens PIL via Claude Vision. Recebe opcionalmente
+    a numeracao real (1-based) de cada pagina pra rotular corretamente."""
     if not images:
         return ''
     pages_text = []
     BATCH = 4
     for i in range(0, len(images), BATCH):
         batch = images[i:i + BATCH]
+        if numeros_pagina:
+            nums_batch = numeros_pagina[i:i + BATCH]
+        else:
+            nums_batch = list(range(i + 1, i + 1 + len(batch)))
+        # Detecta se nums sao contiguos pra escolher prompt apropriado
+        # (fix architect: batch pode ter paginas nao-contiguas em OCR seletivo
+        # com runs pequenos, e "a partir de N" rotularia errado).
+        contiguo = all(
+            nums_batch[k+1] == nums_batch[k] + 1
+            for k in range(len(nums_batch) - 1)
+        ) if len(nums_batch) > 1 else True
         content = []
         for img in batch:
             if img.width > 1600:
@@ -1428,15 +1432,23 @@ def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 80) -> str:
                 'type': 'image',
                 'source': {'type': 'base64', 'media_type': 'image/png', 'data': b64img}
             })
-        content.append({
-            'type': 'text',
-            'text': (f'Transcreva integralmente o texto destas {len(batch)} '
+        if contiguo:
+            instr = (f'Transcreva integralmente o texto destas {len(batch)} '
                      'paginas de manual/documento ferroviario em portugues. '
                      'Preserve a ordem, formate tabelas em markdown e mantenha '
                      'listas. Separe cada pagina com "--- Pagina N ---" '
-                     '(numerando a partir de ' + str(i + 1) + '). '
+                     f'(numerando a partir de {nums_batch[0]}). '
                      'Retorne APENAS o texto transcrito, sem comentarios.')
-        })
+        else:
+            lista = ', '.join(str(n) for n in nums_batch)
+            instr = (f'Transcreva integralmente o texto destas {len(batch)} '
+                     'paginas de manual/documento ferroviario em portugues. '
+                     'Preserve a ordem, formate tabelas em markdown e mantenha '
+                     f'listas. Estas paginas correspondem, na ordem dada, '
+                     f'aos numeros: {lista}. Separe cada pagina com '
+                     '"--- Pagina N ---" usando o numero correto da lista. '
+                     'Retorne APENAS o texto transcrito, sem comentarios.')
+        content.append({'type': 'text', 'text': instr})
         try:
             resp = _anthropic_client.messages.create(
                 model='claude-haiku-4-5',
@@ -1447,6 +1459,69 @@ def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 80) -> str:
         except Exception as e:
             pages_text.append(f'[OCR falhou no lote {i // BATCH + 1}: {e}]')
     return '\n\n'.join(pages_text)
+
+def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 200) -> str:
+    """OCR de TODAS as paginas do PDF (fallback quando pdfplumber falha geral)."""
+    try:
+        from pdf2image import convert_from_bytes
+    except ImportError:
+        return ''
+    try:
+        images = convert_from_bytes(raw, dpi=150, fmt='png',
+                                    first_page=1, last_page=max_pages)
+    except Exception:
+        return ''
+    return _ocr_imagens_via_vision(images)
+
+def _ocr_pdf_paginas_especificas(raw: bytes, paginas_idx: list,
+                                  max_paginas_ocr: int = 80) -> str:
+    """OCR seletivo: extrai SO as paginas listadas (indices 0-based).
+    Usado quando pdfplumber extraiu OK na maioria mas falhou em algumas
+    paginas (PDF misto: digital + scans/imagens). Limita max_paginas_ocr
+    pra nao explodir custo se o PDF tem muitas paginas-imagem.
+
+    PERFORMANCE (fix architect): agrupa paginas em RUNS CONTIGUOS e faz
+    1 chamada poppler por run, em vez de converter min..max inteiro.
+    Ex: paginas [1, 2, 3, 200, 201] → 2 chamadas (1-3 e 200-201) em vez
+    de converter 201 paginas pra usar so 5."""
+    if not paginas_idx:
+        return ''
+    try:
+        from pdf2image import convert_from_bytes
+    except ImportError:
+        return ''
+    paginas_idx = sorted(set(paginas_idx))[:max_paginas_ocr]
+    # Agrupa em runs contiguos
+    runs = []  # lista de (primeiro_idx, ultimo_idx, [idx1, idx2, ...])
+    atual = [paginas_idx[0]]
+    for idx in paginas_idx[1:]:
+        if idx == atual[-1] + 1:
+            atual.append(idx)
+        else:
+            runs.append((atual[0], atual[-1], atual))
+            atual = [idx]
+    runs.append((atual[0], atual[-1], atual))
+
+    todas_imagens = []
+    todos_nums = []
+    for primeiro, ultimo, indices in runs:
+        try:
+            imgs_run = convert_from_bytes(
+                raw, dpi=150, fmt='png',
+                first_page=primeiro + 1,  # 1-based
+                last_page=ultimo + 1,
+            )
+        except Exception:
+            continue
+        if not imgs_run:
+            continue
+        # Run e contiguo, entao imgs_run[k] corresponde a indice (primeiro+k)
+        for k, img in enumerate(imgs_run):
+            todas_imagens.append(img)
+            todos_nums.append(primeiro + k + 1)  # 1-based pra rotular
+    if not todas_imagens:
+        return ''
+    return _ocr_imagens_via_vision(todas_imagens, numeros_pagina=todos_nums)
 
 # === EXTRACAO DE TEXTO DE PDF/TXT ===
 def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str, permitir_ocr: bool = True) -> str:
@@ -1459,21 +1534,51 @@ def extrair_texto_arquivo(b64_data: str, mimetype: str, nome: str, permitir_ocr:
     nome_lower = nome.lower()
     if (mimetype and 'pdf' in mimetype) or nome_lower.endswith('.pdf'):
         texto_pdf = ''
+        # Detecta paginas com extracao ruim (provavelmente em imagem/scan)
+        # pra dispara OCR SELETIVO depois — antes, cenario misto (digital+scan)
+        # perdia silenciosamente as paginas-imagem porque o OCR full so disparava
+        # se o PDF inteiro tinha < 200 chars.
+        paginas_falhas = []
+        n_paginas_total = 0
+        partes_por_pagina = []  # [(idx, texto)] das paginas que extrairam OK
         try:
             import pdfplumber
             with pdfplumber.open(io.BytesIO(raw)) as pdf:
-                pages = []
-                for p in pdf.pages:
+                n_paginas_total = len(pdf.pages)
+                for idx, p in enumerate(pdf.pages):
                     t = p.extract_text() or ''
-                    if t.strip():
-                        pages.append(t)
-                texto_pdf = '\n\n'.join(pages)
+                    # Limiar 50: paginas com menos sao quase sempre imagem/scan
+                    # ou layouts que pdfplumber nao decifra.
+                    if len(t.strip()) >= 50:
+                        partes_por_pagina.append((idx, t))
+                    else:
+                        paginas_falhas.append(idx)
+                texto_pdf = '\n\n'.join(
+                    f'--- Pagina {i+1} ---\n{t}' for (i, t) in partes_por_pagina
+                )
         except Exception:
             texto_pdf = ''
-        if permitir_ocr and len(texto_pdf.strip()) < 200:
-            ocr = _ocr_pdf_via_vision(raw)
-            if len(ocr.strip()) > len(texto_pdf.strip()):
-                texto_pdf = ocr
+            partes_por_pagina = []
+            paginas_falhas = []
+            n_paginas_total = 0
+        if permitir_ocr:
+            # CENARIO 1: PDF inteiro vazio/quase-vazio. Mantem comportamento
+            # antigo: OCR full. NAO checa n_paginas_total > 0 porque se
+            # pdfplumber.open() falhou (PDF problematico) n_paginas_total=0
+            # mas pdf2image ainda pode conseguir renderizar — fix architect:
+            # antes essa condicao era so "len < 200", regressao introduzida.
+            if len(texto_pdf.strip()) < 200:
+                ocr = _ocr_pdf_via_vision(raw)
+                if len(ocr.strip()) > len(texto_pdf.strip()):
+                    texto_pdf = ocr
+            # CENARIO 2 (NOVO): PDF misto — pdfplumber extraiu boa parte mas
+            # algumas paginas vieram vazias. OCR SELETIVO nessas paginas.
+            elif paginas_falhas:
+                ocr_complemento = _ocr_pdf_paginas_especificas(raw, paginas_falhas)
+                if ocr_complemento.strip():
+                    texto_pdf += ('\n\n--- Paginas extraidas via OCR (eram '
+                                  'imagens/scan no PDF original) ---\n'
+                                  + ocr_complemento)
         return texto_pdf
     if nome_lower.endswith('.docx') or 'officedocument.wordprocessingml' in (mimetype or ''):
         try:
@@ -1794,7 +1899,9 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
-        trechos = buscar_chunks(ultima, biblioteca, top_k=6) if ultima else []
+        # top_k=10 (era 6): PDFs grandes podem ter o item buscado num chunk
+        # com score moderado. 10 trechos ainda cabem no contexto sem inflar custo.
+        trechos = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
 
         u = request.current_user
         matricula_user = u.get('matricula', '')

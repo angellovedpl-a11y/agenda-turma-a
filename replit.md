@@ -317,7 +317,19 @@ Tudo aditivo. Sem regressão na Fase 1/2. Endereça gargalos detectados pra carg
 - 429 com `Retry-After` + `X-RateLimit-*` headers + corpo JSON em PT-BR coloquial.
 - Kill switch operacional: `RATELIMIT_ENABLED=0` desliga tudo.
 - Limites aplicados: `/api/claude` (Viriato) **20/min/matrícula** (`RATELIMIT_CLAUDE_PER_MIN`); `/api/chat/conversas` (polling) **120/min/matrícula** (`RATELIMIT_CHAT_CONVERSAS_PER_MIN`).
-- Schema criado no startup (`ratelimit.init_schema()` logo após `kvstore.init_schema()`).
+
+**Bloco I — Extração de PDF página-por-página + OCR seletivo** (`server.py:1405+`; 30/04/2026)
+- **Sintoma:** dono reportou "Viriato disse que dados extraídos do PDF estavam incompletos". Causa raiz: `extrair_texto_arquivo` chamava pdfplumber página por página e pulava as vazias **sem aviso**. Fallback OCR só disparava se TODO o PDF tivesse < 200 chars. PDFs mistos (ex.: 40 páginas digitais + 10 scans/imagens) extraíam só os 30k chars das digitais → texto > 200 → OCR full não disparava → as 10 páginas-imagem eram **silenciosamente perdidas**, e o item buscado pelo Viriato sumia.
+- **Fix 1 — detecção página-por-página:** `extrair_texto_arquivo` agora marca como falha qualquer página cujo `extract_text().strip()` < 50 chars (limiar empírico pra detectar imagem/scan vs cabeçalho real). Acumula `paginas_falhas: list[int]` (0-based). Texto extraído ganha marcadores `--- Pagina N ---` (debug + contexto pro Claude).
+- **Fix 2 — OCR seletivo (`_ocr_pdf_paginas_especificas`):** se `paginas_falhas` mas texto digital > 200, dispara OCR **só nas páginas faltantes** via Vision. Páginas digitais ficam intactas (sem custo OCR). Retorno do upload concatena texto digital + bloco `--- Paginas extraidas via OCR (eram imagens/scan no PDF original) ---`.
+- **Fix 3 — runs contíguos no OCR seletivo (fix architect):** páginas falhas esparsas (ex. `[1, 200]`) **não** convertem o range inteiro `min..max` via Poppler. Algoritmo agrupa em runs contíguos e faz 1 chamada `convert_from_bytes` por run. Ex.: `[0,1,2,199,200]` → 2 chamadas (1-3 e 200-201) renderizando 5 páginas em vez de 201.
+- **Fix 4 — rotulagem correta de batches não-contíguos (fix architect):** `_ocr_imagens_via_vision` recebe `numeros_pagina: list[int]` (1-based) e detecta se o batch é contíguo. Contíguo: prompt usa "numerando a partir de N". Não-contíguo (ex.: páginas 2 e 10 num mesmo batch): prompt lista explicitamente "estas páginas correspondem aos números: 2, 10" pra evitar Claude rotular como 2 e 3.
+- **Fix 5 — preservação do fallback OCR full quando pdfplumber falha (fix architect):** condição do cenário 1 voltou a ser `len(texto_pdf.strip()) < 200` (antes incluía `and n_paginas_total > 0`, regressão funcional — se `pdfplumber.open()` lançasse exceção, `n_paginas_total=0` impedia o OCR full mesmo quando `pdf2image` ainda conseguiria renderizar).
+- **Fix 6 — `top_k` no Viriato 6 → 10** (`server.py:1874`): PDFs grandes podem ter o item buscado num chunk com score moderado. 10 trechos cabem no contexto sem inflar custo.
+- **Fix 7 — `max_pages` do OCR full 80 → 200**: PDFs ferroviários longos cabem dentro do limite Vision.
+- **Aditividade total:** PDF 100% digital → comportamento idêntico (só ganha marcadores `--- Pagina N ---`). PDF 100% scan → continua usando OCR full. PDF misto → cenário NOVO recupera as páginas-imagem antes silenciosamente perdidas.
+- **Custo:** OCR seletivo cap em `max_paginas_ocr=80` páginas/PDF (proteção contra PDF onde 200 páginas são imagens — cairia no cenário scan completo). Cada batch = 4 páginas em 1 chamada Haiku (mesmo padrão do OCR full).
+- **Validação:** smoke test em 3 cenários — PDF digital normal preserva extração + ganhou marcadores; PDF misto detecta página falha e dispara OCR seletivo só nela; PDF totalmente em branco mantém OCR full. Architect review PASS.
 
 **Variáveis de ambiente novas (todas com default sensato)**
 - `PALACE_BUSCA_TIMEOUT=0.8` — timeout em segundos pra busca semântica
