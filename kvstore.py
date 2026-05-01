@@ -74,8 +74,16 @@ def _get_pool():
             return _pool
         if not _DB_URL:
             raise RuntimeError('DATABASE_URL nao configurada')
-        _pool = _pgpool.ThreadedConnectionPool(_POOL_MIN, _POOL_MAX, _DB_URL)
-        print(f'[kvstore] pool criado (min={_POOL_MIN}, max={_POOL_MAX})')
+        # TCP keepalives evitam que o Postgres do Replit (ou middleboxes de rede)
+        # derrubem conexoes SSL idle sem o cliente saber. Sem isso, conexoes
+        # ficam "zombie" no pool e a primeira/segunda chamada apos um periodo
+        # ocioso falha com "SSL connection has been closed unexpectedly".
+        # idle=30s antes do 1o probe, intervalo 10s entre probes, 5 probes ate dar EOF.
+        _pool = _pgpool.ThreadedConnectionPool(
+            _POOL_MIN, _POOL_MAX, _DB_URL,
+            keepalives=1, keepalives_idle=30, keepalives_interval=10, keepalives_count=5,
+        )
+        print(f'[kvstore] pool criado (min={_POOL_MIN}, max={_POOL_MAX}, keepalives=on)')
         return _pool
 
 
@@ -208,21 +216,45 @@ def _do_load(conn, key):
 
 def load(key: str, raise_on_error: bool = False, conn=None) -> dict:
     """Carrega valor JSON. Se `conn` for passado, reusa essa conexao (util
-    dentro de `with_lock` pra evitar pegar nova conexao do pool)."""
+    dentro de `with_lock` pra evitar pegar nova conexao do pool).
+
+    Quando a conexao vem do pool, retenta automaticamente ate 3x se a conexao
+    estiver morta (SSL fechado, EOF). Conexoes mortas sao descartadas pelo
+    `_connect()`, entao o retry sempre pega uma fresca."""
     if not _DB_URL:
         if raise_on_error:
             raise KVStoreError('DATABASE_URL nao configurada')
         return {}
-    try:
-        if conn is not None:
+    # conn vinda de fora: chamador controla, sem retry
+    if conn is not None:
+        try:
             return _do_load(conn, key)
-        with _connect() as c:
-            return _do_load(c, key)
-    except Exception as e:
-        print(f'[kvstore] erro load({key}): {e}')
-        if raise_on_error:
-            raise KVStoreError(str(e))
-        return {}
+        except Exception as e:
+            print(f'[kvstore] erro load({key}) [conn externa]: {e}')
+            if raise_on_error:
+                raise KVStoreError(str(e))
+            return {}
+    # conn do pool: retry em conexao morta (1 tentativa + 2 retries)
+    last_err = None
+    for tentativa in range(3):
+        try:
+            with _connect() as c:
+                return _do_load(c, key)
+        except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+            last_err = e
+            if tentativa < 2:
+                print(f'[kvstore] retry load({key}) tentativa {tentativa+2}/3 (conn morta): {e}')
+                continue
+            break
+        except Exception as e:
+            print(f'[kvstore] erro load({key}): {e}')
+            if raise_on_error:
+                raise KVStoreError(str(e))
+            return {}
+    print(f'[kvstore] FALHA load({key}) apos 3 tentativas: {last_err}')
+    if raise_on_error:
+        raise KVStoreError(str(last_err))
+    return {}
 
 
 def _do_save(conn, key, value):
@@ -240,25 +272,49 @@ def _do_save(conn, key, value):
 
 def save(key: str, value, raise_on_error: bool = False, conn=None) -> bool:
     """Grava valor JSON. Se `conn` for passado, reusa essa conexao (precisa
-    estar dentro de `with_lock` ou outro contexto que ja fara commit)."""
+    estar dentro de `with_lock` ou outro contexto que ja fara commit).
+
+    Quando a conexao vem do pool, retenta automaticamente ate 3x se a conexao
+    estiver morta. O save eh um UPSERT (ON CONFLICT DO UPDATE), entao retry
+    eh idempotente."""
     if not _DB_URL:
         if raise_on_error:
             raise KVStoreError('DATABASE_URL nao configurada')
         return False
-    try:
-        if conn is not None:
+    # conn vinda de fora: chamador controla, sem retry (evita romper transacao)
+    if conn is not None:
+        try:
             _do_save(conn, key, value)
             # NAO commita aqui — quem detem a conn (with_lock/_connect) commita
             return True
-        with _connect() as c:
-            _do_save(c, key, value)
-            c.commit()
-        return True
-    except Exception as e:
-        print(f'[kvstore] erro save({key}): {e}')
-        if raise_on_error:
-            raise KVStoreError(str(e))
-        return False
+        except Exception as e:
+            print(f'[kvstore] erro save({key}) [conn externa]: {e}')
+            if raise_on_error:
+                raise KVStoreError(str(e))
+            return False
+    # conn do pool: retry em conexao morta (1 tentativa + 2 retries)
+    last_err = None
+    for tentativa in range(3):
+        try:
+            with _connect() as c:
+                _do_save(c, key, value)
+                c.commit()
+            return True
+        except (psycopg2.InterfaceError, psycopg2.OperationalError) as e:
+            last_err = e
+            if tentativa < 2:
+                print(f'[kvstore] retry save({key}) tentativa {tentativa+2}/3 (conn morta): {e}')
+                continue
+            break
+        except Exception as e:
+            print(f'[kvstore] erro save({key}): {e}')
+            if raise_on_error:
+                raise KVStoreError(str(e))
+            return False
+    print(f'[kvstore] FALHA save({key}) apos 3 tentativas: {last_err}')
+    if raise_on_error:
+        raise KVStoreError(str(last_err))
+    return False
 
 
 def migrar_de_arquivo(key: str, path: str) -> bool:

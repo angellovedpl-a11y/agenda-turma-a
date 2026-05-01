@@ -235,7 +235,14 @@ def handle_login(data):
     senha = (data.get('senha') or '').strip()
     if not validar_matricula(matricula) or not validar_senha(senha):
         return jsonify({'error': 'Matricula (6 a 10 digitos) ou senha (4 digitos) invalidas'}), 400
-    users = users_load()
+    # raise_on_error=True para distinguir "DB fora do ar" (503) de "credencial errada" (401).
+    # Antes, qualquer falha de DB retornava {} silenciosamente e o user via "senha incorreta"
+    # mesmo digitando os dados corretos (caso classico: conexao SSL morta no pool).
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError as e:
+        print(f'[handle_login] DB indisponivel: {e}')
+        return jsonify({'error': 'Servidor temporariamente indisponivel, tente novamente em instantes'}), 503
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Matricula ou senha incorretas'}), 401
