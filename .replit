@@ -45,7 +45,7 @@ externalPort = 3001
 
 [deployment]
 deploymentTarget = "vm"
-run = ["sh", "-c", ". .venv/bin/activate && export PYTHONUNBUFFERED=1 && exec gunicorn --bind=0.0.0.0:5000 --workers=2 --worker-class=gthread --threads=8 --timeout=600 --keep-alive=5 --preload server:app"]
+run = ["sh", "-c", ". .venv/bin/activate && export PYTHONUNBUFFERED=1 && exec gunicorn -c gunicorn.conf.py --bind=0.0.0.0:5000 --workers=2 --worker-class=gthread --threads=8 --timeout=600 --keep-alive=5 --preload server:app"]
 build = ["sh", "-c", "unset PIP_USER PYTHONUSERBASE && export PIP_USER=0 && python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install flask anthropic pdfplumber reportlab gunicorn sendgrid requests psycopg2-binary pywebpush replit"]
 
 [postMerge]
