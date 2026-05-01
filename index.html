@@ -1608,6 +1608,20 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":
     .tabs-mini{display:flex;gap:6px;margin-bottom:14px}
     .tabs-mini button{background:#0f1117;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:12px;letter-spacing:.5px}
     .tabs-mini button.active{background:var(--neon);color:#000;border-color:var(--neon);font-weight:700}
+
+    /* === FIX MODO CLARO: classes que ficaram com fundo escuro hardcoded === */
+    [data-theme="light"] .toast{background:#ffffff;color:#0f172a;border-color:#cbd5e1;box-shadow:0 8px 24px #0f172a22}
+    [data-theme="light"] .vp-opt{color:#0f172a}
+    [data-theme="light"] .vp-opt:hover{background:#f1f5f9;color:#0f172a}
+    [data-theme="light"] .tabs-mini button{background:#f8fafc;color:#475569;border-color:#cbd5e1}
+    [data-theme="light"] .tabs-mini button.active{background:var(--neon);color:#ffffff;border-color:var(--neon)}
+    [data-theme="light"] .btn-danger{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
+    [data-theme="light"] .btn-legend,[data-theme="light"] .theme-toggle{background:var(--card)}
+    [data-theme="light"] .wk{background:#f1f5f9;border-color:#cbd5e1}
+    [data-theme="light"] .wk .wn{color:#0f172a}
+    /* popups e caixas internas que vivem dentro dos modais admin (Viriato) */
+    /* !important pq o elemento é criado inline com background:#0e1117 hardcoded em renderViriato() */
+    [data-theme="light"] #vwPlusPop{background:#ffffff !important;border-color:#cbd5e1 !important;box-shadow:0 12px 30px #0f172a22 !important}
   `;
   const s=document.createElement("style");s.textContent=css;document.head.appendChild(s);
 })();
@@ -2571,7 +2585,7 @@ async function openSetup(){
   const u=CURRENT_USER||{};
   const isAdm=u.role==="admin"||u.role==="aprovador";
   openModal("Configurações",`
-    <div style="margin-bottom:14px;padding:10px;background:#0f1117;border:1px solid var(--border);border-radius:10px">
+    <div style="margin-bottom:14px;padding:10px;background:var(--card-2);border:1px solid var(--border);border-radius:10px">
       <div style="font-size:13px;font-weight:600">${escapeHtml(u.nome||"")}</div>
       <div style="font-size:12px;color:var(--muted)">Matrícula ${escapeHtml(u.matricula||"")} · ${escapeHtml(u.role||"membro")}</div>
     </div>
@@ -2694,14 +2708,14 @@ async function openAdmin(){
       }else if(tab==="reg"){
         const r=await apiFetch("/api/regras_tecnicas");const d=await r.json();
         const regras=d.regras||[];
-        const form=`<div style="background:#0f1117;border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px">
+        const form=`<div style="background:var(--card-2);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px">
           <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--neon)">+ Nova regra técnica</div>
           <div class="modal-fld" style="margin-bottom:6px"><input id="rgC" placeholder="Conceito (ex: Pressão de alívio L201)" maxlength="120"/></div>
-          <div class="modal-fld" style="margin-bottom:6px"><textarea id="rgR" placeholder="Regra de ouro (operacional, completa)" maxlength="600" rows="3" style="width:100%;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
+          <div class="modal-fld" style="margin-bottom:6px"><textarea id="rgR" placeholder="Regra de ouro (operacional, completa)" maxlength="600" rows="3" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
           <div class="modal-fld" style="margin-bottom:6px"><input id="rgB" placeholder="Condição de borda (opcional)" maxlength="400"/></div>
           <div style="display:flex;gap:6px;margin-bottom:6px">
-            <input id="rgP" placeholder="Peso 0.0–1.0" value="0.9" style="flex:1;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text)"/>
-            <input id="rgF" placeholder="Fonte (doc/pessoa)" maxlength="120" style="flex:2;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text)"/>
+            <input id="rgP" placeholder="Peso 0.0–1.0" value="0.9" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text)"/>
+            <input id="rgF" placeholder="Fonte (doc/pessoa)" maxlength="120" style="flex:2;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text)"/>
           </div>
           <button id="rgB1" class="btn-primary" style="width:100%;padding:8px">Gravar regra</button>
         </div>`;
@@ -2739,10 +2753,10 @@ async function openAdmin(){
       }else if(tab==="ant"){
         const r=await apiFetch("/api/antipadroes");const d=await r.json();
         const lst=d.antipadroes||[];
-        const form=`<div style="background:#0f1117;border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px">
+        const form=`<div style="background:var(--card-2);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px">
           <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:#ff8a8a">+ Novo anti-padrão (erro a NUNCA repetir)</div>
-          <div class="modal-fld" style="margin-bottom:6px"><textarea id="apE" placeholder="Erro que o Viriato cometeu" maxlength="400" rows="2" style="width:100%;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
-          <div class="modal-fld" style="margin-bottom:6px"><textarea id="apC" placeholder="Correção (o que ele deveria ter dito)" maxlength="400" rows="2" style="width:100%;background:#0a0d14;border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
+          <div class="modal-fld" style="margin-bottom:6px"><textarea id="apE" placeholder="Erro que o Viriato cometeu" maxlength="400" rows="2" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
+          <div class="modal-fld" style="margin-bottom:6px"><textarea id="apC" placeholder="Correção (o que ele deveria ter dito)" maxlength="400" rows="2" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;color:var(--text);font-family:inherit;font-size:13px"></textarea></div>
           <button id="apB1" class="btn-primary" style="width:100%;padding:8px">Gravar anti-padrão</button>
         </div>`;
         const lista=lst.length?lst.map(a=>`<div class="lst-item" style="flex-direction:column;align-items:stretch;gap:6px">
@@ -2983,14 +2997,14 @@ function abrirManualPDF(){
   if(v){v.remove();}
   v=document.createElement("div");
   v.id="manualViewer";
-  v.style.cssText="position:fixed;inset:0;z-index:9999;background:#0a0c10;display:flex;flex-direction:column";
+  v.style.cssText="position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column";
   v.innerHTML=`
-    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:#0e1117;border-bottom:1px solid var(--border);box-shadow:0 4px 12px #0008">
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 4px 12px #0008">
       <button id="mvSair" style="background:var(--neon);color:#000;border:0;border-radius:8px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px">
         <span style="font-size:18px">←</span> Sair do manual
       </button>
       <div style="flex:1;color:var(--text);font-weight:600;font-size:14px;text-align:center">📖 Manual do App</div>
-      <a href="/manual_agenda_turma_a.pdf" download style="background:#161a22;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;text-decoration:none">⬇️ Baixar</a>
+      <a href="/manual_agenda_turma_a.pdf" download style="background:var(--card-2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;text-decoration:none">⬇️ Baixar</a>
     </div>
     <iframe src="/manual_agenda_turma_a.pdf" style="flex:1;width:100%;border:0;background:#fff" title="Manual"></iframe>`;
   document.body.appendChild(v);
