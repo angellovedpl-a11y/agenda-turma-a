@@ -1,0 +1,7 @@
+*.zip
+*.pyc
+__pycache__/
+.cache/
+.upm/
+venv/
+*.log

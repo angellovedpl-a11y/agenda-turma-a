@@ -3409,6 +3409,15 @@ def diag_biblioteca():
         'documentos': [{'nome': d.get('nome'), 'categoria': d.get('categoria'), 'chunks': len(d.get('chunks', []))} for d in docs]
     })
 
+
+@app.route('/download-backup')
+def download_backup():
+    import os
+    from flask import send_file
+    filepath = '/home/runner/workspace/agenda-turma-a-backup.zip'
+    if os.path.exists(filepath):
+        return send_file(filepath, as_attachment=True, download_name='agenda-turma-a-backup.zip')
+    return 'Arquivo nao encontrado', 404
 if __name__ == '__main__':
     iniciar_lembrete_prontos()
     app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
