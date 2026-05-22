@@ -1727,6 +1727,21 @@ Conteudo (amostra):
     return {'categoria': 'outros', 'resumo': nome, 'palavras_chave': []}
 
 # === ROTAS ESTATICAS ===
+# Allowlist de extensoes que podem ser servidas pela rota /<path:path>.
+# SEGURANCA: sem isso, send_from_directory('.', path) entregaria server.py,
+# auth.py, .replit (com VAPID_PRIVATE_KEY antiga), data/users.json (hashes de
+# senha), data/sessions.json (tokens ativos), etc. Allowlist > blocklist porque
+# se alguem adicionar `.env` ou `.secrets.json` na raiz, ja fica protegido.
+_STATIC_ALLOWED_EXT = {
+    '.html', '.css', '.js', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp',
+    '.ico', '.webmanifest', '.mp3', '.woff', '.woff2', '.ttf', '.map'
+}
+_STATIC_BLOCKED_PREFIXES = (
+    'api/', 'data/', '.git/', '.replit_integration_files/', 'helpdesk/',
+    'migrations/', 'scripts/', 'documentos_extraidos_md/',
+)
+
+
 @app.route('/')
 def index():
     resp = send_from_directory('.', 'index.html')
@@ -1737,7 +1752,15 @@ def index():
 
 @app.route('/<path:path>')
 def static_files(path):
+    # Bloqueia rotas API caindo aqui (404 explicito, evita servir HTML por engano)
     if path.startswith('api/'):
+        return jsonify({'error': 'Not found'}), 404
+    # Bloqueia dotfiles (.replit, .gitignore, .env, etc) e pastas privadas
+    if path.startswith('.') or any(path.startswith(p) for p in _STATIC_BLOCKED_PREFIXES):
+        return jsonify({'error': 'Not found'}), 404
+    # Allowlist de extensao: bloqueia .py, .toml, .lock, .md, .sql, .sh, .pdf, etc.
+    _, ext = os.path.splitext(path.lower())
+    if ext not in _STATIC_ALLOWED_EXT:
         return jsonify({'error': 'Not found'}), 404
     resp = send_from_directory('.', path)
     if path.endswith('.html'):
@@ -1747,10 +1770,14 @@ def static_files(path):
 # === API CLAUDE ===
 # === API AUTH ===
 @app.route('/api/auth/registrar', methods=['POST'])
+@ratelimit.rate_limit_by_request(5, env_var='RATELIMIT_REGISTRAR_PER_MIN',
+                                  route_key='registrar', body_key='matricula')
 def api_registrar():
     return auth.handle_registrar(request.json or {})
 
 @app.route('/api/auth/login', methods=['POST'])
+@ratelimit.rate_limit_by_request(10, env_var='RATELIMIT_LOGIN_PER_MIN',
+                                  route_key='login', body_key='matricula')
 def api_login():
     return auth.handle_login(request.json or {})
 
@@ -1833,6 +1860,8 @@ def api_despromover(matricula):
     return auth.handle_despromover(matricula, request.current_user)
 
 @app.route('/api/auth/recuperar', methods=['POST'])
+@ratelimit.rate_limit_by_request(5, env_var='RATELIMIT_RECUPERAR_PER_MIN',
+                                  route_key='recuperar', body_key='matricula')
 def api_recuperar():
     return auth.handle_recuperar_senha(request.json or {})
 
@@ -3411,7 +3440,10 @@ def diag_biblioteca():
 
 
 @app.route('/download-backup')
+@auth.require_admin
 def download_backup():
+    # SEGURANCA: backup do app inteiro (codigo + dados). So admin.
+    # Antes era publico — qualquer um baixava se soubesse a URL.
     import os
     from flask import send_file
     filepath = '/home/runner/workspace/agenda-turma-a-backup.zip'

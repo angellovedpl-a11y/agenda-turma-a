@@ -159,6 +159,72 @@ def check_and_increment(matricula: str, rota: str, max_per_min: int) -> tuple:
         return (True, 0, 0)
 
 
+def _client_ip() -> str:
+    """Resolve IP do cliente atras do proxy do Replit. X-Forwarded-For pode ter
+    varios IPs (cliente, proxy1, proxy2) — o primeiro eh o cliente original."""
+    xff = request.headers.get('X-Forwarded-For', '').strip()
+    if xff:
+        return xff.split(',')[0].strip() or 'unknown'
+    return request.remote_addr or 'unknown'
+
+
+def rate_limit_by_request(max_per_min: int, env_var: str = None, route_key: str = None,
+                          body_key: str = None):
+    """Rate limit para rotas SEM autenticacao (login, recuperar senha).
+    Chave eh IP do cliente + opcionalmente um campo do body JSON (ex: 'matricula').
+
+    Por que IP+matricula: bloqueia tanto brute-force de senha (mesmo IP, mesma
+    matricula) quanto enumeracao (mesmo IP, varias matriculas) — cada combinacao
+    tem seu proprio bucket. Sem isso, brute-force de 10k combinacoes de senha
+    de 4 digitos cabe em segundos.
+
+    FAIL-OPEN igual ao rate_limit original: se DB cai, deixa passar (limiter
+    NUNCA pode derrubar o app).
+    """
+    def decorator(fn):
+        limite = max_per_min
+        if env_var:
+            raw = os.environ.get(env_var)
+            if raw is not None and raw.strip():
+                try:
+                    limite = int(raw)
+                except (ValueError, TypeError):
+                    print(f'[ratelimit] {env_var}={raw!r} invalido, usando default {max_per_min}')
+                    limite = max_per_min
+        rota = route_key or fn.__name__
+
+        @wraps(fn)
+        def wrapped(*a, **kw):
+            if not _RL_ENABLED:
+                return fn(*a, **kw)
+            ip = _client_ip()
+            chave_parts = [f'ip:{ip}']
+            if body_key:
+                try:
+                    body = request.get_json(silent=True) or {}
+                    valor = (body.get(body_key) or '').strip()[:32]
+                    if valor:
+                        chave_parts.append(f'{body_key}:{valor}')
+                except Exception:
+                    pass
+            chave = '|'.join(chave_parts)
+            allowed, count, retry_after = check_and_increment(chave, rota, limite)
+            if not allowed:
+                resp = jsonify({
+                    'error': 'rate_limited',
+                    'mensagem': f'Muitas tentativas. Espere {retry_after}s e tente de novo.',
+                    'retry_after': retry_after,
+                })
+                resp.status_code = 429
+                resp.headers['Retry-After'] = str(retry_after)
+                resp.headers['X-RateLimit-Limit'] = str(limite)
+                resp.headers['X-RateLimit-Remaining'] = '0'
+                return resp
+            return fn(*a, **kw)
+        return wrapped
+    return decorator
+
+
 def rate_limit(max_per_min: int, env_var: str = None, route_key: str = None):
     """Decorator de rate limit por matricula. DEVE vir DEPOIS de @auth.require_auth
     (precisa de request.current_user populado).
