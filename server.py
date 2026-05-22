@@ -1652,10 +1652,22 @@ def fazer_chunks(texto: str, tamanho: int = 600, overlap: int = 80) -> list:
 # === BUSCA POR PALAVRAS-CHAVE ===
 STOPWORDS = set('a o e de da do das dos um uma para com por que se na no nos nas em ao aos as os ou e mas isso isto este esta esse essa eu voce me te lhe seu sua eh é eh ja já mais menos como onde quando porque pq qual quais qto qta tem ter ha há sao são foi era estar estou esta está estamos sera será será'.split())
 
+# Padrao pra referencias hierarquicas tipo 43.5, 10.43.7, 43.5a, art. 12.3.
+# Preserva como TOKEN UNICO em tokenize() — sem isso, o re.sub abaixo trocava
+# o ponto por espaco e "43.5" virava ["43","5"], ambos descartados pelo filtro
+# len>=3, e a query "item 43.5" sobrava so com ["item"] (super generico) →
+# perdia o chunk certo no top 10. Diag: scripts/_diag_viriato.py.
+_HIER_REF_RE = re.compile(r'\b\d+(?:\.\d+)+[a-z]?\b')
+
+
 def tokenize(s: str) -> list:
     s = (s or '').lower()
+    # 1) Extrai referencias hierarquicas ANTES do strip de pontuacao.
+    hier_tokens = _HIER_REF_RE.findall(s)
+    # 2) Strip pontuacao + tokenizacao normal (igual ao comportamento antigo).
     s = re.sub(r'[^\w\sáàâãéèêíïóôõúçñ]', ' ', s)
-    return [w for w in s.split() if len(w) >= 3 and w not in STOPWORDS]
+    palavras = [w for w in s.split() if len(w) >= 3 and w not in STOPWORDS]
+    return palavras + hier_tokens
 
 def buscar_chunks(query: str, biblioteca: dict, top_k: int = 3) -> list:
     qtokens = set(tokenize(query))
@@ -1690,6 +1702,13 @@ def buscar_chunks(query: str, biblioteca: dict, top_k: int = 3) -> list:
             for tok in re.findall(r'\b\d+[a-z]?\b', qlower):
                 if len(tok) >= 2 and (tok in chunk_low or tok in chunk_low_nospace):
                     score += 2.5
+            # BONUS FORTE pra match EXATO de referencia hierarquica (43.5, 10.43.7).
+            # Sem isso, query "item 43.5" empata o chunk certo com chunks que so
+            # tem "43" sozinho (10.43, 11.43, ...) — e perde no desempate.
+            # Peso 10 garante que o chunk com a ref exata vai pro topo.
+            for hier in _HIER_REF_RE.findall(qlower):
+                if hier in chunk_low:
+                    score += 10.0
             if doc.get('palavras_chave'):
                 kwset = set(tokenize(' '.join(doc['palavras_chave'])))
                 score += len(qtokens & kwset) * 0.5
