@@ -661,9 +661,154 @@ import hashlib as _hashlib
 import math as _math
 import threading as _threading
 
-_PALACE_EMBED_DIM = 256
+_PALACE_EMBED_DIM = 256          # dimensao do fallback TF-IDF caseiro (col 'embedding')
+_PALACE_EMBED_DIM_V2 = 1024      # dimensao do Voyage voyage-4-large (col 'embedding_v2')
 _PALACE_FLAG_LOCK = _threading.Lock()
 _palace_db_disponivel = None  # tri-state: None=nao testado, True=ok, False=indisponivel
+_palace_v2_disponivel = None  # tri-state: idem pra coluna embedding_v2 (migration aplicada)
+
+# === FASE 4: Voyage AI embeddings ===
+# voyage-4-large: 1024d, multilingual, especialmente bom em PT tecnico.
+# Free tier 200M tokens/mes — pra uso atual (14 docs ~700 chunks + ~milhares
+# de queries/mes) cobre anos. Fallback TF-IDF caseiro mantido pra:
+#  1) Dev sem chave (workspace local, builds quebrados)
+#  2) Falha temporaria da API Voyage (rate limit, 5xx)
+#  3) Migration nao aplicada ainda (coluna embedding_v2 ausente)
+_VOYAGE_API_KEY = os.environ.get('VOYAGE_API_KEY', '').strip()
+_VOYAGE_MODEL = os.environ.get('VOYAGE_MODEL', 'voyage-4-large')
+_VOYAGE_TIMEOUT = float(os.environ.get('VOYAGE_TIMEOUT', '15'))
+_voyage_client = None
+_voyage_client_lock = _threading.Lock()
+_voyage_install_lock_path = os.path.join(os.path.dirname(__file__), '.voyage_pip.lock')
+
+
+def _ensure_voyage_sdk():
+    """Garante voyageai instalado (lazy install igual psycopg2 em kvstore.py).
+    Dev workspace nao roda o `.replit:build` no Run, entao precisa este fallback."""
+    try:
+        import voyageai  # noqa
+        return True
+    except ImportError:
+        pass
+    try:
+        import fcntl
+        import subprocess
+        import sys
+        with open(_voyage_install_lock_path, 'w') as lf:
+            fcntl.flock(lf.fileno(), fcntl.LOCK_EX)
+            try:
+                import voyageai  # noqa
+                return True
+            except ImportError:
+                pass
+            print('[voyage] voyageai ausente, instalando...')
+            subprocess.check_call(
+                [sys.executable, '-m', 'pip', 'install', '--quiet',
+                 '--disable-pip-version-check', 'voyageai'],
+                stdout=subprocess.DEVNULL,
+            )
+        import voyageai  # noqa
+        return True
+    except Exception as e:
+        print(f'[voyage] erro instalando voyageai: {e}')
+        return False
+
+
+def _get_voyage_client():
+    """Cliente Voyage cacheado. None se key ausente ou SDK indisponivel."""
+    global _voyage_client
+    if not _VOYAGE_API_KEY:
+        return None
+    if _voyage_client is not None:
+        return _voyage_client
+    with _voyage_client_lock:
+        if _voyage_client is not None:
+            return _voyage_client
+        if not _ensure_voyage_sdk():
+            return None
+        try:
+            import voyageai
+            _voyage_client = voyageai.Client(api_key=_VOYAGE_API_KEY)
+            print(f'[voyage] cliente inicializado (modelo={_VOYAGE_MODEL})')
+            return _voyage_client
+        except Exception as e:
+            print(f'[voyage] erro inicializando cliente: {e}')
+            return None
+
+
+def _palace_v2_health_check() -> bool:
+    """Testa se a coluna embedding_v2 existe (migration fase4 aplicada).
+    Cacheado igual _palace_health_check. Sem isso, indexar/buscar v2 vai
+    sempre tentar e logar erro a cada chamada."""
+    global _palace_v2_disponivel
+    with _PALACE_FLAG_LOCK:
+        if _palace_v2_disponivel is not None:
+            return _palace_v2_disponivel
+        if not _palace_health_check():
+            _palace_v2_disponivel = False
+            return False
+        try:
+            with kvstore._connect() as conn, conn.cursor() as cur:
+                cur.execute("""
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name='palace_embeddings' AND column_name='embedding_v2'
+                """)
+                if not cur.fetchone():
+                    print('[fase4] coluna embedding_v2 ausente; rode migrations/fase4_voyage_embeddings.sql')
+                    _palace_v2_disponivel = False
+                    return False
+                _palace_v2_disponivel = True
+                return True
+        except Exception as e:
+            print(f'[fase4] health check v2 falhou: {e}')
+            _palace_v2_disponivel = False
+            return False
+
+
+def gerar_embedding_voyage(texto: str, input_type: str = 'document') -> list:
+    """Gera embedding 1024d via Voyage voyage-4-large. Retorna [] em qualquer erro
+    (caller cai pro TF-IDF). input_type='document' pra indexacao, 'query' pra busca
+    — Voyage usa retrieval assimetrico (modelo otimiza diferente cada lado)."""
+    client = _get_voyage_client()
+    if not client or not (texto or '').strip():
+        return []
+    try:
+        result = client.embed(
+            texts=[texto[:8000]],  # limite generoso; chunks tipicos sao ~3500 chars
+            model=_VOYAGE_MODEL,
+            input_type=input_type,
+        )
+        embs = getattr(result, 'embeddings', None)
+        if embs and len(embs) == 1 and len(embs[0]) == _PALACE_EMBED_DIM_V2:
+            return list(embs[0])
+        print(f'[voyage] resposta inesperada (dim={len(embs[0]) if embs else 0})')
+        return []
+    except Exception as e:
+        print(f'[voyage] gerar_embedding_voyage falhou: {e}')
+        return []
+
+
+def gerar_embedding_voyage_batch(textos: list, input_type: str = 'document') -> list:
+    """Embedding em batch (pra backfill rapido). Retorna [[...], [...]] ou [] em erro.
+    Voyage aceita ate 128 textos por call — chunked para esse limite."""
+    client = _get_voyage_client()
+    if not client or not textos:
+        return []
+    out = []
+    BATCH = 128
+    for i in range(0, len(textos), BATCH):
+        slice_ = [(t or '')[:8000] for t in textos[i:i + BATCH]]
+        try:
+            result = client.embed(texts=slice_, model=_VOYAGE_MODEL, input_type=input_type)
+            embs = getattr(result, 'embeddings', None) or []
+            if len(embs) != len(slice_):
+                print(f'[voyage] batch retornou {len(embs)} pra {len(slice_)} inputs')
+                return []
+            out.extend([list(e) for e in embs])
+        except Exception as e:
+            print(f'[voyage] batch falhou no lote {i // BATCH + 1}: {e}')
+            return []
+    return out
 
 def _palace_health_check() -> bool:
     """Testa uma vez se pgvector + tabela palace_embeddings existem. Cacheado."""
@@ -764,30 +909,60 @@ def _embed_to_pg(vec: list) -> str:
     return '[' + ','.join(f'{float(x):.6f}' for x in vec) + ']'
 
 def _indexar_no_palace(id_item, tipo: str, ala: str, sala: str, conteudo: str):
-    """INSERT/UPDATE em palace_embeddings. Roda em thread daemon. Silencioso em erro."""
+    """INSERT/UPDATE em palace_embeddings. Roda em thread daemon. Silencioso em erro.
+
+    FASE 4: popula AMBAS as colunas quando possivel:
+    - embedding (vector 256, TF-IDF caseiro) — sempre (fallback + busca antiga fatos/regras)
+    - embedding_v2 (vector 1024, Voyage) — quando SDK + key + migration disponiveis
+
+    Chunks de biblioteca (tipo='biblio') sao a motivacao do v2, mas indexamos pra
+    todos os tipos pra ficar pronto pra eventual migracao de fatos/regras."""
     try:
         if not _palace_health_check():
             return
         if not (conteudo or '').strip():
             return
-        emb = gerar_embedding(conteudo)
-        emb_lit = _embed_to_pg(emb)
+        conteudo_trunc = (conteudo or '')[:2000]
+        emb_lit = _embed_to_pg(gerar_embedding(conteudo))
+        emb_v2_lit = None
+        if _palace_v2_health_check() and _get_voyage_client():
+            emb_v2 = gerar_embedding_voyage(conteudo, input_type='document')
+            if emb_v2:
+                emb_v2_lit = _embed_to_pg(emb_v2)
         with kvstore._connect() as conn, conn.cursor() as cur:
-            cur.execute(
-                """
-                INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, criado_em)
-                VALUES (%s, %s, %s, %s, %s, %s::vector, NOW())
-                ON CONFLICT (id) DO UPDATE
-                SET tipo = EXCLUDED.tipo,
-                    ala = EXCLUDED.ala,
-                    sala = EXCLUDED.sala,
-                    conteudo = EXCLUDED.conteudo,
-                    embedding = EXCLUDED.embedding,
-                    criado_em = NOW()
-                """,
-                (str(id_item), tipo, (ala or 'geral'), (sala or 'geral'),
-                 (conteudo or '')[:2000], emb_lit),
-            )
+            if emb_v2_lit is not None:
+                cur.execute(
+                    """
+                    INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, embedding_v2, criado_em)
+                    VALUES (%s, %s, %s, %s, %s, %s::vector, %s::vector, NOW())
+                    ON CONFLICT (id) DO UPDATE
+                    SET tipo = EXCLUDED.tipo,
+                        ala = EXCLUDED.ala,
+                        sala = EXCLUDED.sala,
+                        conteudo = EXCLUDED.conteudo,
+                        embedding = EXCLUDED.embedding,
+                        embedding_v2 = EXCLUDED.embedding_v2,
+                        criado_em = NOW()
+                    """,
+                    (str(id_item), tipo, (ala or 'geral'), (sala or 'geral'),
+                     conteudo_trunc, emb_lit, emb_v2_lit),
+                )
+            else:
+                cur.execute(
+                    """
+                    INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, criado_em)
+                    VALUES (%s, %s, %s, %s, %s, %s::vector, NOW())
+                    ON CONFLICT (id) DO UPDATE
+                    SET tipo = EXCLUDED.tipo,
+                        ala = EXCLUDED.ala,
+                        sala = EXCLUDED.sala,
+                        conteudo = EXCLUDED.conteudo,
+                        embedding = EXCLUDED.embedding,
+                        criado_em = NOW()
+                    """,
+                    (str(id_item), tipo, (ala or 'geral'), (sala or 'geral'),
+                     conteudo_trunc, emb_lit),
+                )
     except Exception as e:
         print(f'[fase2] _indexar_no_palace falhou (id={id_item} tipo={tipo}): {e}')
 
@@ -877,6 +1052,15 @@ def _embed_para_busca(texto: str) -> tuple:
     em 500 chars na chamada pra limitar cardinalidade do cache."""
     return tuple(gerar_embedding(texto))
 
+
+@_lru_cache(maxsize=128)
+def _embed_para_busca_voyage(texto: str) -> tuple:
+    """Cache LRU separado pra Voyage (1024d). Tem que ser separado do TF-IDF
+    porque os vetores tem dimensoes diferentes — misturar quebra a query SQL.
+    input_type='query' aproveita o retrieval assimetrico do Voyage."""
+    emb = gerar_embedding_voyage(texto, input_type='query')
+    return tuple(emb) if emb else ()
+
 def _get_palace_busca_executor():
     """Pool dedicado pra buscas (separado da indexacao). 2 workers basta porque
     cada call dura <100ms; serve so pra encapsular timeout via Future.result()."""
@@ -893,53 +1077,75 @@ def _get_palace_busca_executor():
             print(f'[fase3] pool de busca semantica criado ({_PALACE_BUSCA_WORKERS} workers, timeout {_PALACE_BUSCA_TIMEOUT}s)')
         return _palace_busca_executor
 
-def _busca_semantica_sync(query, ala, sala, n):
-    """Implementacao sincrona — executada via pool com timeout pra blindar caller."""
-    ci_before = _embed_para_busca.cache_info().hits
-    emb = list(_embed_para_busca(query[:500]))
-    ci_after = _embed_para_busca.cache_info().hits
+def _busca_semantica_sync(query, ala, sala, n, tipo=None, usar_voyage=False):
+    """Implementacao sincrona — executada via pool com timeout pra blindar caller.
+    FASE 4: param `usar_voyage` escolhe coluna+modelo:
+    - False (default): coluna `embedding` (256d TF-IDF) — busca legada fatos/regras
+    - True: coluna `embedding_v2` (1024d Voyage) — busca de chunks da biblioteca
+    Param `tipo` filtra por tipo de item ('biblio', 'fato', 'regra')."""
+    if usar_voyage:
+        ci_before = _embed_para_busca_voyage.cache_info().hits
+        emb = list(_embed_para_busca_voyage(query[:500]))
+        ci_after = _embed_para_busca_voyage.cache_info().hits
+        if not emb:
+            return []  # Voyage falhou — fallback silencioso
+        coluna = 'embedding_v2'
+    else:
+        ci_before = _embed_para_busca.cache_info().hits
+        emb = list(_embed_para_busca(query[:500]))
+        ci_after = _embed_para_busca.cache_info().hits
+        coluna = 'embedding'
     if ci_after > ci_before:
         with _palace_metrics_lock:
             _palace_metrics['cache_hits'] += 1
     emb_lit = _embed_to_pg(emb)
+    # f-string somente pro nome da coluna (whitelist 'embedding'|'embedding_v2',
+    # nao SQL injection — usar_voyage e bool literal do server)
+    sql = f"""
+        SELECT id, tipo, conteudo, 1 - ({coluna} <=> %s::vector) AS score
+        FROM palace_embeddings
+        WHERE {coluna} IS NOT NULL
+          AND (%s::text IS NULL OR ala = %s)
+          AND (%s::text IS NULL OR sala = %s)
+          AND (%s::text IS NULL OR tipo = %s)
+        ORDER BY score DESC
+        LIMIT %s
+    """
     with kvstore._connect() as conn, conn.cursor() as cur:
-        cur.execute(
-            """
-            SELECT id, tipo, conteudo, 1 - (embedding <=> %s::vector) AS score
-            FROM palace_embeddings
-            WHERE (%s::text IS NULL OR ala = %s)
-              AND (%s::text IS NULL OR sala = %s)
-            ORDER BY score DESC
-            LIMIT %s
-            """,
-            (emb_lit, ala, ala, sala, sala, int(n)),
-        )
+        cur.execute(sql, (emb_lit, ala, ala, sala, sala, tipo, tipo, int(n)))
         rows = cur.fetchall()
     return [{'id': str(r[0]), 'tipo': r[1], 'conteudo': r[2], 'score': float(r[3])}
             for r in rows]
 
-def _busca_semantica_release(query, ala, sala, n):
+def _busca_semantica_release(query, ala, sala, n, tipo=None, usar_voyage=False):
     """Wrapper que SEMPRE libera o semaphore quando a thread termina,
     mesmo que o caller ja tenha desistido por timeout. Isso evita que a
     fila do executor acumule jobs zumbi sob carga."""
     try:
-        return _busca_semantica_sync(query, ala, sala, n)
+        return _busca_semantica_sync(query, ala, sala, n, tipo=tipo, usar_voyage=usar_voyage)
     finally:
         try:
             _palace_busca_inflight.release()
         except ValueError:
             pass  # Defesa: ja liberado em algum branch de erro raro
 
-def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
+def busca_semantica(query: str, ala=None, sala=None, n: int = 5,
+                    tipo=None, usar_voyage: bool = False) -> list:
     """Busca por similaridade vetorial. Retorna [] silenciosamente em erro/timeout/indisponibilidade.
     FASE 3: timeout PALACE_BUSCA_TIMEOUT (default 0.8s) + cache LRU em embedding +
-    semaphore pra limitar in-flight (anti-backlog)."""
+    semaphore pra limitar in-flight (anti-backlog).
+    FASE 4: `usar_voyage=True` usa Voyage 1024d (coluna embedding_v2). `tipo` filtra
+    por tipo de item ('biblio' pra busca em chunks de biblioteca)."""
     if not query or not (query or '').strip():
         return []
     with _palace_metrics_lock:
         _palace_metrics['buscas_total'] += 1
     try:
         if not _palace_health_check():
+            return []
+        # FASE 4: pra Voyage, conferir migration. Sem isso, query falha com
+        # "column embedding_v2 does not exist" e enche log a cada Viriato msg.
+        if usar_voyage and not _palace_v2_health_check():
             return []
         # ANTI-BACKLOG: rejeita imediatamente se ja tem PALACE_BUSCA_INFLIGHT_MAX
         # buscas em voo. Sem isso, palace lento + 500 users => fila do executor
@@ -956,7 +1162,8 @@ def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
         try:
             from concurrent.futures import TimeoutError as _FutTimeout
             pool = _get_palace_busca_executor()
-            future = pool.submit(_busca_semantica_release, query, ala, sala, n)
+            future = pool.submit(_busca_semantica_release, query, ala, sala, n,
+                                 tipo, usar_voyage)
         except Exception:
             try:
                 _palace_busca_inflight.release()
@@ -964,7 +1171,10 @@ def busca_semantica(query: str, ala=None, sala=None, n: int = 5) -> list:
                 pass
             raise
         try:
-            return future.result(timeout=_PALACE_BUSCA_TIMEOUT)
+            # FASE 4: Voyage faz roundtrip HTTP (~200-400ms) + Postgres (~10ms).
+            # Default 0.8s nao da. Pra Voyage usa minimo 2.5s; TF-IDF fica no original.
+            timeout = max(_PALACE_BUSCA_TIMEOUT, 2.5) if usar_voyage else _PALACE_BUSCA_TIMEOUT
+            return future.result(timeout=timeout)
         except _FutTimeout:
             # NAO releaseamos o semaphore aqui — _busca_semantica_release
             # libera quando a thread terminar. Isso garante que a contagem
@@ -1947,9 +2157,49 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
-        # top_k=10 (era 6): PDFs grandes podem ter o item buscado num chunk
-        # com score moderado. 10 trechos ainda cabem no contexto sem inflar custo.
-        trechos = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
+        # FASE 4: busca HIBRIDA — keyword (matches exatos, refs numericas) +
+        # semantica via Voyage (sinonimos, parafrases, queries em linguagem natural).
+        # Cada uma pega trechos que a outra perderia.
+        trechos_kw = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
+        trechos_sem = []
+        if ultima:
+            mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
+                                          tipo='biblio', usar_voyage=True)
+            # Mapeia id ('biblio:<doc_id>:<idx>') de volta pra chunk completo.
+            # Usamos o chunk integral da biblioteca (nao o truncado em 2000 chars
+            # do palace) pra o Viriato ter mais contexto.
+            docs_por_id = {d.get('id'): d for d in biblioteca.get('documentos', [])}
+            for m in mem_biblio:
+                parts = (m.get('id') or '').split(':')
+                if len(parts) == 3 and parts[0] == 'biblio':
+                    doc_id_sem, ck_idx_str = parts[1], parts[2]
+                    doc_obj = docs_por_id.get(doc_id_sem)
+                    if not doc_obj:
+                        continue
+                    try:
+                        ck_idx = int(ck_idx_str)
+                    except ValueError:
+                        continue
+                    chunks_doc = doc_obj.get('chunks', [])
+                    if 0 <= ck_idx < len(chunks_doc):
+                        trechos_sem.append({
+                            'doc': doc_obj.get('nome', '?'),
+                            'categoria': doc_obj.get('categoria', 'outros'),
+                            'idx': ck_idx,
+                            'trecho': chunks_doc[ck_idx],
+                        })
+        # Dedup por (doc, idx). Keyword vem primeiro (preserva ranking exato),
+        # semantica preenche o resto. Limite total = 15 trechos no system prompt.
+        _vistos = set()
+        trechos = []
+        for _t in trechos_kw + trechos_sem:
+            _key = (_t.get('doc'), _t.get('idx'))
+            if _key in _vistos:
+                continue
+            _vistos.add(_key)
+            trechos.append(_t)
+            if len(trechos) >= 15:
+                break
 
         u = request.current_user
         matricula_user = u.get('matricula', '')
@@ -2491,7 +2741,16 @@ def biblioteca_upload():
         if 'sala' not in biblioteca:
             biblioteca['sala'] = 'BIBLIOTECA'
         mem_palace_save('biblioteca', biblioteca)
-        print(f'[biblioteca_upload] save em {time.time()-t3:.1f}s, TOTAL={time.time()-t0:.1f}s nome="{nome}"')
+        # FASE 4: indexa cada chunk no palace_embeddings (tipo='biblio') de forma
+        # ASSINCRONA — nao bloqueia a resposta ao usuario. Voyage faz em batch
+        # internamente, mas como _indexar_async eh por-item, fica 1 chamada por
+        # chunk. Pra um PDF tipico (~50 chunks), eh ~50 calls Voyage em background.
+        # Cada call ~200-400ms via API, distribuidas pelo pool (4 workers).
+        # Se Voyage indisponivel, popula so a coluna TF-IDF 256d (no-op pra busca).
+        for ck_idx, ck_texto in enumerate(chunks):
+            id_chunk = f'biblio:{doc_id}:{ck_idx}'
+            _indexar_async(id_chunk, 'biblio', 'geral', 'biblioteca', ck_texto)
+        print(f'[biblioteca_upload] save em {time.time()-t3:.1f}s, TOTAL={time.time()-t0:.1f}s nome="{nome}" chunks_indexados={len(chunks)}')
         return jsonify({
             'ok': True,
             'id': doc_id,
@@ -2513,12 +2772,70 @@ def biblioteca_upload():
 def biblioteca_remover(doc_id):
     biblioteca = mem_palace_load('biblioteca')
     docs = biblioteca.get('documentos', [])
-    novos = [d for d in docs if d.get('id') != doc_id]
-    if len(novos) == len(docs):
+    doc_alvo = next((d for d in docs if d.get('id') == doc_id), None)
+    if not doc_alvo:
         return jsonify({'error': 'Documento nao encontrado'}), 404
+    novos = [d for d in docs if d.get('id') != doc_id]
     biblioteca['documentos'] = novos
     mem_palace_save('biblioteca', biblioteca)
-    return jsonify({'ok': True})
+    # FASE 4: limpa embeddings do palace assincronamente. Sem isso, deletar
+    # doc deixaria os chunks "fantasma" no palace e a busca semantica continuaria
+    # retornando trechos de doc deletado.
+    qtd_chunks = len(doc_alvo.get('chunks', []))
+    for ck_idx in range(qtd_chunks):
+        _indexar_remove(f'biblio:{doc_id}:{ck_idx}')
+    return jsonify({'ok': True, 'chunks_removidos_index': qtd_chunks})
+
+# === API BIBLIOTECA - REINDEX (admin, FASE 4) ===
+@app.route('/api/admin/biblioteca/reindex', methods=['POST'])
+@auth.require_admin
+def biblioteca_reindex():
+    """Reindexa TODOS os chunks da biblioteca no palace_embeddings com Voyage.
+    Idempotente: ON CONFLICT DO UPDATE no palace. Pode chamar quantas vezes quiser.
+    Roda sincrono (caller aguarda) — chamadas Voyage saoem batch, ~5-10s pra
+    14 docs com ~700 chunks. Retorna stats.
+
+    Pre-condicoes:
+    - Migration fase4 aplicada (coluna embedding_v2 existe)
+    - VOYAGE_API_KEY no Replit Secrets
+    - SDK voyageai instalado (lazy install ou build script)
+
+    Em caso de fallback total (sem Voyage), so popula coluna TF-IDF 256d
+    e retorna voyage_ok=False — admin saberia que precisa configurar key."""
+    t0 = time.time()
+    biblioteca = mem_palace_load('biblioteca')
+    docs = biblioteca.get('documentos', [])
+    voyage_disponivel = bool(_get_voyage_client()) and _palace_v2_health_check()
+    total_chunks = 0
+    erros = 0
+    docs_processados = []
+    for doc in docs:
+        doc_id = doc.get('id')
+        nome = doc.get('nome', '')
+        chunks = doc.get('chunks', [])
+        for ck_idx, ck_texto in enumerate(chunks):
+            id_chunk = f'biblio:{doc_id}:{ck_idx}'
+            try:
+                # Sincrono pra dar feedback no response. Async seria via _indexar_async
+                # mas a o admin nao saberia quando terminou.
+                _indexar_no_palace(id_chunk, 'biblio', 'geral', 'biblioteca', ck_texto)
+                total_chunks += 1
+            except Exception as e:
+                erros += 1
+                print(f'[reindex] erro doc={doc_id} chunk={ck_idx}: {e}')
+        docs_processados.append({'id': doc_id, 'nome': nome, 'chunks': len(chunks)})
+    elapsed = time.time() - t0
+    return jsonify({
+        'ok': True,
+        'voyage_disponivel': voyage_disponivel,
+        'voyage_modelo': _VOYAGE_MODEL if voyage_disponivel else None,
+        'docs_total': len(docs),
+        'chunks_indexados': total_chunks,
+        'erros': erros,
+        'elapsed_seconds': round(elapsed, 1),
+        'docs': docs_processados,
+    })
+
 
 # === API BIBLIOTECA - BUSCAR ===
 @app.route('/api/biblioteca/buscar', methods=['POST'])

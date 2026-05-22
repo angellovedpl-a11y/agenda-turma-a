@@ -15,3 +15,7 @@ data/sessions.json
 # Backup local antes de alteracoes (evita commitar pelado)
 server_backup_*.py
 index_backup*.html
+
+# Lock files de instalacao lazy (kvstore, voyage)
+.kvstore_pip.lock
+.voyage_pip.lock
