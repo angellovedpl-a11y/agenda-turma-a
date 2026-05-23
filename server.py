@@ -2171,13 +2171,14 @@ def claude_chat():
         # FASE 4: busca HIBRIDA — keyword (matches exatos, refs numericas) +
         # semantica via Voyage (sinonimos, parafrases, queries em linguagem natural).
         # Cada uma pega trechos que a outra perderia.
-        trechos_kw = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
+        trechos_kw = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
         print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
-        # FIX TEMPORARIO: busca_semantica(usar_voyage=True) suspeita de travar
-        # o handler. Desligada ate diagnostico completo. Viriato volta ao
-        # comportamento pre-46cbc5b (so keyword via buscar_chunks).
-        if False and ultima:
+        # FASE 4 RE-ATIVADA (design B): busca semantica Voyage volta no chat.
+        # Anti-tranco: timeout 2.5s + anti-backlog semaphore + fallback []
+        # silencioso ja existentes em busca_semantica. Indexacao agora roda em
+        # batch (1-2 calls Voyage por upload), nao satura mais pool DB.
+        if ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
             print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s busca_semantica voyage={len(mem_biblio)}', flush=True)
@@ -2704,6 +2705,95 @@ def biblioteca():
     })
 
 # === API BIBLIOTECA - UPLOAD ===
+def _indexar_biblio_em_batch_async(doc_id: str, chunks: list):
+    """FASE 4 DESIGN B: indexa todos os chunks de UM doc da biblioteca em batch.
+
+    Substitui o loop antigo de N chamadas _indexar_async (que era 1 HTTP Voyage
+    por chunk, saturava pool DB com N conexoes paralelas e travava o claude_chat
+    em paralelo) por:
+      1. UMA chamada gerar_embedding_voyage_batch (ate 128 textos por HTTP)
+         -> 200 chunks = 2 calls HTTP em ~3-5s
+      2. UM cursor.executemany no DB (1 conexao, nao N)
+      3. Roda em thread daemon -> nao bloqueia resposta do upload
+
+    Silencioso em erro. Se Voyage falhar, popula so TF-IDF 256d (busca por
+    keyword continua funcionando)."""
+    def _worker():
+        t0 = time.time()
+        try:
+            if not _palace_health_check() or not chunks:
+                return
+            # TF-IDF caseiro pra todos os chunks (cheap, in-process)
+            embs_tfidf = [_embed_to_pg(gerar_embedding(ck or '')) for ck in chunks]
+            # FIX architect: schema-aware. Se migration v2 nao aplicada, NAO
+            # mencionar coluna embedding_v2 no SQL (ou batch inteiro falharia
+            # e ate TF-IDF sumiria). Mesmo padrao de _indexar_no_palace.
+            v2_ok = _palace_v2_health_check()
+            # Voyage batch (HTTP, opcional)
+            embs_voyage_lit = [None] * len(chunks)
+            if v2_ok and _get_voyage_client():
+                vecs = gerar_embedding_voyage_batch(chunks, input_type='document')
+                if vecs and len(vecs) == len(chunks):
+                    embs_voyage_lit = [_embed_to_pg(v) for v in vecs]
+                else:
+                    print(f'[biblio-batch] doc_id={doc_id} Voyage retornou {len(vecs) if vecs else 0}/{len(chunks)} -> so TF-IDF')
+            # UPSERT executemany (1 conexao DB pra todos os chunks)
+            with kvstore._connect() as conn, conn.cursor() as cur:
+                if v2_ok:
+                    rows = []
+                    for ck_idx, ck_texto in enumerate(chunks):
+                        id_chunk = f'biblio:{doc_id}:{ck_idx}'
+                        conteudo_trunc = (ck_texto or '')[:2000]
+                        rows.append((id_chunk, 'biblio', 'geral', 'biblioteca',
+                                     conteudo_trunc, embs_tfidf[ck_idx],
+                                     embs_voyage_lit[ck_idx]))
+                    # COALESCE preserva v2 antigo se nova Voyage call falhou
+                    cur.executemany(
+                        """
+                        INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, embedding_v2, criado_em)
+                        VALUES (%s, %s, %s, %s, %s, %s::vector, %s::vector, NOW())
+                        ON CONFLICT (id) DO UPDATE
+                        SET tipo = EXCLUDED.tipo,
+                            ala = EXCLUDED.ala,
+                            sala = EXCLUDED.sala,
+                            conteudo = EXCLUDED.conteudo,
+                            embedding = EXCLUDED.embedding,
+                            embedding_v2 = COALESCE(EXCLUDED.embedding_v2, palace_embeddings.embedding_v2),
+                            criado_em = NOW()
+                        """,
+                        rows,
+                    )
+                else:
+                    # FALLBACK: schema v2 ausente. Indexa so coluna embedding (256d TF-IDF).
+                    rows = []
+                    for ck_idx, ck_texto in enumerate(chunks):
+                        id_chunk = f'biblio:{doc_id}:{ck_idx}'
+                        conteudo_trunc = (ck_texto or '')[:2000]
+                        rows.append((id_chunk, 'biblio', 'geral', 'biblioteca',
+                                     conteudo_trunc, embs_tfidf[ck_idx]))
+                    cur.executemany(
+                        """
+                        INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, criado_em)
+                        VALUES (%s, %s, %s, %s, %s, %s::vector, NOW())
+                        ON CONFLICT (id) DO UPDATE
+                        SET tipo = EXCLUDED.tipo,
+                            ala = EXCLUDED.ala,
+                            sala = EXCLUDED.sala,
+                            conteudo = EXCLUDED.conteudo,
+                            embedding = EXCLUDED.embedding,
+                            criado_em = NOW()
+                        """,
+                        rows,
+                    )
+            voyage_ok = sum(1 for x in embs_voyage_lit if x is not None)
+            print(f'[biblio-batch] doc_id={doc_id} OK ({len(chunks)} chunks, voyage={voyage_ok}, v2_schema={v2_ok}) em {time.time()-t0:.1f}s')
+        except Exception as e:
+            print(f'[biblio-batch] doc_id={doc_id} FALHOU em {time.time()-t0:.1f}s: {e}')
+
+    _threading.Thread(target=_worker, daemon=True,
+                      name=f'biblio-batch-{doc_id}').start()
+
+
 @app.route('/api/biblioteca/upload', methods=['POST'])
 @auth.require_auth
 def biblioteca_upload():
@@ -2766,15 +2856,12 @@ def biblioteca_upload():
         if 'sala' not in biblioteca:
             biblioteca['sala'] = 'BIBLIOTECA'
         mem_palace_save('biblioteca', biblioteca)
-        # FASE 4: indexa cada chunk no palace_embeddings (tipo='biblio') de forma
-        # ASSINCRONA — nao bloqueia a resposta ao usuario. Voyage faz em batch
-        # internamente, mas como _indexar_async eh por-item, fica 1 chamada por
-        # chunk. Pra um PDF tipico (~50 chunks), eh ~50 calls Voyage em background.
-        # Cada call ~200-400ms via API, distribuidas pelo pool (4 workers).
-        # Se Voyage indisponivel, popula so a coluna TF-IDF 256d (no-op pra busca).
-        for ck_idx, ck_texto in enumerate(chunks):
-            id_chunk = f'biblio:{doc_id}:{ck_idx}'
-            _indexar_async(id_chunk, 'biblio', 'geral', 'biblioteca', ck_texto)
+        # FASE 4 DESIGN B: indexacao Voyage em BATCH (1-2 calls HTTP no total
+        # ao inves de N), em UMA thread daemon (nao bloqueia upload, nao satura
+        # pool DB com 200 conexoes paralelas). PGS 2722 ~200 chunks: era 200
+        # _indexar_async serializados no pool de 4 workers (50s+ travando o app);
+        # agora vira 2 calls Voyage batch + 1 INSERT executemany (~5s background).
+        _indexar_biblio_em_batch_async(doc_id, chunks)
         print(f'[biblioteca_upload] save em {time.time()-t3:.1f}s, TOTAL={time.time()-t0:.1f}s nome="{nome}" chunks_indexados={len(chunks)}')
         return jsonify({
             'ok': True,
