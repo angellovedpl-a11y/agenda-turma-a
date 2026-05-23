@@ -1655,7 +1655,13 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
                      'Preserve a ordem, formate tabelas em markdown e mantenha '
                      'listas. Separe cada pagina com "--- Pagina N ---" '
                      f'(numerando a partir de {nums_batch[0]}). '
-                     'Retorne APENAS o texto transcrito, sem comentarios.')
+                     'Retorne APENAS o texto transcrito, sem comentarios. '
+                     'REGRA CRITICA: NAO substitua, parafraseie ou altere '
+                     'NENHUMA palavra do original. Cada termo deve ser '
+                     'EXATAMENTE como aparece na imagem (ex: se esta escrito '
+                     '"empregado responsavel", NAO troque por "gerente", '
+                     '"funcionario", "empresario" ou qualquer sinonimo). '
+                     'Transcricao LITERAL, caractere por caractere.')
         else:
             lista = ', '.join(str(n) for n in nums_batch)
             instr = (f'Transcreva integralmente o texto destas {len(batch)} '
@@ -1664,7 +1670,13 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
                      f'listas. Estas paginas correspondem, na ordem dada, '
                      f'aos numeros: {lista}. Separe cada pagina com '
                      '"--- Pagina N ---" usando o numero correto da lista. '
-                     'Retorne APENAS o texto transcrito, sem comentarios.')
+                     'Retorne APENAS o texto transcrito, sem comentarios. '
+                     'REGRA CRITICA: NAO substitua, parafraseie ou altere '
+                     'NENHUMA palavra do original. Cada termo deve ser '
+                     'EXATAMENTE como aparece na imagem (ex: se esta escrito '
+                     '"empregado responsavel", NAO troque por "gerente", '
+                     '"funcionario", "empresario" ou qualquer sinonimo). '
+                     'Transcricao LITERAL, caractere por caractere.')
         content.append({'type': 'text', 'text': instr})
         try:
             resp = _anthropic_client.messages.create(
@@ -2469,6 +2481,11 @@ def claude_chat():
         full_system += (
             '\n### TOM DE VOZ E FORMATACAO ###\n'
             'Voce conversa com ferroviarios da Turma A no celular, em portugues do Brasil natural e direto.\n'
+            'REGRA DE FIDELIDADE TEXTUAL: ao citar, resumir ou referenciar trechos de documentos, '
+            'PDFs, regulamentos ou texto colado pelo usuario, NUNCA parafraseie — reproduza a redacao '
+            'EXATA do original. NAO substitua termos tecnicos ou juridicos por sinonimos '
+            '(ex: "empregado responsavel" NAO pode virar "gerente" ou "funcionario"). '
+            'Se precisar explicar com outras palavras, faca APOS a citacao fiel.\n'
             'REGRAS DE ESCRITA (cumpra TODAS):\n'
             '- Resposta CURTA: 1 a 4 frases na maioria dos casos. So expanda quando o usuario pedir detalhe ou for tecnico critico.\n'
             '- NAO use markdown: NADA de **negrito**, *italico*, ## titulos, listas com - ou *. Escreva em prosa.\n'
