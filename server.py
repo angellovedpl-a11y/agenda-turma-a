@@ -1682,6 +1682,7 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
             resp = _anthropic_client.messages.create(
                 model='claude-haiku-4-5',
                 max_tokens=8000,
+                temperature=0,
                 messages=[{'role': 'user', 'content': content}]
             )
             pages_text.append(resp.content[0].text.strip())
@@ -2501,6 +2502,7 @@ def claude_chat():
         response = _anthropic_client.messages.create(
             model="claude-haiku-4-5",
             max_tokens=8192,
+            temperature=0.2,
             system=full_system,
             messages=messages
         )
