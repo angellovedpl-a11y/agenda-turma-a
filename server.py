@@ -2168,7 +2168,10 @@ def claude_chat():
         trechos_kw = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
         print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
-        if ultima:
+        # FIX TEMPORARIO: busca_semantica(usar_voyage=True) suspeita de travar
+        # o handler. Desligada ate diagnostico completo. Viriato volta ao
+        # comportamento pre-46cbc5b (so keyword via buscar_chunks).
+        if False and ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
             print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s busca_semantica voyage={len(mem_biblio)}', flush=True)
