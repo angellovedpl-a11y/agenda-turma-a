@@ -108,25 +108,43 @@ def main():
         print("nada pra indexar", flush=True)
         return
 
-    print("[2/3] gerando embeddings via Voyage (batch=128) + TF-IDF local...", flush=True)
-    BATCH = 128
+    print("[2/3] gerando embeddings via Voyage (batches adaptativos por tokens)...", flush=True)
+    # Voyage voyage-4-large: hard limit 120k tokens/batch. Margem pra ~100k.
+    # Heuristica 3 chars/token (PT multilingual, conservador).
+    MAX_TOKENS = 100_000
+    MAX_COUNT = 128
     processados = 0
     erros = 0
+    batch_num = 0
+
+    def batches():
+        cur_batch = []
+        cur_tokens = 0
+        for item in all_items:
+            _, texto = item
+            est_tokens = len(texto[:8000]) // 3
+            if cur_batch and (cur_tokens + est_tokens > MAX_TOKENS or len(cur_batch) >= MAX_COUNT):
+                yield cur_batch
+                cur_batch, cur_tokens = [], 0
+            cur_batch.append(item)
+            cur_tokens += est_tokens
+        if cur_batch:
+            yield cur_batch
 
     with psycopg2.connect(DB_URL) as conn, conn.cursor() as cur:
-        for i in range(0, len(all_items), BATCH):
-            batch = all_items[i:i + BATCH]
+        for batch in batches():
+            batch_num += 1
             texts = [t[:8000] for _, t in batch]
             try:
                 result = client.embed(texts=texts, model="voyage-4-large", input_type="document")
                 embs_v2 = result.embeddings
             except Exception as e:
                 erros += len(batch)
-                print(f"  ERRO batch {i // BATCH + 1}: {type(e).__name__}: {e}", flush=True)
+                print(f"  ERRO batch {batch_num} ({len(batch)} chunks): {type(e).__name__}: {e}", flush=True)
                 continue
             if len(embs_v2) != len(batch):
                 erros += len(batch)
-                print(f"  ERRO batch {i // BATCH + 1}: voyage retornou {len(embs_v2)} pra {len(batch)} inputs", flush=True)
+                print(f"  ERRO batch {batch_num}: voyage retornou {len(embs_v2)} pra {len(batch)} inputs", flush=True)
                 continue
             for (id_chunk, conteudo), emb_v2 in zip(batch, embs_v2):
                 emb_v1 = gerar_embedding_tfidf(conteudo)
@@ -150,8 +168,7 @@ def main():
                 )
             conn.commit()
             processados += len(batch)
-            total_batches = (len(all_items) + BATCH - 1) // BATCH
-            print(f"  batch {i // BATCH + 1}/{total_batches}: {processados}/{len(all_items)} OK", flush=True)
+            print(f"  batch {batch_num} ({len(batch)} chunks): {processados}/{len(all_items)} OK", flush=True)
 
     print(f"[3/3] FEITO: {processados} chunks indexados, {erros} erros", flush=True)
 
