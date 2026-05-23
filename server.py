@@ -2174,14 +2174,19 @@ def claude_chat():
         trechos_kw = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
         print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
-        # FASE 4 RE-ATIVADA (design B): busca semantica Voyage volta no chat.
-        # Anti-tranco: timeout 2.5s + anti-backlog semaphore + fallback []
-        # silencioso ja existentes em busca_semantica. Indexacao agora roda em
-        # batch (1-2 calls Voyage por upload), nao satura mais pool DB.
-        if ultima:
+        mem_biblio = []
+        # FIX HOTFIX 2 (travou de novo): busca_semantica Voyage volta a hangar
+        # mesmo com timeout 2.5s + semaphore. Log de prod mostra request parado
+        # 39s+ apos 'trechos_kw' (proximo print 'busca_semantica voyage' NUNCA
+        # fira). Suspeita: bug interno do voyageai SDK ou do future.result com
+        # gthread. Re-desativada via flag env. Pra reativar: setar
+        # VIRIATO_VOYAGE_CHAT=1 no Replit (sem redeploy de codigo).
+        if ultima and os.environ.get('VIRIATO_VOYAGE_CHAT', '0') == '1':
+            print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s busca_semantica voyage INICIO', flush=True)
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
             print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s busca_semantica voyage={len(mem_biblio)}', flush=True)
+        if mem_biblio:
             # Mapeia id ('biblio:<doc_id>:<idx>') de volta pra chunk completo.
             # Usamos o chunk integral da biblioteca (nao o truncado em 2000 chars
             # do palace) pra o Viriato ter mais contexto.
