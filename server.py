@@ -926,7 +926,13 @@ def _indexar_no_palace(id_item, tipo: str, ala: str, sala: str, conteudo: str):
         conteudo_trunc = (conteudo or '')[:2000]
         emb_lit = _embed_to_pg(gerar_embedding(conteudo))
         emb_v2_lit = None
-        if _palace_v2_health_check() and _get_voyage_client():
+        # FIX TEMPORARIO (Viriato travando pos-Voyage): desliga indexacao
+        # Voyage sincrona dentro do pool de indexacao. Em upload de PDF
+        # grande (PGS 2722 ~200 chunks) saturava o pool DB + chamadas HTTP
+        # Voyage seriais, contribuindo p/ exaustao de conexoes que travavam
+        # o claude_chat em paralelo. Re-ativar quando indexacao Voyage virar
+        # worker offline dedicado (design B aprovado pelo dono).
+        if False and _palace_v2_health_check() and _get_voyage_client():
             emb_v2 = gerar_embedding_voyage(conteudo, input_type='document')
             if emb_v2:
                 emb_v2_lit = _embed_to_pg(emb_v2)
@@ -2217,12 +2223,14 @@ def claude_chat():
         role_user = u.get('role', '')
         is_admin_user = role_user == 'admin'
         memoria_pess = memoria_pessoal_load(matricula_user)
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s memoria_pess ok ({len(memoria_pess)})', flush=True)
         # FASE 1 MemPalace: passa a query como query_para_sala (bullet 1 do item 3
         # ativo). FASE 3 ETAPA 5: ala_user vem de _ala_for_query — None se flag
         # multi_turma desativada (comportamento atual), ala do user se ativa.
         fatos_relev = buscar_fatos(ultima, top_k=4,
                                    ala_user=_ala_for_query(matricula_user),
                                    query_para_sala=ultima) if ultima else []
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s fatos_relev ok ({len(fatos_relev)})', flush=True)
         # FASE 2 MemPalace: busca semantica antes da deduplicacao com keywords.
         # Tudo silencioso/aditivo: se pgvector indisponivel ou tabela vazia,
         # mem_alta=[] e o fluxo segue identico ao da Fase 1.
@@ -2234,6 +2242,7 @@ def claude_chat():
             _sala_p2 = None
         mem_semantica = busca_semantica(ultima, ala=_ala_for_query(matricula_user),
                                          sala=_sala_p2, n=5) if ultima else []
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s mem_semantica ok ({len(mem_semantica)})', flush=True)
         mem_alta = [m for m in mem_semantica if float(m.get('score', 0) or 0) >= 0.70]
         # Ids no palace vem prefixados ('fato:123', 'regra:456'). Separa por
         # tipo pra dedup independente de fatos_relev e regras_relev.
@@ -2293,10 +2302,12 @@ def claude_chat():
         regras_relev = buscar_regras_tecnicas(ultima, top_k=4,
                                               ala_user=_ala_for_query(matricula_user),
                                               query_para_sala=ultima) if modo_critico else []
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s regras_relev ok ({len(regras_relev)}, critico={modo_critico})', flush=True)
         # FASE 2: dedup tambem das regras (achado C do code review)
         if ids_sem_regras and regras_relev:
             regras_relev = [r for r in regras_relev if str(r.get('id')) not in ids_sem_regras]
         antipadroes = antipadroes_load() if modo_critico else []
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s antipadroes ok ({len(antipadroes)})', flush=True)
         if modo_critico:
             prefixo += '### MODO DELIBERATIVO ATIVO (Sistema 2) ###\n'
             prefixo += (
