@@ -2120,8 +2120,11 @@ def api_reset_senha(matricula):
 @auth.require_auth
 @ratelimit.rate_limit(20, env_var='RATELIMIT_CLAUDE_PER_MIN', route_key='claude')
 def claude_chat():
+    _dbg_t0 = time.time()
+    print(f'[claude_chat] T+0.00s ENTRADA', flush=True)
     try:
         data = request.json or {}
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s body lido', flush=True)
         messages = data.get('messages', [])
         system = data.get('system', '')
         image_data_url = data.get('image')
@@ -2158,14 +2161,17 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s biblioteca carregada ({len(biblioteca.get("documentos", []))} docs)', flush=True)
         # FASE 4: busca HIBRIDA — keyword (matches exatos, refs numericas) +
         # semantica via Voyage (sinonimos, parafrases, queries em linguagem natural).
         # Cada uma pega trechos que a outra perderia.
         trechos_kw = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
         if ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
+            print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s busca_semantica voyage={len(mem_biblio)}', flush=True)
             # Mapeia id ('biblio:<doc_id>:<idx>') de volta pra chunk completo.
             # Usamos o chunk integral da biblioteca (nao o truncado em 2000 chars
             # do palace) pra o Viriato ter mais contexto.
@@ -2454,12 +2460,14 @@ def claude_chat():
             '### FIM TOM ###\n'
         )
 
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s antes Anthropic (system={len(full_system)} chars, messages={len(messages)} items)', flush=True)
         response = _anthropic_client.messages.create(
             model="claude-haiku-4-5",
             max_tokens=8192,
             system=full_system,
             messages=messages
         )
+        print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s Anthropic respondeu', flush=True)
         texto_resp = response.content[0].text
         salvos = []
         ja_salvos = set()
