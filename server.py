@@ -5,6 +5,7 @@ import base64
 import io
 import re
 import time
+import traceback
 from datetime import datetime
 from anthropic import Anthropic
 import auth
@@ -2652,6 +2653,8 @@ def claude_chat():
                         'regras_sugeridas': regras_sugeridas,
                         'modo_deliberativo': bool(modo_critico)})
     except Exception as e:
+        print('[claude_chat] EXCEPTION:', flush=True)
+        traceback.print_exc()
         err = str(e)
         if "FREE_CLOUD_BUDGET_EXCEEDED" in err:
             return jsonify({'error': 'Limite de creditos Replit AI atingido.'}), 429
