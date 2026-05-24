@@ -766,23 +766,47 @@ def _palace_v2_health_check() -> bool:
             return False
 
 
+_voyage_embed_executor = None
+_voyage_embed_executor_lock = _threading.Lock()
+
+def _get_voyage_embed_executor():
+    global _voyage_embed_executor
+    if _voyage_embed_executor is not None:
+        return _voyage_embed_executor
+    with _voyage_embed_executor_lock:
+        if _voyage_embed_executor is None:
+            from concurrent.futures import ThreadPoolExecutor
+            _voyage_embed_executor = ThreadPoolExecutor(
+                max_workers=2, thread_name_prefix='voyage-embed')
+        return _voyage_embed_executor
+
+_VOYAGE_EMBED_TIMEOUT = float(os.environ.get('VOYAGE_EMBED_TIMEOUT', '2.0'))
+
 def gerar_embedding_voyage(texto: str, input_type: str = 'document') -> list:
     """Gera embedding 1024d via Voyage voyage-4-large. Retorna [] em qualquer erro
     (caller cai pro TF-IDF). input_type='document' pra indexacao, 'query' pra busca
-    — Voyage usa retrieval assimetrico (modelo otimiza diferente cada lado)."""
+    — Voyage usa retrieval assimetrico (modelo otimiza diferente cada lado).
+    Timeout via ThreadPoolExecutor evita que client.embed() trave a thread."""
     client = _get_voyage_client()
     if not client or not (texto or '').strip():
         return []
     try:
-        result = client.embed(
-            texts=[texto[:8000]],  # limite generoso; chunks tipicos sao ~3500 chars
+        from concurrent.futures import TimeoutError as _FutTimeout
+        pool = _get_voyage_embed_executor()
+        future = pool.submit(
+            client.embed,
+            texts=[texto[:8000]],
             model=_VOYAGE_MODEL,
             input_type=input_type,
         )
+        result = future.result(timeout=_VOYAGE_EMBED_TIMEOUT)
         embs = getattr(result, 'embeddings', None)
         if embs and len(embs) == 1 and len(embs[0]) == _PALACE_EMBED_DIM_V2:
             return list(embs[0])
         print(f'[voyage] resposta inesperada (dim={len(embs[0]) if embs else 0})')
+        return []
+    except _FutTimeout:
+        print(f'[voyage] gerar_embedding_voyage timeout ({_VOYAGE_EMBED_TIMEOUT}s)')
         return []
     except Exception as e:
         print(f'[voyage] gerar_embedding_voyage falhou: {e}')
@@ -2179,10 +2203,13 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
+        _ndocs = len(biblioteca.get('documentos', []))
+        print(f'[claude_chat] biblioteca={_ndocs} docs, query="{(ultima or "")[:60]}"', flush=True)
         trechos_kw = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
+        print(f'[claude_chat] trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
         mem_biblio = []
-        if False and ultima:
+        if ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
         if mem_biblio:
