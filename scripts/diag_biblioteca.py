@@ -3,19 +3,16 @@ Uso: python3 scripts/diag_biblioteca.py [termo]
 Exemplo: python3 scripts/diag_biblioteca.py 40.5
 """
 import sys
-import json
 
 sys.path.insert(0, '.')
 import kvstore
 
 termo = sys.argv[1] if len(sys.argv) > 1 else None
 
-raw = kvstore.kv_get('sala:biblioteca')
-if not raw:
+bib = kvstore.load('sala:biblioteca')
+if not bib:
     print('ERRO: biblioteca vazia no kv_store')
     sys.exit(1)
-
-bib = json.loads(raw)
 docs = bib.get('documentos', [])
 print(f'Documentos na biblioteca: {len(docs)}\n')
 
