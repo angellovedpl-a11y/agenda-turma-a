@@ -2182,7 +2182,7 @@ def claude_chat():
         trechos_kw = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
         trechos_sem = []
         mem_biblio = []
-        if ultima:
+        if False and ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
         if mem_biblio:
