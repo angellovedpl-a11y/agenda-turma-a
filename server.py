@@ -3175,6 +3175,36 @@ def memoria_fato_del(id_f):
         return jsonify({'error': 'Apenas o autor ou admin pode remover'}), 403
     return jsonify({'ok': fatos_remove(id_f)})
 
+# === API ADMIN - SYNC GOOGLE DRIVE ===
+@app.route('/api/admin/drive-sync', methods=['POST'])
+@auth.require_admin
+@ratelimit.rate_limit(1, env_var='RATELIMIT_DRIVESYNC_PER_MIN', route_key='drivesync')
+def admin_drive_sync():
+    import drive_sync as ds
+    if ds.is_sync_running():
+        return jsonify({'error': 'Sync ja em andamento'}), 429
+    def _run():
+        try:
+            ds.drive_sync(
+                extrair_texto_fn=extrair_texto_arquivo,
+                fazer_chunks_fn=fazer_chunks,
+                categorizar_doc_fn=categorizar_doc,
+                mem_palace_load_fn=mem_palace_load,
+                mem_palace_save_fn=mem_palace_save,
+                indexar_batch_fn=_indexar_biblio_em_batch_async,
+            )
+        except Exception as e:
+            print(f'[drive-sync] ERRO thread: {e}', flush=True)
+    t = _threading.Thread(target=_run, daemon=True)
+    t.start()
+    return jsonify({'ok': True, 'status': 'sync_iniciado'})
+
+@app.route('/api/admin/drive-sync/status', methods=['GET'])
+@auth.require_admin
+def admin_drive_sync_status():
+    import drive_sync as ds
+    return jsonify({'running': ds.is_sync_running()})
+
 # === API ADMIN - MULTI-TURMA (ETAPA 5: gerencia mapeamento + flag + backfill) ===
 @app.route('/api/admin/user-ala', methods=['GET'])
 @auth.require_admin
