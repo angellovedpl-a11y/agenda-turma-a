@@ -1623,7 +1623,7 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
     if not images:
         return ''
     pages_text = []
-    BATCH = 4
+    BATCH = 2
     for i in range(0, len(images), BATCH):
         batch = images[i:i + BATCH]
         if numeros_pagina:
@@ -1639,9 +1639,9 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
         ) if len(nums_batch) > 1 else True
         content = []
         for img in batch:
-            if img.width > 1600:
-                ratio = 1600 / img.width
-                img = img.resize((1600, int(img.height * ratio)))
+            if img.width > 2000:
+                ratio = 2000 / img.width
+                img = img.resize((int(img.width * ratio), int(img.height * ratio)))
             buf = io.BytesIO()
             img.save(buf, format='PNG', optimize=True)
             b64img = base64.b64encode(buf.getvalue()).decode()
@@ -1680,12 +1680,14 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
         content.append({'type': 'text', 'text': instr})
         try:
             resp = _anthropic_client.messages.create(
-                model='claude-haiku-4-5',
-                max_tokens=8000,
+                model='claude-sonnet-4-6',
+                max_tokens=16000,
                 temperature=0,
                 messages=[{'role': 'user', 'content': content}]
             )
             pages_text.append(resp.content[0].text.strip())
+            if hasattr(resp, 'usage') and resp.usage.output_tokens >= 15000:
+                print(f'[OCR] AVISO: output perto do limite ({resp.usage.output_tokens}/16000 tokens) no lote {i // BATCH + 1}', flush=True)
         except Exception as e:
             pages_text.append(f'[OCR falhou no lote {i // BATCH + 1}: {e}]')
     return '\n\n'.join(pages_text)
@@ -1697,7 +1699,7 @@ def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 200) -> str:
     except ImportError:
         return ''
     try:
-        images = convert_from_bytes(raw, dpi=150, fmt='png',
+        images = convert_from_bytes(raw, dpi=200, fmt='png',
                                     first_page=1, last_page=max_pages)
     except Exception:
         return ''
@@ -1737,7 +1739,7 @@ def _ocr_pdf_paginas_especificas(raw: bytes, paginas_idx: list,
     for primeiro, ultimo, indices in runs:
         try:
             imgs_run = convert_from_bytes(
-                raw, dpi=150, fmt='png',
+                raw, dpi=200, fmt='png',
                 first_page=primeiro + 1,  # 1-based
                 last_page=ultimo + 1,
             )
@@ -2188,12 +2190,8 @@ def claude_chat():
         print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
         mem_biblio = []
-        # FIX HOTFIX 2 (travou de novo): busca_semantica Voyage volta a hangar
-        # mesmo com timeout 2.5s + semaphore. Log de prod mostra request parado
-        # 39s+ apos 'trechos_kw' (proximo print 'busca_semantica voyage' NUNCA
-        # fira). Suspeita: bug interno do voyageai SDK ou do future.result com
-        # gthread. Re-desativada via flag env. Pra reativar: setar
-        # VIRIATO_VOYAGE_CHAT=1 no Replit (sem redeploy de codigo).
+        # Voyage: controlado por env var. Setar VIRIATO_VOYAGE_CHAT=1 pra ativar.
+        # Bug conhecido: SDK voyageai pode travar gthread alem do timeout 2.5s.
         if ultima and os.environ.get('VIRIATO_VOYAGE_CHAT', '0') == '1':
             print(f'[claude_chat] T+{time.time()-_dbg_t0:.2f}s busca_semantica voyage INICIO', flush=True)
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
