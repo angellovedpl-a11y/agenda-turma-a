@@ -926,7 +926,13 @@ def _indexar_no_palace(id_item, tipo: str, ala: str, sala: str, conteudo: str):
         conteudo_trunc = (conteudo or '')[:2000]
         emb_lit = _embed_to_pg(gerar_embedding(conteudo))
         emb_v2_lit = None
-        if _palace_v2_health_check() and _get_voyage_client():
+        # FIX TEMPORARIO (Viriato travando pos-Voyage): desliga indexacao
+        # Voyage sincrona dentro do pool de indexacao. Em upload de PDF
+        # grande (PGS 2722 ~200 chunks) saturava o pool DB + chamadas HTTP
+        # Voyage seriais, contribuindo p/ exaustao de conexoes que travavam
+        # o claude_chat em paralelo. Re-ativar quando indexacao Voyage virar
+        # worker offline dedicado (design B aprovado pelo dono).
+        if False and _palace_v2_health_check() and _get_voyage_client():
             emb_v2 = gerar_embedding_voyage(conteudo, input_type='document')
             if emb_v2:
                 emb_v2_lit = _embed_to_pg(emb_v2)
@@ -1617,7 +1623,7 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
     if not images:
         return ''
     pages_text = []
-    BATCH = 4
+    BATCH = 2
     for i in range(0, len(images), BATCH):
         batch = images[i:i + BATCH]
         if numeros_pagina:
@@ -1633,9 +1639,9 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
         ) if len(nums_batch) > 1 else True
         content = []
         for img in batch:
-            if img.width > 1600:
-                ratio = 1600 / img.width
-                img = img.resize((1600, int(img.height * ratio)))
+            if img.width > 2000:
+                ratio = 2000 / img.width
+                img = img.resize((int(img.width * ratio), int(img.height * ratio)))
             buf = io.BytesIO()
             img.save(buf, format='PNG', optimize=True)
             b64img = base64.b64encode(buf.getvalue()).decode()
@@ -1649,7 +1655,13 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
                      'Preserve a ordem, formate tabelas em markdown e mantenha '
                      'listas. Separe cada pagina com "--- Pagina N ---" '
                      f'(numerando a partir de {nums_batch[0]}). '
-                     'Retorne APENAS o texto transcrito, sem comentarios.')
+                     'Retorne APENAS o texto transcrito, sem comentarios. '
+                     'REGRA CRITICA: NAO substitua, parafraseie ou altere '
+                     'NENHUMA palavra do original. Cada termo deve ser '
+                     'EXATAMENTE como aparece na imagem (ex: se esta escrito '
+                     '"empregado responsavel", NAO troque por "gerente", '
+                     '"funcionario", "empresario" ou qualquer sinonimo). '
+                     'Transcricao LITERAL, caractere por caractere.')
         else:
             lista = ', '.join(str(n) for n in nums_batch)
             instr = (f'Transcreva integralmente o texto destas {len(batch)} '
@@ -1658,15 +1670,24 @@ def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
                      f'listas. Estas paginas correspondem, na ordem dada, '
                      f'aos numeros: {lista}. Separe cada pagina com '
                      '"--- Pagina N ---" usando o numero correto da lista. '
-                     'Retorne APENAS o texto transcrito, sem comentarios.')
+                     'Retorne APENAS o texto transcrito, sem comentarios. '
+                     'REGRA CRITICA: NAO substitua, parafraseie ou altere '
+                     'NENHUMA palavra do original. Cada termo deve ser '
+                     'EXATAMENTE como aparece na imagem (ex: se esta escrito '
+                     '"empregado responsavel", NAO troque por "gerente", '
+                     '"funcionario", "empresario" ou qualquer sinonimo). '
+                     'Transcricao LITERAL, caractere por caractere.')
         content.append({'type': 'text', 'text': instr})
         try:
             resp = _anthropic_client.messages.create(
-                model='claude-haiku-4-5',
-                max_tokens=8000,
+                model='claude-sonnet-4-6',
+                max_tokens=16000,
+                temperature=0,
                 messages=[{'role': 'user', 'content': content}]
             )
             pages_text.append(resp.content[0].text.strip())
+            if hasattr(resp, 'usage') and resp.usage.output_tokens >= 15000:
+                print(f'[OCR] AVISO: output perto do limite ({resp.usage.output_tokens}/16000 tokens) no lote {i // BATCH + 1}', flush=True)
         except Exception as e:
             pages_text.append(f'[OCR falhou no lote {i // BATCH + 1}: {e}]')
     return '\n\n'.join(pages_text)
@@ -1678,7 +1699,7 @@ def _ocr_pdf_via_vision(raw: bytes, max_pages: int = 200) -> str:
     except ImportError:
         return ''
     try:
-        images = convert_from_bytes(raw, dpi=150, fmt='png',
+        images = convert_from_bytes(raw, dpi=200, fmt='png',
                                     first_page=1, last_page=max_pages)
     except Exception:
         return ''
@@ -1718,7 +1739,7 @@ def _ocr_pdf_paginas_especificas(raw: bytes, paginas_idx: list,
     for primeiro, ultimo, indices in runs:
         try:
             imgs_run = convert_from_bytes(
-                raw, dpi=150, fmt='png',
+                raw, dpi=200, fmt='png',
                 first_page=primeiro + 1,  # 1-based
                 last_page=ultimo + 1,
             )
@@ -2158,11 +2179,13 @@ def claude_chat():
                     ultima = c or ''
                 break
         biblioteca = mem_palace_load('biblioteca')
-        trechos_kw = buscar_chunks(ultima, biblioteca, top_k=10) if ultima else []
+        trechos_kw = buscar_chunks(ultima, biblioteca, top_k=15) if ultima else []
         trechos_sem = []
+        mem_biblio = []
         if ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
+        if mem_biblio:
             # Mapeia id ('biblio:<doc_id>:<idx>') de volta pra chunk completo.
             # Usamos o chunk integral da biblioteca (nao o truncado em 2000 chars
             # do palace) pra o Viriato ter mais contexto.
@@ -2440,6 +2463,11 @@ def claude_chat():
         full_system += (
             '\n### TOM DE VOZ E FORMATACAO ###\n'
             'Voce conversa com ferroviarios da Turma A no celular, em portugues do Brasil natural e direto.\n'
+            'REGRA DE FIDELIDADE TEXTUAL: ao citar, resumir ou referenciar trechos de documentos, '
+            'PDFs, regulamentos ou texto colado pelo usuario, NUNCA parafraseie — reproduza a redacao '
+            'EXATA do original. NAO substitua termos tecnicos ou juridicos por sinonimos '
+            '(ex: "empregado responsavel" NAO pode virar "gerente" ou "funcionario"). '
+            'Se precisar explicar com outras palavras, faca APOS a citacao fiel.\n'
             'REGRAS DE ESCRITA (cumpra TODAS):\n'
             '- Resposta CURTA: 1 a 4 frases na maioria dos casos. So expanda quando o usuario pedir detalhe ou for tecnico critico.\n'
             '- NAO use markdown: NADA de **negrito**, *italico*, ## titulos, listas com - ou *. Escreva em prosa.\n'
@@ -2454,6 +2482,7 @@ def claude_chat():
         response = _anthropic_client.messages.create(
             model="claude-haiku-4-5",
             max_tokens=8192,
+            temperature=0.2,
             system=full_system,
             messages=messages
         )
@@ -2679,6 +2708,95 @@ def biblioteca():
     })
 
 # === API BIBLIOTECA - UPLOAD ===
+def _indexar_biblio_em_batch_async(doc_id: str, chunks: list):
+    """FASE 4 DESIGN B: indexa todos os chunks de UM doc da biblioteca em batch.
+
+    Substitui o loop antigo de N chamadas _indexar_async (que era 1 HTTP Voyage
+    por chunk, saturava pool DB com N conexoes paralelas e travava o claude_chat
+    em paralelo) por:
+      1. UMA chamada gerar_embedding_voyage_batch (ate 128 textos por HTTP)
+         -> 200 chunks = 2 calls HTTP em ~3-5s
+      2. UM cursor.executemany no DB (1 conexao, nao N)
+      3. Roda em thread daemon -> nao bloqueia resposta do upload
+
+    Silencioso em erro. Se Voyage falhar, popula so TF-IDF 256d (busca por
+    keyword continua funcionando)."""
+    def _worker():
+        t0 = time.time()
+        try:
+            if not _palace_health_check() or not chunks:
+                return
+            # TF-IDF caseiro pra todos os chunks (cheap, in-process)
+            embs_tfidf = [_embed_to_pg(gerar_embedding(ck or '')) for ck in chunks]
+            # FIX architect: schema-aware. Se migration v2 nao aplicada, NAO
+            # mencionar coluna embedding_v2 no SQL (ou batch inteiro falharia
+            # e ate TF-IDF sumiria). Mesmo padrao de _indexar_no_palace.
+            v2_ok = _palace_v2_health_check()
+            # Voyage batch (HTTP, opcional)
+            embs_voyage_lit = [None] * len(chunks)
+            if v2_ok and _get_voyage_client():
+                vecs = gerar_embedding_voyage_batch(chunks, input_type='document')
+                if vecs and len(vecs) == len(chunks):
+                    embs_voyage_lit = [_embed_to_pg(v) for v in vecs]
+                else:
+                    print(f'[biblio-batch] doc_id={doc_id} Voyage retornou {len(vecs) if vecs else 0}/{len(chunks)} -> so TF-IDF')
+            # UPSERT executemany (1 conexao DB pra todos os chunks)
+            with kvstore._connect() as conn, conn.cursor() as cur:
+                if v2_ok:
+                    rows = []
+                    for ck_idx, ck_texto in enumerate(chunks):
+                        id_chunk = f'biblio:{doc_id}:{ck_idx}'
+                        conteudo_trunc = (ck_texto or '')[:2000]
+                        rows.append((id_chunk, 'biblio', 'geral', 'biblioteca',
+                                     conteudo_trunc, embs_tfidf[ck_idx],
+                                     embs_voyage_lit[ck_idx]))
+                    # COALESCE preserva v2 antigo se nova Voyage call falhou
+                    cur.executemany(
+                        """
+                        INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, embedding_v2, criado_em)
+                        VALUES (%s, %s, %s, %s, %s, %s::vector, %s::vector, NOW())
+                        ON CONFLICT (id) DO UPDATE
+                        SET tipo = EXCLUDED.tipo,
+                            ala = EXCLUDED.ala,
+                            sala = EXCLUDED.sala,
+                            conteudo = EXCLUDED.conteudo,
+                            embedding = EXCLUDED.embedding,
+                            embedding_v2 = COALESCE(EXCLUDED.embedding_v2, palace_embeddings.embedding_v2),
+                            criado_em = NOW()
+                        """,
+                        rows,
+                    )
+                else:
+                    # FALLBACK: schema v2 ausente. Indexa so coluna embedding (256d TF-IDF).
+                    rows = []
+                    for ck_idx, ck_texto in enumerate(chunks):
+                        id_chunk = f'biblio:{doc_id}:{ck_idx}'
+                        conteudo_trunc = (ck_texto or '')[:2000]
+                        rows.append((id_chunk, 'biblio', 'geral', 'biblioteca',
+                                     conteudo_trunc, embs_tfidf[ck_idx]))
+                    cur.executemany(
+                        """
+                        INSERT INTO palace_embeddings (id, tipo, ala, sala, conteudo, embedding, criado_em)
+                        VALUES (%s, %s, %s, %s, %s, %s::vector, NOW())
+                        ON CONFLICT (id) DO UPDATE
+                        SET tipo = EXCLUDED.tipo,
+                            ala = EXCLUDED.ala,
+                            sala = EXCLUDED.sala,
+                            conteudo = EXCLUDED.conteudo,
+                            embedding = EXCLUDED.embedding,
+                            criado_em = NOW()
+                        """,
+                        rows,
+                    )
+            voyage_ok = sum(1 for x in embs_voyage_lit if x is not None)
+            print(f'[biblio-batch] doc_id={doc_id} OK ({len(chunks)} chunks, voyage={voyage_ok}, v2_schema={v2_ok}) em {time.time()-t0:.1f}s')
+        except Exception as e:
+            print(f'[biblio-batch] doc_id={doc_id} FALHOU em {time.time()-t0:.1f}s: {e}')
+
+    _threading.Thread(target=_worker, daemon=True,
+                      name=f'biblio-batch-{doc_id}').start()
+
+
 @app.route('/api/biblioteca/upload', methods=['POST'])
 @auth.require_auth
 def biblioteca_upload():
@@ -2741,15 +2859,12 @@ def biblioteca_upload():
         if 'sala' not in biblioteca:
             biblioteca['sala'] = 'BIBLIOTECA'
         mem_palace_save('biblioteca', biblioteca)
-        # FASE 4: indexa cada chunk no palace_embeddings (tipo='biblio') de forma
-        # ASSINCRONA — nao bloqueia a resposta ao usuario. Voyage faz em batch
-        # internamente, mas como _indexar_async eh por-item, fica 1 chamada por
-        # chunk. Pra um PDF tipico (~50 chunks), eh ~50 calls Voyage em background.
-        # Cada call ~200-400ms via API, distribuidas pelo pool (4 workers).
-        # Se Voyage indisponivel, popula so a coluna TF-IDF 256d (no-op pra busca).
-        for ck_idx, ck_texto in enumerate(chunks):
-            id_chunk = f'biblio:{doc_id}:{ck_idx}'
-            _indexar_async(id_chunk, 'biblio', 'geral', 'biblioteca', ck_texto)
+        # FASE 4 DESIGN B: indexacao Voyage em BATCH (1-2 calls HTTP no total
+        # ao inves de N), em UMA thread daemon (nao bloqueia upload, nao satura
+        # pool DB com 200 conexoes paralelas). PGS 2722 ~200 chunks: era 200
+        # _indexar_async serializados no pool de 4 workers (50s+ travando o app);
+        # agora vira 2 calls Voyage batch + 1 INSERT executemany (~5s background).
+        _indexar_biblio_em_batch_async(doc_id, chunks)
         print(f'[biblioteca_upload] save em {time.time()-t3:.1f}s, TOTAL={time.time()-t0:.1f}s nome="{nome}" chunks_indexados={len(chunks)}')
         return jsonify({
             'ok': True,
@@ -3040,6 +3155,36 @@ def memoria_fato_del(id_f):
        not any(f.get('id') == id_f and f.get('matricula') == u['matricula'] for f in fatos_load()):
         return jsonify({'error': 'Apenas o autor ou admin pode remover'}), 403
     return jsonify({'ok': fatos_remove(id_f)})
+
+# === API ADMIN - SYNC GOOGLE DRIVE ===
+@app.route('/api/admin/drive-sync', methods=['POST'])
+@auth.require_admin
+@ratelimit.rate_limit(1, env_var='RATELIMIT_DRIVESYNC_PER_MIN', route_key='drivesync')
+def admin_drive_sync():
+    import drive_sync as ds
+    if ds.is_sync_running():
+        return jsonify({'error': 'Sync ja em andamento'}), 429
+    def _run():
+        try:
+            ds.drive_sync(
+                extrair_texto_fn=extrair_texto_arquivo,
+                fazer_chunks_fn=fazer_chunks,
+                categorizar_doc_fn=categorizar_doc,
+                mem_palace_load_fn=mem_palace_load,
+                mem_palace_save_fn=mem_palace_save,
+                indexar_batch_fn=_indexar_biblio_em_batch_async,
+            )
+        except Exception as e:
+            print(f'[drive-sync] ERRO thread: {e}', flush=True)
+    t = _threading.Thread(target=_run, daemon=True)
+    t.start()
+    return jsonify({'ok': True, 'status': 'sync_iniciado'})
+
+@app.route('/api/admin/drive-sync/status', methods=['GET'])
+@auth.require_admin
+def admin_drive_sync_status():
+    import drive_sync as ds
+    return jsonify({'running': ds.is_sync_running()})
 
 # === API ADMIN - MULTI-TURMA (ETAPA 5: gerencia mapeamento + flag + backfill) ===
 @app.route('/api/admin/user-ala', methods=['GET'])
