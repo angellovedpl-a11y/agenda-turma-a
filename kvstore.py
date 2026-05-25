@@ -83,7 +83,8 @@ def _get_pool():
             _POOL_MIN, _POOL_MAX, _DB_URL,
             keepalives=1, keepalives_idle=30, keepalives_interval=10, keepalives_count=5,
         )
-        print(f'[kvstore] pool criado (min={_POOL_MIN}, max={_POOL_MAX}, keepalives=on)')
+        _db_host = _DB_URL.split('@')[1].split('/')[0] if '@' in _DB_URL else '?'
+        print(f'[kvstore] pool criado (min={_POOL_MIN}, max={_POOL_MAX}, keepalives=on, host={_db_host})')
         return _pool
 
 
