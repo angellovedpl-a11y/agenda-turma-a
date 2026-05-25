@@ -2209,7 +2209,7 @@ def claude_chat():
         print(f'[claude_chat] trechos_kw={len(trechos_kw)}', flush=True)
         trechos_sem = []
         mem_biblio = []
-        if ultima:
+        if False and ultima:
             mem_biblio = busca_semantica(ultima, ala=None, sala='biblioteca', n=8,
                                           tipo='biblio', usar_voyage=True)
         if mem_biblio:
