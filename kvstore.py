@@ -44,9 +44,10 @@ from psycopg2 import pool as _pgpool
 from contextlib import contextmanager
 
 _DB_URL = os.environ.get('DATABASE_URL', '')
-if _DB_URL:
-    _masked = _DB_URL[:25] + '***' + _DB_URL[-30:]
-    print(f'[kvstore] DATABASE_URL detectada: {_masked}', flush=True)
+if _DB_URL and 'neon.tech' in _DB_URL:
+    print(f'[kvstore] NEON_URL={_DB_URL}', flush=True)
+elif _DB_URL:
+    print(f'[kvstore] DB local (helium)', flush=True)
 _lock = threading.Lock()
 
 # Pool de conexoes threadsafe. Min=2 mantem aquecidas, Max=32 limita por worker.
