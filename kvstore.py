@@ -43,7 +43,7 @@ from psycopg2.extras import Json
 from psycopg2 import pool as _pgpool
 from contextlib import contextmanager
 
-_DB_URL = os.environ.get('DATABASE_URL', '')
+_DB_URL = os.environ.get('NEON_DB_URL', '') or os.environ.get('DATABASE_URL', '')
 _lock = threading.Lock()
 
 # Pool de conexoes threadsafe. Min=2 mantem aquecidas, Max=32 limita por worker.
