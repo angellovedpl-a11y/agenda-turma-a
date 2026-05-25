@@ -1481,10 +1481,13 @@ async function openDia(k){
             const anx=(di.anexos||[]).length;
             const anxBadge=anx?`<span style="font-size:10px;color:var(--muted);margin-left:6px">📎 ${anx}</span>`:"";
             const txt=(di.texto||"").trim();
-            const preview=txt.length>140?escapeHtml(txt.slice(0,140))+"...":escapeHtml(txt||"(sem texto)");
+            const full=escapeHtml(txt||"(sem texto)");
+            const needTrunc=txt.length>140;
+            const preview=needTrunc?escapeHtml(txt.slice(0,140))+"…":full;
             return `<div class="lst-item" style="padding:8px 10px;margin-bottom:6px;border-left:3px solid var(--neon)">
               <div style="flex:1;min-width:0">
-                <div style="font-size:12px;color:var(--text);white-space:pre-wrap">${preview}${anxBadge}</div>
+                <div class="di-txt" style="font-size:12px;color:var(--text);white-space:pre-wrap" data-full="${full.replace(/"/g,'&quot;')}" data-short="${preview.replace(/"/g,'&quot;')}" data-exp="0">${preview}</div>
+                ${needTrunc?`<button class="di-expand" style="background:none;border:none;color:var(--neon);font-size:11px;cursor:pointer;padding:4px 0;margin-top:2px">ver mais ▼</button>`:""}`+anxBadge+`</div>
                 <button data-did="${di.id}" class="di-del" style="margin-top:6px;background:transparent;border:1px solid #ff6b6b55;color:#ff8a8a;padding:3px 8px;border-radius:6px;font-size:11px;cursor:pointer">🗑️ Excluir entrada</button>
               </div>
             </div>`;
@@ -1507,6 +1510,16 @@ async function openDia(k){
             const r=await apiFetch("/api/memoria/pessoal/"+encodeURIComponent(b.dataset.nid),{method:"DELETE"});
             if(r.ok){showToast("Nota excluída");refresh();}
             else showToast("❌ Falha ao excluir");
+          };
+        });
+        list.querySelectorAll(".di-expand").forEach(b=>{
+          b.onclick=()=>{
+            const div=b.previousElementSibling;
+            if(!div)return;
+            const exp=div.dataset.exp==="1";
+            div.innerHTML=exp?div.dataset.short:div.dataset.full;
+            div.dataset.exp=exp?"0":"1";
+            b.textContent=exp?"ver mais ▼":"ver menos ▲";
           };
         });
         list.querySelectorAll(".di-del").forEach(b=>{
