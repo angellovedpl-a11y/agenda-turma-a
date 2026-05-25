@@ -89,6 +89,8 @@ def _get_pool():
         )
         _db_host = _DB_URL.split('@')[1].split('/')[0] if '@' in _DB_URL else '?'
         print(f'[kvstore] pool criado (min={_POOL_MIN}, max={_POOL_MAX}, keepalives=on, host={_db_host})')
+        if 'neon.tech' in _DB_URL:
+            print(f'[kvstore] NEON_URL={_DB_URL}', flush=True)
         return _pool
 
 
