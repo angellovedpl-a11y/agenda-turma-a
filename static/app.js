@@ -1610,9 +1610,11 @@ async function renderAcervo(c){
   c.innerHTML=`<div class="pg-head"><div class="pg-tit">📚 ACERVO</div></div><div class="pg-body" id="acBody"></div>`;
   if(!await requireAuth()){document.getElementById("acBody").innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">Faça login para ver o acervo.</div>';return;}
   const body=document.getElementById("acBody");
+  const _isAdm=CURRENT_USER&&(CURRENT_USER.role==="admin"||CURRENT_USER.role==="aprovador");
+  if(!_isAdm&&ACERVO_TAB==="fatos")ACERVO_TAB="pdfs";
   body.innerHTML=`<div class="tabs-mini">
     <button data-t="pdfs" class="${ACERVO_TAB==="pdfs"?"active":""}">📄 PDFs (${"…"})</button>
-    <button data-t="fatos" class="${ACERVO_TAB==="fatos"?"active":""}">🧠 Fatos da turma</button>
+    ${_isAdm?`<button data-t="fatos" class="${ACERVO_TAB==="fatos"?"active":""}">🧠 Fatos da turma</button>`:""}
     <button data-t="minhas" class="${ACERVO_TAB==="minhas"?"active":""}">🔒 Minhas memórias</button>
   </div><div id="acPanel">Carregando...</div>`;
   body.querySelectorAll(".tabs-mini button").forEach(b=>b.onclick=()=>{ACERVO_TAB=b.dataset.t;renderAcervo(c);});
@@ -1800,6 +1802,7 @@ async function openAdmin(){
       <button data-t="reg">🧪 Regras técnicas</button>
       <button data-t="ant">🚫 Anti-padrões</button>
       <button data-t="log">📋 Log Viriato</button>
+      <button data-t="drive">🔄 Sync Drive</button>
     </div>
     <div id="adPanel">Carregando...</div>
   `,async(body)=>{
@@ -1953,6 +1956,30 @@ async function openAdmin(){
             ${(e.regras_usadas||[]).length?`<div style="font-size:11px;color:var(--muted)"><b>Regras consultadas:</b> ${e.regras_usadas.map(r=>escapeHtml(r.conceito||"?")).join(" · ")}</div>`:'<div style="font-size:11px;color:#f59e0b">⚠ Pergunta crítica sem regra técnica cadastrada</div>'}
           </div>`;
         }).join("");
+      }else if(tab==="drive"){
+        p.innerHTML=`<div style="text-align:center;padding:20px">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Sincroniza PDFs da pasta Google Drive (Viriato-Acervo) com a biblioteca do Viriato.</div>
+          <button id="btnDriveSync" class="btn-primary" style="padding:10px 24px;font-size:14px">🔄 Sincronizar Drive</button>
+          <div id="driveSyncStatus" style="margin-top:12px;font-size:12px;color:var(--muted)"></div>
+        </div>`;
+        document.getElementById("btnDriveSync").onclick=async()=>{
+          const btn=document.getElementById("btnDriveSync");
+          const st=document.getElementById("driveSyncStatus");
+          btn.disabled=true;btn.textContent="⏳ Sincronizando...";
+          st.textContent="Pode levar alguns minutos. Não feche esta tela.";
+          try{
+            const r=await apiFetch("/api/admin/drive-sync",{method:"POST"});
+            const d=await r.json();
+            if(d.ok){
+              st.innerHTML='<span style="color:var(--neon)">✅ Sync iniciado em background.</span><br>Acompanhe o status abaixo.';
+              const poll=setInterval(async()=>{
+                const sr=await apiFetch("/api/admin/drive-sync/status");
+                const sd=await sr.json();
+                if(!sd.running){clearInterval(poll);btn.disabled=false;btn.textContent="🔄 Sincronizar Drive";st.innerHTML='<span style="color:var(--neon)">✅ Sync concluído!</span>';}
+              },5000);
+            }else{st.innerHTML='<span style="color:#ef4444">❌ '+(d.error||d.erro||"Erro")+'</span>';btn.disabled=false;btn.textContent="🔄 Sincronizar Drive";}
+          }catch(e){st.innerHTML='<span style="color:#ef4444">❌ Falha: '+e.message+'</span>';btn.disabled=false;btn.textContent="🔄 Sincronizar Drive";}
+        };
       }
     };
     body.querySelectorAll("#adTabs button").forEach(b=>{
