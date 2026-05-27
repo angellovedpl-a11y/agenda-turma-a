@@ -9,6 +9,11 @@
 import os, json, hashlib, secrets, time, re
 from functools import wraps
 from flask import request, jsonify
+try:
+    import bcrypt
+    _BCRYPT_AVAILABLE = True
+except ImportError:
+    _BCRYPT_AVAILABLE = False
 
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
@@ -61,9 +66,23 @@ def sessions_save(data):
     kvstore.save('sessions', data)
 
 
-def hash_senha(matricula: str, senha: str) -> str:
+def _hash_sha256_legado(matricula: str, senha: str) -> str:
     salt = ('turmaA_' + matricula).encode('utf-8')
     return hashlib.sha256(salt + senha.encode('utf-8')).hexdigest()
+
+
+def hash_senha(matricula: str, senha: str) -> str:
+    if _BCRYPT_AVAILABLE:
+        combined = (matricula + ':' + senha).encode('utf-8')
+        return bcrypt.hashpw(combined, bcrypt.gensalt(rounds=12)).decode('utf-8')
+    return _hash_sha256_legado(matricula, senha)
+
+
+def verificar_senha(matricula: str, senha: str, stored_hash: str) -> bool:
+    if _BCRYPT_AVAILABLE and stored_hash.startswith('$2'):
+        combined = (matricula + ':' + senha).encode('utf-8')
+        return bcrypt.checkpw(combined, stored_hash.encode('utf-8'))
+    return stored_hash == _hash_sha256_legado(matricula, senha)
 
 
 def validar_matricula(m: str) -> bool:
@@ -246,8 +265,11 @@ def handle_login(data):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Matricula ou senha incorretas'}), 401
-    if u.get('senha_hash') != hash_senha(matricula, senha):
+    if not verificar_senha(matricula, senha, u.get('senha_hash', '')):
         return jsonify({'error': 'Matricula ou senha incorretas'}), 401
+    if _BCRYPT_AVAILABLE and not u.get('senha_hash', '').startswith('$2'):
+        u['senha_hash'] = hash_senha(matricula, senha)
+        users_save(users)
     if u.get('status') == 'pendente':
         return jsonify({'error': 'Cadastro pendente de aprovacao do administrador'}), 403
     if u.get('status') == 'negado':
@@ -454,7 +476,7 @@ def handle_trocar_senha(data, user):
         return jsonify({'error': 'A nova senha precisa ser diferente da atual'}), 400
     users = users_load()
     u = users.get(user['matricula'])
-    if not u or u.get('senha_hash') != hash_senha(user['matricula'], atual):
+    if not u or not verificar_senha(user['matricula'], atual, u.get('senha_hash', '')):
         return jsonify({'error': 'Senha atual incorreta'}), 401
     u['senha_hash'] = hash_senha(user['matricula'], nova)
     u['senha_temp'] = False

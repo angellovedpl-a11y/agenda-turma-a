@@ -29,8 +29,19 @@ def _presence_track():
 
 @app.after_request
 def _security_headers(resp):
-    # Evita vazar URL completa (com ?t=<token>) em links externos
     resp.headers.setdefault('Referrer-Policy', 'same-origin')
+    resp.headers.setdefault('X-Frame-Options', 'DENY')
+    resp.headers.setdefault('X-Content-Type-Options', 'nosniff')
+    resp.headers.setdefault('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+    resp.headers.setdefault('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+    resp.headers.setdefault('Content-Security-Policy',
+                            "default-src 'self'; "
+                            "script-src 'self' 'unsafe-inline'; "
+                            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+                            "font-src 'self' https://fonts.gstatic.com; "
+                            "img-src 'self' data: blob:; "
+                            "connect-src 'self'; "
+                            "frame-ancestors 'none'")
     return resp
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -2711,7 +2722,7 @@ def claude_chat():
         err = str(e)
         if "FREE_CLOUD_BUDGET_EXCEEDED" in err:
             return jsonify({'error': 'Limite de creditos Replit AI atingido.'}), 429
-        return jsonify({'error': err}), 500
+        return jsonify({'error': 'Erro interno no chat. Tente novamente.'}), 500
 
 # === API BIBLIOTECA - LISTAR ===
 @app.route('/api/biblioteca', methods=['GET'])
@@ -2906,7 +2917,7 @@ def biblioteca_upload():
         import traceback
         print(f'[biblioteca_upload] ERRO em {time.time()-t0:.1f}s nome="{nome_log}": {e}')
         traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'Erro ao processar documento. Tente novamente.'}), 500
 
 # === API BIBLIOTECA - REMOVER ===
 @app.route('/api/biblioteca/<doc_id>', methods=['DELETE'])
@@ -3103,7 +3114,8 @@ def mem_update(sala):
                 print(f'[push] falha mural: {_e}')
         return jsonify({'ok': True, 'sala': sala})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f'[mem_sala] ERRO: {e}')
+        return jsonify({'error': 'Erro ao salvar dados. Tente novamente.'}), 500
 
 # === REACOES NO MURAL ===
 REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '🎉', '🙏', '👏', '🚂']

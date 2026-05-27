@@ -6,6 +6,7 @@ __pycache__/
 venv/
 .venv/
 *.log
+.env*
 
 # SEGURANCA: contem hashes de senha e tokens de sessao ativos.
 # Em prod sao armazenados no Postgres via kvstore — disco eh so seed/cache.
