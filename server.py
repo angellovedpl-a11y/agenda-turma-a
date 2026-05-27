@@ -40,7 +40,10 @@ def _security_headers(resp):
                             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                             "font-src 'self' https://fonts.gstatic.com; "
                             "img-src 'self' data: blob:; "
-                            "connect-src 'self'; "
+                            "connect-src 'self' https://*.push.services.mozilla.com https://fcm.googleapis.com https://*.notify.windows.com; "
+                            "worker-src 'self'; "
+                            "manifest-src 'self'; "
+                            "media-src 'self'; "
                             "frame-ancestors 'none'")
     return resp
 
