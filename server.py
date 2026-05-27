@@ -98,6 +98,19 @@ try:
 except Exception as _e:
     print('[migracao] erro:', _e)
 
+# Migracao unica: marca o admin original como owner (flag imutavel)
+try:
+    _u2 = _kv_init.load('users') or {}
+    _has_owner = any(d.get('owner') for d in _u2.values())
+    if not _has_owner:
+        _admin = next(((_m, _d) for _m, _d in _u2.items() if _d.get('role') == 'admin'), None)
+        if _admin:
+            _admin[1]['owner'] = True
+            _kv_init.save('users', _u2)
+            print(f'[migracao] owner marcado: {_admin[0]}')
+except Exception as _e:
+    print('[migracao] owner erro:', _e)
+
 def helpdesk_load() -> list:
     if not os.path.isdir(HELPDESK_DIR):
         return []

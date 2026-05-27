@@ -158,6 +158,10 @@ def get_current_user():
     return {'matricula': s['matricula'], **u}
 
 
+def is_owner(user) -> bool:
+    return bool(user and user.get('owner'))
+
+
 def can_approve(user) -> bool:
     if not user:
         return False
@@ -228,6 +232,7 @@ def handle_registrar(data):
         'senha_hash': hash_senha(matricula, senha),
         'status': 'aprovado' if primeiro else 'pendente',
         'role': 'admin' if primeiro else 'user',
+        'owner': True if primeiro else False,
         'criado_em': time.time(),
         'aprovado_em': time.time() if primeiro else None,
         'aprovado_por': 'auto-admin' if primeiro else None,
@@ -391,7 +396,7 @@ def handle_negar(matricula, aprovador):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Usuario nao encontrado'}), 404
-    if u.get('role') == 'admin':
+    if u.get('owner') or u.get('role') == 'admin':
         return jsonify({'error': 'Nao e possivel negar o admin'}), 403
     if u.get('status') != 'pendente':
         return jsonify({'error': 'Apenas cadastros pendentes podem ser negados'}), 400
@@ -493,6 +498,8 @@ def handle_admin_reset_senha(matricula, admin):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Usuário não encontrado'}), 404
+    if u.get('owner') and admin.get('matricula') != matricula:
+        return jsonify({'error': 'Apenas o próprio dono pode resetar sua senha'}), 403
     if u.get('status') != 'aprovado':
         return jsonify({'error': 'Usuário precisa estar aprovado'}), 400
     nova = _gera_senha_temp()
@@ -511,7 +518,7 @@ def handle_despromover(matricula, admin):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Usuario nao encontrado'}), 404
-    if u.get('role') == 'admin':
+    if u.get('owner') or u.get('role') == 'admin':
         return jsonify({'error': 'Nao e possivel despromover o admin'}), 403
     if u.get('role') != 'aprovador':
         return jsonify({'error': 'Usuario nao e aprovador'}), 400
