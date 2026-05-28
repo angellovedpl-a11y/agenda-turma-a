@@ -242,12 +242,6 @@ function renderMensal(){
     wk+=`</div></div>`;
     html+=wk;
   }
-  // Banner reflexivo do Viriato (logo abaixo do calendario, com botao integrado)
-  html+=`<div class="viriato-banner" id="viriatoBanner">
-    <button class="vb-bot" id="vbOpenViriato" aria-label="Abrir Viriato" title="Falar com o Viriato">🤖</button>
-    <span class="vb-txt"><i>Vc Já viu como é Linda a Vista da Lagoa Mapaúra, pela Janela de Uma Locomotiva?</i></span>
-    <button class="vb-close" id="vbClose" aria-label="Fechar">×</button>
-  </div>`;
   return html;
 }
 
@@ -396,7 +390,7 @@ function render(){
   document.getElementById("rightPanel").style.display="";
   c.innerHTML=S.view==="mensal"?renderMensal():renderAnual();
   document.getElementById("rightPanel").innerHTML=renderRight();
-  attachViriatoBanner();
+
   if(CURRENT_USER){
     carregarEventosCache().then(()=>{
       if(S.section==="calendario"||!S.section){
@@ -405,7 +399,7 @@ function render(){
         const rp=document.getElementById("rightPanel");
         if(rp)rp.innerHTML=renderRight();
         bindCalNav();
-        attachViriatoBanner();
+      
       }
     });
   }
@@ -479,24 +473,9 @@ document.getElementById("themeToggle").addEventListener("click",()=>{
   const cur=document.documentElement.getAttribute("data-theme")||"dark";
   applyTheme(cur==="dark"?"light":"dark");
 });
-// Banner reflexivo do Viriato — attach handlers a cada render do calendario
-function attachViriatoBanner(){
-  const banner=document.getElementById("viriatoBanner");
-  if(!banner){document.body.classList.remove("banner-visible");return;}
-  try{localStorage.removeItem("turmaA_vbHidden");}catch(e){}
-  document.body.classList.add("banner-visible");
-  const cls=document.getElementById("vbClose");
-  if(cls)cls.onclick=()=>{
-    banner.classList.add("hidden");
-    document.body.classList.remove("banner-visible");
-  };
-  const ob=document.getElementById("vbOpenViriato");
-  if(ob)ob.onclick=()=>{setSection("viriato");};
-}
-
 // ===== Viriato em tela cheia (aba dedicada) =====
 function renderViriatoFull(c){
-  const msgs=S.history.length?S.history:[{role:"assistant",content:"Olá! Sou o Viriato, assistente ferroviário. Como posso ajudar?"}];
+  const msgs=S.history.length?S.history:[{role:"assistant",content:"Vc já viu como é linda a vista da Lagoa Mapaúra, pela janela de uma locomotiva? Sou o Viriato, assistente ferroviário da turma. Como posso ajudar?"}];
   c.innerHTML=`
     <div class="viriato-full">
       <div class="vf-head">
@@ -574,7 +553,7 @@ function renderViriatoFull(c){
 function renderViriato(){
   const w=document.getElementById("viriatoWin");
   if(!S.viriatoOpen){w.innerHTML="";return;}
-  const msgs=S.history.length?S.history:[{role:"assistant",content:"Olá! Sou o Viriato, assistente ferroviário. Como posso ajudar?"}];
+  const msgs=S.history.length?S.history:[{role:"assistant",content:"Vc já viu como é linda a vista da Lagoa Mapaúra, pela janela de uma locomotiva? Sou o Viriato, assistente ferroviário da turma. Como posso ajudar?"}];
   w.innerHTML=`
     <div class="viriato-win">
       <div class="vw-head">
