@@ -490,7 +490,11 @@ function renderViriatoFull(c){
         <button class="vf-clear" id="vfClear" title="Limpar conversa">🗑️</button>
       </div>
       <div class="vf-body" id="vfBody">
-        ${msgs.map(m=>`<div class="msg ${m.role==="user"?"user":"bot"}">${escapeHtml(m.content)}</div>`).join("")}
+        ${msgs.map((m,i)=>{
+          const isLastBot=m.role==="assistant"&&i===msgs.length-1;
+          const pdfBtn=isLastBot&&S._pendingPdf?`<button class="vf-pdf-btn" id="vfPdfDl">📄 Baixar PDF</button>`:"";
+          return `<div class="msg ${m.role==="user"?"user":"bot"}">${escapeHtml(m.content)}${pdfBtn}</div>`;
+        }).join("")}
         ${S.viriatoTyping?'<div class="msg bot typing">Viriato digitando…</div>':""}
       </div>
       <div class="vf-input">
@@ -505,8 +509,12 @@ function renderViriatoFull(c){
   setTimeout(()=>inp&&inp.focus(),50);
   document.getElementById("vfBack").onclick=()=>setSection("calendario");
   document.getElementById("vfClear").onclick=()=>{
-    if(confirm("Limpar toda a conversa com o Viriato?")){S.history=[];renderViriatoFull(c);}
+    if(confirm("Limpar toda a conversa com o Viriato?")){S.history=[];S._pendingPdf=null;renderViriatoFull(c);}
   };
+  const pdfDl=document.getElementById("vfPdfDl");
+  if(pdfDl&&S._pendingPdf){
+    pdfDl.onclick=()=>{downloadViriatoPdf(S._pendingPdf);S._pendingPdf=null;};
+  }
   const doSend=async()=>{
     const txt=(inp.value||"").trim();
     if(!txt||S.viriatoTyping)return;
@@ -538,6 +546,9 @@ function renderViriatoFull(c){
           showToast("📅 "+d.eventos_criados.length+" evento(s) adicionado(s) à agenda");
           await carregarEventosCache();
         }
+        if(d.pdf && d.pdf.titulo && d.pdf.conteudo){
+          S._pendingPdf=d.pdf;
+        }
       }
     }catch(e){S.history.push({role:"assistant",content:"Erro de conexão: "+e.message});}
     S.viriatoTyping=false;
@@ -547,6 +558,28 @@ function renderViriatoFull(c){
   inp.addEventListener("keydown",e=>{
     if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();doSend();}
   });
+}
+
+async function downloadViriatoPdf(pdf){
+  try{
+    const token=getToken();
+    const r=await fetch("/api/gerar-pdf",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+      body:JSON.stringify({titulo:pdf.titulo,conteudo:pdf.conteudo})
+    });
+    if(!r.ok){const d=await r.json().catch(()=>({}));showToast("❌ "+(d.error||"Erro ao gerar PDF"));return;}
+    const blob=await r.blob();
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=r.headers.get("content-disposition")?.split("filename=")[1]?.replace(/"/g,"")||"viriato.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("📄 PDF baixado!");
+  }catch(e){showToast("❌ Erro: "+e.message);}
 }
 
 // ===== Viriato =====

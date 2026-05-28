@@ -2515,6 +2515,26 @@ def claude_chat():
         full_system += '========================================\n'
 
         full_system += (
+            '\n### GERAR PDF PARA DOWNLOAD ###\n'
+            'Se o usuario pedir para gerar um documento, simulado, resumo, apostila, checklist '
+            'ou QUALQUER conteudo que ele queira SALVAR ou BAIXAR, voce DEVE:\n'
+            '1) Escrever o conteudo COMPLETO e DETALHADO na sua resposta (nao resuma, nao corte).\n'
+            '2) Ao FINAL, emitir o marcador em linha separada:\n\n'
+            '  [GERAR_PDF titulo=Nome do Documento]\n\n'
+            'O sistema vai pegar TODO o texto da sua resposta (exceto o marcador) e gerar um PDF '
+            'para download automaticamente. O usuario vera um botao de download no chat.\n\n'
+            'REGRAS:\n'
+            '- Use linhas em branco para separar secoes (serao espacos no PDF).\n'
+            '- Use # Titulo e ## Subtitulo para cabecalhos (serao formatados no PDF).\n'
+            '- Use - item para listas (virarao bullet points no PDF).\n'
+            '- NESSAS respostas de PDF, markdown eh PERMITIDO (excecao da regra de escrita).\n'
+            '- O titulo no marcador deve ser descritivo (ex: "Simulado Ferroviario", "Checklist Pre-Viagem").\n'
+            '- So emita [GERAR_PDF] quando o usuario PEDIR explicitamente um documento/arquivo/PDF/simulado.\n'
+            '  Nunca emita espontaneamente.\n'
+            '### FIM GERAR PDF ###\n\n'
+        )
+
+        full_system += (
             '\n### TOM DE VOZ E FORMATACAO ###\n'
             'Voce conversa com ferroviarios da Turma A no celular, em portugues do Brasil natural e direto.\n'
             'REGRA DE FIDELIDADE TEXTUAL: ao citar, resumir ou referenciar trechos de documentos, '
@@ -2727,11 +2747,25 @@ def claude_chat():
                 partes.append('\n\n*⏳ Enviado para aprovação do admin: ' + '; '.join(s['texto'][:80] for s in pendentes_now) + '*')
             texto_limpo = texto_limpo + ''.join(partes)
 
+        pdf_info = None
+        marcador_pdf = re.compile(
+            r'\[\s*GERAR[_ ]PDF\s+titulo\s*=\s*([^\]\n]+)\s*\]',
+            re.IGNORECASE
+        )
+        m_pdf = marcador_pdf.search(texto_limpo)
+        if m_pdf:
+            pdf_titulo = m_pdf.group(1).strip().rstrip('.').strip()[:120]
+            pdf_conteudo = marcador_pdf.sub('', texto_limpo).strip()
+            if pdf_titulo and len(pdf_conteudo) >= 10:
+                pdf_info = {'titulo': pdf_titulo, 'conteudo': pdf_conteudo}
+            texto_limpo = marcador_pdf.sub('', texto_limpo)
+
         return jsonify({'text': texto_limpo, 'trechos_usados': len(trechos),
                         'memoria_salva': salvos,
                         'eventos_criados': eventos_criados,
                         'regras_sugeridas': regras_sugeridas,
-                        'modo_deliberativo': bool(modo_critico)})
+                        'modo_deliberativo': bool(modo_critico),
+                        'pdf': pdf_info})
     except Exception as e:
         print('[claude_chat] EXCEPTION:', flush=True)
         traceback.print_exc()
@@ -2739,6 +2773,84 @@ def claude_chat():
         if "FREE_CLOUD_BUDGET_EXCEEDED" in err:
             return jsonify({'error': 'Limite de creditos Replit AI atingido.'}), 429
         return jsonify({'error': 'Erro interno no chat. Tente novamente.'}), 500
+
+# === API GERAR PDF (sob demanda, sem armazenamento) ===
+@app.route('/api/gerar-pdf', methods=['POST'])
+@auth.require_auth
+@ratelimit.rate_limit(5, env_var='RATELIMIT_PDF_PER_MIN', route_key='gerar_pdf')
+def api_gerar_pdf():
+    try:
+        data = request.json or {}
+        titulo = (data.get('titulo') or 'Documento Viriato').strip()[:120]
+        conteudo = (data.get('conteudo') or '').strip()
+        if not conteudo or len(conteudo) < 10:
+            return jsonify({'error': 'Conteudo muito curto para gerar PDF'}), 400
+        if len(conteudo) > 50000:
+            return jsonify({'error': 'Conteudo excede o limite (50.000 caracteres)'}), 400
+
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib.units import cm
+        from reportlab.lib.enums import TA_LEFT, TA_CENTER
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+        from reportlab.lib.colors import HexColor
+
+        buf = io.BytesIO()
+        doc = SimpleDocTemplate(buf, pagesize=A4,
+                                leftMargin=2*cm, rightMargin=2*cm,
+                                topMargin=2*cm, bottomMargin=2*cm)
+        styles = getSampleStyleSheet()
+        title_style = ParagraphStyle('PDFTitle', parent=styles['Title'],
+                                     fontSize=18, textColor=HexColor('#7c3aed'),
+                                     spaceAfter=20, alignment=TA_CENTER)
+        body_style = ParagraphStyle('PDFBody', parent=styles['Normal'],
+                                    fontSize=11, leading=16, spaceAfter=8,
+                                    alignment=TA_LEFT)
+        meta_style = ParagraphStyle('PDFMeta', parent=styles['Normal'],
+                                    fontSize=8, textColor=HexColor('#94a3b8'),
+                                    spaceAfter=16, alignment=TA_CENTER)
+
+        story = []
+        story.append(Paragraph(titulo, title_style))
+        nome = request.current_user.get('nome', '')
+        story.append(Paragraph(
+            f"Gerado por Viriato para {nome} em {time.strftime('%d/%m/%Y %H:%M')}",
+            meta_style))
+        story.append(Spacer(1, 12))
+
+        for linha in conteudo.split('\n'):
+            linha = linha.strip()
+            if not linha:
+                story.append(Spacer(1, 6))
+                continue
+            linha_safe = linha.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            if linha.startswith('# '):
+                s = ParagraphStyle('H1', parent=styles['Heading1'],
+                                   fontSize=16, spaceAfter=10,
+                                   textColor=HexColor('#7c3aed'))
+                story.append(Paragraph(linha_safe[2:], s))
+            elif linha.startswith('## '):
+                s = ParagraphStyle('H2', parent=styles['Heading2'],
+                                   fontSize=14, spaceAfter=8,
+                                   textColor=HexColor('#7c3aed'))
+                story.append(Paragraph(linha_safe[3:], s))
+            elif linha.startswith('- ') or linha.startswith('* '):
+                story.append(Paragraph(f"• {linha_safe[2:]}", body_style))
+            else:
+                story.append(Paragraph(linha_safe, body_style))
+
+        doc.build(story)
+        buf.seek(0)
+
+        safe_titulo = re.sub(r'[^a-zA-Z0-9_\- ]+', '', titulo)[:60].strip() or 'documento'
+        filename = f"viriato_{safe_titulo}_{time.strftime('%Y%m%d_%H%M%S')}.pdf"
+
+        from flask import send_file
+        return send_file(buf, mimetype='application/pdf',
+                         as_attachment=True, download_name=filename)
+    except Exception as e:
+        print(f'[gerar-pdf] erro: {e}')
+        return jsonify({'error': 'Erro ao gerar PDF. Tente novamente.'}), 500
 
 # === API BIBLIOTECA - LISTAR ===
 @app.route('/api/biblioteca', methods=['GET'])
