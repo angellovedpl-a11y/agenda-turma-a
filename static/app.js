@@ -377,6 +377,14 @@ function renderRight(){
         <span>${pctF}% FOLGA</span>
       </div>
     </div>
+
+    <div class="panel legal-panel">
+      <div class="panel-tit">Documentos</div>
+      <div class="legal-links">
+        <a href="/termos-de-uso.html">Termos de Uso</a>
+        <a href="/politica-de-seguranca.html">Segurança e Privacidade</a>
+      </div>
+    </div>
   `;
 }
 
@@ -875,6 +883,10 @@ function openLogin(){
     <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="loginSen" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"/></div>
     <button id="loginBtn" class="btn-primary" style="width:100%">ENTRAR</button>
     <div id="loginMsg" style="color:#ff6b6b;font-size:12px;text-align:center;min-height:14px;margin-top:10px"></div>
+    <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--muted);line-height:1.45">
+      Ao entrar, você aceita os <a href="/termos-de-uso.html" style="color:var(--neon)">Termos de Uso</a>
+      e a <a href="/politica-de-seguranca.html" style="color:var(--neon)">Política de Segurança</a>.
+    </div>
     <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
       Não tem conta? <a href="#" id="goReg" style="color:var(--neon)">Cadastrar-se</a>
     </div>
@@ -904,6 +916,10 @@ function openRegistro(){
     <div class="modal-fld"><label>Função</label><select id="rgFun"><option value="">— selecione —</option><option value="Função Operacional">Função Operacional</option><option value="Função Administrativa">Função Administrativa</option></select></div>
     <div class="modal-fld"><label>E-mail (opcional)</label><input id="rgEmail" type="email"/></div>
     <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="rgSen" type="password" inputmode="numeric" maxlength="4"/></div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.45;margin:-2px 0 12px;text-align:center">
+      Ao cadastrar, você concorda com os <a href="/termos-de-uso.html" style="color:var(--neon)">Termos de Uso</a>
+      e com a <a href="/politica-de-seguranca.html" style="color:var(--neon)">Política de Segurança e Privacidade</a>.
+    </div>
     <button id="rgBtn" class="btn-primary" style="width:100%">CADASTRAR</button>
     <div id="rgMsg" style="font-size:12px;text-align:center;min-height:14px;margin-top:10px"></div>
     <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted)"><a href="#" id="goLog" style="color:var(--neon)">Já tenho conta</a></div>
@@ -1796,6 +1812,8 @@ async function openSetup(){
       <button class="btn-secondary" id="stTema">🌓 Alternar tema (claro/escuro)</button>
       <button class="btn-secondary" id="stSenha">🔑 Trocar senha</button>
       <button class="btn-secondary" id="stFun">👤 Trocar função</button>
+      <a class="btn-secondary" href="/termos-de-uso.html" style="text-align:center;text-decoration:none">📄 Termos de Uso</a>
+      <a class="btn-secondary" href="/politica-de-seguranca.html" style="text-align:center;text-decoration:none">🛡 Segurança e Privacidade</a>
       ${isAdm?'<button class="btn-secondary" id="stAdm">👑 Painel admin</button>':""}
       <button class="btn-danger" id="stSair" style="margin-top:6px">🚪 Sair</button>
     </div>

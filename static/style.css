@@ -467,6 +467,16 @@ button.cal-legend-item.off:hover{opacity:.75}
 .resumo-bar .b-f{background:var(--neon)}
 .resumo-bar .b-t{background:var(--orange)}
 .resumo-leg{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-mute);margin-top:6px;letter-spacing:1px}
+.legal-panel{padding:14px}
+.legal-links{display:grid;gap:8px}
+.legal-links a{
+  display:flex;align-items:center;justify-content:center;
+  min-height:38px;padding:8px 10px;border:1px solid var(--border-soft);
+  border-radius:8px;background:var(--card-2);color:var(--text);
+  text-decoration:none;font-size:12px;font-weight:600;transition:all .15s;
+}
+.legal-links a:hover{border-color:var(--neon);color:var(--neon)}
+[data-theme="light"] .legal-links a{background:#f8fafc;border-color:#cbd5e1}
 
 /* ===== VIRIATO TELA CHEIA (aba dedicada) ===== */
 body.sec-viriato .main{padding:0!important;overflow:hidden!important;height:100dvh!important;gap:0!important}
