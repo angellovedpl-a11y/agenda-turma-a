@@ -2087,6 +2087,11 @@ def api_login():
 def api_logout():
     return auth.handle_logout()
 
+@app.route('/api/auth/legal-acceptance', methods=['POST'])
+@auth.require_auth_allow_pending_legal
+def api_legal_acceptance():
+    return auth.handle_legal_acceptance(request.json or {}, request.current_user)
+
 @app.route('/api/auth/me', methods=['GET'])
 def api_me():
     return auth.handle_me()

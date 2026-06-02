@@ -6,7 +6,8 @@
 - Cadastros novos ficam pendentes ate aprovacao
 - Sessoes via token (uuid) salvas em data/sessions.json (validade 30 dias)
 """
-import os, json, hashlib, secrets, time, re
+import os, json, hashlib, hmac, secrets, time, re
+from datetime import datetime, timezone
 from functools import wraps
 from flask import request, jsonify
 try:
@@ -49,6 +50,10 @@ MAX_APROVADORES = 3  # alem do admin
 MATRICULA_RE = re.compile(r'^\d{6,10}$')
 SENHA_RE = re.compile(r'^\d{4}$')
 
+LEGAL_TERMS_VERSION = '1.0'
+LEGAL_POLICY_VERSION = '1.0'
+LEGAL_AUDIT_KEY = 'legal_acceptance_audit'
+
 
 def users_load():
     return kvstore.load('users')
@@ -64,6 +69,100 @@ def sessions_load():
 
 def sessions_save(data):
     kvstore.save('sessions', data)
+
+
+def _legal_now():
+    ts = time.time()
+    iso = datetime.fromtimestamp(ts, timezone.utc).isoformat().replace('+00:00', 'Z')
+    return ts, iso
+
+
+def legal_acceptance_current(user) -> bool:
+    acc = (user or {}).get('legal_acceptance') or {}
+    return (
+        acc.get('terms_version') == LEGAL_TERMS_VERSION and
+        acc.get('policy_version') == LEGAL_POLICY_VERSION
+    )
+
+
+def _legal_user_fields(user) -> dict:
+    acc = (user or {}).get('legal_acceptance') or {}
+    return {
+        'legal_acceptance_required': not legal_acceptance_current(user),
+        'legal_terms_version': LEGAL_TERMS_VERSION,
+        'legal_policy_version': LEGAL_POLICY_VERSION,
+        'legal_acceptance': {
+            'terms_version': acc.get('terms_version'),
+            'policy_version': acc.get('policy_version'),
+            'accepted_at': acc.get('accepted_at'),
+            'accepted_at_iso': acc.get('accepted_at_iso'),
+        } if acc else None,
+    }
+
+
+def _acceptance_truthy(value) -> bool:
+    return value is True or str(value).strip().lower() in ('1', 'true', 'on', 'yes', 'sim')
+
+
+def _hash_for_audit(value: str):
+    salt = os.environ.get('LEGAL_AUDIT_SALT', '').strip()
+    if not value or len(salt) < 16:
+        return None
+    return hmac.new(salt.encode('utf-8'), str(value).encode('utf-8'), hashlib.sha256).hexdigest()
+
+
+def _client_ip_for_hash():
+    forwarded = (request.headers.get('X-Forwarded-For') or '').split(',')[0].strip()
+    return forwarded or request.headers.get('X-Real-IP', '').strip() or getattr(request, 'remote_addr', '') or ''
+
+
+def _new_legal_acceptance(origin: str) -> dict:
+    ts, iso = _legal_now()
+    return {
+        'terms_version': LEGAL_TERMS_VERSION,
+        'policy_version': LEGAL_POLICY_VERSION,
+        'accepted_at': ts,
+        'accepted_at_iso': iso,
+        'origin': origin,
+    }
+
+
+def _new_legal_audit_entry(matricula: str, origin: str, accepted_at: float, accepted_at_iso: str) -> dict:
+    entry = {
+        'matricula': str(matricula),
+        'terms_version': LEGAL_TERMS_VERSION,
+        'policy_version': LEGAL_POLICY_VERSION,
+        'accepted_at': accepted_at,
+        'accepted_at_iso': accepted_at_iso,
+        'origin': origin,
+    }
+    ip_hash = _hash_for_audit(_client_ip_for_hash())
+    ua_hash = _hash_for_audit(request.headers.get('User-Agent', ''))
+    if ip_hash:
+        entry['ip_hash'] = ip_hash
+    if ua_hash:
+        entry['user_agent_hash'] = ua_hash
+    return entry
+
+
+def _append_legal_audit(entry: dict) -> bool:
+    try:
+        with kvstore.with_lock(LEGAL_AUDIT_KEY) as conn:
+            data = kvstore.load(LEGAL_AUDIT_KEY, conn=conn)
+            entries = data.get('entries') if isinstance(data, dict) else None
+            if not isinstance(entries, list):
+                entries = []
+            entries.append(entry)
+            return kvstore.save(LEGAL_AUDIT_KEY, {'entries': entries}, conn=conn)
+    except Exception as e:
+        print(f'[legal] falha ao gravar auditoria de aceite: {e}')
+        return False
+
+
+def _mark_legal_acceptance(users: dict, matricula: str, origin: str) -> dict:
+    acceptance = _new_legal_acceptance(origin)
+    users[matricula]['legal_acceptance'] = acceptance
+    return acceptance
 
 
 def _hash_sha256_legado(matricula: str, senha: str) -> str:
@@ -174,6 +273,24 @@ def require_auth(fn):
         u = get_current_user()
         if not u:
             return jsonify({'error': 'auth_required', 'mensagem': 'Faca login'}), 401
+        if not legal_acceptance_current(u):
+            return jsonify({
+                'error': 'legal_acceptance_required',
+                'mensagem': 'Aceite os Termos de Uso e a Politica de Seguranca para continuar.',
+                'legal_terms_version': LEGAL_TERMS_VERSION,
+                'legal_policy_version': LEGAL_POLICY_VERSION,
+            }), 428
+        request.current_user = u
+        return fn(*a, **kw)
+    return wrapped
+
+
+def require_auth_allow_pending_legal(fn):
+    @wraps(fn)
+    def wrapped(*a, **kw):
+        u = get_current_user()
+        if not u:
+            return jsonify({'error': 'auth_required', 'mensagem': 'Faca login'}), 401
         request.current_user = u
         return fn(*a, **kw)
     return wrapped
@@ -185,6 +302,13 @@ def require_approver(fn):
         u = get_current_user()
         if not u:
             return jsonify({'error': 'auth_required'}), 401
+        if not legal_acceptance_current(u):
+            return jsonify({
+                'error': 'legal_acceptance_required',
+                'mensagem': 'Aceite os Termos de Uso e a Politica de Seguranca para continuar.',
+                'legal_terms_version': LEGAL_TERMS_VERSION,
+                'legal_policy_version': LEGAL_POLICY_VERSION,
+            }), 428
         if not can_approve(u):
             return jsonify({'error': 'forbidden', 'mensagem': 'Apenas aprovadores'}), 403
         request.current_user = u
@@ -198,6 +322,13 @@ def require_admin(fn):
         u = get_current_user()
         if not u:
             return jsonify({'error': 'auth_required'}), 401
+        if not legal_acceptance_current(u):
+            return jsonify({
+                'error': 'legal_acceptance_required',
+                'mensagem': 'Aceite os Termos de Uso e a Politica de Seguranca para continuar.',
+                'legal_terms_version': LEGAL_TERMS_VERSION,
+                'legal_policy_version': LEGAL_POLICY_VERSION,
+            }), 428
         if u.get('role') != 'admin':
             return jsonify({'error': 'forbidden', 'mensagem': 'Apenas admin'}), 403
         request.current_user = u
@@ -212,6 +343,8 @@ def handle_registrar(data):
     senha = (data.get('senha') or '').strip()
     nome = (data.get('nome') or '').strip()[:60]
     funcao = (data.get('funcao') or '').strip()
+    if not _acceptance_truthy(data.get('aceita_termos')):
+        return jsonify({'error': 'Aceite os termos de uso e a politica de seguranca para cadastrar'}), 400
     if not validar_matricula(matricula):
         return jsonify({'error': 'A matricula deve ter de 6 a 10 digitos'}), 400
     if not validar_senha(senha):
@@ -238,7 +371,11 @@ def handle_registrar(data):
         'aprovado_por': 'auto-admin' if primeiro else None,
     }
     users[matricula] = novo
+    acceptance = _mark_legal_acceptance(users, matricula, 'cadastro')
     users_save(users)
+    _append_legal_audit(_new_legal_audit_entry(
+        matricula, 'cadastro', acceptance['accepted_at'], acceptance['accepted_at_iso']
+    ))
     if not primeiro:
         try:
             import notify
@@ -247,9 +384,11 @@ def handle_registrar(data):
             print(f'[auth] falha ao notificar aprovadores: {e}')
     if primeiro:
         token = session_create(matricula)
+        user_payload = {'matricula': matricula, 'nome': nome, 'role': 'admin'}
+        user_payload.update(_legal_user_fields(users[matricula]))
         return jsonify({'ok': True, 'admin': True, 'token': token,
                         'mensagem': 'Bem-vindo, administrador! Voce e o primeiro usuario.',
-                        'user': {'matricula': matricula, 'nome': nome, 'role': 'admin'}})
+                        'user': user_payload})
     return jsonify({'ok': True, 'pendente': True,
                     'mensagem': 'Cadastro recebido! Aguarde aprovacao de um administrador.'})
 
@@ -280,11 +419,13 @@ def handle_login(data):
     if u.get('status') == 'negado':
         return jsonify({'error': 'Cadastro negado pelo administrador'}), 403
     token = session_create(matricula)
-    return jsonify({'ok': True, 'token': token, 'user': {
+    user_payload = {
         'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
         'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
         'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
-    }})
+    }
+    user_payload.update(_legal_user_fields(u))
+    return jsonify({'ok': True, 'token': token, 'user': user_payload})
 
 
 def handle_logout():
@@ -317,7 +458,28 @@ def handle_me():
         'funcao': funcao,
         'obrigado_prontos': obrigado_prontos(funcao),
         'funcoes_disponiveis': FUNCOES_VALIDAS,
+        **_legal_user_fields(u),
     })
+
+
+def handle_legal_acceptance(data, user):
+    if not _acceptance_truthy(data.get('accepted')):
+        return jsonify({'error': 'Aceite os Termos de Uso e a Politica de Seguranca para continuar'}), 400
+    users = users_load()
+    matricula = user.get('matricula')
+    u = users.get(matricula)
+    if not u:
+        return jsonify({'error': 'Usuario nao encontrado'}), 404
+    if not legal_acceptance_current(u):
+        acceptance = _mark_legal_acceptance(users, matricula, 'login')
+        users_save(users)
+        _append_legal_audit(_new_legal_audit_entry(
+            matricula, 'login', acceptance['accepted_at'], acceptance['accepted_at_iso']
+        ))
+        u = users.get(matricula, u)
+    payload = _legal_user_fields(u)
+    payload.update({'ok': True})
+    return jsonify(payload)
 
 
 def handle_set_funcao(data, user):

@@ -841,6 +841,14 @@ async function apiFetch(path,opts={}){
   if(opts.body && !headers["Content-Type"])headers["Content-Type"]="application/json";
   const r=await fetch(path,Object.assign({},opts,{headers}));
   if(r.status===401){setToken("");CURRENT_USER=null;openLogin();throw new Error("auth");}
+  if(r.status===428){
+    const d=await r.json().catch(()=>({}));
+    if(d.error==="legal_acceptance_required"){
+      if(CURRENT_USER)CURRENT_USER.legal_acceptance_required=true;
+      openLegalAcceptanceModal(d);
+      throw new Error("auth");
+    }
+  }
   return r;
 }
 async function loadMe(){
@@ -850,7 +858,9 @@ async function loadMe(){
     if(r.ok){
       const d=await r.json();
       if(d && d.authenticated===false){setToken("");CURRENT_USER=null;return null;}
-      CURRENT_USER=d.user||d;return CURRENT_USER;
+      CURRENT_USER=d.user||d;
+      if(CURRENT_USER&&CURRENT_USER.legal_acceptance_required)setTimeout(()=>openLegalAcceptanceModal(CURRENT_USER),80);
+      return CURRENT_USER;
     }
   }catch(e){}
   setToken("");CURRENT_USER=null;return null;
@@ -899,7 +909,11 @@ function openLogin(){
       try{
         const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:m,senha:s})});
         const d=await r.json();
-        if(r.ok && d.token){setToken(d.token);CURRENT_USER=d.user||null;closeModal();showToast("✅ Bem-vindo, "+(CURRENT_USER&&CURRENT_USER.nome||"colega"));}
+        if(r.ok && d.token){
+          setToken(d.token);CURRENT_USER=d.user||null;closeModal();
+          if(CURRENT_USER&&CURRENT_USER.legal_acceptance_required)openLegalAcceptanceModal(CURRENT_USER);
+          else showToast("✅ Bem-vindo, "+(CURRENT_USER&&CURRENT_USER.nome||"colega"));
+        }
         else msg.textContent=d.error||"Falha no login";
       }catch(e){msg.textContent="Erro: "+e.message;}
     };
@@ -916,17 +930,19 @@ function openRegistro(){
     <div class="modal-fld"><label>Função</label><select id="rgFun"><option value="">— selecione —</option><option value="Função Operacional">Função Operacional</option><option value="Função Administrativa">Função Administrativa</option></select></div>
     <div class="modal-fld"><label>E-mail (opcional)</label><input id="rgEmail" type="email"/></div>
     <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="rgSen" type="password" inputmode="numeric" maxlength="4"/></div>
-    <div style="font-size:11px;color:var(--muted);line-height:1.45;margin:-2px 0 12px;text-align:center">
-      Ao cadastrar, você concorda com os <a href="/termos-de-uso.html" style="color:var(--neon)">Termos de Uso</a>
-      e com a <a href="/politica-de-seguranca.html" style="color:var(--neon)">Política de Segurança e Privacidade</a>.
-    </div>
-    <button id="rgBtn" class="btn-primary" style="width:100%">CADASTRAR</button>
+    <label style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);line-height:1.45;margin:-2px 0 12px">
+      <input id="rgLegal" type="checkbox" style="margin-top:3px;accent-color:var(--neon)"/>
+      <span>Li e aceito os <a href="/termos-de-uso.html" style="color:var(--neon)">Termos de Uso</a> e a <a href="/politica-de-seguranca.html" style="color:var(--neon)">Política de Segurança e Privacidade</a>.</span>
+    </label>
+    <button id="rgBtn" class="btn-primary" style="width:100%" disabled>CADASTRAR</button>
     <div id="rgMsg" style="font-size:12px;text-align:center;min-height:14px;margin-top:10px"></div>
     <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted)"><a href="#" id="goLog" style="color:var(--neon)">Já tenho conta</a></div>
   `,()=>{
     document.getElementById("rgBtn").onclick=async()=>{
-      const body={nome:document.getElementById("rgNome").value.trim(),matricula:document.getElementById("rgMat").value.trim(),funcao:document.getElementById("rgFun").value.trim(),email:document.getElementById("rgEmail").value.trim(),senha:document.getElementById("rgSen").value.trim()};
       const msg=document.getElementById("rgMsg");
+      const legal=document.getElementById("rgLegal").checked;
+      if(!legal){msg.style.color="#ff8a8a";msg.textContent="Aceite os termos para continuar.";return;}
+      const body={nome:document.getElementById("rgNome").value.trim(),matricula:document.getElementById("rgMat").value.trim(),funcao:document.getElementById("rgFun").value.trim(),email:document.getElementById("rgEmail").value.trim(),senha:document.getElementById("rgSen").value.trim(),aceita_termos:legal};
       msg.style.color="var(--muted)";msg.textContent="Enviando...";
       try{
         const r=await fetch("/api/auth/registrar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
@@ -935,7 +951,51 @@ function openRegistro(){
         else{msg.style.color="#ff8a8a";msg.textContent=d.error||"Falha";}
       }catch(e){msg.style.color="#ff8a8a";msg.textContent="Erro: "+e.message;}
     };
+    document.getElementById("rgLegal").onchange=()=>{document.getElementById("rgBtn").disabled=!document.getElementById("rgLegal").checked;};
     document.getElementById("goLog").onclick=e=>{e.preventDefault();openLogin();};
+  });
+}
+
+function openLegalAcceptanceModal(info){
+  const termos=(info&&info.legal_terms_version)||"1.0";
+  const politica=(info&&info.legal_policy_version)||"1.0";
+  openModal("Aceite obrigatório",`
+    <div style="font-size:14px;line-height:1.5;margin-bottom:14px">
+      Para continuar usando o Agenda Turma A, confirme o aceite da versão atual dos documentos:
+    </div>
+    <div style="display:grid;gap:8px;margin-bottom:14px">
+      <a class="btn-secondary" href="/termos-de-uso.html" style="text-align:center;text-decoration:none">📄 Termos de Uso v${escapeHtml(termos)}</a>
+      <a class="btn-secondary" href="/politica-de-seguranca.html" style="text-align:center;text-decoration:none">🛡 Política de Segurança v${escapeHtml(politica)}</a>
+    </div>
+    <label style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:12px">
+      <input id="laChk" type="checkbox" style="margin-top:3px;accent-color:var(--neon)"/>
+      <span>Li e aceito os Termos de Uso e a Política de Segurança e Privacidade.</span>
+    </label>
+    <button id="laBtn" class="btn-primary" style="width:100%" disabled>ACEITAR E CONTINUAR</button>
+    <div id="laMsg" style="font-size:12px;text-align:center;min-height:14px;margin-top:10px;color:#ff8a8a"></div>
+  `,()=>{
+    const chk=document.getElementById("laChk");
+    const btn=document.getElementById("laBtn");
+    const msg=document.getElementById("laMsg");
+    chk.onchange=()=>{btn.disabled=!chk.checked;};
+    btn.onclick=async()=>{
+      if(!chk.checked)return;
+      msg.style.color="var(--muted)";msg.textContent="Registrando aceite...";
+      try{
+        const r=await fetch("/api/auth/legal-acceptance",{
+          method:"POST",
+          headers:{"Content-Type":"application/json","Authorization":"Bearer "+getToken()},
+          body:JSON.stringify({accepted:true})
+        });
+        const d=await r.json();
+        if(r.ok){
+          if(CURRENT_USER)CURRENT_USER.legal_acceptance_required=false;
+          closeModal();showToast("✅ Aceite registrado");render();
+        }else{
+          msg.style.color="#ff8a8a";msg.textContent=d.error||"Falha ao registrar aceite";
+        }
+      }catch(e){msg.style.color="#ff8a8a";msg.textContent="Erro: "+e.message;}
+    };
   });
 }
 
@@ -944,6 +1004,7 @@ async function requireAuth(){
   if(!getToken()){openLogin();return false;}
   if(!CURRENT_USER){await loadMe();}
   if(!CURRENT_USER){openLogin();return false;}
+  if(CURRENT_USER.legal_acceptance_required){openLegalAcceptanceModal(CURRENT_USER);return false;}
   return true;
 }
 
