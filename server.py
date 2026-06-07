@@ -2242,51 +2242,6 @@ DSS_MAX_IMG_BYTES = 5 * 1024 * 1024  # 5 MB (cliente ja comprime)
 DSS_IMG_MIMES = {'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp'}
 
 
-def _dss_call_claude(tema, descricao, tom):
-    """Gera o texto do card de DSS via Claude. Retorna dict cru ou None.
-
-    System prompt 100% server-side (o cliente nao influencia, igual ao chat).
-    Pede JSON estrito e extrai defensivamente.
-    """
-    system = (
-        'Voce escreve cards de DSS (Dialogo de Seguranca e Saude) para uma turma '
-        'de ferroviarios da Vale, em portugues do Brasil, claro e direto para o celular. '
-        'A partir do tema, da descricao e do tom, devolva SOMENTE um objeto JSON valido '
-        '(sem texto antes ou depois, sem markdown) com exatamente estas chaves:\n'
-        '{"titulo": string curta (max 60 caracteres),\n'
-        ' "bullets": array com 3 a 4 pontos-chave (cada um uma frase curta de acao, max 110 caracteres),\n'
-        ' "fala": uma frase de abertura que o apresentador fala para a equipe (max 220 caracteres),\n'
-        ' "pergunta": uma pergunta de engajamento para o fim (max 120 caracteres)}\n'
-        'Use linguagem de colega de trabalho, sem jargao corporativo, sem emojis. '
-        'O tom pedido orienta o estilo: Direto = objetivo e firme; Educativo = explica o porque; '
-        'Alerta = enfatiza o risco; Motivacional = foca no cuidado com a equipe e a familia.'
-    )
-    user_msg = (f'Tema: {tema or "(sem tema)"}\n'
-                f'Descricao: {descricao}\n'
-                f'Tom: {tom}\n\n'
-                'Gere o card agora. Responda apenas o JSON.')
-    resp = _anthropic_client.messages.create(
-        model='claude-haiku-4-5',
-        max_tokens=900,
-        temperature=0.5,
-        system=system,
-        messages=[{'role': 'user', 'content': user_msg}],
-    )
-    txt = (resp.content[0].text or '').strip()
-    ini, fim = txt.find('{'), txt.rfind('}')
-    if ini == -1 or fim <= ini:
-        return None
-    import json as _json
-    return _json.loads(txt[ini:fim + 1])
-
-
-@app.route('/api/dss/<eid>/gerar-texto', methods=['POST'])
-@auth.require_auth
-@ratelimit.rate_limit(8, env_var='RATELIMIT_DSS_GEN_PER_MIN', route_key='dss_gen')
-def api_dss_gerar_texto(eid):
-    return dss.handle_gerar_texto(eid, request.json or {}, request.current_user, _dss_call_claude)
-
-
 @app.route('/api/dss/<eid>/card', methods=['POST'])
 @auth.require_auth
 def api_dss_save_card(eid):

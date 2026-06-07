@@ -1058,7 +1058,6 @@ let DSS_STATE={escala:[],historico:[]};
 let DSS_LOOKUP=null; // empregado resolvido no form de escalar
 let DSS_CONTAINER=null; // container da secao DSS (pra voltar do editor)
 const DSS_STATUS={pendente:["Pendente","dss-s-pend"],card_pronto:["Card pronto","dss-s-ready"],revisado:["Revisado","dss-s-rev"]};
-const DSS_TONS=["Direto","Educativo","Alerta","Motivacional"];
 function dssIsSup(){return !!(CURRENT_USER&&(CURRENT_USER.role==="admin"||CURRENT_USER.role==="aprovador"));}
 function dssIsAdmin(){return !!(CURRENT_USER&&CURRENT_USER.role==="admin");}
 function dssIsMine(e){return !!(CURRENT_USER&&e&&String(CURRENT_USER.matricula)===String(e.matricula));}
@@ -1232,11 +1231,10 @@ window.dssRemover=async function(id){
   }catch(e){if(e.message!=="auth")showToast("Erro ao remover");}
 };
 
-/* ===== Fase 2: editor "Gerar card de exportacao" ===== */
+/* ===== Card de exportação (WhatsApp) — autoria manual da pessoa escalada ===== */
 let DSS_EDIT=null;        // entry sendo editada (referencia em DSS_STATE.escala)
-let dssCardData=null;     // {titulo,bullets,fala,pergunta,tom}
 let dssImgURL=null;       // dataURL/endpoint da imagem (preview + canvas)
-let dssImgFit="cover";    // cover | contain
+let dssImgFit="contain";  // contain | cover
 let dssRatio="wide";      // wide (16:9) | story (9:16)
 const DSS_CHECK='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
 
@@ -1244,38 +1242,40 @@ window.dssOpenCard=function(id){
   const e=(DSS_STATE.escala||[]).find(x=>x.id===id);
   if(!e){showToast("Apresentação não encontrada");return;}
   DSS_EDIT=e;
-  dssCardData=e.card&&typeof e.card==="object"?Object.assign({titulo:"",bullets:[],fala:"",pergunta:"",tom:e.tom||"Direto"},e.card):null;
   dssImgFit="contain"; dssRatio="wide";
   dssImgURL=e.card_img_key?("/api/dss/"+e.id+"/imagem?t="+encodeURIComponent(getToken())):null;
   dssRenderEditor();
 };
 
+// lê o card direto dos campos (fonte da verdade do preview/export)
+function dssCurrentCard(){
+  const g=id=>(document.getElementById(id)?.value||"");
+  return {
+    titulo:g("dcT").trim()||((DSS_EDIT&&DSS_EDIT.tema)||""),
+    bullets:g("dcB").split("\n").map(s=>s.trim()).filter(Boolean),
+    fala:g("dcF").trim(),
+    pergunta:g("dcQ").trim(),
+  };
+}
+
 function dssRenderEditor(){
   const e=DSS_EDIT, c=DSS_CONTAINER; if(!e||!c)return;
-  const tomChips=DSS_TONS.map(t=>`<button type="button" class="dss-chip" aria-pressed="${(e.tom||"Direto")===t}" data-v="${t}">${t}</button>`).join("");
-  const hasCard=!!dssCardData;
+  const card=(e.card&&typeof e.card==="object")?e.card:{};
   c.innerHTML=`
   <button class="dss-back" id="dssBack"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao mural</button>
-  <div class="dss-shead"><h3>Montar card de DSS</h3><span class="dss-count">${escapeHtml(e.nome||"")} · ${dssFmt(e.data_prevista)}</span></div>
+  <div class="dss-shead"><h3>Card de DSS pro grupo</h3><span class="dss-count">${escapeHtml(e.nome||"")} · ${dssFmt(e.data_prevista)}</span></div>
   <div class="dss-gen">
     <div class="dss-panel">
-      <div class="dss-gfield"><label>Tema <span class="req">*</span></label><input id="dcTema" maxlength="120" value="${escapeHtml(e.tema||"")}" placeholder="Ex.: Uso correto de EPI"/></div>
-      <div class="dss-gfield"><label>Descrição <span class="req">*</span></label><textarea id="dcDesc" maxlength="2000" placeholder="O que a equipe precisa entender?">${escapeHtml(e.descricao||"")}</textarea>
-        <div class="dss-hint">A IA (Claude) transforma isso em título, pontos-chave, fala do apresentador e pergunta.</div></div>
-      <div class="dss-gfield"><label>Tom da apresentação</label><div class="dss-chips" id="dcTom">${tomChips}</div></div>
+      <div class="dss-gfield"><label>Título <span class="req">*</span></label><input id="dcT" maxlength="80" placeholder="Ex.: Uso correto de EPI"/></div>
+      <div class="dss-gfield"><label>Pontos-chave (um por linha)</label><textarea id="dcB" maxlength="800" placeholder="Inspecione o EPI antes do turno&#10;Descarte itens danificados&#10;Comunique qualquer condição insegura"></textarea></div>
+      <div class="dss-gfield"><label>Fala do apresentador</label><textarea id="dcF" maxlength="400" placeholder="Frase de abertura que você fala pra equipe"></textarea></div>
+      <div class="dss-gfield"><label>Pergunta de engajamento</label><input id="dcQ" maxlength="200" placeholder="Ex.: E você, está usando o EPI certo?"/></div>
       <div class="dss-gfield"><label>Imagem (opcional)</label>
-        <label class="dss-drop" for="dcImg"><input id="dcImg" type="file" accept="image/jpeg,image/png,image/webp" hidden/><span id="dcImgTxt">📷 Toque para adicionar uma foto do equipamento/situação</span></label>
+        <label class="dss-drop" for="dcImg"><input id="dcImg" type="file" accept="image/jpeg,image/png,image/webp" hidden/><span id="dcImgTxt">📷 Toque para adicionar uma foto</span></label>
         <div class="dss-chips" style="margin-top:9px" id="dcFit"><button type="button" class="dss-chip" aria-pressed="true" data-fit="contain">Foto inteira (sem cortar)</button><button type="button" class="dss-chip" aria-pressed="false" data-fit="cover">Preencher (corta)</button></div>
         <div id="dcImgActions" style="margin-top:8px"></div></div>
-      <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcGen"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M13 3l2.5 6.5L22 12l-6.5 2.5L13 21l-2.5-6.5L4 12l6.5-2.5L13 3z"/></svg> ${hasCard?"Gerar de novo":"Gerar com IA"}</button></div>
-      <div id="dcEdit" style="display:${hasCard?"block":"none"};margin-top:16px;border-top:1px solid var(--border);padding-top:14px">
-        <div class="dss-gfield"><label>Título</label><input id="dcT" maxlength="80"/></div>
-        <div class="dss-gfield"><label>Pontos-chave (um por linha)</label><textarea id="dcB" maxlength="800"></textarea></div>
-        <div class="dss-gfield"><label>Fala do apresentador</label><textarea id="dcF" maxlength="400"></textarea></div>
-        <div class="dss-gfield"><label>Pergunta de engajamento</label><input id="dcQ" maxlength="200"/></div>
-        <button class="dss-btn dss-btn-ghost dss-sm" id="dcSave">Salvar ajustes</button>
-      </div>
-      <div class="dss-note"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Gere o texto com a IA, ajuste se quiser e baixe o PNG pra mandar no grupo do WhatsApp.</span></div>
+      <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcSave">Salvar card</button></div>
+      <div class="dss-note"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Você escreve a sua DSS. O card vira um PNG pronto pra mandar no grupo do WhatsApp.</span></div>
     </div>
     <div>
       <div class="dss-prevhead"><h4>Card de exportação</h4>
@@ -1302,30 +1302,22 @@ function dssRenderEditor(){
     </div>
   </div>`;
 
+  // prefill a partir do card salvo (ou tema da escala)
+  document.getElementById("dcT").value=card.titulo||e.tema||"";
+  document.getElementById("dcB").value=(card.bullets||[]).join("\n");
+  document.getElementById("dcF").value=card.fala||"";
+  document.getElementById("dcQ").value=card.pergunta||"";
+
   document.getElementById("dssBack").onclick=()=>renderDSS(c);
-  document.getElementById("dcTema").addEventListener("input",dssPreview);
-  document.getElementById("dcTom").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssPreview();});
+  ["dcT","dcB","dcF","dcQ"].forEach(id=>document.getElementById(id).addEventListener("input",dssPreview));
   document.getElementById("dcFit").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssImgFit=b.dataset.fit;dssPreview();});
   document.getElementById("dcRatio").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssRatio=b.dataset.r;document.getElementById("dcSlide").classList.toggle("story",dssRatio==="story");});
   document.getElementById("dcImg").addEventListener("change",dssImgPick);
-  document.getElementById("dcGen").onclick=dssGerarTexto;
-  document.getElementById("dcSave").onclick=dssSalvarTexto;
+  document.getElementById("dcSave").onclick=dssSalvarCard;
   document.getElementById("dcPng").onclick=()=>dssExport(false);
   document.getElementById("dcShare").onclick=()=>dssExport(true);
-  if(hasCard)dssFillEditFields();
   dssRenderImgActions();
   dssPreview();
-}
-
-function dssTomSel(){const b=document.querySelector("#dcTom .dss-chip[aria-pressed='true']");return b?b.dataset.v:"Direto";}
-
-function dssFillEditFields(){
-  if(!dssCardData)return;
-  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
-  set("dcT",dssCardData.titulo||"");
-  set("dcB",(dssCardData.bullets||[]).join("\n"));
-  set("dcF",dssCardData.fala||"");
-  set("dcQ",dssCardData.pergunta||"");
 }
 
 function dssRenderImgActions(){
@@ -1335,17 +1327,15 @@ function dssRenderImgActions(){
     if(txt)txt.textContent="✓ Imagem adicionada";
     box.innerHTML=`<button class="dss-btn dss-btn-ghost dss-sm" id="dcImgDel">Remover imagem</button>`;
     document.getElementById("dcImgDel").onclick=dssImgRemove;
-  }else{box.innerHTML="";if(txt)txt.textContent="📷 Toque para adicionar uma foto do equipamento/situação";}
+  }else{box.innerHTML="";if(txt)txt.textContent="📷 Toque para adicionar uma foto";}
 }
 
 function dssPreview(){
-  const tema=(document.getElementById("dcTema")?.value||"").trim();
-  const card=dssCardData||{};
-  const title=card.titulo||tema||"Tema do DSS";
-  document.getElementById("dcsTitle").textContent=title;
+  const card=dssCurrentCard();
+  document.getElementById("dcsTitle").textContent=card.titulo||"Título da DSS";
   const bl=document.getElementById("dcsBullets");
-  bl.innerHTML=(card.bullets&&card.bullets.length?card.bullets:["Gere o texto com a IA para ver os pontos-chave aqui"]).map(b=>`<li>${DSS_CHECK}<span>${escapeHtml(b)}</span></li>`).join("");
-  document.getElementById("dcsSpeaker").textContent=card.fala||"A fala do apresentador aparece aqui depois de gerar.";
+  bl.innerHTML=(card.bullets.length?card.bullets:["Adicione os pontos-chave (um por linha)"]).map(b=>`<li>${DSS_CHECK}<span>${escapeHtml(b)}</span></li>`).join("");
+  document.getElementById("dcsSpeaker").textContent=card.fala||"Sua fala de abertura aparece aqui.";
   document.getElementById("dcsQ").textContent=card.pergunta||"Pergunta de engajamento";
   document.getElementById("dcsResp").textContent=(DSS_EDIT&&DSS_EDIT.nome)||"—";
   const dd=DSS_EDIT&&DSS_EDIT.data_prevista?new Date(DSS_EDIT.data_prevista+"T00:00"):new Date();
@@ -1355,38 +1345,13 @@ function dssPreview(){
   else{img.style.backgroundImage="";img.classList.remove("contain");img.innerHTML=`<div class="imghint"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>fundo padrão</div>`;}
 }
 
-async function dssGerarTexto(){
-  const tema=(document.getElementById("dcTema").value||"").trim();
-  const descricao=(document.getElementById("dcDesc").value||"").trim();
-  const tom=dssTomSel();
-  if(descricao.length<10){showToast("Descreva o que a equipe precisa entender (mín. 10 caracteres)");return;}
-  const btn=document.getElementById("dcGen");const old=btn.innerHTML;btn.disabled=true;btn.innerHTML="Gerando… ✨";
-  try{
-    const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/gerar-texto",{method:"POST",body:JSON.stringify({tema,descricao,tom})});
-    const d=await r.json();
-    if(r.ok&&d.ok&&d.card){
-      dssCardData=d.card;
-      DSS_EDIT.card=d.card;DSS_EDIT.status="card_pronto";DSS_EDIT.tema=tema;DSS_EDIT.descricao=descricao;DSS_EDIT.tom=tom;
-      document.getElementById("dcEdit").style.display="block";
-      dssFillEditFields();dssPreview();
-      showToast("Card gerado pela IA ✓");
-    }else{showToast(d.mensagem||"Não consegui gerar agora. Tente de novo.");}
-  }catch(e){if(e.message!=="auth")showToast("Erro ao gerar o texto");}
-  finally{btn.disabled=false;btn.innerHTML=old;}
-}
-
-async function dssSalvarTexto(){
-  const card={
-    titulo:(document.getElementById("dcT").value||"").trim(),
-    bullets:(document.getElementById("dcB").value||"").split("\n").map(s=>s.trim()).filter(Boolean),
-    fala:(document.getElementById("dcF").value||"").trim(),
-    pergunta:(document.getElementById("dcQ").value||"").trim(),
-    tom:dssTomSel(),
-  };
+async function dssSalvarCard(){
+  const card=dssCurrentCard();
+  if(!card.titulo){showToast("Dê um título pro card");return;}
   try{
     const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/card",{method:"POST",body:JSON.stringify({card})});
     const d=await r.json();
-    if(r.ok&&d.ok&&d.card){dssCardData=d.card;DSS_EDIT.card=d.card;dssFillEditFields();dssPreview();showToast("Ajustes salvos ✓");}
+    if(r.ok&&d.ok&&d.card){DSS_EDIT.card=d.card;DSS_EDIT.status="card_pronto";showToast("Card salvo ✓");}
     else showToast(d.mensagem||"Não foi possível salvar");
   }catch(e){if(e.message!=="auth")showToast("Erro ao salvar");}
 }
@@ -1422,7 +1387,7 @@ function dssWrap(ctx,text,maxW){const words=(text||"").split(/\s+/);const lines=
 function dssDrawImageBox(ctx,im,x,y,w,h,fit){ctx.save();dssRoundRect(ctx,x,y,w,h,0);ctx.clip();ctx.fillStyle="#0b1119";ctx.fillRect(x,y,w,h);if(im){const ir=im.width/im.height,br=w/h;let dw,dh,dx,dy;if((fit==="contain")?(ir>br):(ir<br)){dw=w;dh=w/ir;}else{dh=h;dw=h*ir;}dx=x+(w-dw)/2;dy=y+(h-dh)/2;ctx.drawImage(im,dx,dy,dw,dh);}ctx.restore();}
 
 async function dssBuildCanvas(){
-  const card=dssCardData||{};
+  const card=dssCurrentCard();
   const story=dssRatio==="story";
   const W=story?1080:1280, H=story?1920:720;
   const cv=document.createElement("canvas");cv.width=W;cv.height=H;
@@ -1491,7 +1456,7 @@ async function dssBuildCanvas(){
 }
 
 async function dssExport(share){
-  if(!dssCardData||!dssCardData.titulo){showToast("Gere o texto do card primeiro");return;}
+  if(!dssCurrentCard().titulo){showToast("Dê um título pro card primeiro");return;}
   let cv;try{cv=await dssBuildCanvas();}catch(e){showToast("Erro ao montar o PNG");return;}
   const fname="DSS_"+((DSS_EDIT&&DSS_EDIT.nome)||"card").replace(/[^a-zA-Z0-9]+/g,"_").slice(0,30)+".png";
   cv.toBlob(async blob=>{
