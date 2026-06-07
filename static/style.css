@@ -886,8 +886,9 @@ body.banner-visible .viriato-fab{display:none}
 /* visualizador da apresentacao em tela cheia */
 .dss-deck{position:fixed;inset:0;z-index:1000;background:#06090e;display:none;flex-direction:column}
 .dss-noscroll{overflow:hidden}
-.dss-deck-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-2);border-bottom:1px solid var(--border)}
-.dss-deck-tit{font-weight:700;color:var(--text);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dss-deck-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card-2);border-bottom:1px solid var(--border);flex:0 0 auto;position:relative;z-index:2}
+.dss-deck-back{min-height:44px;padding:10px 18px;font-size:15px}
+.dss-deck-tit{font-weight:700;color:var(--text);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
 .dss-iconbtn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--text-dim);display:grid;place-items:center;cursor:pointer;text-decoration:none;flex:0 0 auto}
 .dss-iconbtn:hover{color:var(--text)}
 .dss-deck-frame{flex:1;width:100%;border:none;background:#fff}

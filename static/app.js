@@ -920,6 +920,7 @@ function openLogin(){
         const d=await r.json();
         if(r.ok && d.token){
           setToken(d.token);CURRENT_USER=d.user||null;closeModal();
+          render();  // re-renderiza a home no estado logado (senao o banner/eventos ficam do estado pre-login)
           if(CURRENT_USER&&CURRENT_USER.legal_acceptance_required)openLegalAcceptanceModal(CURRENT_USER);
           else showToast("✅ Bem-vindo, "+(CURRENT_USER&&CURRENT_USER.nome||"colega"));
         }
@@ -1437,9 +1438,10 @@ function dssOpenDeck(){
   const url="/api/dss/"+e.id+"/apresentacao.pdf?t="+encodeURIComponent(getToken())+"&_="+Date.now();
   let deck=document.getElementById("dssDeck");
   if(!deck){deck=document.createElement("div");deck.id="dssDeck";deck.className="dss-deck";document.body.appendChild(deck);}
-  deck.innerHTML=`<div class="dss-deck-bar"><span class="dss-deck-tit">${escapeHtml(e.ppt_nome||"Apresentação")}</span><a class="dss-iconbtn" href="${url}" target="_blank" rel="noopener" title="Abrir em nova aba"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a><button class="dss-iconbtn" id="dssDeckClose" title="Fechar (Esc)"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><iframe class="dss-deck-frame" src="${url}" title="Apresentação"></iframe>`;
+  deck.innerHTML=`<div class="dss-deck-bar"><button class="dss-btn dss-btn-primary dss-deck-back" id="dssDeckClose"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar</button><span class="dss-deck-tit">${escapeHtml(e.ppt_nome||"Apresentação")}</span><a class="dss-iconbtn" href="${url}" target="_blank" rel="noopener" title="Abrir em nova aba"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div><iframe class="dss-deck-frame" src="${url}" title="Apresentação"></iframe>`;
   deck.style.display="flex";document.body.classList.add("dss-noscroll");
   document.getElementById("dssDeckClose").onclick=dssCloseDeck;
+  document.removeEventListener("keydown",dssDeckKey);
   document.addEventListener("keydown",dssDeckKey);
 }
 function dssDeckKey(ev){if(ev.key==="Escape")dssCloseDeck();}
@@ -2821,6 +2823,10 @@ function abrirManualPDF(){
 
 // ===== Boot =====
 loadMe().then(async()=>{
+  // loadMe resolve assincrono e seta CURRENT_USER; o render() de baixo roda antes
+  // disso (com user ainda null). Re-renderiza agora que o usuario eh conhecido,
+  // senao a home (banner DSS, eventos) fica presa no estado pre-login ate navegar.
+  if(CURRENT_USER)render();
   await registerSW();
   atualizarBotaoNotif();
   // hook do botao do menu
