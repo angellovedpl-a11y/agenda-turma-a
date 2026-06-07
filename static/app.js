@@ -1074,7 +1074,7 @@ async function renderDSS(c){
     <div class="dss-hero">
       <div class="dss-hero-ic"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
       <div><div class="dss-hero-tit">Programa Mensal de DSS</div>
-      <div class="dss-hero-sub">Diálogo de Segurança e Saúde · escala de apresentações da Turma A</div></div>
+      <div class="dss-hero-sub">Escala de apresentação da turma</div></div>
     </div>
 
     <div class="dss-shead">
