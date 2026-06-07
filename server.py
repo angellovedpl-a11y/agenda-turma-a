@@ -2447,7 +2447,9 @@ def _dss_serve_ppt(eid, which):
     else:
         nome = item.get('ppt_nome') or 'apresentacao'
         resp = send_file(io.BytesIO(raw), as_attachment=True, download_name=nome)
-    resp.headers['Cache-Control'] = 'private, max-age=300'
+    # arquivo muda quando a pessoa sobe outro no mesmo endpoint — nao cachear,
+    # senao o navegador serve o PDF antigo apos a troca.
+    resp.headers['Cache-Control'] = 'no-store'
     return resp
 
 

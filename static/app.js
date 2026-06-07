@@ -1243,7 +1243,7 @@ window.dssOpenCard=function(id){
   if(!e){showToast("Apresentação não encontrada");return;}
   DSS_EDIT=e;
   dssImgFit="contain"; dssRatio="wide";
-  dssImgURL=e.card_img_key?("/api/dss/"+e.id+"/imagem?t="+encodeURIComponent(getToken())):null;
+  dssImgURL=e.card_img_key?("/api/dss/"+e.id+"/imagem?t="+encodeURIComponent(getToken())+"&_="+Date.now()):null;
   dssRenderEditor();
 };
 
@@ -1418,7 +1418,7 @@ function dssRenderPptActions(){
     document.getElementById("dcPptDel").onclick=dssPptRemove;
   }else if(e.ppt_pendente){
     if(txt)txt.textContent="⚠ "+(e.ppt_nome||"arquivo")+" — conversão pendente";
-    box.innerHTML=`<div class="dss-hint" style="color:var(--orange);margin:0 0 6px">PPT enviado, mas falta o LibreOffice no servidor pra converter em PDF.</div><a class="dss-btn dss-btn-ghost dss-sm" href="/api/dss/${e.id}/apresentacao/original?t=${encodeURIComponent(getToken())}">Baixar original</a> <button class="dss-btn dss-btn-ghost dss-sm" id="dcPptDel">Remover</button>`;
+    box.innerHTML=`<div class="dss-hint" style="color:var(--orange);margin:0 0 6px">PPT enviado, mas falta o LibreOffice no servidor pra converter em PDF.</div><a class="dss-btn dss-btn-ghost dss-sm" href="/api/dss/${e.id}/apresentacao/original?t=${encodeURIComponent(getToken())}&_=${Date.now()}">Baixar original</a> <button class="dss-btn dss-btn-ghost dss-sm" id="dcPptDel">Remover</button>`;
     document.getElementById("dcPptDel").onclick=dssPptRemove;
   }else{box.innerHTML="";if(txt)txt.textContent="📊 Subir .pptx, .ppt ou .pdf";}
 }
@@ -1433,7 +1433,8 @@ async function dssPptRemove(){
 
 function dssOpenDeck(){
   const e=DSS_EDIT;if(!e||!e.ppt_pdf_key)return;
-  const url="/api/dss/"+e.id+"/apresentacao.pdf?t="+encodeURIComponent(getToken());
+  // cache-buster (&_=) garante que, apos trocar o arquivo, o iframe nao sirva o PDF antigo
+  const url="/api/dss/"+e.id+"/apresentacao.pdf?t="+encodeURIComponent(getToken())+"&_="+Date.now();
   let deck=document.getElementById("dssDeck");
   if(!deck){deck=document.createElement("div");deck.id="dssDeck";deck.className="dss-deck";document.body.appendChild(deck);}
   deck.innerHTML=`<div class="dss-deck-bar"><span class="dss-deck-tit">${escapeHtml(e.ppt_nome||"Apresentação")}</span><a class="dss-iconbtn" href="${url}" target="_blank" rel="noopener" title="Abrir em nova aba"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a><button class="dss-iconbtn" id="dssDeckClose" title="Fechar (Esc)"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><iframe class="dss-deck-frame" src="${url}" title="Apresentação"></iframe>`;
