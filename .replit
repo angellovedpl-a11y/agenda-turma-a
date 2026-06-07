@@ -5,7 +5,7 @@ integrations = ["python_anthropic_ai_integrations:1.0.0", "sendgrid:1.0.0", "jav
 
 [nix]
 channel = "stable-25_05"
-packages = ["postgresql"]
+packages = ["postgresql", "libreoffice"]
 
 [workflows]
 runButton = "Project"
