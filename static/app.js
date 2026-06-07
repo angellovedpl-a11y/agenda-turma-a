@@ -1245,7 +1245,7 @@ window.dssOpenCard=function(id){
   if(!e){showToast("Apresentação não encontrada");return;}
   DSS_EDIT=e;
   dssCardData=e.card&&typeof e.card==="object"?Object.assign({titulo:"",bullets:[],fala:"",pergunta:"",tom:e.tom||"Direto"},e.card):null;
-  dssImgFit="cover"; dssRatio="wide";
+  dssImgFit="contain"; dssRatio="wide";
   dssImgURL=e.card_img_key?("/api/dss/"+e.id+"/imagem?t="+encodeURIComponent(getToken())):null;
   dssRenderEditor();
 };
@@ -1265,7 +1265,7 @@ function dssRenderEditor(){
       <div class="dss-gfield"><label>Tom da apresentação</label><div class="dss-chips" id="dcTom">${tomChips}</div></div>
       <div class="dss-gfield"><label>Imagem (opcional)</label>
         <label class="dss-drop" for="dcImg"><input id="dcImg" type="file" accept="image/jpeg,image/png,image/webp" hidden/><span id="dcImgTxt">📷 Toque para adicionar uma foto do equipamento/situação</span></label>
-        <div class="dss-chips" style="margin-top:9px" id="dcFit"><button type="button" class="dss-chip" aria-pressed="true" data-fit="cover">Preencher</button><button type="button" class="dss-chip" aria-pressed="false" data-fit="contain">Imagem inteira</button></div>
+        <div class="dss-chips" style="margin-top:9px" id="dcFit"><button type="button" class="dss-chip" aria-pressed="true" data-fit="contain">Foto inteira (sem cortar)</button><button type="button" class="dss-chip" aria-pressed="false" data-fit="cover">Preencher (corta)</button></div>
         <div id="dcImgActions" style="margin-top:8px"></div></div>
       <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcGen"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M13 3l2.5 6.5L22 12l-6.5 2.5L13 21l-2.5-6.5L4 12l6.5-2.5L13 3z"/></svg> ${hasCard?"Gerar de novo":"Gerar com IA"}</button></div>
       <div id="dcEdit" style="display:${hasCard?"block":"none"};margin-top:16px;border-top:1px solid var(--border);padding-top:14px">
