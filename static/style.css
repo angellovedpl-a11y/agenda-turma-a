@@ -882,3 +882,12 @@ body.banner-visible .viriato-fab{display:none}
 .dss-qmark{margin-left:auto;color:var(--orange);font-weight:700;display:flex;align-items:center;gap:6px;background:var(--orange-soft);border:1px solid var(--orange);padding:4px 10px;border-radius:999px}
 @media (max-width:980px){.dss-gen{grid-template-columns:1fr}}
 @media (max-width:620px){.dss-grow{grid-template-columns:1fr}.dss-slide{position:static}}
+
+/* visualizador da apresentacao em tela cheia */
+.dss-deck{position:fixed;inset:0;z-index:1000;background:#06090e;display:none;flex-direction:column}
+.dss-noscroll{overflow:hidden}
+.dss-deck-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-2);border-bottom:1px solid var(--border)}
+.dss-deck-tit{font-weight:700;color:var(--text);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dss-iconbtn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--text-dim);display:grid;place-items:center;cursor:pointer;text-decoration:none;flex:0 0 auto}
+.dss-iconbtn:hover{color:var(--text)}
+.dss-deck-frame{flex:1;width:100%;border:none;background:#fff}

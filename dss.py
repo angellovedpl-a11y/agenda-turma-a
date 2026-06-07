@@ -141,8 +141,10 @@ def handle_escalar(data, user):
         'card': None,                  # textos gerados (titulo/bullets/fala/pergunta/tom)
         'card_img_key': None,          # imagem do card de exportacao (object_storage)
         'card_img_mime': None,         # mimetype da imagem do card
-        'ppt_key': None,               # arquivo de apresentacao original
-        'ppt_pdf_key': None,           # apresentacao convertida p/ PDF
+        'ppt_key': None,               # arquivo de apresentacao original (ppt/pptx/pdf)
+        'ppt_pdf_key': None,           # apresentacao em PDF (convertida ou o proprio pdf)
+        'ppt_nome': None,              # nome original do arquivo
+        'ppt_pendente': False,         # True = PPT enviado mas conversao p/ PDF pendente
         'escalado_por': (user or {}).get('matricula'),
         'criado_em': _now(),
     }
@@ -211,6 +213,13 @@ def can_edit(item, user):
         return False
     if user.get('role') == 'admin':
         return True
+    return str(user.get('matricula') or '') == str(item.get('matricula') or '')
+
+
+def is_owner(item, user):
+    """So a propria pessoa escalada (dono da DSS). Admin NAO conta aqui."""
+    if not item or not user:
+        return False
     return str(user.get('matricula') or '') == str(item.get('matricula') or '')
 
 
@@ -288,3 +297,46 @@ def handle_clear_card_img(eid, user):
         item['card_img_mime'] = None
         kvstore.save(KEY, d, conn=conn)
     return old, jsonify({'ok': True}), 200
+
+
+# ---------------------------------------------------------------- apresentacao
+def handle_set_apresentacao(eid, ppt_key, ppt_pdf_key, nome, pendente, user):
+    """Aponta o item para a apresentacao ja enviada (e PDF convertido, se houver).
+
+    Upload e SO do dono (cada escalado sobe a sua). Retorna
+    (chaves_antigas_a_limpar, codigo_erro|None, http_code).
+    """
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return [], 'nao_encontrado', 404
+        if not is_owner(item, user):
+            return [], 'sem_permissao', 403
+        old = [item.get('ppt_key'), item.get('ppt_pdf_key')]
+        item['ppt_key'] = ppt_key
+        item['ppt_pdf_key'] = ppt_pdf_key
+        item['ppt_nome'] = nome
+        item['ppt_pendente'] = bool(pendente)
+        kvstore.save(KEY, d, conn=conn)
+    novos = {ppt_key, ppt_pdf_key}
+    old = [k for k in old if k and k not in novos]
+    return old, None, 200
+
+
+def handle_clear_apresentacao(eid, user):
+    """Remove a apresentacao. So o dono. Retorna (chaves_antigas, erro|None, code)."""
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return [], 'nao_encontrado', 404
+        if not is_owner(item, user):
+            return [], 'sem_permissao', 403
+        old = [item.get('ppt_key'), item.get('ppt_pdf_key')]
+        item['ppt_key'] = None
+        item['ppt_pdf_key'] = None
+        item['ppt_nome'] = None
+        item['ppt_pendente'] = False
+        kvstore.save(KEY, d, conn=conn)
+    return [k for k in old if k], None, 200

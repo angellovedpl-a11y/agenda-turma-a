@@ -2311,6 +2311,169 @@ def api_dss_img_delete(eid):
     return resp, code
 
 
+# --- DSS: upload da apresentacao + conversao PPTX->PDF (LibreOffice) ---
+DSS_PPT_PREFIX = 'dss-ppt'
+DSS_MAX_PPT_BYTES = 20 * 1024 * 1024  # 20 MB
+DSS_PPT_EXT = {
+    'application/pdf': 'pdf',
+    'application/vnd.ms-powerpoint': 'ppt',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
+}
+
+
+def _dss_ppt_ext(nome, mimetype):
+    """Resolve a extensao pelo mimetype OU pela extensao do nome do arquivo."""
+    ext = DSS_PPT_EXT.get((mimetype or '').lower())
+    if ext:
+        return ext
+    low = (nome or '').lower()
+    for e in ('pptx', 'ppt', 'pdf'):
+        if low.endswith('.' + e):
+            return e
+    return None
+
+
+def _dss_soffice():
+    import shutil
+    return shutil.which('soffice') or shutil.which('libreoffice')
+
+
+def _dss_convert_pdf(raw, ext):
+    """Converte ppt/pptx -> pdf via LibreOffice headless. Retorna bytes ou None."""
+    soffice = _dss_soffice()
+    if not soffice:
+        print('[dss] LibreOffice ausente — conversao PPTX->PDF indisponivel')
+        return None
+    import subprocess
+    import tempfile
+    import shutil
+    tmpd = tempfile.mkdtemp(prefix='dssppt_')
+    try:
+        src = os.path.join(tmpd, 'in.' + ext)
+        with open(src, 'wb') as f:
+            f.write(raw)
+        env = dict(os.environ)
+        env.setdefault('HOME', tmpd)  # soffice precisa de HOME gravavel p/ o profile
+        subprocess.run([soffice, '--headless', '--convert-to', 'pdf', '--outdir', tmpd, src],
+                       check=True, timeout=120, capture_output=True, env=env)
+        out = os.path.join(tmpd, 'in.pdf')
+        if os.path.isfile(out):
+            with open(out, 'rb') as f:
+                return f.read()
+        return None
+    except Exception as e:
+        print(f'[dss] conversao PPTX->PDF falhou: {e}')
+        return None
+    finally:
+        shutil.rmtree(tmpd, ignore_errors=True)
+
+
+@app.route('/api/dss/<eid>/apresentacao', methods=['POST'])
+@auth.require_auth
+@ratelimit.rate_limit(6, env_var='RATELIMIT_DSS_PPT_PER_MIN', route_key='dss_ppt')
+def api_dss_ppt_upload(eid):
+    u = request.current_user
+    item = dss.get_item(eid)
+    if not item:
+        return jsonify({'error': 'nao_encontrado'}), 404
+    if not dss.is_owner(item, u):
+        return jsonify({'error': 'sem_permissao',
+                        'mensagem': 'So a propria pessoa escalada sobe a apresentacao.'}), 403
+    if not _obj.is_enabled():
+        return jsonify({'error': 'storage_off', 'mensagem': 'Armazenamento indisponivel.'}), 503
+    data = request.json or {}
+    nome = (data.get('nome') or 'apresentacao').strip()[:120]
+    ext = _dss_ppt_ext(nome, data.get('mimetype'))
+    if not ext:
+        return jsonify({'error': 'formato', 'mensagem': 'Use .pptx, .ppt ou .pdf.'}), 400
+    try:
+        raw = _b64.b64decode(data.get('b64') or '')
+    except Exception:
+        return jsonify({'error': 'b64', 'mensagem': 'Arquivo invalido.'}), 400
+    if not raw:
+        return jsonify({'error': 'vazio'}), 400
+    if len(raw) > DSS_MAX_PPT_BYTES:
+        return jsonify({'error': 'tamanho', 'mensagem': 'Arquivo maior que 20 MB.'}), 400
+
+    orig_key = _obj.make_key(DSS_PPT_PREFIX, item.get('matricula'), eid, 0, 'apresentacao.' + ext)
+    mt = data.get('mimetype') or 'application/octet-stream'
+    if not _obj.upload_bytes(orig_key, raw, content_type=mt):
+        return jsonify({'error': 'upload', 'mensagem': 'Falha ao enviar.'}), 500
+
+    pdf_key = None
+    pendente = False
+    if ext == 'pdf':
+        pdf_key = orig_key
+    else:
+        pdf_bytes = _dss_convert_pdf(raw, ext)
+        if pdf_bytes:
+            pdf_key = _obj.make_key(DSS_PPT_PREFIX, item.get('matricula'), eid, 1, 'apresentacao.pdf')
+            if not _obj.upload_bytes(pdf_key, pdf_bytes, content_type='application/pdf'):
+                pdf_key = None
+                pendente = True
+        else:
+            pendente = True
+
+    olds, err, code = dss.handle_set_apresentacao(eid, orig_key, pdf_key, nome, pendente, u)
+    if code != 200:
+        return jsonify({'error': err}), code
+    for k in olds:
+        _obj.delete(k)
+    return jsonify({'ok': True, 'pendente': pendente, 'tem_pdf': bool(pdf_key), 'nome': nome})
+
+
+def _dss_serve_ppt(eid, which):
+    u = request.current_user
+    item = dss.get_item(eid)
+    if not item:
+        return jsonify({'error': 'nao_encontrado'}), 404
+    if not dss.can_edit(item, u):  # dono OU admin (admin fiscaliza)
+        return jsonify({'error': 'sem_permissao'}), 403
+    key = item.get('ppt_pdf_key') if which == 'pdf' else item.get('ppt_key')
+    if not key:
+        return jsonify({'error': 'sem_arquivo'}), 404
+    try:
+        raw = _obj.download_bytes(key)
+    except Exception as e:
+        return jsonify({'error': f'arquivo nao encontrado: {e}'}), 404
+    from flask import send_file
+    if which == 'pdf':
+        resp = send_file(io.BytesIO(raw), mimetype='application/pdf')
+        # Permite embutir o PDF num iframe da PROPRIA origem (o after_request
+        # global poe DENY/frame-ancestors 'none' via setdefault; aqui sobrescreve
+        # so para este recurso, mantendo o resto travado).
+        resp.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        resp.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
+    else:
+        nome = item.get('ppt_nome') or 'apresentacao'
+        resp = send_file(io.BytesIO(raw), as_attachment=True, download_name=nome)
+    resp.headers['Cache-Control'] = 'private, max-age=300'
+    return resp
+
+
+@app.route('/api/dss/<eid>/apresentacao.pdf', methods=['GET'])
+@auth.require_auth
+def api_dss_ppt_pdf(eid):
+    return _dss_serve_ppt(eid, 'pdf')
+
+
+@app.route('/api/dss/<eid>/apresentacao/original', methods=['GET'])
+@auth.require_auth
+def api_dss_ppt_original(eid):
+    return _dss_serve_ppt(eid, 'orig')
+
+
+@app.route('/api/dss/<eid>/apresentacao', methods=['DELETE'])
+@auth.require_auth
+def api_dss_ppt_delete(eid):
+    olds, err, code = dss.handle_clear_apresentacao(eid, request.current_user)
+    if code != 200:
+        return jsonify({'error': err}), code
+    for k in olds:
+        _obj.delete(k)
+    return jsonify({'ok': True})
+
+
 @app.route('/api/claude', methods=['POST'])
 @auth.require_auth
 @ratelimit.rate_limit(20, env_var='RATELIMIT_CLAUDE_PER_MIN', route_key='claude')

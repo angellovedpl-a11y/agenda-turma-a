@@ -1274,8 +1274,12 @@ function dssRenderEditor(){
         <label class="dss-drop" for="dcImg"><input id="dcImg" type="file" accept="image/jpeg,image/png,image/webp" hidden/><span id="dcImgTxt">📷 Toque para adicionar uma foto</span></label>
         <div class="dss-chips" style="margin-top:9px" id="dcFit"><button type="button" class="dss-chip" aria-pressed="true" data-fit="contain">Foto inteira (sem cortar)</button><button type="button" class="dss-chip" aria-pressed="false" data-fit="cover">Preencher (corta)</button></div>
         <div id="dcImgActions" style="margin-top:8px"></div></div>
+      <div class="dss-gfield"><label>Apresentação · PowerPoint ou PDF (opcional)</label>
+        <label class="dss-drop" for="dcPpt"><input id="dcPpt" type="file" accept=".ppt,.pptx,.pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/pdf" hidden/><span id="dcPptTxt">📊 Subir .pptx, .ppt ou .pdf</span></label>
+        <div class="dss-hint">É o material que você espelha na tela. PPT/PPTX vira PDF automaticamente (até 20 MB).</div>
+        <div id="dcPptActions" style="margin-top:8px"></div></div>
       <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcSave">Salvar card</button></div>
-      <div class="dss-note"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Você escreve a sua DSS. O card vira um PNG pronto pra mandar no grupo do WhatsApp.</span></div>
+      <div class="dss-note"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Você escreve a sua DSS e sobe a sua apresentação. O card vira um PNG pronto pra mandar no grupo do WhatsApp.</span></div>
     </div>
     <div>
       <div class="dss-prevhead"><h4>Card de exportação</h4>
@@ -1313,10 +1317,12 @@ function dssRenderEditor(){
   document.getElementById("dcFit").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssImgFit=b.dataset.fit;dssPreview();});
   document.getElementById("dcRatio").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssRatio=b.dataset.r;document.getElementById("dcSlide").classList.toggle("story",dssRatio==="story");});
   document.getElementById("dcImg").addEventListener("change",dssImgPick);
+  document.getElementById("dcPpt").addEventListener("change",dssPptPick);
   document.getElementById("dcSave").onclick=dssSalvarCard;
   document.getElementById("dcPng").onclick=()=>dssExport(false);
   document.getElementById("dcShare").onclick=()=>dssExport(true);
   dssRenderImgActions();
+  dssRenderPptActions();
   dssPreview();
 }
 
@@ -1379,6 +1385,68 @@ async function dssImgRemove(){
 }
 
 function dssReadAsDataURL(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(file);});}
+
+/* ---- apresentacao: upload (PPT/PDF), conversao no servidor, visualizador ---- */
+async function dssPptPick(ev){
+  const f=ev.target.files&&ev.target.files[0];if(!f)return;
+  const ext=(f.name.split(".").pop()||"").toLowerCase();
+  if(!["ppt","pptx","pdf"].includes(ext)){showToast("Use .pptx, .ppt ou .pdf");return;}
+  if(f.size>20*1024*1024){showToast("Arquivo maior que 20 MB");return;}
+  const txt=document.getElementById("dcPptTxt");
+  if(txt)txt.textContent="⏳ Enviando"+(ext==="pdf"?"":" e convertendo")+"… "+f.name;
+  let dataURL;try{dataURL=await dssReadAsDataURL(f);}catch(e){showToast("Não consegui ler o arquivo");dssRenderPptActions();return;}
+  const b64=(dataURL.split(",")[1])||"";
+  try{
+    const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/apresentacao",{method:"POST",body:JSON.stringify({b64,nome:f.name,mimetype:f.type})});
+    const d=await r.json();
+    if(r.ok&&d.ok){
+      DSS_EDIT.ppt_nome=d.nome;DSS_EDIT.ppt_key="set";
+      DSS_EDIT.ppt_pdf_key=d.tem_pdf?"set":null;DSS_EDIT.ppt_pendente=!!d.pendente;
+      showToast(d.pendente?"Enviado. Conversão pendente (falta o LibreOffice no servidor).":"Apresentação pronta ✓");
+    }else{showToast(d.mensagem||"Falha ao enviar a apresentação");}
+  }catch(e){if(e.message!=="auth")showToast("Erro ao enviar a apresentação");}
+  finally{dssRenderPptActions();}
+}
+
+function dssRenderPptActions(){
+  const box=document.getElementById("dcPptActions");if(!box)return;
+  const txt=document.getElementById("dcPptTxt");const e=DSS_EDIT||{};
+  if(e.ppt_pdf_key){
+    if(txt)txt.textContent="✓ "+(e.ppt_nome||"apresentação");
+    box.innerHTML=`<button class="dss-btn dss-btn-primary dss-sm" id="dcPptOpen">▶ Abrir apresentação</button> <button class="dss-btn dss-btn-ghost dss-sm" id="dcPptDel">Remover</button>`;
+    document.getElementById("dcPptOpen").onclick=dssOpenDeck;
+    document.getElementById("dcPptDel").onclick=dssPptRemove;
+  }else if(e.ppt_pendente){
+    if(txt)txt.textContent="⚠ "+(e.ppt_nome||"arquivo")+" — conversão pendente";
+    box.innerHTML=`<div class="dss-hint" style="color:var(--orange);margin:0 0 6px">PPT enviado, mas falta o LibreOffice no servidor pra converter em PDF.</div><a class="dss-btn dss-btn-ghost dss-sm" href="/api/dss/${e.id}/apresentacao/original?t=${encodeURIComponent(getToken())}">Baixar original</a> <button class="dss-btn dss-btn-ghost dss-sm" id="dcPptDel">Remover</button>`;
+    document.getElementById("dcPptDel").onclick=dssPptRemove;
+  }else{box.innerHTML="";if(txt)txt.textContent="📊 Subir .pptx, .ppt ou .pdf";}
+}
+
+async function dssPptRemove(){
+  if(!confirm("Remover a apresentação?"))return;
+  try{await apiFetch("/api/dss/"+DSS_EDIT.id+"/apresentacao",{method:"DELETE"});}catch(e){}
+  DSS_EDIT.ppt_pdf_key=null;DSS_EDIT.ppt_key=null;DSS_EDIT.ppt_pendente=false;DSS_EDIT.ppt_nome=null;
+  const inp=document.getElementById("dcPpt");if(inp)inp.value="";
+  dssRenderPptActions();
+}
+
+function dssOpenDeck(){
+  const e=DSS_EDIT;if(!e||!e.ppt_pdf_key)return;
+  const url="/api/dss/"+e.id+"/apresentacao.pdf?t="+encodeURIComponent(getToken());
+  let deck=document.getElementById("dssDeck");
+  if(!deck){deck=document.createElement("div");deck.id="dssDeck";deck.className="dss-deck";document.body.appendChild(deck);}
+  deck.innerHTML=`<div class="dss-deck-bar"><span class="dss-deck-tit">${escapeHtml(e.ppt_nome||"Apresentação")}</span><a class="dss-iconbtn" href="${url}" target="_blank" rel="noopener" title="Abrir em nova aba"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a><button class="dss-iconbtn" id="dssDeckClose" title="Fechar (Esc)"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><iframe class="dss-deck-frame" src="${url}" title="Apresentação"></iframe>`;
+  deck.style.display="flex";document.body.classList.add("dss-noscroll");
+  document.getElementById("dssDeckClose").onclick=dssCloseDeck;
+  document.addEventListener("keydown",dssDeckKey);
+}
+function dssDeckKey(ev){if(ev.key==="Escape")dssCloseDeck();}
+function dssCloseDeck(){
+  const deck=document.getElementById("dssDeck");if(deck){deck.style.display="none";deck.innerHTML="";}
+  document.body.classList.remove("dss-noscroll");
+  document.removeEventListener("keydown",dssDeckKey);
+}
 
 /* ---- export PNG (canvas nativo, sem libs; imagem same-origin nao tainta) ---- */
 function dssLoadImage(src){return new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=src;});}
