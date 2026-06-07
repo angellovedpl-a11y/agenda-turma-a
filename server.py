@@ -2236,6 +2236,126 @@ def api_dss_confirmar(eid):
     return dss.handle_confirmar(eid, request.current_user, create_event=_mk_evento)
 
 
+# --- Fase 2 DSS: gerar card de exportacao ---
+DSS_OBJ_PREFIX = 'dss'
+DSS_MAX_IMG_BYTES = 5 * 1024 * 1024  # 5 MB (cliente ja comprime)
+DSS_IMG_MIMES = {'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp'}
+
+
+def _dss_call_claude(tema, descricao, tom):
+    """Gera o texto do card de DSS via Claude. Retorna dict cru ou None.
+
+    System prompt 100% server-side (o cliente nao influencia, igual ao chat).
+    Pede JSON estrito e extrai defensivamente.
+    """
+    system = (
+        'Voce escreve cards de DSS (Dialogo de Seguranca e Saude) para uma turma '
+        'de ferroviarios da Vale, em portugues do Brasil, claro e direto para o celular. '
+        'A partir do tema, da descricao e do tom, devolva SOMENTE um objeto JSON valido '
+        '(sem texto antes ou depois, sem markdown) com exatamente estas chaves:\n'
+        '{"titulo": string curta (max 60 caracteres),\n'
+        ' "bullets": array com 3 a 4 pontos-chave (cada um uma frase curta de acao, max 110 caracteres),\n'
+        ' "fala": uma frase de abertura que o apresentador fala para a equipe (max 220 caracteres),\n'
+        ' "pergunta": uma pergunta de engajamento para o fim (max 120 caracteres)}\n'
+        'Use linguagem de colega de trabalho, sem jargao corporativo, sem emojis. '
+        'O tom pedido orienta o estilo: Direto = objetivo e firme; Educativo = explica o porque; '
+        'Alerta = enfatiza o risco; Motivacional = foca no cuidado com a equipe e a familia.'
+    )
+    user_msg = (f'Tema: {tema or "(sem tema)"}\n'
+                f'Descricao: {descricao}\n'
+                f'Tom: {tom}\n\n'
+                'Gere o card agora. Responda apenas o JSON.')
+    resp = _anthropic_client.messages.create(
+        model='claude-haiku-4-5',
+        max_tokens=900,
+        temperature=0.5,
+        system=system,
+        messages=[{'role': 'user', 'content': user_msg}],
+    )
+    txt = (resp.content[0].text or '').strip()
+    ini, fim = txt.find('{'), txt.rfind('}')
+    if ini == -1 or fim <= ini:
+        return None
+    import json as _json
+    return _json.loads(txt[ini:fim + 1])
+
+
+@app.route('/api/dss/<eid>/gerar-texto', methods=['POST'])
+@auth.require_auth
+@ratelimit.rate_limit(8, env_var='RATELIMIT_DSS_GEN_PER_MIN', route_key='dss_gen')
+def api_dss_gerar_texto(eid):
+    return dss.handle_gerar_texto(eid, request.json or {}, request.current_user, _dss_call_claude)
+
+
+@app.route('/api/dss/<eid>/card', methods=['POST'])
+@auth.require_auth
+def api_dss_save_card(eid):
+    return dss.handle_save_card(eid, request.json or {}, request.current_user)
+
+
+@app.route('/api/dss/<eid>/imagem', methods=['POST'])
+@auth.require_auth
+@ratelimit.rate_limit(15, env_var='RATELIMIT_DSS_IMG_PER_MIN', route_key='dss_img')
+def api_dss_img_upload(eid):
+    u = request.current_user
+    item = dss.get_item(eid)
+    if not item:
+        return jsonify({'error': 'nao_encontrado'}), 404
+    if not dss.can_edit(item, u):
+        return jsonify({'error': 'sem_permissao'}), 403
+    if not _obj.is_enabled():
+        return jsonify({'error': 'storage_off',
+                        'mensagem': 'Armazenamento de imagens indisponivel.'}), 503
+    data = request.json or {}
+    mt = (data.get('mimetype') or '').strip().lower()
+    ext = DSS_IMG_MIMES.get(mt)
+    if not ext:
+        return jsonify({'error': 'formato', 'mensagem': 'Use JPG, PNG ou WebP.'}), 400
+    try:
+        raw = _b64.b64decode(data.get('b64') or '')
+    except Exception:
+        return jsonify({'error': 'b64', 'mensagem': 'Imagem invalida.'}), 400
+    if not raw:
+        return jsonify({'error': 'vazio', 'mensagem': 'Imagem vazia.'}), 400
+    if len(raw) > DSS_MAX_IMG_BYTES:
+        return jsonify({'error': 'tamanho', 'mensagem': 'Imagem maior que 5 MB.'}), 400
+    key = _obj.make_key(DSS_OBJ_PREFIX, item.get('matricula'), eid, 0, 'card.' + ext)
+    if not _obj.upload_bytes(key, raw, content_type=mt):
+        return jsonify({'error': 'upload', 'mensagem': 'Falha ao enviar a imagem.'}), 500
+    old, resp, code = dss.handle_set_card_img(eid, key, mt, u)
+    if code == 200 and old:
+        _obj.delete(old)
+    return resp, code
+
+
+@app.route('/api/dss/<eid>/imagem', methods=['GET'])
+@auth.require_auth
+def api_dss_img_get(eid):
+    u = request.current_user
+    item = dss.get_item(eid)
+    if not item or not item.get('card_img_key'):
+        return jsonify({'error': 'nao_encontrado'}), 404
+    if not dss.can_edit(item, u):
+        return jsonify({'error': 'sem_permissao'}), 403
+    try:
+        raw = _obj.download_bytes(item['card_img_key'])
+    except Exception as e:
+        return jsonify({'error': f'arquivo nao encontrado: {e}'}), 404
+    from flask import send_file
+    resp = send_file(io.BytesIO(raw), mimetype=item.get('card_img_mime') or 'image/jpeg')
+    resp.headers['Cache-Control'] = 'private, max-age=600'
+    return resp
+
+
+@app.route('/api/dss/<eid>/imagem', methods=['DELETE'])
+@auth.require_auth
+def api_dss_img_delete(eid):
+    old, resp, code = dss.handle_clear_card_img(eid, request.current_user)
+    if code == 200 and old:
+        _obj.delete(old)
+    return resp, code
+
+
 @app.route('/api/claude', methods=['POST'])
 @auth.require_auth
 @ratelimit.rate_limit(20, env_var='RATELIMIT_CLAUDE_PER_MIN', route_key='claude')

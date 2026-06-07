@@ -1056,9 +1056,12 @@ function bindMuralFilterChips(c){
 // ===== MODULO DSS (Dialogo de Seguranca) =====
 let DSS_STATE={escala:[],historico:[]};
 let DSS_LOOKUP=null; // empregado resolvido no form de escalar
+let DSS_CONTAINER=null; // container da secao DSS (pra voltar do editor)
 const DSS_STATUS={pendente:["Pendente","dss-s-pend"],card_pronto:["Card pronto","dss-s-ready"],revisado:["Revisado","dss-s-rev"]};
+const DSS_TONS=["Direto","Educativo","Alerta","Motivacional"];
 function dssIsSup(){return !!(CURRENT_USER&&(CURRENT_USER.role==="admin"||CURRENT_USER.role==="aprovador"));}
 function dssIsAdmin(){return !!(CURRENT_USER&&CURRENT_USER.role==="admin");}
+function dssIsMine(e){return !!(CURRENT_USER&&e&&String(CURRENT_USER.matricula)===String(e.matricula));}
 function dssFmt(d){if(!d)return"—";const p=String(d).split("-");return p.length===3?`${p[2]}/${p[1]}`:d;}
 function dssDia(d){return d?parseInt(String(d).split("-")[2],10):"";}
 function dssMes3(d){return d?MESES3[parseInt(String(d).split("-")[1],10)-1]:"";}
@@ -1068,6 +1071,7 @@ function dssIni(n){return (n||"?").split(" ").slice(0,2).map(w=>w[0]||"").join("
 
 async function renderDSS(c){
   document.getElementById("rightPanel").style.display="none";
+  DSS_CONTAINER=c;
   const sup=dssIsSup(), adm=dssIsAdmin();
   c.innerHTML=`
   <div class="dss-wrap">
@@ -1177,7 +1181,7 @@ function dssRenderMural(){
       <div class="dss-person"><div class="dss-av">${dssIni(e.nome)}</div><div><div class="dss-nm">${escapeHtml(e.nome||"")}</div><div class="dss-mt">Matr. ${escapeHtml(e.matricula||"")}</div></div></div>
       <div class="dss-ptheme">Tema: <b>${escapeHtml(e.tema||"a definir")}</b> · ${dssFmt(e.data_prevista)}</div>
       <div><span class="dss-status ${st[1]}">${st[0]}</span></div>
-      ${(sup||adm)?`<div class="dss-acts">${sup?`<button class="dss-btn dss-btn-primary dss-sm" onclick="dssConfirmar('${e.id}')">✓ Realizada</button>`:""}${adm?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Remover</button>`:""}</div>`:""}
+      <div class="dss-acts">${(dssIsMine(e)||adm)?`<button class="dss-btn dss-btn-primary dss-sm" onclick="dssOpenCard('${e.id}')">${e.status==="pendente"?"Montar card":"Ver card"}</button>`:""}${sup?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssConfirmar('${e.id}')">✓ Realizada</button>`:""}${adm?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Remover</button>`:""}</div>
     </div>`;}).join(""):`<div class="dss-pcard"><span class="dss-plabel">Ninguém escalado ainda</span></div>`;
 
   const prog=document.getElementById("dssProg");
@@ -1187,7 +1191,7 @@ function dssRenderMural(){
       <div class="dss-date"><div class="d">${dssDia(e.data_prevista)}</div><div class="m">${dssMes3(e.data_prevista)}</div></div>
       <div class="dss-who">${escapeHtml(e.nome||"")}<small>Matr. ${escapeHtml(e.matricula||"")}</small></div>
       <div class="dss-th">${escapeHtml(e.tema||"tema a definir")}</div>
-      <div><span class="dss-status ${st[1]}">${st[0]}</span></div>
+      <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end"><span class="dss-status ${st[1]}">${st[0]}</span>${(dssIsMine(e)||adm)?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssOpenCard('${e.id}')">Card</button>`:""}</div>
     </div>`;}).join(""):`<div class="dss-row" style="color:var(--muted)">Nenhuma apresentação programada.</div>`;
   const pc=document.getElementById("dssProgCount");if(pc)pc.textContent=esc.length+" programadas";
 
@@ -1227,6 +1231,282 @@ window.dssRemover=async function(id){
     else showToast("Não foi possível remover");
   }catch(e){if(e.message!=="auth")showToast("Erro ao remover");}
 };
+
+/* ===== Fase 2: editor "Gerar card de exportacao" ===== */
+let DSS_EDIT=null;        // entry sendo editada (referencia em DSS_STATE.escala)
+let dssCardData=null;     // {titulo,bullets,fala,pergunta,tom}
+let dssImgURL=null;       // dataURL/endpoint da imagem (preview + canvas)
+let dssImgFit="cover";    // cover | contain
+let dssRatio="wide";      // wide (16:9) | story (9:16)
+const DSS_CHECK='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>';
+
+window.dssOpenCard=function(id){
+  const e=(DSS_STATE.escala||[]).find(x=>x.id===id);
+  if(!e){showToast("Apresentação não encontrada");return;}
+  DSS_EDIT=e;
+  dssCardData=e.card&&typeof e.card==="object"?Object.assign({titulo:"",bullets:[],fala:"",pergunta:"",tom:e.tom||"Direto"},e.card):null;
+  dssImgFit="cover"; dssRatio="wide";
+  dssImgURL=e.card_img_key?("/api/dss/"+e.id+"/imagem?t="+encodeURIComponent(getToken())):null;
+  dssRenderEditor();
+};
+
+function dssRenderEditor(){
+  const e=DSS_EDIT, c=DSS_CONTAINER; if(!e||!c)return;
+  const tomChips=DSS_TONS.map(t=>`<button type="button" class="dss-chip" aria-pressed="${(e.tom||"Direto")===t}" data-v="${t}">${t}</button>`).join("");
+  const hasCard=!!dssCardData;
+  c.innerHTML=`
+  <button class="dss-back" id="dssBack"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao mural</button>
+  <div class="dss-shead"><h3>Montar card de DSS</h3><span class="dss-count">${escapeHtml(e.nome||"")} · ${dssFmt(e.data_prevista)}</span></div>
+  <div class="dss-gen">
+    <div class="dss-panel">
+      <div class="dss-gfield"><label>Tema <span class="req">*</span></label><input id="dcTema" maxlength="120" value="${escapeHtml(e.tema||"")}" placeholder="Ex.: Uso correto de EPI"/></div>
+      <div class="dss-gfield"><label>Descrição <span class="req">*</span></label><textarea id="dcDesc" maxlength="2000" placeholder="O que a equipe precisa entender?">${escapeHtml(e.descricao||"")}</textarea>
+        <div class="dss-hint">A IA (Claude) transforma isso em título, pontos-chave, fala do apresentador e pergunta.</div></div>
+      <div class="dss-gfield"><label>Tom da apresentação</label><div class="dss-chips" id="dcTom">${tomChips}</div></div>
+      <div class="dss-gfield"><label>Imagem (opcional)</label>
+        <label class="dss-drop" for="dcImg"><input id="dcImg" type="file" accept="image/jpeg,image/png,image/webp" hidden/><span id="dcImgTxt">📷 Toque para adicionar uma foto do equipamento/situação</span></label>
+        <div class="dss-chips" style="margin-top:9px" id="dcFit"><button type="button" class="dss-chip" aria-pressed="true" data-fit="cover">Preencher</button><button type="button" class="dss-chip" aria-pressed="false" data-fit="contain">Imagem inteira</button></div>
+        <div id="dcImgActions" style="margin-top:8px"></div></div>
+      <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcGen"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M13 3l2.5 6.5L22 12l-6.5 2.5L13 21l-2.5-6.5L4 12l6.5-2.5L13 3z"/></svg> ${hasCard?"Gerar de novo":"Gerar com IA"}</button></div>
+      <div id="dcEdit" style="display:${hasCard?"block":"none"};margin-top:16px;border-top:1px solid var(--border);padding-top:14px">
+        <div class="dss-gfield"><label>Título</label><input id="dcT" maxlength="80"/></div>
+        <div class="dss-gfield"><label>Pontos-chave (um por linha)</label><textarea id="dcB" maxlength="800"></textarea></div>
+        <div class="dss-gfield"><label>Fala do apresentador</label><textarea id="dcF" maxlength="400"></textarea></div>
+        <div class="dss-gfield"><label>Pergunta de engajamento</label><input id="dcQ" maxlength="200"/></div>
+        <button class="dss-btn dss-btn-ghost dss-sm" id="dcSave">Salvar ajustes</button>
+      </div>
+      <div class="dss-note"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Gere o texto com a IA, ajuste se quiser e baixe o PNG pra mandar no grupo do WhatsApp.</span></div>
+    </div>
+    <div>
+      <div class="dss-prevhead"><h4>Card de exportação</h4>
+        <div class="dss-ratio" id="dcRatio"><button type="button" class="dss-chip" aria-pressed="true" data-r="wide">16:9</button><button type="button" class="dss-chip" aria-pressed="false" data-r="story">9:16 WhatsApp</button></div></div>
+      <article class="dss-slide" id="dcSlide">
+        <div class="dss-stop"><span class="dss-badge">DSS</span><span class="dss-kicker">Diálogo de Segurança</span><span class="dss-vale">VALE</span></div>
+        <div class="dss-sbody">
+          <div class="dss-smain"><h1 class="dss-stitle" id="dcsTitle"></h1><ul class="dss-bullets" id="dcsBullets"></ul></div>
+          <div class="dss-saside">
+            <div class="dss-simg" id="dcsImg"><div class="imghint"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>fundo padrão</div></div>
+            <div class="dss-speaker"><div class="lbl"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/></svg>Fala do apresentador</div><p id="dcsSpeaker"></p></div>
+          </div>
+        </div>
+        <div class="dss-sfoot">
+          <span class="fitem"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><b id="dcsDate"></b></span>
+          <span class="fitem"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><b id="dcsResp"></b></span>
+          <span class="dss-qmark"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg><span id="dcsQ"></span></span>
+        </div>
+      </article>
+      <div class="dss-gactions">
+        <button class="dss-btn dss-btn-primary" id="dcPng"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Baixar PNG</button>
+        <button class="dss-btn dss-btn-ghost" id="dcShare"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg> Compartilhar</button>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById("dssBack").onclick=()=>renderDSS(c);
+  document.getElementById("dcTema").addEventListener("input",dssPreview);
+  document.getElementById("dcTom").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssPreview();});
+  document.getElementById("dcFit").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssImgFit=b.dataset.fit;dssPreview();});
+  document.getElementById("dcRatio").addEventListener("click",ev=>{const b=ev.target.closest(".dss-chip");if(!b)return;[...ev.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));dssRatio=b.dataset.r;document.getElementById("dcSlide").classList.toggle("story",dssRatio==="story");});
+  document.getElementById("dcImg").addEventListener("change",dssImgPick);
+  document.getElementById("dcGen").onclick=dssGerarTexto;
+  document.getElementById("dcSave").onclick=dssSalvarTexto;
+  document.getElementById("dcPng").onclick=()=>dssExport(false);
+  document.getElementById("dcShare").onclick=()=>dssExport(true);
+  if(hasCard)dssFillEditFields();
+  dssRenderImgActions();
+  dssPreview();
+}
+
+function dssTomSel(){const b=document.querySelector("#dcTom .dss-chip[aria-pressed='true']");return b?b.dataset.v:"Direto";}
+
+function dssFillEditFields(){
+  if(!dssCardData)return;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
+  set("dcT",dssCardData.titulo||"");
+  set("dcB",(dssCardData.bullets||[]).join("\n"));
+  set("dcF",dssCardData.fala||"");
+  set("dcQ",dssCardData.pergunta||"");
+}
+
+function dssRenderImgActions(){
+  const box=document.getElementById("dcImgActions");if(!box)return;
+  const txt=document.getElementById("dcImgTxt");
+  if(dssImgURL){
+    if(txt)txt.textContent="✓ Imagem adicionada";
+    box.innerHTML=`<button class="dss-btn dss-btn-ghost dss-sm" id="dcImgDel">Remover imagem</button>`;
+    document.getElementById("dcImgDel").onclick=dssImgRemove;
+  }else{box.innerHTML="";if(txt)txt.textContent="📷 Toque para adicionar uma foto do equipamento/situação";}
+}
+
+function dssPreview(){
+  const tema=(document.getElementById("dcTema")?.value||"").trim();
+  const card=dssCardData||{};
+  const title=card.titulo||tema||"Tema do DSS";
+  document.getElementById("dcsTitle").textContent=title;
+  const bl=document.getElementById("dcsBullets");
+  bl.innerHTML=(card.bullets&&card.bullets.length?card.bullets:["Gere o texto com a IA para ver os pontos-chave aqui"]).map(b=>`<li>${DSS_CHECK}<span>${escapeHtml(b)}</span></li>`).join("");
+  document.getElementById("dcsSpeaker").textContent=card.fala||"A fala do apresentador aparece aqui depois de gerar.";
+  document.getElementById("dcsQ").textContent=card.pergunta||"Pergunta de engajamento";
+  document.getElementById("dcsResp").textContent=(DSS_EDIT&&DSS_EDIT.nome)||"—";
+  const dd=DSS_EDIT&&DSS_EDIT.data_prevista?new Date(DSS_EDIT.data_prevista+"T00:00"):new Date();
+  document.getElementById("dcsDate").textContent=dd.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  const img=document.getElementById("dcsImg");
+  if(dssImgURL){img.style.backgroundImage=`url("${dssImgURL}")`;img.classList.toggle("contain",dssImgFit==="contain");img.innerHTML="";}
+  else{img.style.backgroundImage="";img.classList.remove("contain");img.innerHTML=`<div class="imghint"><svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>fundo padrão</div>`;}
+}
+
+async function dssGerarTexto(){
+  const tema=(document.getElementById("dcTema").value||"").trim();
+  const descricao=(document.getElementById("dcDesc").value||"").trim();
+  const tom=dssTomSel();
+  if(descricao.length<10){showToast("Descreva o que a equipe precisa entender (mín. 10 caracteres)");return;}
+  const btn=document.getElementById("dcGen");const old=btn.innerHTML;btn.disabled=true;btn.innerHTML="Gerando… ✨";
+  try{
+    const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/gerar-texto",{method:"POST",body:JSON.stringify({tema,descricao,tom})});
+    const d=await r.json();
+    if(r.ok&&d.ok&&d.card){
+      dssCardData=d.card;
+      DSS_EDIT.card=d.card;DSS_EDIT.status="card_pronto";DSS_EDIT.tema=tema;DSS_EDIT.descricao=descricao;DSS_EDIT.tom=tom;
+      document.getElementById("dcEdit").style.display="block";
+      dssFillEditFields();dssPreview();
+      showToast("Card gerado pela IA ✓");
+    }else{showToast(d.mensagem||"Não consegui gerar agora. Tente de novo.");}
+  }catch(e){if(e.message!=="auth")showToast("Erro ao gerar o texto");}
+  finally{btn.disabled=false;btn.innerHTML=old;}
+}
+
+async function dssSalvarTexto(){
+  const card={
+    titulo:(document.getElementById("dcT").value||"").trim(),
+    bullets:(document.getElementById("dcB").value||"").split("\n").map(s=>s.trim()).filter(Boolean),
+    fala:(document.getElementById("dcF").value||"").trim(),
+    pergunta:(document.getElementById("dcQ").value||"").trim(),
+    tom:dssTomSel(),
+  };
+  try{
+    const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/card",{method:"POST",body:JSON.stringify({card})});
+    const d=await r.json();
+    if(r.ok&&d.ok&&d.card){dssCardData=d.card;DSS_EDIT.card=d.card;dssFillEditFields();dssPreview();showToast("Ajustes salvos ✓");}
+    else showToast(d.mensagem||"Não foi possível salvar");
+  }catch(e){if(e.message!=="auth")showToast("Erro ao salvar");}
+}
+
+async function dssImgPick(ev){
+  const f=ev.target.files&&ev.target.files[0];if(!f)return;
+  if(!/^image\/(jpeg|png|webp)$/.test(f.type)){showToast("Use JPG, PNG ou WebP");return;}
+  if(f.size>5*1024*1024){showToast("Imagem maior que 5 MB");return;}
+  let dataURL;
+  try{dataURL=await dssReadAsDataURL(f);}catch(e){showToast("Não consegui ler a imagem");return;}
+  dssImgURL=dataURL;dssRenderImgActions();dssPreview();
+  const b64=(dataURL.split(",")[1])||"";
+  try{
+    const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/imagem",{method:"POST",body:JSON.stringify({b64,mimetype:f.type})});
+    const d=await r.json();
+    if(r.ok&&d.ok){DSS_EDIT.card_img_key="set";showToast("Imagem enviada ✓");}
+    else showToast(d.mensagem||"Falha ao enviar a imagem");
+  }catch(e){if(e.message!=="auth")showToast("Erro ao enviar imagem");}
+}
+
+async function dssImgRemove(){
+  dssImgURL=null;dssRenderImgActions();dssPreview();
+  const inp=document.getElementById("dcImg");if(inp)inp.value="";
+  try{await apiFetch("/api/dss/"+DSS_EDIT.id+"/imagem",{method:"DELETE"});DSS_EDIT.card_img_key=null;}catch(e){}
+}
+
+function dssReadAsDataURL(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(file);});}
+
+/* ---- export PNG (canvas nativo, sem libs; imagem same-origin nao tainta) ---- */
+function dssLoadImage(src){return new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=src;});}
+function dssRoundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function dssWrap(ctx,text,maxW){const words=(text||"").split(/\s+/);const lines=[];let line="";for(const w of words){const t=line?line+" "+w:w;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w;}else line=t;}if(line)lines.push(line);return lines;}
+function dssDrawImageBox(ctx,im,x,y,w,h,fit){ctx.save();dssRoundRect(ctx,x,y,w,h,0);ctx.clip();ctx.fillStyle="#0b1119";ctx.fillRect(x,y,w,h);if(im){const ir=im.width/im.height,br=w/h;let dw,dh,dx,dy;if((fit==="contain")?(ir>br):(ir<br)){dw=w;dh=w/ir;}else{dh=h;dw=h*ir;}dx=x+(w-dw)/2;dy=y+(h-dh)/2;ctx.drawImage(im,dx,dy,dw,dh);}ctx.restore();}
+
+async function dssBuildCanvas(){
+  const card=dssCardData||{};
+  const story=dssRatio==="story";
+  const W=story?1080:1280, H=story?1920:720;
+  const cv=document.createElement("canvas");cv.width=W;cv.height=H;
+  const ctx=cv.getContext("2d");
+  // fundo
+  ctx.fillStyle="#0f1720";ctx.fillRect(0,0,W,H);
+  const pad=story?64:56;
+  // topo
+  const topH=story?96:86;
+  const g=ctx.createLinearGradient(0,0,W,0);g.addColorStop(0,"#0e2a1c");g.addColorStop(1,"#0f1720");
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,topH);
+  ctx.fillStyle="#00e676";ctx.fillRect(0,topH-5,W,5);
+  ctx.fillStyle="#00e676";dssRoundRect(ctx,pad,topH/2-19,86,38,7);ctx.fill();
+  ctx.fillStyle="#04130a";ctx.font="800 22px Lexend, sans-serif";ctx.textBaseline="middle";ctx.fillText("DSS",pad+20,topH/2+1);
+  ctx.fillStyle="#9fb0a6";ctx.font="700 19px 'Source Sans 3',sans-serif";ctx.fillText("DIÁLOGO DE SEGURANÇA",pad+104,topH/2+1);
+  ctx.fillStyle="#ffd24a";ctx.font="800 26px Lexend, sans-serif";ctx.textAlign="right";ctx.fillText("VALE",W-pad,topH/2+1);ctx.textAlign="left";
+  // layout corpo
+  const im=dssImgURL?await dssLoadImage(dssImgURL):null;
+  const footH=story?150:104;
+  const bodyY=topH+(story?36:34), bodyB=H-footH;
+  let textX=pad, textW=W-pad*2, imgY, imgH;
+  if(story){imgH=im||dssImgURL?640:0;if(imgH){dssDrawImageBox(ctx,im,0,bodyY,W,imgH,dssImgFit);}}
+  else{const colW=Math.round(W*0.40);dssDrawImageBox(ctx,im,W-colW,topH+5,colW,bodyB-(topH+5),dssImgFit);textW=W-colW-pad*2-24;}
+  let y=story?(bodyY+(imgH?imgH+48:8)):bodyY+8;
+  // titulo
+  ctx.fillStyle="#fff";ctx.textBaseline="top";
+  const tSize=story?58:42;ctx.font=`800 ${tSize}px Lexend, sans-serif`;
+  dssWrap(ctx,card.titulo||(DSS_EDIT&&DSS_EDIT.tema)||"Diálogo de Segurança",textW).slice(0,3).forEach(ln=>{ctx.fillText(ln,textX,y);y+=tSize*1.12;});
+  y+=story?22:16;
+  // bullets
+  const bSize=story?30:21;ctx.font=`400 ${bSize}px 'Source Sans 3',sans-serif`;
+  (card.bullets||[]).slice(0,4).forEach(b=>{
+    ctx.fillStyle="#00e676";ctx.font=`700 ${bSize}px 'Source Sans 3',sans-serif`;ctx.fillText("✓",textX,y);
+    ctx.fillStyle="#dfe7ee";ctx.font=`400 ${bSize}px 'Source Sans 3',sans-serif`;
+    const lines=dssWrap(ctx,b,textW-38);lines.forEach((ln,i)=>{ctx.fillText(ln,textX+34,y+i*bSize*1.32);});
+    y+=Math.max(1,lines.length)*bSize*1.32+(story?18:13);
+  });
+  // fala (caixa) — encaixa acima do rodape
+  if(card.fala){
+    const fSize=story?26:19;ctx.font=`italic 400 ${fSize}px 'Source Sans 3',sans-serif`;
+    const flines=dssWrap(ctx,'"'+card.fala+'"',textW-36).slice(0,4);
+    const boxH=flines.length*fSize*1.34+44;const boxY=Math.min(y+10,bodyB-boxH-8);
+    ctx.fillStyle="#0b1119";dssRoundRect(ctx,textX,boxY,textW,boxH,12);ctx.fill();
+    ctx.strokeStyle="#1c2733";ctx.lineWidth=1;dssRoundRect(ctx,textX,boxY,textW,boxH,12);ctx.stroke();
+    ctx.fillStyle="#f5a623";ctx.font=`800 ${story?15:13}px 'Source Sans 3',sans-serif`;ctx.fillText("FALA DO APRESENTADOR",textX+18,boxY+14);
+    ctx.fillStyle="#c8d2dc";ctx.font=`italic 400 ${fSize}px 'Source Sans 3',sans-serif`;
+    flines.forEach((ln,i)=>ctx.fillText(ln,textX+18,boxY+38+i*fSize*1.34));
+  }
+  // rodape
+  ctx.fillStyle="#0a0f15";ctx.fillRect(0,H-footH,W,footH);
+  ctx.fillStyle="#1c2733";ctx.fillRect(0,H-footH,W,1);
+  const fy=H-footH/2;ctx.textBaseline="middle";
+  const dd=DSS_EDIT&&DSS_EDIT.data_prevista?new Date(DSS_EDIT.data_prevista+"T00:00"):new Date();
+  const dstr=dd.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  ctx.fillStyle="#dfe7ee";ctx.font="600 22px 'Source Sans 3',sans-serif";
+  ctx.fillText(dstr+"   ·   "+((DSS_EDIT&&DSS_EDIT.nome)||""),pad,fy);
+  if(card.pergunta){
+    ctx.font="700 21px 'Source Sans 3',sans-serif";
+    const q=card.pergunta;const qw=Math.min(ctx.measureText(q).width+44,W*0.5);
+    ctx.fillStyle="#f5a62322";dssRoundRect(ctx,W-pad-qw,fy-26,qw,52,26);ctx.fill();
+    ctx.strokeStyle="#f5a623";ctx.lineWidth=1.5;dssRoundRect(ctx,W-pad-qw,fy-26,qw,52,26);ctx.stroke();
+    ctx.fillStyle="#f5a623";ctx.textAlign="center";
+    const qline=dssWrap(ctx,q,qw-30)[0]||q;ctx.fillText(qline,W-pad-qw/2,fy);ctx.textAlign="left";
+  }
+  return cv;
+}
+
+async function dssExport(share){
+  if(!dssCardData||!dssCardData.titulo){showToast("Gere o texto do card primeiro");return;}
+  let cv;try{cv=await dssBuildCanvas();}catch(e){showToast("Erro ao montar o PNG");return;}
+  const fname="DSS_"+((DSS_EDIT&&DSS_EDIT.nome)||"card").replace(/[^a-zA-Z0-9]+/g,"_").slice(0,30)+".png";
+  cv.toBlob(async blob=>{
+    if(!blob){showToast("Erro ao gerar o PNG");return;}
+    if(share&&navigator.share&&navigator.canShare){
+      const file=new File([blob],fname,{type:"image/png"});
+      if(navigator.canShare({files:[file]})){
+        try{await navigator.share({files:[file],title:"Card de DSS"});return;}catch(e){if(e&&e.name==="AbortError")return;}
+      }
+    }
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=fname;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    showToast(share?"Compartilhamento indisponível — baixei o PNG":"PNG baixado ✓");
+  },"image/png");
+}
 
 async function renderEventos(c){
   c.innerHTML=`<div class="pg-head"><div class="pg-tit">📋 MURAL DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO POST</button></div>${renderMuralFilterBar()}<div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;

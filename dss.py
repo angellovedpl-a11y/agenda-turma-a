@@ -138,8 +138,9 @@ def handle_escalar(data, user):
         'descricao': descricao,
         'tom': tom,
         'status': 'pendente',          # pendente | card_pronto | revisado
-        'card': None,                  # textos gerados (titulo/bullets/fala/pergunta)
-        'card_img_key': None,          # imagem do card de exportacao
+        'card': None,                  # textos gerados (titulo/bullets/fala/pergunta/tom)
+        'card_img_key': None,          # imagem do card de exportacao (object_storage)
+        'card_img_mime': None,         # mimetype da imagem do card
         'ppt_key': None,               # arquivo de apresentacao original
         'ppt_pdf_key': None,           # apresentacao convertida p/ PDF
         'escalado_por': (user or {}).get('matricula'),
@@ -201,3 +202,148 @@ def handle_confirmar(eid, user, create_event=None):
         d['escala'] = [x for x in d['escala'] if x.get('id') != eid]
         kvstore.save(KEY, d, conn=conn)
     return jsonify({'ok': True, 'historico': hist})
+
+
+# ---------------------------------------------------------------- Fase 2: card
+def can_edit(item, user):
+    """O card so pode ser montado pela pessoa escalada ou por um admin."""
+    if not item or not user:
+        return False
+    if user.get('role') == 'admin':
+        return True
+    return str(user.get('matricula') or '') == str(item.get('matricula') or '')
+
+
+def get_item(eid):
+    """Retorna o item da escala (nao do historico) ou None — sem lock, so leitura."""
+    return _find(load_all()['escala'], eid)
+
+
+def _sanitize_card(card, tom):
+    """Normaliza o que a IA devolveu para um formato seguro e limitado."""
+    if not isinstance(card, dict):
+        card = {}
+    bullets = card.get('bullets')
+    if not isinstance(bullets, list):
+        bullets = []
+    bullets = [re.sub(r'\s+', ' ', str(b)).strip()[:160]
+               for b in bullets if str(b).strip()][:5]
+    return {
+        'titulo': re.sub(r'\s+', ' ', str(card.get('titulo') or '')).strip()[:80],
+        'bullets': bullets,
+        'fala': re.sub(r'\s+', ' ', str(card.get('fala') or '')).strip()[:400],
+        'pergunta': re.sub(r'\s+', ' ', str(card.get('pergunta') or '')).strip()[:200],
+        'tom': tom if tom in TOM_OK else 'Direto',
+    }
+
+
+def handle_gerar_texto(eid, data, user, call_claude):
+    """POST /api/dss/<id>/gerar-texto — IA escreve o card a partir de tema+descricao+tom.
+
+    `data` traz tema/descricao/tom informados pela pessoa escalada (a descricao
+    nao e capturada no momento da escala). Persiste esses campos no item e o
+    card gerado. `call_claude(tema, descricao, tom)` faz a chamada de rede e
+    devolve um dict cru (ou levanta excecao). Permissao: escalado ou admin.
+    """
+    data = data or {}
+    tema = (data.get('tema') or '').strip()[:120]
+    descricao = (data.get('descricao') or '').strip()[:2000]
+    tom = (data.get('tom') or 'Direto').strip()
+    if tom not in TOM_OK:
+        tom = 'Direto'
+    if len(descricao) < 10:
+        return jsonify({'error': 'descricao_curta',
+                        'mensagem': 'Descreva o que a equipe precisa entender (min. 10 caracteres).'}), 400
+
+    # 1) valida existencia + permissao (sob lock, rapido)
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return jsonify({'error': 'nao_encontrado'}), 404
+        if not can_edit(item, user):
+            return jsonify({'error': 'sem_permissao',
+                            'mensagem': 'So a pessoa escalada ou um admin pode montar o card.'}), 403
+
+    # 2) chama a IA FORA do lock (rede lenta — nao segura a conexao do DB)
+    try:
+        card_raw = call_claude(tema, descricao, tom)
+    except Exception as e:
+        print(f'[dss] gerar-texto falhou: {e}')
+        card_raw = None
+    if not card_raw:
+        return jsonify({'error': 'ia_indisponivel',
+                        'mensagem': 'Nao consegui gerar o texto agora. Tente de novo.'}), 502
+    card = _sanitize_card(card_raw, tom)
+    if not card['titulo']:
+        card['titulo'] = tema or 'Dialogo de Seguranca'
+
+    # 3) read-modify-write atomico (re-busca o item dentro do lock)
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return jsonify({'error': 'nao_encontrado'}), 404
+        item['tema'] = tema
+        item['descricao'] = descricao
+        item['tom'] = tom
+        item['card'] = card
+        item['status'] = 'card_pronto'
+        kvstore.save(KEY, d, conn=conn)
+    return jsonify({'ok': True, 'card': card})
+
+
+def handle_save_card(eid, data, user):
+    """POST /api/dss/<id>/card — salva edicoes manuais do texto do card."""
+    data = data or {}
+    card_in = data.get('card') if isinstance(data.get('card'), dict) else data
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return jsonify({'error': 'nao_encontrado'}), 404
+        if not can_edit(item, user):
+            return jsonify({'error': 'sem_permissao'}), 403
+        tom = (card_in.get('tom') or item.get('tom') or 'Direto')
+        card = _sanitize_card(card_in, tom)
+        if not card['titulo']:
+            card['titulo'] = item.get('tema') or 'Dialogo de Seguranca'
+        item['card'] = card
+        item['tom'] = card['tom']
+        if item.get('status') == 'pendente':
+            item['status'] = 'card_pronto'
+        kvstore.save(KEY, d, conn=conn)
+    return jsonify({'ok': True, 'card': card})
+
+
+def handle_set_card_img(eid, key, mimetype, user):
+    """Aponta o item para a imagem ja enviada ao object_storage.
+    Retorna a chave anterior (se houver) para o caller limpar o orfao."""
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return None, jsonify({'error': 'nao_encontrado'}), 404
+        if not can_edit(item, user):
+            return None, jsonify({'error': 'sem_permissao'}), 403
+        old = item.get('card_img_key')
+        item['card_img_key'] = key
+        item['card_img_mime'] = mimetype
+        kvstore.save(KEY, d, conn=conn)
+    return (old if old and old != key else None), jsonify({'ok': True}), 200
+
+
+def handle_clear_card_img(eid, user):
+    """Remove a imagem do card. Retorna a chave antiga p/ o caller deletar."""
+    with kvstore.with_lock(KEY) as conn:
+        d = load_all(conn=conn)
+        item = _find(d['escala'], eid)
+        if not item:
+            return None, jsonify({'error': 'nao_encontrado'}), 404
+        if not can_edit(item, user):
+            return None, jsonify({'error': 'sem_permissao'}), 403
+        old = item.get('card_img_key')
+        item['card_img_key'] = None
+        item['card_img_mime'] = None
+        kvstore.save(KEY, d, conn=conn)
+    return old, jsonify({'ok': True}), 200
