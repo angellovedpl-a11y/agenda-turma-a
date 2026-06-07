@@ -9,6 +9,7 @@ import traceback
 from datetime import datetime
 from anthropic import Anthropic
 import auth
+import dss
 
 app = Flask(__name__, static_folder='.')
 app.json.ensure_ascii = False
@@ -343,7 +344,7 @@ def memoria_pessoal_remove(matricula: str, id_entrada: int) -> bool:
     return True
 
 # === MEMPALACE — EVENTOS DA AGENDA (com tipo) ===
-EVENTO_TIPOS_VALIDOS = ('aniversario', 'medico', 'viagem', 'compromisso', 'hora_extra', 'outro')
+EVENTO_TIPOS_VALIDOS = ('aniversario', 'medico', 'viagem', 'compromisso', 'hora_extra', 'dss', 'outro')
 
 def evento_add(tipo: str, titulo: str, data: str, hora: str = '', descricao: str = '', autor: str = '') -> dict:
     titulo = (titulo or '').strip()[:200]
@@ -2191,6 +2192,42 @@ def api_set_funcao():
 @auth.require_admin
 def api_reset_senha(matricula):
     return auth.handle_admin_reset_senha(matricula, request.current_user)
+
+
+# === API DSS (Dialogo de Seguranca) ===
+@app.route('/api/dss', methods=['GET'])
+@auth.require_auth
+def api_dss_get():
+    return dss.handle_get()
+
+
+@app.route('/api/dss/usuario/<matricula>', methods=['GET'])
+@auth.require_approver
+def api_dss_lookup(matricula):
+    return dss.handle_lookup(matricula)
+
+
+@app.route('/api/dss/escala', methods=['POST'])
+@auth.require_approver
+def api_dss_escalar():
+    return dss.handle_escalar(request.json or {}, request.current_user)
+
+
+@app.route('/api/dss/escala/<eid>', methods=['DELETE'])
+@auth.require_approver
+def api_dss_remover(eid):
+    return dss.handle_remover(eid, request.current_user)
+
+
+@app.route('/api/dss/<eid>/confirmar', methods=['POST'])
+@auth.require_approver
+def api_dss_confirmar(eid):
+    def _mk_evento(item, data_real):
+        titulo = f"DSS · {item.get('tema') or 'tema'} — {item.get('nome') or ''}".strip()
+        r = evento_add('dss', titulo, data_real,
+                       autor=(request.current_user or {}).get('matricula') or '')
+        return (r.get('evento') or {}).get('id') if r.get('ok') else None
+    return dss.handle_confirmar(eid, request.current_user, create_event=_mk_evento)
 
 
 @app.route('/api/claude', methods=['POST'])

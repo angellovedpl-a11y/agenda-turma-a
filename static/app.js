@@ -11,6 +11,7 @@ const EVENTO_TIPOS={
   viagem:     {emoji:"✈️",label:"Viagem",     cor:"#3b82f6"},
   compromisso:{emoji:"📋",label:"Compromisso",cor:"#14b8a6"},
   hora_extra: {emoji:"⏰",label:"Hora Extra", cor:"#fbbf24"},
+  dss:        {emoji:"🛡️",label:"DSS",        cor:"#f5a623"},
   outro:      {emoji:"⭐",label:"Outro",      cor:"#94a3b8"}
 };
 function evTipoInfo(t){return EVENTO_TIPOS[t]||EVENTO_TIPOS.outro;}
@@ -394,6 +395,7 @@ function render(){
   if(S.section && S.section!=="calendario"){
     document.getElementById("rightPanel").style.display="none";
     if(S.section==="eventos")renderEventos(c);
+    else if(S.section==="dss")renderDSS(c);
     else if(S.section==="pessoais")renderPessoais(c);
     else if(S.section==="diario")renderDiario(c);
     else if(S.section==="acervo")renderAcervo(c);
@@ -1044,6 +1046,174 @@ function bindMuralFilterChips(c){
   const cl=document.getElementById("muralLegendClear");
   if(cl)cl.onclick=(e)=>{e.preventDefault();clearEvFilter();renderEventos(c);};
 }
+// ===== MODULO DSS (Dialogo de Seguranca) =====
+let DSS_STATE={escala:[],historico:[]};
+let DSS_LOOKUP=null; // empregado resolvido no form de escalar
+const DSS_STATUS={pendente:["Pendente","dss-s-pend"],card_pronto:["Card pronto","dss-s-ready"],revisado:["Revisado","dss-s-rev"]};
+function dssIsSup(){return !!(CURRENT_USER&&(CURRENT_USER.role==="admin"||CURRENT_USER.role==="aprovador"));}
+function dssFmt(d){if(!d)return"—";const p=String(d).split("-");return p.length===3?`${p[2]}/${p[1]}`:d;}
+function dssDia(d){return d?parseInt(String(d).split("-")[2],10):"";}
+function dssMes3(d){return d?MESES3[parseInt(String(d).split("-")[1],10)-1]:"";}
+function dssDaysTo(d){const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(d+"T00:00")-t)/864e5);}
+function dssWhen(d){const n=dssDaysTo(d);return n<0?"já passou":n===0?"hoje":n===1?"amanhã":"em "+n+" dias";}
+function dssIni(n){return (n||"?").split(" ").slice(0,2).map(w=>w[0]||"").join("").toUpperCase();}
+
+async function renderDSS(c){
+  document.getElementById("rightPanel").style.display="none";
+  const sup=dssIsSup();
+  c.innerHTML=`
+  <div class="dss-wrap">
+    <div class="dss-hero">
+      <div class="dss-hero-ic"><svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div><div class="dss-hero-tit">Programa Mensal de DSS</div>
+      <div class="dss-hero-sub">Diálogo de Segurança e Saúde · escala de apresentações da Turma A</div></div>
+    </div>
+
+    <div class="dss-shead">
+      <h3>Próximos apresentadores</h3>
+      ${sup?`<button class="dss-btn dss-btn-primary dss-sm" id="dssEscalarBtn"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Escalar apresentador</button>`:""}
+    </div>
+    ${sup?`<div class="dss-escala" id="dssEscalaForm">
+      <div class="dss-eg">
+        <div class="dss-field"><label>Matrícula *</label><input id="dssEMat" inputmode="numeric" maxlength="10" placeholder="Ex.: 123456"/><div class="dss-lookup dss-idle" id="dssELookup">Digite a matrícula</div></div>
+        <div class="dss-field"><label>Apresentador</label><input id="dssENome" placeholder="— pela matrícula —" readonly/></div>
+        <div class="dss-field"><label>Data *</label><input id="dssEData" type="date"/></div>
+        <div class="dss-field"><label>Tema</label><input id="dssETema" placeholder="Ex.: Trabalho em altura"/></div>
+        <button class="dss-btn dss-btn-primary" id="dssESave">Confirmar escala</button>
+      </div>
+      <div class="dss-hint">Só inspetores/supervisores escalam. A matrícula busca o empregado no cadastro.</div>
+    </div>`:""}
+    <div class="dss-next" id="dssNext"></div>
+
+    <div class="dss-shead"><h3>Na agenda da turma</h3><span class="dss-count">lançado quando a DSS é verificada</span></div>
+    <div class="dss-agbox" id="dssAgenda"></div>
+
+    <div class="dss-shead"><h3>Programa do mês</h3><span class="dss-count" id="dssProgCount"></span></div>
+    <div class="dss-list" id="dssProg"></div>
+
+    <div class="dss-shead"><h3>Histórico de DSS realizadas</h3><span class="dss-count" id="dssHistCount"></span></div>
+    <div class="dss-list" id="dssHist"></div>
+  </div>`;
+
+  if(sup){
+    const form=document.getElementById("dssEscalaForm");
+    document.getElementById("dssEscalarBtn").onclick=()=>form.classList.toggle("open");
+    const matEl=document.getElementById("dssEMat");
+    matEl.addEventListener("input",dssDebouncedLookup);
+    document.getElementById("dssESave").onclick=dssEscalar;
+  }
+  await dssLoad();
+}
+
+let _dssLkTimer=null;
+function dssDebouncedLookup(){
+  clearTimeout(_dssLkTimer);
+  const lk=document.getElementById("dssELookup"),nm=document.getElementById("dssENome");
+  const mat=document.getElementById("dssEMat").value.trim();
+  DSS_LOOKUP=null;nm.value="";
+  if(!mat){lk.className="dss-lookup dss-idle";lk.textContent="Digite a matrícula";return;}
+  lk.className="dss-lookup dss-idle";lk.textContent="buscando…";
+  _dssLkTimer=setTimeout(async()=>{
+    try{
+      const r=await apiFetch("/api/dss/usuario/"+encodeURIComponent(mat));
+      if(r.ok){const u=await r.json();DSS_LOOKUP=u;nm.value=u.nome||"";lk.className="dss-lookup dss-ok";lk.textContent="✓ "+(u.funcao||"empregado");}
+      else{lk.className="dss-lookup dss-bad";lk.textContent="Matrícula não encontrada";}
+    }catch(e){lk.className="dss-lookup dss-bad";lk.textContent="Falha na busca";}
+  },300);
+}
+
+async function dssEscalar(){
+  const mat=document.getElementById("dssEMat").value.trim();
+  const data=document.getElementById("dssEData").value;
+  const tema=document.getElementById("dssETema").value.trim();
+  if(!DSS_LOOKUP){showToast("Informe uma matrícula válida");return;}
+  if(!data){showToast("Informe a data da apresentação");return;}
+  try{
+    const r=await apiFetch("/api/dss/escala",{method:"POST",body:JSON.stringify({matricula:mat,data_prevista:data,tema:tema})});
+    const d=await r.json();
+    if(r.ok&&d.ok){
+      ["dssEMat","dssEData","dssETema"].forEach(id=>document.getElementById(id).value="");
+      document.getElementById("dssENome").value="";DSS_LOOKUP=null;
+      document.getElementById("dssELookup").className="dss-lookup dss-idle";
+      document.getElementById("dssELookup").textContent="Digite a matrícula";
+      document.getElementById("dssEscalaForm").classList.remove("open");
+      showToast("Apresentador escalado ✓");await dssLoad();
+    }else{showToast(d.mensagem||"Não foi possível escalar");}
+  }catch(e){if(e.message!=="auth")showToast("Erro ao escalar");}
+}
+
+async function dssLoad(){
+  try{const r=await apiFetch("/api/dss");const d=await r.json();DSS_STATE={escala:d.escala||[],historico:d.historico||[]};}
+  catch(e){DSS_STATE={escala:[],historico:[]};}
+  dssRenderMural();
+  try{await carregarEventosCache();}catch(e){}
+  dssRenderAgenda();
+}
+
+function dssRenderMural(){
+  const sup=dssIsSup();
+  const esc=[...DSS_STATE.escala].sort((a,b)=>(a.data_prevista||"").localeCompare(b.data_prevista||""));
+  const next=esc.filter(e=>dssDaysTo(e.data_prevista)>=0).slice(0,4);
+  const nextEl=document.getElementById("dssNext");
+  if(nextEl)nextEl.innerHTML=next.length?next.map((e,i)=>{
+    const st=DSS_STATUS[e.status]||DSS_STATUS.pendente;
+    return `<div class="dss-pcard ${i===0?"first":""}">
+      <span class="dss-when">${dssWhen(e.data_prevista)}</span>
+      <span class="dss-plabel">${i===0?"PRÓXIMO":(i+1)+"º DA ESCALA"}</span>
+      <div class="dss-person"><div class="dss-av">${dssIni(e.nome)}</div><div><div class="dss-nm">${escapeHtml(e.nome||"")}</div><div class="dss-mt">Matr. ${escapeHtml(e.matricula||"")}</div></div></div>
+      <div class="dss-ptheme">Tema: <b>${escapeHtml(e.tema||"a definir")}</b> · ${dssFmt(e.data_prevista)}</div>
+      <div><span class="dss-status ${st[1]}">${st[0]}</span></div>
+      ${sup?`<div class="dss-acts"><button class="dss-btn dss-btn-primary dss-sm" onclick="dssConfirmar('${e.id}')">✓ Realizada</button><button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Remover</button></div>`:""}
+    </div>`;}).join(""):`<div class="dss-pcard"><span class="dss-plabel">Ninguém escalado ainda</span></div>`;
+
+  const prog=document.getElementById("dssProg");
+  if(prog)prog.innerHTML=esc.length?esc.map(e=>{
+    const st=DSS_STATUS[e.status]||DSS_STATUS.pendente;
+    return `<div class="dss-row">
+      <div class="dss-date"><div class="d">${dssDia(e.data_prevista)}</div><div class="m">${dssMes3(e.data_prevista)}</div></div>
+      <div class="dss-who">${escapeHtml(e.nome||"")}<small>Matr. ${escapeHtml(e.matricula||"")}</small></div>
+      <div class="dss-th">${escapeHtml(e.tema||"tema a definir")}</div>
+      <div><span class="dss-status ${st[1]}">${st[0]}</span></div>
+    </div>`;}).join(""):`<div class="dss-row" style="color:var(--muted)">Nenhuma apresentação programada.</div>`;
+  const pc=document.getElementById("dssProgCount");if(pc)pc.textContent=esc.length+" programadas";
+
+  const hist=[...DSS_STATE.historico].sort((a,b)=>(b.data_real||"").localeCompare(a.data_real||""));
+  const histEl=document.getElementById("dssHist");
+  if(histEl)histEl.innerHTML=hist.length?hist.map(x=>{
+    const atraso=x.data_prevista&&x.data_prevista!==x.data_real?` <span style="color:var(--orange,#f5a623);font-size:11px">(prev. ${dssFmt(x.data_prevista)} · atrasou)</span>`:"";
+    return `<div class="dss-row">
+      <div class="dss-date"><div class="d">${dssDia(x.data_real)}</div><div class="m">${dssMes3(x.data_real)}</div></div>
+      <div class="dss-who">${escapeHtml(x.nome||"")}<small>Matr. ${escapeHtml(x.matricula||"")}</small></div>
+      <div class="dss-th">${escapeHtml(x.tema||"")}${atraso}</div>
+      <div><span class="dss-status dss-s-done">Apresentado</span></div>
+    </div>`;}).join(""):`<div class="dss-row" style="color:var(--muted)">Nenhuma DSS realizada ainda.</div>`;
+  const hc=document.getElementById("dssHistCount");if(hc)hc.textContent=hist.length+" realizadas";
+}
+
+function dssRenderAgenda(){
+  const el=document.getElementById("dssAgenda");if(!el)return;
+  const evs=(EVENTOS_CACHE||[]).filter(e=>e.tipo==="dss").sort((a,b)=>(b.data||"").localeCompare(a.data||"")).slice(0,6);
+  el.innerHTML=evs.length?evs.map(e=>`<div class="dss-agrow"><span class="dss-agdot"></span><span class="dss-agdate">${dssFmt(e.data)}</span><span class="dss-agtit">${escapeHtml(e.titulo||"")}</span><span class="dss-agtag">DSS</span></div>`).join(""):`<div class="dss-agrow" style="color:var(--muted)">Nenhum lançamento ainda.</div>`;
+}
+
+window.dssConfirmar=async function(id){
+  if(!confirm("Confirmar que a DSS foi apresentada?\nMarca como verificada (data de hoje) e lança na agenda da turma."))return;
+  try{
+    const r=await apiFetch("/api/dss/"+id+"/confirmar",{method:"POST"});
+    const d=await r.json();
+    if(r.ok&&d.ok){showToast("✓ Verificado · lançado na agenda");await dssLoad();}
+    else showToast(d.mensagem||"Não foi possível confirmar");
+  }catch(e){if(e.message!=="auth")showToast("Erro ao confirmar");}
+};
+window.dssRemover=async function(id){
+  if(!confirm("Remover este apresentador da escala?"))return;
+  try{
+    const r=await apiFetch("/api/dss/escala/"+id,{method:"DELETE"});
+    if(r.ok){showToast("Removido da escala");await dssLoad();}
+    else showToast("Não foi possível remover");
+  }catch(e){if(e.message!=="auth")showToast("Erro ao remover");}
+};
+
 async function renderEventos(c){
   c.innerHTML=`<div class="pg-head"><div class="pg-tit">📋 MURAL DA TURMA</div><button id="evNew" class="btn-primary">+ NOVO POST</button></div>${renderMuralFilterBar()}<div class="pg-body" id="evBody"><div style="color:var(--muted)">Carregando...</div></div>`;
   document.getElementById("evNew").onclick=()=>openEventoForm();
@@ -2118,12 +2288,12 @@ async function openAdmin(){
 function setSection(sec){
   S.section=sec;
   document.querySelectorAll(".mp-item[data-sec]").forEach(b=>b.classList.toggle("active",b.dataset.sec===sec));
-  ["sec-calendario","sec-eventos","sec-pessoais","sec-diario","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+  ["sec-calendario","sec-eventos","sec-dss","sec-pessoais","sec-diario","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
   document.body.classList.add("sec-"+sec);
   render();
 }
 S.section=S.section||"calendario";
-["sec-calendario","sec-eventos","sec-pessoais","sec-diario","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
+["sec-calendario","sec-eventos","sec-dss","sec-pessoais","sec-diario","sec-chat","sec-acervo","sec-viriato","sec-setup"].forEach(c=>document.body.classList.remove(c));
 document.body.classList.add("sec-"+S.section);
 // Menu ⋮ wiring
 (function(){
