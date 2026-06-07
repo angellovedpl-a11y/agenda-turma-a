@@ -744,10 +744,18 @@ body.banner-visible .viriato-fab{display:none}
 
 /* ===================== MODULO DSS ===================== */
 .dss-wrap{max-width:1180px;margin:0 auto;padding:20px}
-.dss-hero{display:flex;align-items:center;gap:16px;border:1px solid var(--border);border-left:4px solid var(--orange);border-radius:16px;padding:18px 22px;margin-bottom:22px;background:linear-gradient(100deg,var(--orange-soft),transparent 62%),var(--card)}
-.dss-hero-ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange-soft);color:var(--orange);border:1px solid var(--orange)}
-.dss-hero-tit{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.05}
-.dss-hero-sub{color:var(--text-dim);font-size:13.5px;margin-top:3px}
+.dss-hero{display:flex;align-items:center;gap:16px;border:1px solid var(--orange);border-radius:16px;padding:20px 22px;margin-bottom:22px;color:#fff;background:linear-gradient(100deg,rgba(8,9,13,.90),rgba(8,9,13,.45)),url('/assets/dss-equipe.png');background-size:cover;background-position:center 28%}
+.dss-hero-ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange);color:#1a1205;border:1px solid var(--orange)}
+.dss-hero-tit{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.05;color:#fff}
+.dss-hero-sub{color:#d7dde6;font-size:13.5px;margin-top:3px}
+/* banner de acesso na home (calendario) */
+.dss-banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;cursor:pointer;border:1px solid var(--orange);border-radius:16px;padding:15px 18px;margin-bottom:14px;color:#fff;background:linear-gradient(90deg,rgba(8,9,13,.92),rgba(8,9,13,.50)),url('/assets/dss-equipe.png');background-size:cover;background-position:center 30%;transition:.18s}
+.dss-banner:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.dss-banner:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.dss-banner-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange);color:#1a1205}
+.dss-banner-tit{font-weight:800;font-size:clamp(15px,2vw,19px);line-height:1.1}
+.dss-banner-sub{font-size:12.5px;color:#d7dde6;margin-top:2px}
+.dss-banner-arrow{margin-left:auto;color:var(--orange);flex:0 0 auto}
 .dss-shead{display:flex;align-items:center;gap:10px;margin:0 0 12px}
 .dss-shead h3{font-size:15px;margin:0}
 .dss-count{font-size:12px;color:var(--text-mute)}

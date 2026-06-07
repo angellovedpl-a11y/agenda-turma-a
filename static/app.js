@@ -159,6 +159,14 @@ function renderMensal(){
   const legendOpen=getLegendOpen()||filterAtivo;
 
   let html=`
+    <div class="dss-banner" role="button" tabindex="0" onclick="setSection('dss')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setSection('dss')}">
+      <div class="dss-banner-ic"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="dss-banner-txt">
+        <div class="dss-banner-tit">Programa Mensal de Aderência ao DSS</div>
+        <div class="dss-banner-sub">Designar e acompanhar os apresentadores do Diálogo de Segurança</div>
+      </div>
+      <svg class="dss-banner-arrow" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
     <div class="month-bar">
       <div class="month-nav">
         <button class="nav-arrow" id="prevMes" aria-label="Mês anterior">
