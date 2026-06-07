@@ -744,18 +744,26 @@ body.banner-visible .viriato-fab{display:none}
 
 /* ===================== MODULO DSS ===================== */
 .dss-wrap{max-width:1180px;margin:0 auto;padding:20px}
-.dss-hero{display:flex;align-items:center;gap:16px;border:1px solid var(--orange);border-radius:16px;padding:20px 22px;margin-bottom:22px;color:#fff;background:linear-gradient(100deg,rgba(8,9,13,.90),rgba(8,9,13,.45)),url('/assets/dss-equipe.png');background-size:cover;background-position:center 28%}
-.dss-hero-ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange);color:#1a1205;border:1px solid var(--orange)}
-.dss-hero-tit{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.05;color:#fff}
-.dss-hero-sub{color:#d7dde6;font-size:13.5px;margin-top:3px}
-/* banner de acesso na home (calendario) */
-.dss-banner{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;cursor:pointer;border:1px solid var(--orange);border-radius:16px;padding:15px 18px;margin-bottom:14px;color:#fff;background:linear-gradient(90deg,rgba(8,9,13,.92),rgba(8,9,13,.50)),url('/assets/dss-equipe.png');background-size:cover;background-position:center 30%;transition:.18s}
-.dss-banner:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.dss-hero{display:flex;align-items:center;gap:16px;border:1px solid var(--border);border-left:4px solid var(--orange);border-radius:16px;padding:18px 22px;margin-bottom:22px;background:linear-gradient(100deg,var(--orange-soft),transparent 62%),var(--card)}
+.dss-hero-ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange-soft);color:var(--orange);border:1px solid var(--orange)}
+.dss-hero-tit{font-size:clamp(20px,2.6vw,28px);font-weight:800;line-height:1.05;color:var(--text)}
+.dss-hero-sub{color:var(--text-dim);font-size:13.5px;margin-top:3px}
+/* banner de acesso na home (calendario) — em harmonia com claro/escuro */
+.dss-banner{display:flex;align-items:center;gap:14px;cursor:pointer;border:1px solid var(--border);border-left:4px solid var(--orange);border-radius:16px;padding:15px 18px;margin-bottom:14px;background:linear-gradient(100deg,var(--orange-soft),transparent 60%),var(--card);color:var(--text);transition:.18s}
+.dss-banner:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:0 12px 26px -18px var(--orange)}
 .dss-banner:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
-.dss-banner-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange);color:#1a1205}
-.dss-banner-tit{font-weight:800;font-size:clamp(15px,2vw,19px);line-height:1.1}
-.dss-banner-sub{font-size:12.5px;color:#d7dde6;margin-top:2px}
-.dss-banner-arrow{margin-left:auto;color:var(--orange);flex:0 0 auto}
+.dss-banner-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;background:var(--orange-soft);color:var(--orange);border:1px solid var(--orange)}
+.dss-banner-tit{font-weight:800;font-size:clamp(15px,2vw,19px);line-height:1.1;color:var(--text)}
+.dss-banner-sub{font-size:12.5px;color:var(--text-dim);margin-top:2px}
+.dss-banner-txt{flex:1;min-width:0}
+.dss-banner-img{width:124px;height:58px;object-fit:cover;object-position:center 22%;border-radius:10px;border:1px solid var(--border);flex:0 0 auto}
+.dss-banner-arrow{margin-left:6px;color:var(--orange);flex:0 0 auto}
+@media (max-width:600px){
+  .dss-banner{gap:11px;padding:13px 14px}
+  .dss-banner-ic{width:38px;height:38px}
+  .dss-banner-img{width:78px;height:50px}
+  .dss-banner-arrow{display:none}
+}
 .dss-shead{display:flex;align-items:center;gap:10px;margin:0 0 12px}
 .dss-shead h3{font-size:15px;margin:0}
 .dss-count{font-size:12px;color:var(--text-mute)}

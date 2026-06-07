@@ -165,6 +165,7 @@ function renderMensal(){
         <div class="dss-banner-tit">Programa Mensal de Aderência ao DSS</div>
         <div class="dss-banner-sub">Designar e acompanhar os apresentadores do Diálogo de Segurança</div>
       </div>
+      <img class="dss-banner-img" src="/assets/dss-equipe.png" alt="Equipe da turma"/>
       <svg class="dss-banner-arrow" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
     <div class="month-bar">
