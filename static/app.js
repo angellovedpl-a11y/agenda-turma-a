@@ -1058,6 +1058,7 @@ let DSS_STATE={escala:[],historico:[]};
 let DSS_LOOKUP=null; // empregado resolvido no form de escalar
 const DSS_STATUS={pendente:["Pendente","dss-s-pend"],card_pronto:["Card pronto","dss-s-ready"],revisado:["Revisado","dss-s-rev"]};
 function dssIsSup(){return !!(CURRENT_USER&&(CURRENT_USER.role==="admin"||CURRENT_USER.role==="aprovador"));}
+function dssIsAdmin(){return !!(CURRENT_USER&&CURRENT_USER.role==="admin");}
 function dssFmt(d){if(!d)return"—";const p=String(d).split("-");return p.length===3?`${p[2]}/${p[1]}`:d;}
 function dssDia(d){return d?parseInt(String(d).split("-")[2],10):"";}
 function dssMes3(d){return d?MESES3[parseInt(String(d).split("-")[1],10)-1]:"";}
@@ -1067,7 +1068,7 @@ function dssIni(n){return (n||"?").split(" ").slice(0,2).map(w=>w[0]||"").join("
 
 async function renderDSS(c){
   document.getElementById("rightPanel").style.display="none";
-  const sup=dssIsSup();
+  const sup=dssIsSup(), adm=dssIsAdmin();
   c.innerHTML=`
   <div class="dss-wrap">
     <div class="dss-hero">
@@ -1078,17 +1079,20 @@ async function renderDSS(c){
 
     <div class="dss-shead">
       <h3>Próximos apresentadores</h3>
-      ${sup?`<button class="dss-btn dss-btn-primary dss-sm" id="dssEscalarBtn"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Escalar apresentador</button>`:""}
+      ${adm?`<button class="dss-btn dss-btn-primary dss-sm" id="dssEscalarBtn"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Escalar apresentador</button>`:""}
     </div>
-    ${sup?`<div class="dss-escala" id="dssEscalaForm">
+    ${adm?`<div class="dss-escala" id="dssEscalaForm">
       <div class="dss-eg">
-        <div class="dss-field"><label>Matrícula *</label><input id="dssEMat" inputmode="numeric" maxlength="10" placeholder="Ex.: 123456"/><div class="dss-lookup dss-idle" id="dssELookup">Digite a matrícula</div></div>
-        <div class="dss-field"><label>Apresentador</label><input id="dssENome" placeholder="— pela matrícula —" readonly/></div>
+        <div class="dss-field dss-search"><label>Buscar empregado *</label>
+          <input id="dssEQ" autocomplete="off" placeholder="Nome ou matrícula"/>
+          <div class="dss-results" id="dssEResults"></div>
+          <div class="dss-selected" id="dssESelected"></div>
+        </div>
         <div class="dss-field"><label>Data *</label><input id="dssEData" type="date"/></div>
         <div class="dss-field"><label>Tema</label><input id="dssETema" placeholder="Ex.: Trabalho em altura"/></div>
         <button class="dss-btn dss-btn-primary" id="dssESave">Confirmar escala</button>
       </div>
-      <div class="dss-hint">Só inspetores/supervisores escalam. A matrícula busca o empregado no cadastro.</div>
+      <div class="dss-hint">Só administradores escalam. Busque por nome ou matrícula e selecione o empregado.</div>
     </div>`:""}
     <div class="dss-next" id="dssNext"></div>
 
@@ -1102,47 +1106,50 @@ async function renderDSS(c){
     <div class="dss-list" id="dssHist"></div>
   </div>`;
 
-  if(sup){
+  if(adm){
     const form=document.getElementById("dssEscalaForm");
     document.getElementById("dssEscalarBtn").onclick=()=>form.classList.toggle("open");
-    const matEl=document.getElementById("dssEMat");
-    matEl.addEventListener("input",dssDebouncedLookup);
+    document.getElementById("dssEQ").addEventListener("input",dssDebouncedSearch);
     document.getElementById("dssESave").onclick=dssEscalar;
   }
   await dssLoad();
 }
 
-let _dssLkTimer=null;
-function dssDebouncedLookup(){
-  clearTimeout(_dssLkTimer);
-  const lk=document.getElementById("dssELookup"),nm=document.getElementById("dssENome");
-  const mat=document.getElementById("dssEMat").value.trim();
-  DSS_LOOKUP=null;nm.value="";
-  if(!mat){lk.className="dss-lookup dss-idle";lk.textContent="Digite a matrícula";return;}
-  lk.className="dss-lookup dss-idle";lk.textContent="buscando…";
-  _dssLkTimer=setTimeout(async()=>{
+let _dssSrchTimer=null;
+function dssDebouncedSearch(){
+  clearTimeout(_dssSrchTimer);
+  const q=document.getElementById("dssEQ").value.trim();
+  const box=document.getElementById("dssEResults");
+  if(q.length<2){box.innerHTML="";box.classList.remove("open");return;}
+  _dssSrchTimer=setTimeout(async()=>{
     try{
-      const r=await apiFetch("/api/dss/usuario/"+encodeURIComponent(mat));
-      if(r.ok){const u=await r.json();DSS_LOOKUP=u;nm.value=u.nome||"";lk.className="dss-lookup dss-ok";lk.textContent="✓ "+(u.funcao||"empregado");}
-      else{lk.className="dss-lookup dss-bad";lk.textContent="Matrícula não encontrada";}
-    }catch(e){lk.className="dss-lookup dss-bad";lk.textContent="Falha na busca";}
-  },300);
+      const r=await apiFetch("/api/dss/buscar?q="+encodeURIComponent(q));
+      const d=await r.json();const res=d.results||[];
+      if(!res.length){box.innerHTML='<div class="dss-res-empty">Nenhum empregado encontrado</div>';box.classList.add("open");return;}
+      box.innerHTML=res.map(u=>`<div class="dss-res" data-mat="${escapeHtml(u.matricula)}" data-nome="${escapeHtml(u.nome)}" data-func="${escapeHtml(u.funcao)}"><div class="dss-res-nm">${escapeHtml(u.nome||"(sem nome)")}</div><div class="dss-res-mt">Matr. ${escapeHtml(u.matricula)} · ${escapeHtml(u.funcao||"")}</div></div>`).join("");
+      box.classList.add("open");
+      box.querySelectorAll(".dss-res").forEach(el=>el.onclick=()=>{
+        DSS_LOOKUP={matricula:el.dataset.mat,nome:el.dataset.nome,funcao:el.dataset.func};
+        document.getElementById("dssESelected").innerHTML="✓ <b>"+escapeHtml(el.dataset.nome)+"</b> · Matr. "+escapeHtml(el.dataset.mat);
+        document.getElementById("dssEQ").value=el.dataset.nome;
+        box.innerHTML="";box.classList.remove("open");
+      });
+    }catch(e){box.innerHTML="";box.classList.remove("open");}
+  },280);
 }
 
 async function dssEscalar(){
-  const mat=document.getElementById("dssEMat").value.trim();
   const data=document.getElementById("dssEData").value;
   const tema=document.getElementById("dssETema").value.trim();
-  if(!DSS_LOOKUP){showToast("Informe uma matrícula válida");return;}
+  if(!DSS_LOOKUP||!DSS_LOOKUP.matricula){showToast("Busque e selecione um empregado");return;}
   if(!data){showToast("Informe a data da apresentação");return;}
   try{
-    const r=await apiFetch("/api/dss/escala",{method:"POST",body:JSON.stringify({matricula:mat,data_prevista:data,tema:tema})});
+    const r=await apiFetch("/api/dss/escala",{method:"POST",body:JSON.stringify({matricula:DSS_LOOKUP.matricula,data_prevista:data,tema:tema})});
     const d=await r.json();
     if(r.ok&&d.ok){
-      ["dssEMat","dssEData","dssETema"].forEach(id=>document.getElementById(id).value="");
-      document.getElementById("dssENome").value="";DSS_LOOKUP=null;
-      document.getElementById("dssELookup").className="dss-lookup dss-idle";
-      document.getElementById("dssELookup").textContent="Digite a matrícula";
+      ["dssEQ","dssEData","dssETema"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+      const sel=document.getElementById("dssESelected");if(sel)sel.innerHTML="";
+      DSS_LOOKUP=null;
       document.getElementById("dssEscalaForm").classList.remove("open");
       showToast("Apresentador escalado ✓");await dssLoad();
     }else{showToast(d.mensagem||"Não foi possível escalar");}
@@ -1158,7 +1165,7 @@ async function dssLoad(){
 }
 
 function dssRenderMural(){
-  const sup=dssIsSup();
+  const sup=dssIsSup(), adm=dssIsAdmin();
   const esc=[...DSS_STATE.escala].sort((a,b)=>(a.data_prevista||"").localeCompare(b.data_prevista||""));
   const next=esc.filter(e=>dssDaysTo(e.data_prevista)>=0).slice(0,4);
   const nextEl=document.getElementById("dssNext");
@@ -1170,7 +1177,7 @@ function dssRenderMural(){
       <div class="dss-person"><div class="dss-av">${dssIni(e.nome)}</div><div><div class="dss-nm">${escapeHtml(e.nome||"")}</div><div class="dss-mt">Matr. ${escapeHtml(e.matricula||"")}</div></div></div>
       <div class="dss-ptheme">Tema: <b>${escapeHtml(e.tema||"a definir")}</b> · ${dssFmt(e.data_prevista)}</div>
       <div><span class="dss-status ${st[1]}">${st[0]}</span></div>
-      ${sup?`<div class="dss-acts"><button class="dss-btn dss-btn-primary dss-sm" onclick="dssConfirmar('${e.id}')">✓ Realizada</button><button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Remover</button></div>`:""}
+      ${(sup||adm)?`<div class="dss-acts">${sup?`<button class="dss-btn dss-btn-primary dss-sm" onclick="dssConfirmar('${e.id}')">✓ Realizada</button>`:""}${adm?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Remover</button>`:""}</div>`:""}
     </div>`;}).join(""):`<div class="dss-pcard"><span class="dss-plabel">Ninguém escalado ainda</span></div>`;
 
   const prog=document.getElementById("dssProg");

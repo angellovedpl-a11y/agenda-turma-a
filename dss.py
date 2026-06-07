@@ -89,6 +89,23 @@ def handle_lookup(matricula):
     })
 
 
+def handle_buscar(q):
+    """GET /api/dss/buscar?q=... — busca empregados por nome OU matricula (admin)."""
+    q = (q or '').strip().lower()
+    if len(q) < 2:
+        return jsonify({'results': []})
+    users = auth.users_load() or {}
+    out = []
+    for mat, u in users.items():
+        if not isinstance(u, dict) or u.get('status') != 'aprovado':
+            continue
+        nome = u.get('nome') or ''
+        if q in mat.lower() or q in nome.lower():
+            out.append({'matricula': mat, 'nome': nome, 'funcao': u.get('funcao') or ''})
+    out.sort(key=lambda x: (x['nome'] or '').lower())
+    return jsonify({'results': out[:12]})
+
+
 # ---------------------------------------------------------------- escrita
 def handle_escalar(data, user):
     """POST /api/dss/escala — escala uma pessoa (aprovador)."""

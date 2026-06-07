@@ -2202,19 +2202,25 @@ def api_dss_get():
 
 
 @app.route('/api/dss/usuario/<matricula>', methods=['GET'])
-@auth.require_approver
+@auth.require_admin
 def api_dss_lookup(matricula):
     return dss.handle_lookup(matricula)
 
 
+@app.route('/api/dss/buscar', methods=['GET'])
+@auth.require_admin
+def api_dss_buscar():
+    return dss.handle_buscar(request.args.get('q', ''))
+
+
 @app.route('/api/dss/escala', methods=['POST'])
-@auth.require_approver
+@auth.require_admin
 def api_dss_escalar():
     return dss.handle_escalar(request.json or {}, request.current_user)
 
 
 @app.route('/api/dss/escala/<eid>', methods=['DELETE'])
-@auth.require_approver
+@auth.require_admin
 def api_dss_remover(eid):
     return dss.handle_remover(eid, request.current_user)
 
