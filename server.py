@@ -2157,6 +2157,11 @@ def api_aprovar(matricula):
 def api_negar(matricula):
     return auth.handle_negar(matricula, request.current_user)
 
+@app.route('/api/admin/banir/<matricula>', methods=['POST'])
+@auth.require_admin
+def api_banir(matricula):
+    return auth.handle_banir(matricula, request.current_user)
+
 @app.route('/api/admin/promover/<matricula>', methods=['POST'])
 @auth.require_admin
 def api_promover(matricula):

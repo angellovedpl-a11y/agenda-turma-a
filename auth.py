@@ -569,6 +569,28 @@ def handle_negar(matricula, aprovador):
     return jsonify({'ok': True, 'mensagem': 'Cadastro negado'})
 
 
+def handle_banir(matricula, admin):
+    """Bane um usuario JA APROVADO: status -> 'negado' (o login passa a bloquear,
+    e get_current_user revalida status a cada request, revogando o acesso na hora).
+    Tambem destroi as sessoes ativas. Reversivel via aprovar. So admin."""
+    users = users_load()
+    u = users.get(matricula)
+    if not u:
+        return jsonify({'error': 'Usuario nao encontrado'}), 404
+    if u.get('owner') or u.get('role') == 'admin':
+        return jsonify({'error': 'Nao e possivel banir um administrador'}), 403
+    if str(matricula) == str((admin or {}).get('matricula')):
+        return jsonify({'error': 'Voce nao pode banir a si mesmo'}), 403
+    if u.get('status') == 'negado':
+        return jsonify({'ok': True, 'mensagem': 'Usuario ja estava banido'})
+    u['status'] = 'negado'
+    u['negado_em'] = time.time()
+    u['negado_por'] = (admin or {}).get('matricula')
+    users_save(users)
+    session_destroy_all_for(matricula)  # revoga tokens ativos imediatamente
+    return jsonify({'ok': True, 'mensagem': 'Usuario banido. Acesso revogado.'})
+
+
 def handle_promover(matricula, admin):
     users = users_load()
     u = users.get(matricula)
