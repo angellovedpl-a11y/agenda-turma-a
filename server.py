@@ -2165,7 +2165,8 @@ def api_banir(matricula):
 @app.route('/api/admin/promover/<matricula>', methods=['POST'])
 @auth.require_admin
 def api_promover(matricula):
-    return auth.handle_promover(matricula, request.current_user)
+    nivel = (request.json or {}).get('nivel', 1)
+    return auth.handle_promover(matricula, request.current_user, nivel)
 
 @app.route('/api/admin/despromover/<matricula>', methods=['POST'])
 @auth.require_admin

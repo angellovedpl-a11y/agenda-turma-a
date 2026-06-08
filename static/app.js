@@ -2477,12 +2477,37 @@ async function openAdmin(){
       }else if(tab==="usu"){
         const r=await apiFetch("/api/admin/usuarios");const d=await r.json();
         const list=d.usuarios||d||[];
-        p.innerHTML=list.map(u=>`<div class="lst-item"><div style="flex:1"><div style="font-weight:600">${escapeHtml(u.nome||"")}</div><div style="font-size:12px;color:var(--muted)">Mat ${escapeHtml(u.matricula||"")} · ${u.owner?'<span style="color:var(--neon);font-weight:700">desenvolvedor 🛠️</span>':escapeHtml(u.role||"membro")}${u.status==="negado"?' · <span style="color:#ff6b6b;font-weight:700">BANIDO</span>':u.status==="pendente"?' · <span style="color:var(--orange,#f5a623)">pendente</span>':''}</div></div><div style="display:flex;gap:4px;flex-wrap:wrap">${u.owner?'':(u.role==="admin"||u.role==="aprovador")?'<button class="btn-secondary" data-act="dp" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">↓ Despromover</button>':'<button class="btn-secondary" data-act="pr" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">↑ Promover</button>'}<button class="btn-secondary" data-act="rs" data-m="${escapeHtml(u.matricula)}" style="padding:4px 8px;font-size:11px">🔑 Resetar</button>${u.status==="negado"?'<button class="btn-secondary" data-act="ap" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">♻ Reativar</button>':(u.role!=="admin"&&!u.owner&&u.matricula!==(CURRENT_USER&&CURRENT_USER.matricula)?'<button class="btn-danger" data-act="bn" data-m="'+escapeHtml(u.matricula)+'" style="padding:4px 8px;font-size:11px">🚫 Banir</button>':'')}</div></div>`).join("");
+        const myLvl=(CURRENT_USER&&CURRENT_USER.admin_level)||0;
+        const myMat=CURRENT_USER&&CURRENT_USER.matricula;
+        const canManage=(u)=>{ if(u.owner)return myLvl>=3; if((u.admin_level||0)>=1)return myLvl>=2; return myLvl>=1; };
+        const B=(act,m,txt,extra,cls)=>'<button class="'+(cls||'btn-secondary')+'" data-act="'+act+'" data-m="'+escapeHtml(m)+'"'+(extra||'')+' style="padding:4px 8px;font-size:11px">'+txt+'</button>';
+        p.innerHTML=list.map(u=>{
+          const lvl=u.admin_level||0;
+          const cargo=u.owner?'<span style="color:var(--neon);font-weight:700">desenvolvedor 🛠️</span>':(lvl>=1?('admin <b>N'+lvl+'</b>'):escapeHtml(u.role||"membro"));
+          const badge=u.status==="negado"?' · <span style="color:#ff6b6b;font-weight:700">BANIDO</span>':u.status==="pendente"?' · <span style="color:var(--orange,#f5a623)">pendente</span>':'';
+          const isSelf=u.matricula===myMat;
+          let acts='';
+          if(u.status==="negado"){
+            if(canManage(u))acts+=B('ap',u.matricula,'♻ Reativar');
+          }else if(!u.owner){
+            if(lvl===0){
+              if(myLvl>=2)acts+=B('pr',u.matricula,'↑ Admin N1',' data-nivel="1"')+B('pr',u.matricula,'↑ Admin N2',' data-nivel="2"');
+            }else if(myLvl>=2){
+              acts+=B('pr',u.matricula,lvl===2?'↓ p/ N1':'↑ p/ N2',' data-nivel="'+(lvl===2?'1':'2')+'"');
+              acts+=B('dp',u.matricula,'✕ Tirar admin');
+            }
+          }
+          if(canManage(u)||isSelf)acts+=B('rs',u.matricula,'🔑 Resetar');
+          if(!u.owner&&!isSelf&&u.status!=="negado"&&canManage(u))acts+=B('bn',u.matricula,'🚫 Banir',null,'btn-danger');
+          return '<div class="lst-item"><div style="flex:1"><div style="font-weight:600">'+escapeHtml(u.nome||"")+'</div><div style="font-size:12px;color:var(--muted)">Mat '+escapeHtml(u.matricula||"")+' · '+cargo+badge+'</div></div><div style="display:flex;gap:4px;flex-wrap:wrap">'+acts+'</div></div>';
+        }).join("");
         p.querySelectorAll("button[data-act]").forEach(b=>{
           b.onclick=async()=>{
             const ep={pr:"promover",dp:"despromover",rs:"reset-senha",bn:"banir",ap:"aprovar"}[b.dataset.act];
             if(b.dataset.act==="bn"&&!confirm("Banir este usuário? O acesso é revogado na hora (sessões derrubadas). Dá pra reativar depois."))return;
-            const r=await apiFetch("/api/admin/"+ep+"/"+encodeURIComponent(b.dataset.m),{method:"POST"});
+            const opts={method:"POST"};
+            if(b.dataset.act==="pr")opts.body=JSON.stringify({nivel:b.dataset.nivel||"1"});
+            const r=await apiFetch("/api/admin/"+ep+"/"+encodeURIComponent(b.dataset.m),opts);
             const d=await r.json();
             if(r.ok)showToast(d.mensagem||"✅ Feito");
             else showToast("❌ "+(d.error||"falhou"));

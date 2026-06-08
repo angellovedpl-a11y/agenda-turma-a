@@ -267,6 +267,32 @@ def can_approve(user) -> bool:
     return user.get('role') in ('admin', 'aprovador')
 
 
+def admin_level(u) -> int:
+    """Nivel de poder: 0=comum/aprovador, 1=admin N1, 2=admin N2, 3=desenvolvedor (owner)."""
+    if not u:
+        return 0
+    if u.get('owner'):
+        return 3
+    if u.get('role') == 'admin':
+        return 2 if u.get('admin_level') == 2 else 1
+    return 0
+
+
+def can_manage(actor, target) -> bool:
+    """Quem pode promover/despromover/banir/resetar quem.
+    - O desenvolvedor (owner) so e gerido por ele mesmo (ninguem mexe nele).
+    - Em outro admin (N1/N2): so admin N2 ou o owner.
+    - Em usuario comum: qualquer admin (N1, N2 ou owner).
+    """
+    if not actor or not target:
+        return False
+    if target.get('owner'):
+        return bool(actor.get('owner'))
+    if admin_level(target) >= 1:      # alvo e admin
+        return admin_level(actor) >= 2
+    return admin_level(actor) >= 1    # alvo comum
+
+
 def require_auth(fn):
     @wraps(fn)
     def wrapped(*a, **kw):
@@ -421,7 +447,7 @@ def handle_login(data):
     token = session_create(matricula)
     user_payload = {
         'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
-        'owner': bool(u.get('owner')),
+        'owner': bool(u.get('owner')), 'admin_level': admin_level(u),
         'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
         'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
     }
@@ -452,7 +478,7 @@ def handle_me():
         'matricula': u['matricula'],
         'nome': u.get('nome'),
         'role': u.get('role', 'user'),
-        'owner': bool(u.get('owner')),
+        'owner': bool(u.get('owner')), 'admin_level': admin_level(u),
         'pode_aprovar': can_approve(u),
         'pendentes': pendentes,
         'senha_temp': bool(u.get('senha_temp')),
@@ -535,6 +561,7 @@ def handle_listar_usuarios():
             'status': u.get('status'),
             'role': u.get('role', 'user'),
             'owner': bool(u.get('owner')),
+            'admin_level': admin_level(u),
             'criado_em': u.get('criado_em'),
             'aprovado_por': u.get('aprovado_por'),
         })
@@ -584,6 +611,8 @@ def handle_banir(matricula, admin):
         return jsonify({'error': 'Nao e possivel banir o desenvolvedor'}), 403
     if str(matricula) == str((admin or {}).get('matricula')):
         return jsonify({'error': 'Voce nao pode banir a si mesmo'}), 403
+    if not can_manage(admin, u):
+        return jsonify({'error': 'Sem permissao para banir este usuario (so admin N2 mexe em admins)'}), 403
     if u.get('status') == 'negado':
         return jsonify({'ok': True, 'mensagem': 'Usuario ja estava banido'})
     u['status'] = 'negado'
@@ -594,7 +623,7 @@ def handle_banir(matricula, admin):
     return jsonify({'ok': True, 'mensagem': 'Usuario banido. Acesso revogado.'})
 
 
-def handle_promover(matricula, admin):
+def handle_promover(matricula, admin, nivel=1):
     users = users_load()
     u = users.get(matricula)
     if not u:
@@ -603,11 +632,16 @@ def handle_promover(matricula, admin):
         return jsonify({'error': 'Usuario precisa estar aprovado primeiro'}), 400
     if u.get('owner'):
         return jsonify({'ok': True, 'mensagem': 'O desenvolvedor ja tem acesso total'})
-    if u.get('role') == 'admin':
-        return jsonify({'ok': True, 'mensagem': 'Ja e admin'})
+    # so admin N2 (ou o desenvolvedor) podem promover/definir nivel de admin
+    if admin_level(admin) < 2:
+        return jsonify({'error': 'Apenas admin Nivel 2 ou o desenvolvedor podem promover'}), 403
+    nivel = 2 if str(nivel) == '2' else 1
+    if u.get('role') == 'admin' and u.get('admin_level', 1) == nivel:
+        return jsonify({'ok': True, 'mensagem': f'Ja e admin Nivel {nivel}'})
     u['role'] = 'admin'
+    u['admin_level'] = nivel
     users_save(users)
-    return jsonify({'ok': True, 'mensagem': (u.get('nome') or 'Usuario') + ' agora e admin'})
+    return jsonify({'ok': True, 'mensagem': (u.get('nome') or 'Usuario') + f' agora e admin Nivel {nivel}'})
 
 
 def _normaliza_nome(s: str) -> str:
@@ -682,8 +716,8 @@ def handle_admin_reset_senha(matricula, admin):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Usuário não encontrado'}), 404
-    if u.get('owner') and admin.get('matricula') != matricula:
-        return jsonify({'error': 'Apenas o próprio dono pode resetar sua senha'}), 403
+    if admin.get('matricula') != matricula and not can_manage(admin, u):
+        return jsonify({'error': 'Sem permissão para resetar a senha deste usuário'}), 403
     if u.get('status') != 'aprovado':
         return jsonify({'error': 'Usuário precisa estar aprovado'}), 400
     nova = _gera_senha_temp()
@@ -706,6 +740,9 @@ def handle_despromover(matricula, admin):
         return jsonify({'error': 'Nao e possivel despromover o desenvolvedor'}), 403
     if u.get('role') not in ('admin', 'aprovador'):
         return jsonify({'error': 'Usuario nao tem cargo de admin'}), 400
+    if not can_manage(admin, u):
+        return jsonify({'error': 'Apenas admin Nivel 2 ou o desenvolvedor podem mexer em admins'}), 403
     u['role'] = 'user'
+    u.pop('admin_level', None)
     users_save(users)
     return jsonify({'ok': True, 'mensagem': 'Acesso de admin removido'})
