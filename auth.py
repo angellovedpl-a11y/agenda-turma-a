@@ -421,6 +421,7 @@ def handle_login(data):
     token = session_create(matricula)
     user_payload = {
         'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
+        'owner': bool(u.get('owner')),
         'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
         'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
     }
@@ -451,6 +452,7 @@ def handle_me():
         'matricula': u['matricula'],
         'nome': u.get('nome'),
         'role': u.get('role', 'user'),
+        'owner': bool(u.get('owner')),
         'pode_aprovar': can_approve(u),
         'pendentes': pendentes,
         'senha_temp': bool(u.get('senha_temp')),
@@ -532,6 +534,7 @@ def handle_listar_usuarios():
             'nome': u.get('nome'),
             'status': u.get('status'),
             'role': u.get('role', 'user'),
+            'owner': bool(u.get('owner')),
             'criado_em': u.get('criado_em'),
             'aprovado_por': u.get('aprovado_por'),
         })
@@ -577,8 +580,8 @@ def handle_banir(matricula, admin):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Usuario nao encontrado'}), 404
-    if u.get('owner') or u.get('role') == 'admin':
-        return jsonify({'error': 'Nao e possivel banir um administrador'}), 403
+    if u.get('owner'):
+        return jsonify({'error': 'Nao e possivel banir o desenvolvedor'}), 403
     if str(matricula) == str((admin or {}).get('matricula')):
         return jsonify({'error': 'Voce nao pode banir a si mesmo'}), 403
     if u.get('status') == 'negado':
@@ -598,16 +601,13 @@ def handle_promover(matricula, admin):
         return jsonify({'error': 'Usuario nao encontrado'}), 404
     if u.get('status') != 'aprovado':
         return jsonify({'error': 'Usuario precisa estar aprovado primeiro'}), 400
+    if u.get('owner'):
+        return jsonify({'ok': True, 'mensagem': 'O desenvolvedor ja tem acesso total'})
     if u.get('role') == 'admin':
-        return jsonify({'error': 'Ja e admin'}), 400
-    if u.get('role') == 'aprovador':
-        return jsonify({'ok': True, 'mensagem': 'Ja era aprovador'})
-    aprovadores_atuais = sum(1 for x in users.values() if x.get('role') == 'aprovador')
-    if aprovadores_atuais >= MAX_APROVADORES:
-        return jsonify({'error': f'Limite de {MAX_APROVADORES} aprovadores atingido. Despromova outro antes.'}), 400
-    u['role'] = 'aprovador'
+        return jsonify({'ok': True, 'mensagem': 'Ja e admin'})
+    u['role'] = 'admin'
     users_save(users)
-    return jsonify({'ok': True, 'mensagem': u.get('nome') + ' agora pode aprovar cadastros'})
+    return jsonify({'ok': True, 'mensagem': (u.get('nome') or 'Usuario') + ' agora e admin'})
 
 
 def _normaliza_nome(s: str) -> str:
@@ -702,10 +702,10 @@ def handle_despromover(matricula, admin):
     u = users.get(matricula)
     if not u:
         return jsonify({'error': 'Usuario nao encontrado'}), 404
-    if u.get('owner') or u.get('role') == 'admin':
-        return jsonify({'error': 'Nao e possivel despromover o admin'}), 403
-    if u.get('role') != 'aprovador':
-        return jsonify({'error': 'Usuario nao e aprovador'}), 400
+    if u.get('owner'):
+        return jsonify({'error': 'Nao e possivel despromover o desenvolvedor'}), 403
+    if u.get('role') not in ('admin', 'aprovador'):
+        return jsonify({'error': 'Usuario nao tem cargo de admin'}), 400
     u['role'] = 'user'
     users_save(users)
-    return jsonify({'ok': True, 'mensagem': 'Permissao removida'})
+    return jsonify({'ok': True, 'mensagem': 'Acesso de admin removido'})
