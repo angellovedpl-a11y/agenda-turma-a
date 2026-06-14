@@ -106,6 +106,56 @@ def handle_buscar(q):
     return jsonify({'results': out[:12]})
 
 
+# ---------------------------------------------------------------- auditoria
+def historico_de(matricula, hist=None):
+    """Registros do historico de uma matricula, mais recentes primeiro (puro)."""
+    mat = str(matricula or '').strip()
+    if hist is None:
+        hist = load_all().get('historico', [])
+    itens = [h for h in hist if str(h.get('matricula') or '').strip() == mat]
+    itens.sort(key=lambda h: h.get('data_real') or '', reverse=True)
+    return itens
+
+
+def auditar(matricula):
+    """Resumo auditavel de um empregado: quantas DSS, quando, quais temas.
+
+    Le do historico append-only (kvstore key 'dss'). Funcao pura de dominio:
+    nao toca em HTTP, devolve um dict pronto para serializar.
+    """
+    mat = str(matricula or '').strip()
+    d = load_all()
+    itens = historico_de(mat, d.get('historico', []))
+    u = _empregado(mat) or {}
+    nome = u.get('nome') or (itens[0].get('nome') if itens else '')
+    por_tema = {}
+    for h in itens:
+        tema = (h.get('tema') or 'Sem tema').strip() or 'Sem tema'
+        por_tema[tema] = por_tema.get(tema, 0) + 1
+    return {
+        'matricula': mat,
+        'nome': nome,
+        'funcao': u.get('funcao') or '',
+        'total': len(itens),
+        'por_tema': por_tema,
+        'realizacoes': [{
+            'data_real': h.get('data_real'),
+            'data_prevista': h.get('data_prevista'),
+            'tema': h.get('tema') or '',
+            'verificado_por': h.get('verificado_por'),
+            'evento_id': h.get('evento_id'),
+        } for h in itens],
+    }
+
+
+def handle_auditoria(matricula):
+    """GET /api/dss/auditoria/<matricula> — trilha auditavel do empregado."""
+    matricula = (matricula or '').strip()
+    if not MAT_RE.match(matricula):
+        return jsonify({'error': 'matricula_invalida'}), 400
+    return jsonify(auditar(matricula))
+
+
 # ---------------------------------------------------------------- escrita
 def handle_escalar(data, user):
     """POST /api/dss/escala — escala uma pessoa (aprovador)."""

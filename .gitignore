@@ -20,3 +20,4 @@ index_backup*.html
 # Lock files de instalacao lazy (kvstore, voyage)
 .kvstore_pip.lock
 .voyage_pip.lock
+graphify-out/

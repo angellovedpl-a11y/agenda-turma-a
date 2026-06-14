@@ -1056,6 +1056,9 @@ function bindMuralFilterChips(c){
 }
 // ===== MODULO DSS (Dialogo de Seguranca) =====
 let DSS_STATE={escala:[],historico:[]};
+let DSS_RZ_FILTRO="";   // filtro do painel REALIZADOS (nome ou tema)
+let DSS_RZ_PAGE=1;      // página atual do REALIZADOS
+const DSS_RZ_PP=8;      // realizadas por página
 let DSS_LOOKUP=null; // empregado resolvido no form de escalar
 let DSS_CONTAINER=null; // container da secao DSS (pra voltar do editor)
 const DSS_STATUS={pendente:["Pendente","dss-s-pend"],card_pronto:["Card pronto","dss-s-ready"],revisado:["Revisado","dss-s-rev"]};
@@ -1063,6 +1066,8 @@ function dssIsSup(){return !!(CURRENT_USER&&(CURRENT_USER.role==="admin"||CURREN
 function dssIsAdmin(){return !!(CURRENT_USER&&CURRENT_USER.role==="admin");}
 function dssIsMine(e){return !!(CURRENT_USER&&e&&String(CURRENT_USER.matricula)===String(e.matricula));}
 function dssFmt(d){if(!d)return"—";const p=String(d).split("-");return p.length===3?`${p[2]}/${p[1]}`:d;}
+function dssFmtFull(d){if(!d)return"—";const p=String(d).split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
+function dssSemAcento(s){return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
 function dssDia(d){return d?parseInt(String(d).split("-")[2],10):"";}
 function dssMes3(d){return d?MESES3[parseInt(String(d).split("-")[1],10)-1]:"";}
 function dssDaysTo(d){const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(d+"T00:00")-t)/864e5);}
@@ -1106,9 +1111,28 @@ async function renderDSS(c){
     <div class="dss-shead"><h3>Programa do mês</h3><span class="dss-count" id="dssProgCount"></span></div>
     <div class="dss-list" id="dssProg"></div>
 
-    <div class="dss-shead"><h3>Histórico de DSS realizadas</h3><span class="dss-count" id="dssHistCount"></span></div>
-    <div class="dss-list" id="dssHist"></div>
+    <div class="dss-realizados">
+      <div class="dss-rz-head">
+        <div class="dss-rz-tit"><span class="dss-rz-badge">REALIZADOS</span><span class="dss-count" id="dssHistCount"></span></div>
+        <div class="dss-rz-tools">
+          <div class="dss-rz-filtro">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="dssRzFiltro" autocomplete="off" placeholder="Filtrar por nome ou tema"/>
+          </div>
+          <button type="button" class="dss-btn dss-btn-extrato" id="dssRzExtrato" title="Baixar extrato mensal em SVG">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg> Extrato
+          </button>
+        </div>
+      </div>
+      <div class="dss-rz-table" id="dssHist"></div>
+      <div class="dss-rz-pager" id="dssRzPager"></div>
+    </div>
   </div>`;
+
+  const fIn=document.getElementById("dssRzFiltro");
+  if(fIn)fIn.addEventListener("input",()=>{DSS_RZ_FILTRO=fIn.value;DSS_RZ_PAGE=1;dssRenderRealizados();});
+  const exBtn=document.getElementById("dssRzExtrato");
+  if(exBtn)exBtn.onclick=dssExtratoSVG;
 
   if(adm){
     const form=document.getElementById("dssEscalaForm");
@@ -1195,17 +1219,122 @@ function dssRenderMural(){
     </div>`;}).join(""):`<div class="dss-row" style="color:var(--muted)">Nenhuma apresentação programada.</div>`;
   const pc=document.getElementById("dssProgCount");if(pc)pc.textContent=esc.length+" programadas";
 
-  const hist=[...DSS_STATE.historico].sort((a,b)=>(b.data_real||"").localeCompare(a.data_real||""));
-  const histEl=document.getElementById("dssHist");
-  if(histEl)histEl.innerHTML=hist.length?hist.map(x=>{
-    const atraso=x.data_prevista&&x.data_prevista!==x.data_real?` <span style="color:var(--orange,#f5a623);font-size:11px">(prev. ${dssFmt(x.data_prevista)} · atrasou)</span>`:"";
-    return `<div class="dss-row">
-      <div class="dss-date"><div class="d">${dssDia(x.data_real)}</div><div class="m">${dssMes3(x.data_real)}</div></div>
-      <div class="dss-who">${escapeHtml(x.nome||"")}<small>Matr. ${escapeHtml(x.matricula||"")}</small></div>
-      <div class="dss-th">${escapeHtml(x.tema||"")}${atraso}</div>
-      <div><span class="dss-status dss-s-done">Apresentado</span></div>
-    </div>`;}).join(""):`<div class="dss-row" style="color:var(--muted)">Nenhuma DSS realizada ainda.</div>`;
-  const hc=document.getElementById("dssHistCount");if(hc)hc.textContent=hist.length+" realizadas";
+  dssRenderRealizados();
+}
+
+// ====== Painel REALIZADOS (layout do mockup): filtro + tabela + paginação ======
+function dssHistFiltrado(){
+  const f=dssSemAcento(DSS_RZ_FILTRO.trim());
+  let hist=[...DSS_STATE.historico].sort((a,b)=>(b.data_real||"").localeCompare(a.data_real||""));
+  if(f)hist=hist.filter(x=>dssSemAcento(x.nome).includes(f)||dssSemAcento(x.tema).includes(f)||String(x.matricula||"").includes(f));
+  return hist;
+}
+
+function dssRenderRealizados(){
+  const tbl=document.getElementById("dssHist");if(!tbl)return;
+  const hist=dssHistFiltrado();
+  const total=hist.length;
+  const pages=Math.max(1,Math.ceil(total/DSS_RZ_PP));
+  if(DSS_RZ_PAGE>pages)DSS_RZ_PAGE=pages;
+  if(DSS_RZ_PAGE<1)DSS_RZ_PAGE=1;
+  const slice=hist.slice((DSS_RZ_PAGE-1)*DSS_RZ_PP,(DSS_RZ_PAGE-1)*DSS_RZ_PP+DSS_RZ_PP);
+
+  const hc=document.getElementById("dssHistCount");
+  if(hc)hc.textContent=DSS_RZ_FILTRO?`${total} de ${DSS_STATE.historico.length} realizadas`:`${total} realizadas`;
+
+  if(!slice.length){
+    tbl.innerHTML=`<div class="dss-rz-empty">${DSS_RZ_FILTRO?"Nenhum resultado para o filtro.":"Nenhuma DSS realizada ainda."}</div>`;
+  }else{
+    const head=`<div class="dss-rz-colhead"><span>NOME</span><span>DATA</span><span>TEMA</span></div>`;
+    const rows=slice.map(x=>{
+      const mat=escapeHtml(String(x.matricula||""));
+      const atraso=x.data_prevista&&x.data_prevista!==x.data_real?`<span class="dss-rz-late" title="Previsto ${dssFmt(x.data_prevista)}">atrasou</span>`:"";
+      return `<div class="dss-rz-row">
+        <button type="button" class="dss-nome" onclick="dssAuditEmpregado('${mat}')" title="Ver auditoria de ${escapeHtml(x.nome||"")}">${escapeHtml(x.nome||"(sem nome)")}</button>
+        <span class="dss-data">${dssFmtFull(x.data_real)}</span>
+        <span class="dss-tema">${escapeHtml(x.tema||"—")}${atraso}</span>
+      </div>`;
+    }).join("");
+    tbl.innerHTML=head+rows;
+  }
+
+  const pager=document.getElementById("dssRzPager");
+  if(pager)pager.innerHTML=pages<=1?"":`
+    <button type="button" class="dss-rz-pg" ${DSS_RZ_PAGE<=1?"disabled":""} onclick="dssRzNav(-1)" aria-label="Página anterior">‹</button>
+    <span class="dss-rz-pgn">PÁGINA ${DSS_RZ_PAGE} / ${pages}</span>
+    <button type="button" class="dss-rz-pg" ${DSS_RZ_PAGE>=pages?"disabled":""} onclick="dssRzNav(1)" aria-label="Próxima página">›</button>`;
+}
+
+window.dssRzNav=function(d){DSS_RZ_PAGE+=d;dssRenderRealizados();};
+
+// Auditoria por empregado: quantas DSS, quando, quais temas (lê /api/dss/auditoria)
+window.dssAuditEmpregado=async function(mat){
+  if(!mat)return;
+  openModal("Auditoria de DSS",`<div class="dss-aud-load">Carregando…</div>`,async(body)=>{
+    try{
+      const r=await apiFetch("/api/dss/auditoria/"+encodeURIComponent(mat));
+      const d=await r.json();
+      if(!r.ok){body.innerHTML=`<div class="dss-aud-empty">Não foi possível auditar.</div>`;return;}
+      const temas=Object.entries(d.por_tema||{}).sort((a,b)=>b[1]-a[1]);
+      const corpo=d.total?`
+        <div class="dss-aud-sec">Temas apresentados</div>
+        <div class="dss-aud-temas">${temas.map(([t,n])=>`<span class="dss-aud-chip">${escapeHtml(t)} <b>${n}×</b></span>`).join("")}</div>
+        <div class="dss-aud-sec">Histórico (${d.total})</div>
+        <div class="dss-aud-list">${(d.realizacoes||[]).map(x=>`<div class="dss-aud-row"><span class="dss-aud-d">${dssFmtFull(x.data_real)}</span><span class="dss-aud-t">${escapeHtml(x.tema||"—")}</span></div>`).join("")}</div>`
+        :`<div class="dss-aud-empty">Este empregado ainda não realizou nenhuma DSS.</div>`;
+      body.innerHTML=`
+        <div class="dss-aud-hd">
+          <div class="dss-aud-av">${dssIni(d.nome)}</div>
+          <div><div class="dss-aud-nm">${escapeHtml(d.nome||"(sem nome)")}</div>
+          <div class="dss-aud-mt">Matr. ${escapeHtml(d.matricula||"")}${d.funcao?" · "+escapeHtml(d.funcao):""}</div></div>
+          <div class="dss-aud-total"><b>${d.total}</b><span>DSS</span></div>
+        </div>${corpo}`;
+    }catch(e){if(e.message!=="auth")body.innerHTML=`<div class="dss-aud-empty">Erro ao carregar auditoria.</div>`;}
+  });
+};
+
+// Extrato mensal em SVG: agrupa o histórico filtrado por mês e baixa como arquivo
+function dssExtratoSVG(){
+  const hist=dssHistFiltrado();
+  if(!hist.length){showToast("Nada para exportar");return;}
+  const grupos={};
+  hist.forEach(x=>{const k=(x.data_real||"").slice(0,7)||"0000-00";(grupos[k]=grupos[k]||[]).push(x);});
+  const meses=Object.keys(grupos).sort().reverse();
+  const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  const W=820,PAD=28,headH=118,bandH=34,rowH=30;
+  const esc=s=>String(s||"").replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));
+  const hoje=new Date();
+  const dd=String(hoje.getDate()).padStart(2,"0"),mm=String(hoje.getMonth()+1).padStart(2,"0");
+  let y=headH,body="";
+  meses.forEach(k=>{
+    const[yy,mo]=k.split("-");
+    const titulo=mo!=="00"?`${(MES[(+mo)-1]||mo).toUpperCase()}/${yy}`:"SEM DATA";
+    body+=`<rect x="${PAD}" y="${y}" width="${W-2*PAD}" height="${bandH-6}" rx="7" fill="#00e676" opacity="0.16"/>`;
+    body+=`<text x="${PAD+12}" y="${y+bandH-15}" font-size="13" font-weight="700" fill="#00a850">${esc(titulo)} · ${grupos[k].length} DSS</text>`;
+    y+=bandH;
+    grupos[k].forEach((x,i)=>{
+      if(i%2===0)body+=`<rect x="${PAD}" y="${y}" width="${W-2*PAD}" height="${rowH}" fill="#0b0e14" opacity="0.04"/>`;
+      body+=`<text x="${PAD+12}" y="${y+20}" font-size="13" fill="#111827">${esc(x.nome||"")}</text>`;
+      body+=`<text x="${PAD+300}" y="${y+20}" font-size="13" fill="#4b5563">${esc(dssFmtFull(x.data_real))}</text>`;
+      body+=`<text x="${PAD+430}" y="${y+20}" font-size="13" fill="#4b5563">${esc((x.tema||"—").slice(0,48))}</text>`;
+      y+=rowH;
+    });
+    y+=10;
+  });
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${y+24}" viewBox="0 0 ${W} ${y+24}" font-family="Arial,Helvetica,sans-serif">
+    <rect width="${W}" height="${y+24}" fill="#ffffff"/>
+    <text x="${PAD}" y="46" font-size="23" font-weight="800" fill="#0b0e14">Extrato DSS — Turma A</text>
+    <text x="${PAD}" y="72" font-size="13" fill="#5a6478">Programa Mensal de Diálogo de Segurança e Saúde</text>
+    <text x="${PAD}" y="95" font-size="12" fill="#8b95a8">Gerado em ${dd}/${mm}/${hoje.getFullYear()} · ${hist.length} realizações${DSS_RZ_FILTRO?` · filtro: "${esc(DSS_RZ_FILTRO)}"`:""}</text>
+    <line x1="${PAD}" y1="${headH-14}" x2="${W-PAD}" y2="${headH-14}" stroke="#e2e8f0"/>
+    ${body}
+  </svg>`;
+  const url=URL.createObjectURL(new Blob([svg],{type:"image/svg+xml;charset=utf-8"}));
+  const a=document.createElement("a");
+  a.href=url;a.download=`extrato-dss${DSS_RZ_FILTRO?"-filtrado":""}-${hoje.getFullYear()}-${mm}-${dd}.svg`;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},100);
+  showToast("Extrato SVG baixado ✓");
 }
 
 function dssRenderAgenda(){

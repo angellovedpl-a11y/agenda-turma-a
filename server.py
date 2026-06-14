@@ -2219,6 +2219,12 @@ def api_dss_buscar():
     return dss.handle_buscar(request.args.get('q', ''))
 
 
+@app.route('/api/dss/auditoria/<matricula>', methods=['GET'])
+@auth.require_auth
+def api_dss_auditoria(matricula):
+    return dss.handle_auditoria(matricula)
+
+
 @app.route('/api/dss/escala', methods=['POST'])
 @auth.require_admin
 def api_dss_escalar():
