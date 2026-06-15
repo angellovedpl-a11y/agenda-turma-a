@@ -2226,19 +2226,21 @@ def api_dss_auditoria(matricula):
 
 
 @app.route('/api/dss/escala', methods=['POST'])
-@auth.require_admin
+@auth.require_auth
 def api_dss_escalar():
+    # self-service: a matricula vem do usuario logado, dentro do handle
     return dss.handle_escalar(request.json or {}, request.current_user)
 
 
 @app.route('/api/dss/escala/<eid>', methods=['DELETE'])
-@auth.require_admin
+@auth.require_auth
 def api_dss_remover(eid):
+    # dono cancela a propria escala (ou admin) — checado no handle
     return dss.handle_remover(eid, request.current_user)
 
 
 @app.route('/api/dss/<eid>/confirmar', methods=['POST'])
-@auth.require_approver
+@auth.require_auth
 def api_dss_confirmar(eid):
     def _mk_evento(item, data_real):
         titulo = f"DSS · {item.get('tema') or 'tema'} — {item.get('nome') or ''}".strip()

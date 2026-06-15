@@ -1,16 +1,16 @@
 """Modulo DSS (Dialogo de Seguranca e Saude) — Agenda Turma A.
 
-Programa mensal de apresentacoes de DSS da turma:
-- supervisor/aprovador escala pessoas com antecedencia (por matricula);
-- a pessoa escalada monta o card de exportacao (WhatsApp) e sobe a apresentacao;
-- supervisor confirma a realizacao no dia -> vai pro historico (auditavel)
-  e gera um evento na agenda da turma.
+Programa mensal de apresentacoes de DSS da turma (self-service):
+- a propria pessoa se escala (escolhe o dia e o tema que vai apresentar);
+- na mesma pagina ela monta o card de exportacao (WhatsApp) e sobe a apresentacao;
+- depois de apresentar, a propria pessoa marca como realizada -> vai pro
+  historico (auditavel) e gera um evento na agenda da turma.
 
 Dados ficam em kvstore na chave "dss":
     { "escala": [...], "historico": [...] }
 
 Toda escrita acontece dentro de kvstore.with_lock('dss') para evitar
-condicoes de corrida (varios supervisores mexendo ao mesmo tempo).
+condicoes de corrida (varias pessoas mexendo ao mesmo tempo).
 """
 import re
 import uuid
@@ -158,9 +158,14 @@ def handle_auditoria(matricula):
 
 # ---------------------------------------------------------------- escrita
 def handle_escalar(data, user):
-    """POST /api/dss/escala — escala uma pessoa (aprovador)."""
+    """POST /api/dss/escala — a propria pessoa se escala (self-service).
+
+    A matricula vem SEMPRE do usuario logado (nao do corpo), entao ninguem
+    escala outra pessoa. Basta escolher a data e o tema que vai apresentar.
+    """
     data = data or {}
-    matricula = (data.get('matricula') or '').strip()
+    user = user or {}
+    matricula = str(user.get('matricula') or '').strip()
     data_prevista = (data.get('data_prevista') or data.get('data') or '').strip()
     tema = (data.get('tema') or '').strip()[:120]
     descricao = (data.get('descricao') or '').strip()[:2000]
@@ -170,14 +175,14 @@ def handle_escalar(data, user):
 
     if not MAT_RE.match(matricula):
         return jsonify({'error': 'matricula_invalida',
-                        'mensagem': 'Matricula deve ter 6 a 10 digitos'}), 400
+                        'mensagem': 'Sessao invalida — entre novamente'}), 400
     if not DATE_RE.match(data_prevista):
         return jsonify({'error': 'data_invalida',
                         'mensagem': 'Informe a data (YYYY-MM-DD)'}), 400
     u = _empregado(matricula)
     if not u:
         return jsonify({'error': 'empregado_nao_encontrado',
-                        'mensagem': 'Matricula nao encontrada no cadastro'}), 404
+                        'mensagem': 'Seu cadastro nao esta aprovado'}), 404
 
     entry = {
         'id': _gid(),
@@ -195,7 +200,7 @@ def handle_escalar(data, user):
         'ppt_pdf_key': None,           # apresentacao em PDF (convertida ou o proprio pdf)
         'ppt_nome': None,              # nome original do arquivo
         'ppt_pendente': False,         # True = PPT enviado mas conversao p/ PDF pendente
-        'escalado_por': (user or {}).get('matricula'),
+        'escalado_por': matricula,     # ela mesma (self-service)
         'criado_em': _now(),
     }
     with kvstore.with_lock(KEY) as conn:
@@ -206,19 +211,21 @@ def handle_escalar(data, user):
 
 
 def handle_remover(eid, user):
-    """DELETE /api/dss/escala/<id> — remove da escala (aprovador)."""
+    """DELETE /api/dss/escala/<id> — cancela a propria escala (dono ou admin)."""
     with kvstore.with_lock(KEY) as conn:
         d = load_all(conn=conn)
-        antes = len(d['escala'])
-        d['escala'] = [x for x in d['escala'] if x.get('id') != eid]
-        if len(d['escala']) == antes:
+        item = _find(d['escala'], eid)
+        if not item:
             return jsonify({'error': 'nao_encontrado'}), 404
+        if not can_edit(item, user):   # dono OU admin
+            return jsonify({'error': 'sem_permissao'}), 403
+        d['escala'] = [x for x in d['escala'] if x.get('id') != eid]
         kvstore.save(KEY, d, conn=conn)
     return jsonify({'ok': True})
 
 
 def handle_confirmar(eid, user, create_event=None):
-    """POST /api/dss/<id>/confirmar — verifica a DSS (admin/aprovador).
+    """POST /api/dss/<id>/confirmar — marca a DSS como realizada (dono ou admin).
 
     Move a entrada da escala para o historico (append-only) usando a DATA
     REAL do clique e guarda a data prevista. Se `create_event` for passado,
@@ -229,6 +236,8 @@ def handle_confirmar(eid, user, create_event=None):
         item = _find(d['escala'], eid)
         if not item:
             return jsonify({'error': 'nao_encontrado'}), 404
+        if not can_edit(item, user):   # dono OU admin (self-service)
+            return jsonify({'error': 'sem_permissao'}), 403
 
         data_real = _today()
         evento_id = None
