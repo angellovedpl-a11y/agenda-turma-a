@@ -855,6 +855,21 @@ body.banner-visible .viriato-fab{display:none}
 .dss-rz-pg:not(:disabled):hover{border-color:var(--neon);color:var(--neon)}
 .dss-rz-pgn{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-dim)}
 
+/* ===== DSS · CTA "Sua vez de apresentar" + caixa de auto-escala ===== */
+.dss-cta{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  border:1px solid var(--orange);border-radius:16px;padding:16px 18px;margin:0 0 28px;
+  background:linear-gradient(100deg,var(--orange-soft),transparent 70%),var(--card);
+  color:var(--text);transition:.16s}
+.dss-cta:hover{box-shadow:0 0 0 1px var(--orange),0 16px 36px -22px var(--orange);transform:translateY(-1px)}
+.dss-cta-ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;
+  background:var(--orange-soft);color:var(--orange);border:1px solid var(--orange)}
+.dss-cta-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dss-cta-tx b{font-size:15px;font-weight:800;letter-spacing:.5px;color:var(--orange)}
+.dss-cta-tx small{font-size:12.5px;color:var(--text-dim)}
+.dss-cta-go{margin-left:auto;color:var(--orange);flex:0 0 auto}
+.dss-selfsched{background:var(--dss-blue-soft);border:1px solid var(--dss-blue);border-radius:12px;padding:13px 14px;margin-bottom:16px;display:flex;flex-direction:column;gap:12px}
+.dss-selfsched .dss-hint{margin:0}
+
 /* popup de auditoria do empregado */
 .dss-aud-load,.dss-aud-empty{padding:24px;text-align:center;color:var(--text-mute)}
 .dss-aud-hd{display:flex;align-items:center;gap:13px}
@@ -867,7 +882,7 @@ body.banner-visible .viriato-fab{display:none}
 .dss-aud-sec{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--text-mute);text-transform:uppercase;margin:18px 0 8px}
 .dss-aud-temas{display:flex;flex-wrap:wrap;gap:7px}
 .dss-aud-chip{font-size:12.5px;background:var(--neon-soft);color:var(--neon);border:1px solid var(--neon);border-radius:999px;padding:4px 11px}
-.dss-aud-list{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.dss-aud-list{border:1px solid var(--border);border-radius:10px;overflow-y:auto;max-height:min(46vh,300px)}
 .dss-aud-row{display:grid;grid-template-columns:100px 1fr;gap:10px;padding:9px 13px;border-top:1px solid var(--border-soft)}
 .dss-aud-row:first-child{border-top:none}
 .dss-aud-d{font-weight:700;color:var(--dss-blue);font-size:13px;font-variant-numeric:tabular-nums}

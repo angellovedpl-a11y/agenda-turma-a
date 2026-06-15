@@ -1058,11 +1058,9 @@ function bindMuralFilterChips(c){
 let DSS_STATE={escala:[],historico:[]};
 let DSS_RZ_FILTRO="";   // filtro do painel REALIZADOS (nome ou tema)
 let DSS_RZ_PAGE=1;      // página atual do REALIZADOS
-const DSS_RZ_PP=8;      // realizadas por página
-let DSS_LOOKUP=null; // empregado resolvido no form de escalar
+const DSS_RZ_PP=5;      // realizadas por página (5 últimos por padrão)
 let DSS_CONTAINER=null; // container da secao DSS (pra voltar do editor)
 const DSS_STATUS={pendente:["Pendente","dss-s-pend"],card_pronto:["Card pronto","dss-s-ready"],revisado:["Revisado","dss-s-rev"]};
-function dssIsSup(){return !!(CURRENT_USER&&(CURRENT_USER.role==="admin"||CURRENT_USER.role==="aprovador"));}
 function dssIsAdmin(){return !!(CURRENT_USER&&CURRENT_USER.role==="admin");}
 function dssIsMine(e){return !!(CURRENT_USER&&e&&String(CURRENT_USER.matricula)===String(e.matricula));}
 function dssFmt(d){if(!d)return"—";const p=String(d).split("-");return p.length===3?`${p[2]}/${p[1]}`:d;}
@@ -1077,7 +1075,6 @@ function dssIni(n){return (n||"?").split(" ").slice(0,2).map(w=>w[0]||"").join("
 async function renderDSS(c){
   document.getElementById("rightPanel").style.display="none";
   DSS_CONTAINER=c;
-  const sup=dssIsSup(), adm=dssIsAdmin();
   c.innerHTML=`
   <div class="dss-wrap">
     <div class="dss-hero">
@@ -1085,31 +1082,6 @@ async function renderDSS(c){
       <div><div class="dss-hero-tit">Programa Mensal de DSS</div>
       <div class="dss-hero-sub">Escala de apresentação da turma</div></div>
     </div>
-
-    <div class="dss-shead">
-      <h3>Próximos apresentadores</h3>
-      ${adm?`<button class="dss-btn dss-btn-primary dss-sm" id="dssEscalarBtn"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Escalar apresentador</button>`:""}
-    </div>
-    ${adm?`<div class="dss-escala" id="dssEscalaForm">
-      <div class="dss-eg">
-        <div class="dss-field dss-search"><label>Buscar empregado *</label>
-          <input id="dssEQ" autocomplete="off" placeholder="Nome ou matrícula"/>
-          <div class="dss-results" id="dssEResults"></div>
-          <div class="dss-selected" id="dssESelected"></div>
-        </div>
-        <div class="dss-field"><label>Data *</label><input id="dssEData" type="date"/></div>
-        <div class="dss-field"><label>Tema</label><input id="dssETema" placeholder="Ex.: Trabalho em altura"/></div>
-        <button class="dss-btn dss-btn-primary" id="dssESave">Confirmar escala</button>
-      </div>
-      <div class="dss-hint">Só administradores escalam. Busque por nome ou matrícula e selecione o empregado.</div>
-    </div>`:""}
-    <div class="dss-next" id="dssNext"></div>
-
-    <div class="dss-shead"><h3>Na agenda da turma</h3><span class="dss-count">lançado quando a DSS é verificada</span></div>
-    <div class="dss-agbox" id="dssAgenda"></div>
-
-    <div class="dss-shead"><h3>Programa do mês</h3><span class="dss-count" id="dssProgCount"></span></div>
-    <div class="dss-list" id="dssProg"></div>
 
     <div class="dss-realizados">
       <div class="dss-rz-head">
@@ -1127,62 +1099,43 @@ async function renderDSS(c){
       <div class="dss-rz-table" id="dssHist"></div>
       <div class="dss-rz-pager" id="dssRzPager"></div>
     </div>
+
+    <button type="button" class="dss-cta" id="dssMinhaVez">
+      <span class="dss-cta-ic"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8L13 20l-3 1-1.4-3.2"/></svg></span>
+      <span class="dss-cta-tx"><b>SUA VEZ DE APRESENTAR</b><small>Escolha o dia e o tema e monte seu card</small></span>
+      <svg class="dss-cta-go" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+
+    <div class="dss-shead"><h3>Próximos apresentadores</h3><span class="dss-count">em destaque pra turma</span></div>
+    <div class="dss-next" id="dssNext"></div>
+
+    <div class="dss-shead"><h3>Na agenda da turma</h3><span class="dss-count">lançado quando a DSS é verificada</span></div>
+    <div class="dss-agbox" id="dssAgenda"></div>
+
+    <div class="dss-shead"><h3>Programa do mês</h3><span class="dss-count" id="dssProgCount"></span></div>
+    <div class="dss-list" id="dssProg"></div>
   </div>`;
 
   const fIn=document.getElementById("dssRzFiltro");
   if(fIn)fIn.addEventListener("input",()=>{DSS_RZ_FILTRO=fIn.value;DSS_RZ_PAGE=1;dssRenderRealizados();});
   const exBtn=document.getElementById("dssRzExtrato");
   if(exBtn)exBtn.onclick=dssExtratoSVG;
+  const vezBtn=document.getElementById("dssMinhaVez");
+  if(vezBtn)vezBtn.onclick=dssNovaApresentacao;
 
-  if(adm){
-    const form=document.getElementById("dssEscalaForm");
-    document.getElementById("dssEscalarBtn").onclick=()=>form.classList.toggle("open");
-    document.getElementById("dssEQ").addEventListener("input",dssDebouncedSearch);
-    document.getElementById("dssESave").onclick=dssEscalar;
-  }
   await dssLoad();
 }
 
-let _dssSrchTimer=null;
-function dssDebouncedSearch(){
-  clearTimeout(_dssSrchTimer);
-  const q=document.getElementById("dssEQ").value.trim();
-  const box=document.getElementById("dssEResults");
-  if(q.length<2){box.innerHTML="";box.classList.remove("open");return;}
-  _dssSrchTimer=setTimeout(async()=>{
-    try{
-      const r=await apiFetch("/api/dss/buscar?q="+encodeURIComponent(q));
-      const d=await r.json();const res=d.results||[];
-      if(!res.length){box.innerHTML='<div class="dss-res-empty">Nenhum empregado encontrado</div>';box.classList.add("open");return;}
-      box.innerHTML=res.map(u=>`<div class="dss-res" data-mat="${escapeHtml(u.matricula)}" data-nome="${escapeHtml(u.nome)}" data-func="${escapeHtml(u.funcao)}"><div class="dss-res-nm">${escapeHtml(u.nome||"(sem nome)")}</div><div class="dss-res-mt">Matr. ${escapeHtml(u.matricula)} · ${escapeHtml(u.funcao||"")}</div></div>`).join("");
-      box.classList.add("open");
-      box.querySelectorAll(".dss-res").forEach(el=>el.onclick=()=>{
-        DSS_LOOKUP={matricula:el.dataset.mat,nome:el.dataset.nome,funcao:el.dataset.func};
-        document.getElementById("dssESelected").innerHTML="✓ <b>"+escapeHtml(el.dataset.nome)+"</b> · Matr. "+escapeHtml(el.dataset.mat);
-        document.getElementById("dssEQ").value=el.dataset.nome;
-        box.innerHTML="";box.classList.remove("open");
-      });
-    }catch(e){box.innerHTML="";box.classList.remove("open");}
-  },280);
-}
-
-async function dssEscalar(){
-  const data=document.getElementById("dssEData").value;
-  const tema=document.getElementById("dssETema").value.trim();
-  if(!DSS_LOOKUP||!DSS_LOOKUP.matricula){showToast("Busque e selecione um empregado");return;}
-  if(!data){showToast("Informe a data da apresentação");return;}
-  try{
-    const r=await apiFetch("/api/dss/escala",{method:"POST",body:JSON.stringify({matricula:DSS_LOOKUP.matricula,data_prevista:data,tema:tema})});
-    const d=await r.json();
-    if(r.ok&&d.ok){
-      ["dssEQ","dssEData","dssETema"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
-      const sel=document.getElementById("dssESelected");if(sel)sel.innerHTML="";
-      DSS_LOOKUP=null;
-      document.getElementById("dssEscalaForm").classList.remove("open");
-      showToast("Apresentador escalado ✓");await dssLoad();
-    }else{showToast(d.mensagem||"Não foi possível escalar");}
-  }catch(e){if(e.message!=="auth")showToast("Erro ao escalar");}
-}
+// "Sua vez de apresentar": abre o editor em modo NOVO (sem id) — a propria
+// pessoa escolhe data + tema e monta o card. A escala e criada ao salvar.
+window.dssNovaApresentacao=function(){
+  if(!CURRENT_USER||!CURRENT_USER.matricula){showToast("Entre pra se escalar");return;}
+  DSS_EDIT={id:null,matricula:CURRENT_USER.matricula,nome:CURRENT_USER.nome||"",
+            data_prevista:"",tema:"",status:"pendente",card:null,
+            card_img_key:null,ppt_key:null,ppt_pdf_key:null,ppt_pendente:false};
+  dssImgFit="contain";dssRatio="wide";dssImgURL=null;
+  dssRenderEditor();
+};
 
 async function dssLoad(){
   try{const r=await apiFetch("/api/dss");const d=await r.json();DSS_STATE={escala:d.escala||[],historico:d.historico||[]};}
@@ -1193,7 +1146,7 @@ async function dssLoad(){
 }
 
 function dssRenderMural(){
-  const sup=dssIsSup(), adm=dssIsAdmin();
+  const adm=dssIsAdmin();
   const esc=[...DSS_STATE.escala].sort((a,b)=>(a.data_prevista||"").localeCompare(b.data_prevista||""));
   const next=esc.filter(e=>dssDaysTo(e.data_prevista)>=0).slice(0,4);
   const nextEl=document.getElementById("dssNext");
@@ -1205,7 +1158,7 @@ function dssRenderMural(){
       <div class="dss-person"><div class="dss-av">${dssIni(e.nome)}</div><div><div class="dss-nm">${escapeHtml(e.nome||"")}</div><div class="dss-mt">Matr. ${escapeHtml(e.matricula||"")}</div></div></div>
       <div class="dss-ptheme">Tema: <b>${escapeHtml(e.tema||"a definir")}</b> · ${dssFmt(e.data_prevista)}</div>
       <div><span class="dss-status ${st[1]}">${st[0]}</span></div>
-      <div class="dss-acts">${(dssIsMine(e)||adm)?`<button class="dss-btn dss-btn-primary dss-sm" onclick="dssOpenCard('${e.id}')">${e.status==="pendente"?"Montar card":"Ver card"}</button>`:""}${sup?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssConfirmar('${e.id}')">✓ Realizada</button>`:""}${adm?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Remover</button>`:""}</div>
+      <div class="dss-acts">${(dssIsMine(e)||adm)?`<button class="dss-btn dss-btn-primary dss-sm" onclick="dssOpenCard('${e.id}')">${e.status==="pendente"?"Montar card":"Ver card"}</button>`:""}${(dssIsMine(e)||adm)?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssConfirmar('${e.id}')">✓ Já apresentei</button>`:""}${(dssIsMine(e)||adm)?`<button class="dss-btn dss-btn-ghost dss-sm" onclick="dssRemover('${e.id}')">Cancelar</button>`:""}</div>
     </div>`;}).join(""):`<div class="dss-pcard"><span class="dss-plabel">Ninguém escalado ainda</span></div>`;
 
   const prog=document.getElementById("dssProg");
@@ -1344,21 +1297,21 @@ function dssRenderAgenda(){
 }
 
 window.dssConfirmar=async function(id){
-  if(!confirm("Confirmar que a DSS foi apresentada?\nMarca como verificada (data de hoje) e lança na agenda da turma."))return;
+  if(!confirm("Você já apresentou esta DSS?\nVai pro histórico (data de hoje) e é lançada na agenda da turma."))return;
   try{
     const r=await apiFetch("/api/dss/"+id+"/confirmar",{method:"POST"});
     const d=await r.json();
-    if(r.ok&&d.ok){showToast("✓ Verificado · lançado na agenda");await dssLoad();}
+    if(r.ok&&d.ok){showToast("✓ Realizada · lançada na agenda");await dssLoad();}
     else showToast(d.mensagem||"Não foi possível confirmar");
   }catch(e){if(e.message!=="auth")showToast("Erro ao confirmar");}
 };
 window.dssRemover=async function(id){
-  if(!confirm("Remover este apresentador da escala?"))return;
+  if(!confirm("Cancelar esta apresentação agendada?"))return;
   try{
     const r=await apiFetch("/api/dss/escala/"+id,{method:"DELETE"});
-    if(r.ok){showToast("Removido da escala");await dssLoad();}
-    else showToast("Não foi possível remover");
-  }catch(e){if(e.message!=="auth")showToast("Erro ao remover");}
+    if(r.ok){showToast("Apresentação cancelada");await dssLoad();}
+    else showToast("Não foi possível cancelar");
+  }catch(e){if(e.message!=="auth")showToast("Erro ao cancelar");}
 };
 
 /* ===== Card de exportação (WhatsApp) — autoria manual da pessoa escalada ===== */
@@ -1390,12 +1343,18 @@ function dssCurrentCard(){
 
 function dssRenderEditor(){
   const e=DSS_EDIT, c=DSS_CONTAINER; if(!e||!c)return;
+  const isNew=!e.id;
   const card=(e.card&&typeof e.card==="object")?e.card:{};
   c.innerHTML=`
   <button class="dss-back" id="dssBack"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar ao mural</button>
-  <div class="dss-shead"><h3>Card de DSS pro grupo</h3><span class="dss-count">${escapeHtml(e.nome||"")} · ${dssFmt(e.data_prevista)}</span></div>
+  <div class="dss-shead"><h3>${isNew?"Sua vez de apresentar":"Card de DSS pro grupo"}</h3><span class="dss-count">${escapeHtml(e.nome||"")}${e.data_prevista?` · ${dssFmt(e.data_prevista)}`:""}</span></div>
   <div class="dss-gen">
     <div class="dss-panel">
+      ${isNew?`<div class="dss-selfsched">
+        <div class="dss-gfield"><label>Data da sua apresentação <span class="req">*</span></label><input id="dssSData" type="date" value="${escapeHtml(e.data_prevista||"")}"/></div>
+        <div class="dss-gfield"><label>Tema <span class="req">*</span></label><input id="dssSTema" maxlength="120" value="${escapeHtml(e.tema||"")}" placeholder="Ex.: Trabalho em altura"/></div>
+        <div class="dss-hint">Você escolhe quando vai apresentar e o tema. A imagem e a apresentação podem ser anexadas depois de salvar.</div>
+      </div>`:""}
       <div class="dss-gfield"><label>Título <span class="req">*</span></label><input id="dcT" maxlength="80" placeholder="Ex.: Uso correto de EPI"/></div>
       <div class="dss-gfield"><label>Pontos-chave (um por linha)</label><textarea id="dcB" maxlength="800" placeholder="Inspecione o EPI antes do turno&#10;Descarte itens danificados&#10;Comunique qualquer condição insegura"></textarea></div>
       <div class="dss-gfield"><label>Fala do apresentador</label><textarea id="dcF" maxlength="400" placeholder="Frase de abertura que você fala pra equipe"></textarea></div>
@@ -1408,7 +1367,7 @@ function dssRenderEditor(){
         <label class="dss-drop" for="dcPpt"><input id="dcPpt" type="file" accept=".ppt,.pptx,.pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/pdf" hidden/><span id="dcPptTxt">📊 Subir .pptx, .ppt ou .pdf</span></label>
         <div class="dss-hint">É o material que você espelha na tela. PPT/PPTX vira PDF automaticamente (até 20 MB).</div>
         <div id="dcPptActions" style="margin-top:8px"></div></div>
-      <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcSave">Salvar card</button></div>
+      <div class="dss-gactions"><button class="dss-btn dss-btn-primary" id="dcSave">${isNew?"Salvar e me escalar":"Salvar card"}</button></div>
       <div class="dss-note"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Você escreve a sua DSS e sobe a sua apresentação. O card vira um PNG pronto pra mandar no grupo do WhatsApp.</span></div>
     </div>
     <div>
@@ -1482,18 +1441,36 @@ function dssPreview(){
 }
 
 async function dssSalvarCard(){
+  const isNew=!DSS_EDIT.id;
+  // modo NOVO: cria a auto-escala (data + tema) e só então o card
+  if(isNew){
+    const dataPrev=(document.getElementById("dssSData")||{}).value||"";
+    const tema=((document.getElementById("dssSTema")||{}).value||"").trim();
+    if(!dataPrev){showToast("Escolha a data da sua apresentação");return;}
+    try{
+      const r=await apiFetch("/api/dss/escala",{method:"POST",body:JSON.stringify({data_prevista:dataPrev,tema})});
+      const d=await r.json();
+      if(!(r.ok&&d.ok&&d.item)){showToast(d.mensagem||"Não foi possível agendar");return;}
+      DSS_EDIT=d.item;   // agora tem id → libera imagem/apresentação
+    }catch(e){if(e.message!=="auth")showToast("Erro ao agendar");return;}
+  }
   const card=dssCurrentCard();
   if(!card.titulo){showToast("Dê um título pro card");return;}
   try{
     const r=await apiFetch("/api/dss/"+DSS_EDIT.id+"/card",{method:"POST",body:JSON.stringify({card})});
     const d=await r.json();
-    if(r.ok&&d.ok&&d.card){DSS_EDIT.card=d.card;DSS_EDIT.status="card_pronto";showToast("Card salvo ✓");}
+    if(r.ok&&d.ok&&d.card){
+      DSS_EDIT.card=d.card;DSS_EDIT.status="card_pronto";
+      showToast(isNew?"Agendado e card salvo ✓":"Card salvo ✓");
+      if(isNew)dssRenderEditor();   // re-render em modo edição (imagem/ppt liberados)
+    }
     else showToast(d.mensagem||"Não foi possível salvar");
   }catch(e){if(e.message!=="auth")showToast("Erro ao salvar");}
 }
 
 async function dssImgPick(ev){
   const f=ev.target.files&&ev.target.files[0];if(!f)return;
+  if(!DSS_EDIT||!DSS_EDIT.id){showToast("Salve a apresentação primeiro pra anexar a imagem");ev.target.value="";return;}
   if(!/^image\/(jpeg|png|webp)$/.test(f.type)){showToast("Use JPG, PNG ou WebP");return;}
   if(f.size>5*1024*1024){showToast("Imagem maior que 5 MB");return;}
   let dataURL;
@@ -1519,6 +1496,7 @@ function dssReadAsDataURL(file){return new Promise((res,rej)=>{const fr=new File
 /* ---- apresentacao: upload (PPT/PDF), conversao no servidor, visualizador ---- */
 async function dssPptPick(ev){
   const f=ev.target.files&&ev.target.files[0];if(!f)return;
+  if(!DSS_EDIT||!DSS_EDIT.id){showToast("Salve a apresentação primeiro pra anexar o arquivo");ev.target.value="";return;}
   const ext=(f.name.split(".").pop()||"").toLowerCase();
   if(!["ppt","pptx","pdf"].includes(ext)){showToast("Use .pptx, .ppt ou .pdf");return;}
   if(f.size>20*1024*1024){showToast("Arquivo maior que 20 MB");return;}
