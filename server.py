@@ -2207,18 +2207,6 @@ def api_dss_get():
     return dss.handle_get()
 
 
-@app.route('/api/dss/usuario/<matricula>', methods=['GET'])
-@auth.require_admin
-def api_dss_lookup(matricula):
-    return dss.handle_lookup(matricula)
-
-
-@app.route('/api/dss/buscar', methods=['GET'])
-@auth.require_admin
-def api_dss_buscar():
-    return dss.handle_buscar(request.args.get('q', ''))
-
-
 @app.route('/api/dss/auditoria/<matricula>', methods=['GET'])
 @auth.require_auth
 def api_dss_auditoria(matricula):

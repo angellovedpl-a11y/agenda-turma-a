@@ -74,38 +74,6 @@ def handle_get():
     return jsonify(load_all())
 
 
-def handle_lookup(matricula):
-    """GET /api/dss/usuario/<matricula> — resolve nome/funcao (aprovador)."""
-    matricula = (matricula or '').strip()
-    if not MAT_RE.match(matricula):
-        return jsonify({'error': 'matricula_invalida'}), 400
-    u = _empregado(matricula)
-    if not u:
-        return jsonify({'error': 'nao_encontrado'}), 404
-    return jsonify({
-        'matricula': matricula,
-        'nome': u.get('nome') or '',
-        'funcao': u.get('funcao') or '',
-    })
-
-
-def handle_buscar(q):
-    """GET /api/dss/buscar?q=... — busca empregados por nome OU matricula (admin)."""
-    q = (q or '').strip().lower()
-    if len(q) < 2:
-        return jsonify({'results': []})
-    users = auth.users_load() or {}
-    out = []
-    for mat, u in users.items():
-        if not isinstance(u, dict) or u.get('status') != 'aprovado':
-            continue
-        nome = u.get('nome') or ''
-        if q in mat.lower() or q in nome.lower():
-            out.append({'matricula': mat, 'nome': nome, 'funcao': u.get('funcao') or ''})
-    out.sort(key=lambda x: (x['nome'] or '').lower())
-    return jsonify({'results': out[:12]})
-
-
 # ---------------------------------------------------------------- auditoria
 def historico_de(matricula, hist=None):
     """Registros do historico de uma matricula, mais recentes primeiro (puro)."""
