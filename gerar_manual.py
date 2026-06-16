@@ -945,6 +945,10 @@ story.append(Paragraph(
     "pode vir de qualquer lugar — inclusive da cabine.", P))
 
 story.append(Paragraph(
+    "Ao <b>Inspetor Ronaldo Leite</b>, que contribuiu com o desenvolvimento da implantação "
+    "do <b>DSS</b> no aplicativo. Grato pelos conselhos e pela ajuda no tempo oportuno.", P))
+
+story.append(Paragraph(
     "Aos amigos que doaram tempo, ouvido e crítica construtiva ao longo do caminho:", P))
 
 amigos = ["Glória Mulato", "Geidher Aurélio", "Rafael Melo",
