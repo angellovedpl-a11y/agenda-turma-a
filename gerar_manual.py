@@ -140,7 +140,7 @@ def capa_canvas(canvas, doc):
     # selo amarelo
     canvas.setFillColor(AMARELO_VALE)
     canvas.setFont("Helvetica-Bold", 10)
-    canvas.drawCentredString(W/2, centro_y - 2.0*cm, "DE MAQUINISTA  PARA  MAQUINISTAS")
+    canvas.drawCentredString(W/2, centro_y - 2.0*cm, "MANUAL DE INSTRUÇÕES DO APLICATIVO")
 
     # 5) Rodape elegante (verde com nota de autoria)
     rodape_h = 2.5*cm
