@@ -922,7 +922,7 @@ story.append(Paragraph(
     "ninguém lembra de cor, o documento que vence sem avisar, a troca de turno que fica solta no "
     "WhatsApp, o checklist que esquecemos no fim do dia.", P))
 story.append(Paragraph(
-    "Foi um projeto feito <b>de maquinista para maquinistas</b>, sem patrocínio e sem prazo. "
+    "Foi um projeto feito <b>com dedicação para toda a turma</b>, sem patrocínio e sem prazo. "
     "Só com vontade de deixar a vida da turma um pouquinho mais organizada — e, quem sabe, "
     "servir de exemplo de que dá pra ir além do volante.", P))
 
