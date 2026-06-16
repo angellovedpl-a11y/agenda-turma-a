@@ -1119,7 +1119,7 @@ async function renderDSS(c){
   const fIn=document.getElementById("dssRzFiltro");
   if(fIn)fIn.addEventListener("input",()=>{DSS_RZ_FILTRO=fIn.value;DSS_RZ_PAGE=1;dssRenderRealizados();});
   const exBtn=document.getElementById("dssRzExtrato");
-  if(exBtn)exBtn.onclick=dssExtratoSVG;
+  if(exBtn){if(dssIsAdmin())exBtn.onclick=dssExtratoSVG;else exBtn.style.display="none";}
   const vezBtn=document.getElementById("dssMinhaVez");
   if(vezBtn)vezBtn.onclick=dssNovaApresentacao;
 
@@ -1246,8 +1246,23 @@ window.dssAuditEmpregado=async function(mat){
   });
 };
 
-// Extrato mensal em SVG: agrupa o histórico filtrado por mês e baixa como arquivo
+// Ranking de engajamento: agrega o histórico por pessoa (matricula) e ordena
+// pelo total de DSS (desc); desempate pela DSS mais recente. Conta atrasos junto.
+function dssRanking(hist){
+  const m={};
+  hist.forEach(x=>{
+    const k=String(x.matricula||x.nome||"?");
+    if(!m[k])m[k]={matricula:x.matricula,nome:x.nome,count:0,atrasos:0,ultima:""};
+    m[k].count++;
+    if(x.data_prevista&&x.data_prevista!==x.data_real)m[k].atrasos++;
+    if((x.data_real||"")>m[k].ultima)m[k].ultima=x.data_real||"";
+  });
+  return Object.values(m).sort((a,b)=>b.count-a.count||(b.ultima||"").localeCompare(a.ultima||""));
+}
+
+// Extrato mensal em SVG (somente admin): ranking de engajamento + detalhe por mês
 function dssExtratoSVG(){
+  if(!dssIsAdmin()){showToast("Apenas administradores");return;}
   const hist=dssHistFiltrado();
   if(!hist.length){showToast("Nada para exportar");return;}
   const grupos={};
@@ -1259,6 +1274,30 @@ function dssExtratoSVG(){
   const hoje=new Date();
   const dd=String(hoje.getDate()).padStart(2,"0"),mm=String(hoje.getMonth()+1).padStart(2,"0");
   let y=headH,body="";
+
+  // ===== Seção RANKING DE ENGAJAMENTO (barras horizontais, pódio top 3) =====
+  const rank=dssRanking(hist);
+  const maxC=rank.length?rank[0].count:1;
+  const xBar=PAD+232, barFull=(W-PAD-58)-xBar;
+  const medal=["#f5b301","#b8c0cc","#cd7f32"]; // ouro, prata, bronze
+  body+=`<rect x="${PAD}" y="${y}" width="${W-2*PAD}" height="${bandH-6}" rx="7" fill="#00e676" opacity="0.16"/>`;
+  body+=`<text x="${PAD+12}" y="${y+bandH-15}" font-size="13" font-weight="700" fill="#00a850">RANKING DE ENGAJAMENTO · ${rank.length} pessoas</text>`;
+  y+=bandH+4;
+  rank.forEach((r,i)=>{
+    const cor=i<3?medal[i]:"#00c46a";
+    const bw=Math.max(6,maxC?(r.count/maxC)*barFull:0);
+    if(i%2===0)body+=`<rect x="${PAD}" y="${y-4}" width="${W-2*PAD}" height="${rowH}" fill="#0b0e14" opacity="0.04"/>`;
+    body+=`<circle cx="${PAD+18}" cy="${y+10}" r="11" fill="${cor}" opacity="${i<3?1:0.25}"/>`;
+    body+=`<text x="${PAD+18}" y="${y+14}" font-size="12" font-weight="800" text-anchor="middle" fill="${i<3?"#0b0e14":"#4b5563"}">${i+1}</text>`;
+    body+=`<text x="${PAD+40}" y="${y+15}" font-size="13" font-weight="600" fill="#111827">${esc((r.nome||"").slice(0,26))}</text>`;
+    body+=`<rect x="${xBar}" y="${y+2}" width="${barFull}" height="16" rx="8" fill="#0b0e14" opacity="0.05"/>`;
+    body+=`<rect x="${xBar}" y="${y+2}" width="${bw}" height="16" rx="8" fill="${cor}"/>`;
+    const atr=r.atrasos?` (${r.atrasos} atras${r.atrasos>1?"os":"o"})`:"";
+    body+=`<text x="${xBar+bw+8}" y="${y+15}" font-size="12" font-weight="700" fill="#374151">${r.count} DSS${atr}</text>`;
+    y+=rowH;
+  });
+  y+=18;
+
   meses.forEach(k=>{
     const[yy,mo]=k.split("-");
     const titulo=mo!=="00"?`${(MES[(+mo)-1]||mo).toUpperCase()}/${yy}`:"SEM DATA";
