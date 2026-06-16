@@ -154,7 +154,7 @@ def capa_canvas(canvas, doc):
     canvas.drawCentredString(W/2, rodape_h - 1.0*cm, "Criado por Angelo Silva")
     canvas.setFont("Helvetica", 9)
     canvas.setFillColor(HexColor("#e8f4f3"))
-    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 2.5   •   Abril de 2026")
+    canvas.drawCentredString(W/2, rodape_h - 1.55*cm, "Maquinista — Turma A   •   Versão 3.4   •   Junho de 2026")
 
     canvas.restoreState()
 
@@ -184,20 +184,21 @@ story.append(Paragraph("Sumário", H1))
 sumario = [
     ("1.", "Boas-vindas", "3"),
     ("2.", "Primeiros passos: cadastro e login", "3"),
-    ("3.", "A tela inicial e o menu da Porta", "5"),
+    ("3.", "A tela inicial e o menu", "5"),
     ("4.", "A escala 2x2: como ler", "7"),
     ("5.", "Mural da Turma (com reações)", "8"),
     ("6.", "Chat — conversas e grupos da turma", "9"),
     ("7.", "Acervo (biblioteca) e anexos até 50 MB", "10"),
     ("8.", "Função na ferrovia: Operacional ou Administrativa", "11"),
     ("9.", "Checklist Pré-Jornada", "12"),
-    ("10.", "Viriato — o ajudante de bordo", "13"),
-    ("11.", "Painel do administrador", "14"),
-    ("12.", "Esqueci minha senha — e agora?", "15"),
-    ("13.", "Trocar minha senha", "15"),
-    ("14.", "Perguntas frequentes", "16"),
-    ("15.", "Glossário ferroviário rápido", "17"),
-    ("16.", "Créditos e agradecimentos", "18"),
+    ("10.", "DSS — Diálogo de Segurança e Saúde", "13"),
+    ("11.", "Viriato — o ajudante de bordo", "15"),
+    ("12.", "Painel do administrador", "17"),
+    ("13.", "Esqueci minha senha — e agora?", "19"),
+    ("14.", "Trocar minha senha", "19"),
+    ("15.", "Perguntas frequentes", "20"),
+    ("16.", "Glossário ferroviário rápido", "21"),
+    ("17.", "Créditos e agradecimentos", "22"),
 ]
 data_sum = [[n, t, p] for n, t, p in sumario]
 ts = Table(data_sum, colWidths=[1.2*cm, 13*cm, 1.5*cm])
@@ -277,16 +278,16 @@ story.append(Paragraph(
     "Na tela de entrada, toque em <b>Já tenho cadastro</b>, digite sua matrícula e sua senha "
     "de 4 dígitos. Pronto, está dentro.", P))
 
-story.append(Paragraph("2.3. O que cada item do menu faz", H2))
+story.append(Paragraph("2.3. O menu do app e o que cada item faz", H2))
 story.append(Paragraph(
-    "Na versão atual (2.5), os botões principais ficam dentro de um <b>popup que abre pelo "
-    "ícone da Porta 🚪</b> no topo da tela, ao lado do botão de tema (sol/lua). Toque na "
-    "Porta e o menu desce com estes itens:", P))
+    "Na versão atual (3.4), os botões principais ficam dentro de um <b>menu que abre pelo "
+    "ícone de menu</b> no topo da tela, ao lado do botão de tema (sol/lua). Toque nele e o "
+    "menu desce com estes itens:", P))
 def badge(label, bg, fg=white):
     s = ParagraphStyle("BG", parent=P, alignment=TA_CENTER, fontName="Helvetica-Bold",
                        fontSize=10, textColor=fg, leading=12)
     p = Paragraph("<b>"+label+"</b>", s)
-    t = Table([[p]], colWidths=[2.4*cm], rowHeights=[0.85*cm])
+    t = Table([[p]], colWidths=[2.6*cm], rowHeights=[0.85*cm])
     t.setStyle(TableStyle([
         ("BACKGROUND", (0,0), (-1,-1), bg),
         ("VALIGN", (0,0), (-1,-1), "MIDDLE"),
@@ -300,16 +301,17 @@ def badge(label, bg, fg=white):
     return t
 
 botoes = [
-    ["Item do menu (Porta 🚪)", "O que faz"],
+    ["Item do menu", "O que faz"],
     [badge("CALENDÁRIO", AZUL), "Abre o calendário com a escala 2x2 (visões mensal e anual). Tela inicial do app."],
     [badge("MURAL", HexColor("#7c3aed")), "Mural da Turma — onde a turma posta avisos, fotos e arquivos pra todos verem. Inclui reações com emoji."],
     [badge("CHAT", HexColor("#16a34a")), "Conversas privadas e grupos da turma, estilo WhatsApp. Bolinha vermelha mostra mensagens não lidas."],
     [badge("ACERVO", HexColor("#0ea5e9")), "Biblioteca de documentos (PDFs, regulamentos, manuais). É o cérebro de consulta do Viriato."],
     [badge("CONFIG.", HexColor("#64748b")), "Tema claro/escuro, alarme da jornada, auditoria, trocar senha, sair, e (para admins) o painel de aprovação."],
-    [badge("PRONTOS", HexColor("#fdb913"), black), "Atalho que abre o portal externo Sistema Prontos numa aba nova (pra fazer o teste antes da jornada)."],
     [badge("MANUAL", HexColor("#dc2626")), "Abre este manual em PDF numa aba nova, pronto pra ler ou imprimir."],
+    [badge("NOTIFICAÇÕES", HexColor("#0891b2")), "Liga ou desliga os avisos do app no seu celular (notificações push: lembrete de Prontos, novidades da turma)."],
+    [badge("PRONTOS", HexColor("#fdb913"), black), "Atalho que abre o portal externo Sistema Prontos numa aba nova (pra fazer o teste antes da jornada)."],
 ]
-tb = Table(botoes, colWidths=[3*cm, 12*cm])
+tb = Table(botoes, colWidths=[3.2*cm, 11.8*cm])
 tb.setStyle(TableStyle([
     ("BACKGROUND", (0,0), (-1,0), AZUL),
     ("TEXTCOLOR", (0,0), (-1,0), white),
@@ -324,6 +326,9 @@ tb.setStyle(TableStyle([
     ("LEFTPADDING", (1,0), (1,-1), 10),
 ]))
 story.append(tb)
+story.append(nota("A área de <b>DSS</b> (Diálogo de Segurança e Saúde) não fica neste menu: ela "
+                  "abre pelo <b>banner verde “Programa Mensal de Aderência ao DSS”</b> que aparece "
+                  "no Calendário, logo abaixo dos eventos. Veja o capítulo 10."))
 story.append(PageBreak())
 
 # 3. Tela inicial
@@ -332,18 +337,26 @@ story.append(Paragraph(
     "Logo que entra, você cai no <b>Calendário</b>. No topo ficam três coisas importantes:", P))
 story.append(li("À esquerda, a marca <b>AGENDA TURMA A — Escala 2x2</b> com o símbolo da Vale."))
 story.append(li("No meio, dois botões para alternar entre <b>MENSAL</b> e <b>ANUAL</b>."))
-story.append(li("À direita, dois ícones pequenos: <b>🌗 Tema</b> (claro/escuro) e <b>🚪 Porta</b> "
-                "(abre o menu com Calendário, Mural, Chat, Acervo, Configurações, Prontos e Manual)."))
+story.append(li("À direita, dois ícones pequenos: o <b>botão de menu</b> (abre Calendário, Mural, "
+                "Chat, Acervo, Configurações, Manual, Notificações e Prontos) e o <b>🌗 Tema</b> "
+                "(claro/escuro)."))
 story.append(Paragraph(
     "Logo abaixo do mês, aparece a caixa <b>ESTA SEMANA</b>: sete cartões pequenos (Dom a Sáb) "
     "mostrando se o dia é <b>TRAB</b> (trabalho) ou <b>FOLGA</b>. O dia de hoje vem destacado "
     "em <b>amarelo neon</b> com uma borda viva — bater o olho e já saber.", P))
 story.append(Paragraph(
-    "Mais abaixo entra o calendário do mês inteiro, depois a <b>lista de eventos</b> da turma, e "
-    "por fim o <b>banner do Viriato</b> — uma faixa colorida que convida a abrir uma conversa com "
-    "o assistente. Quando o banner está visível, o trenzinho 🚂 flutuante some pra não atrapalhar.", P))
-story.append(nota("Toque em qualquer dia do calendário para abrir os detalhes daquele turno e "
-                  "adicionar uma observação (por exemplo: 'cobertura do colega João')."))
+    "Mais abaixo entra o calendário do mês inteiro, depois a <b>lista de eventos</b> da turma, o "
+    "<b>banner do DSS</b> (que abre o Programa Mensal de Diálogo de Segurança — capítulo 10) e, "
+    "por fim, o <b>banner do Viriato</b> — uma faixa colorida que convida a abrir uma conversa "
+    "com o assistente. Quando o banner do Viriato está visível, o trenzinho 🚂 flutuante some pra "
+    "não atrapalhar.", P))
+story.append(Paragraph(
+    "Ao <b>tocar em qualquer dia</b> do calendário, abre o detalhe daquele turno (Folga ou "
+    "Trabalho, feriado, eventos do dia) com <b>quatro botões</b> para registrar algo na data:", P))
+story.append(li("<b>📢 Mural</b> — cria um evento que <b>toda a turma</b> vê (capítulo 5)."))
+story.append(li("<b>🔒 Meus Eventos</b> — um evento <b>só seu</b> (lembrete pessoal, não vai pro mural)."))
+story.append(li("<b>📓 Diário</b> — uma entrada do seu <b>diário pessoal</b> daquele dia (privado)."))
+story.append(li("<b>📝 Nota</b> — uma observação rápida na data (ex.: “cobertura do colega João”)."))
 
 # 4. Escala 2x2
 story.append(Paragraph("4. A escala 2x2: como ler", H1))
@@ -386,7 +399,7 @@ story.append(PageBreak())
 # 5. Mural de Eventos
 story.append(Paragraph("5. Mural da Turma", H1))
 story.append(Paragraph(
-    "O <b>Mural</b> (item do menu da Porta 🚪) é onde a turma deixa avisos que <b>todo mundo "
+    "O <b>Mural</b> (item do menu) é onde a turma deixa avisos que <b>todo mundo "
     "precisa ver</b>: comunicados da coordenação, fotos da equipe, escalas extras, troca de turno "
     "combinada, etc. Não é conversa privada — é o quadro de avisos compartilhado.", P))
 story.append(li("Toque em <b>+ NOVO EVENTO</b> para postar uma nova mensagem com título, data, "
@@ -417,20 +430,21 @@ story.append(nota("Conversas pessoais ou em pequeno grupo não vão aqui — vã
 story.append(Paragraph("5.2. Eventos no calendário (médico, viagem, hora extra)", H2))
 story.append(Paragraph(
     "Independente do Mural, cada dia do calendário aceita os <b>eventos da turma</b>. "
-    "Toque em qualquer dia (no mês ou no calendário anual) para abrir o detalhe do dia e criar "
-    "um evento. Cada tipo tem uma <b>cor própria</b> que aparece como pontinho no calendário, "
-    "facilitando enxergar de longe o que vem pela frente:", P))
+    "Toque em qualquer dia (no mês ou no calendário anual) para abrir o detalhe do dia e, no "
+    "botão <b>📢 Mural</b>, criar um evento. Cada tipo tem uma <b>cor própria</b> que aparece como "
+    "pontinho no calendário, facilitando enxergar de longe o que vem pela frente:", P))
 story.append(li("🎂 <b>Aniversário</b> (rosa) — basta cadastrar uma vez; o app repete automaticamente todo ano 🔁."))
 story.append(li("🏥 <b>Médico</b> (vermelho) — consultas, ASO periódico, exames complementares."))
 story.append(li("✈ <b>Viagem</b> (azul) — viagens pessoais ou a serviço."))
 story.append(li("📋 <b>Compromisso</b> (verde) — reunião, treinamento, escola dos filhos, audiência."))
 story.append(li("⏰ <b>Hora Extra</b> (amarelo) — cobertura de colega, plantão extra, troca de escala."))
+story.append(li("🛡️ <b>DSS</b> (laranja) — apresentação de Diálogo de Segurança lançada na agenda quando uma DSS é confirmada (capítulo 10)."))
 story.append(li("⭐ <b>Outro</b> (cinza) — para o que não se encaixa nos demais."))
 story.append(Paragraph(
-    "Cada evento aparece direto no cartão do dia e também no <b>📋 MURAL DA TURMA</b>, "
+    "Cada evento aparece direto no cartão do dia e também no <b>📢 MURAL DA TURMA</b>, "
     "ordenado do mais novo para o mais antigo. Para apagar um evento, abra o Mural e use o "
     "botão <b>Excluir</b> ao lado dele.", P))
-story.append(nota("Você também pode pedir pro Viriato anotar pra você (veja capítulo 10.5): "
+story.append(nota("Você também pode pedir pro Viriato anotar pra você (veja capítulo 11.5): "
                   "diga <i>“anota na agenda pra turma: cobertura do João dia 26”</i> e ele cria "
                   "o evento sozinho, com a cor certa. Se disser <i>“anota pra mim”</i>, ele "
                   "guarda como lembrete pessoal e nada vai pro mural compartilhado."))
@@ -438,7 +452,7 @@ story.append(nota("Você também pode pedir pro Viriato anotar pra você (veja c
 # 6. Chat
 story.append(Paragraph("6. Chat — conversas e grupos da turma", H1))
 story.append(Paragraph(
-    "O <b>Chat</b> (ícone do balão de fala na barra lateral) funciona parecido com o WhatsApp, "
+    "O <b>Chat</b> (item do menu) funciona parecido com o WhatsApp, "
     "mas <b>dentro do app da turma</b>. Serve pra conversa privada (1 pra 1) ou em grupos pequenos "
     "(escala da semana, churrasco do mês, troca de cobertura, etc).", P))
 story.append(li("Toque em <b>+ Nova conversa</b>, escolha um colega aprovado e pronto — começa "
@@ -463,7 +477,7 @@ story.append(aviso("Não use o Chat pra avisos que <b>todos da turma</b> precisa
 # 7. Acervo
 story.append(Paragraph("7. Acervo (biblioteca) e anexos até 50 MB", H1))
 story.append(Paragraph(
-    "O <b>Acervo</b> (item do menu da Porta 🚪) é a <b>biblioteca de documentos</b> da turma. "
+    "O <b>Acervo</b> (item do menu) é a <b>biblioteca de documentos</b> da turma. "
     "É também o <b>cérebro de consulta do Viriato</b>: tudo que você anexa aqui, ele pode ler e "
     "usar pra responder perguntas.", P))
 story.append(li("<b>📎 Anexar documento</b> — para arquivos <b>permanentes</b>: regulamentos, "
@@ -525,7 +539,7 @@ story.append(aviso("Quem é da Função Operacional <b>não pode esquecer dos Pr
                    "mas a responsabilidade de fazer o teste antes de assumir a jornada continua sendo "
                    "sua. Banner laranja no topo = teste pendente."))
 
-# 7. Checklist
+# 9. Checklist
 story.append(Paragraph("9. Checklist Pré-Jornada", H1))
 story.append(Paragraph(
     "Toque no ícone da <b>prancheta 📋</b> no topo da tela para abrir o <b>Checklist</b>. "
@@ -542,15 +556,91 @@ story.append(nota("Os itens Prontos 1 e Prontos 2 só aparecem para quem se cada
                   "Os itens extras que você adicionar ficam salvos no seu celular."))
 story.append(PageBreak())
 
-# 8. Viriato
-story.append(Paragraph("10. Viriato — o ajudante de bordo", H1))
+# 10. DSS — Dialogo de Seguranca e Saude
+story.append(Paragraph("10. DSS — Diálogo de Segurança e Saúde", H1))
+story.append(Paragraph(
+    "O <b>DSS</b> é o <b>Programa Mensal de Diálogo de Segurança e Saúde</b> da turma: a escala "
+    "de quem vai apresentar o diálogo de segurança e o registro de quem já apresentou. Funciona "
+    "em <b>self-service</b> — cada um se escala, monta o próprio card e, depois de apresentar, "
+    "marca como realizado. Tudo fica registrado para a turma e para o administrador acompanharem.", P))
+
+story.append(Paragraph("10.1. Como abrir o DSS", H2))
+story.append(Paragraph(
+    "A área de DSS <b>não fica no menu</b>. Ela abre pelo <b>banner verde “Programa Mensal de "
+    "Aderência ao DSS”</b> que aparece no <b>Calendário</b>, logo abaixo da lista de eventos. "
+    "Role um pouco a tela e toque no banner.", P))
+
+story.append(Paragraph("10.2. O que tem na tela do DSS", H2))
+story.append(li("<b>REALIZADOS</b> (no topo) — lista de quem já apresentou, do mais recente para "
+                "o mais antigo, com <b>filtro</b> (por nome, tema ou matrícula) e <b>paginação de "
+                "5 por página</b>. Mostra também o contador de quantas DSS já foram realizadas."))
+story.append(li("<b>SUA VEZ DE APRESENTAR</b> — o botão para você se escalar."))
+story.append(li("<b>Próximos apresentadores</b> — cards em destaque com os próximos da escala."))
+story.append(li("<b>Na agenda da turma</b> — quando uma DSS é confirmada, ela vira um evento na "
+                "agenda (aparece no calendário com a cor laranja do DSS)."))
+story.append(li("<b>Programa do mês</b> — a lista completa das apresentações programadas."))
+
+story.append(Paragraph("10.3. Me escalar (self-service)", H2))
+story.append(Paragraph(
+    "Toque em <b>SUA VEZ DE APRESENTAR</b>, escolha a <b>data</b> e o <b>tema</b> que você vai "
+    "apresentar e salve. Você só escala <b>você mesmo</b> — a matrícula vem sempre do seu login, "
+    "então ninguém escala outra pessoa no seu lugar. A escala nasce com status <b>Pendente</b>; "
+    "quando você monta o card, passa para <b>Card pronto</b>.", P))
+
+story.append(Paragraph("10.4. Montar o card de exportação (WhatsApp)", H2))
+story.append(Paragraph(
+    "No seu card, toque em <b>Montar card</b> para escrever o conteúdo do seu diálogo. Você "
+    "preenche, do seu jeito:", P))
+story.append(li("<b>Título</b> do diálogo (até 80 caracteres)."))
+story.append(li("Até <b>5 tópicos</b> (bullets) com os pontos principais."))
+story.append(li("Uma <b>fala</b> de abertura e uma <b>pergunta</b> para puxar a conversa com a turma."))
+story.append(li("O <b>tom</b> da apresentação: <b>Direto</b>, <b>Educativo</b>, <b>Alerta</b> ou "
+                "<b>Motivacional</b>."))
+story.append(Paragraph(
+    "Dá ainda para anexar uma <b>imagem do card</b> (pronta para mandar no WhatsApp) e enviar a "
+    "<b>apresentação</b> (PPT, PPTX ou PDF). O upload da apresentação é <b>só do dono</b> da "
+    "escala — cada um sobe a sua.", P))
+
+story.append(Paragraph("10.5. “Já apresentei” e “Cancelar”", H2))
+story.append(li("<b>✓ Já apresentei</b> — depois de apresentar, toque aqui. A DSS sai da escala, "
+                "entra no <b>histórico</b> com a <b>data real</b> da apresentação e vira um "
+                "<b>evento na agenda da turma</b>."))
+story.append(li("<b>Cancelar</b> — remove a sua escala. Só o <b>dono</b> (ou um admin) pode "
+                "cancelar ou confirmar uma DSS."))
+story.append(nota("O histórico é <b>append-only</b> (só cresce, nunca apaga): é a trilha de "
+                  "auditoria do programa. Por isso dá pra confiar nos números do REALIZADOS e do "
+                  "extrato."))
+
+story.append(Paragraph("10.6. Auditoria por empregado", H2))
+story.append(Paragraph(
+    "No painel REALIZADOS, <b>toque no nome</b> de quem apresentou para abrir a <b>auditoria</b> "
+    "daquela pessoa: o <b>total de DSS</b> que ela já fez, os <b>temas apresentados</b> (com "
+    "quantas vezes cada um) e o <b>histórico</b> de datas. Quando a data real foi diferente da "
+    "data que estava prevista, aparece o selo <b>“atrasou”</b>.", P))
+
+story.append(Paragraph("10.7. Extrato em SVG e Ranking de Engajamento (só admin)", H2))
+story.append(Paragraph(
+    "O botão <b>Extrato</b> aparece <b>apenas para administradores</b>. Ele baixa um arquivo "
+    "<b>SVG</b> (próprio para imprimir ou anexar) com duas partes:", P))
+story.append(li("<b>Ranking de Engajamento</b> — barras horizontais, do <b>mais</b> ao "
+                "<b>menos engajado</b>, com pódio dos <b>3 primeiros</b> (ouro, prata e bronze), "
+                "o <b>total de DSS</b> de cada pessoa e a indicação de atrasos."))
+story.append(li("<b>Detalhe por mês</b> — todas as apresentações agrupadas por mês, com nome, "
+                "data e tema."))
+story.append(Paragraph(
+    "O extrato respeita o <b>filtro</b> que estiver ativo no painel REALIZADOS: se você filtrar "
+    "por um tema, o extrato sai só com aquele recorte (e o arquivo vem marcado como “filtrado”).", P))
+story.append(PageBreak())
+
+# 11. Viriato
+story.append(Paragraph("11. Viriato — o ajudante de bordo", H1))
 story.append(Paragraph(
     "O <b>Viriato</b> é um agente inteligente <b>criado pelo Angelo Silva</b> "
     "especialmente para esta agenda. Não é um chatbot genérico copiado da internet: ele foi "
     "moldado com a linguagem da turma, com o jeito ferroviário de falar e com o conhecimento "
     "da rotina 2x2.", P))
 
-story.append(Paragraph("10.1. Como abrir o Viriato", H2))
+story.append(Paragraph("11.1. Como abrir o Viriato", H2))
 story.append(Paragraph(
     "O Viriato aparece em três lugares — o caminho que estiver mais à mão:", P))
 story.append(li("<b>Banner colorido no Calendário</b> (faixa roxa-verde abaixo dos eventos): "
@@ -562,7 +652,7 @@ story.append(li("<b>Trenzinho flutuante 🚂</b> no canto inferior direito: arra
 story.append(li("<b>Janelinha pop-up</b>: tocar no trenzinho abre uma janela menor por cima da "
                 "tela, sem precisar sair de onde você está."))
 
-story.append(Paragraph("10.2. Como conversar com ele", H2))
+story.append(Paragraph("11.2. Como conversar com ele", H2))
 story.append(Paragraph(
     "Pode perguntar qualquer coisa em português comum, por exemplo:", P))
 story.append(li("<i>“Quando é minha próxima folga?”</i>"))
@@ -576,16 +666,16 @@ story.append(Paragraph(
 story.append(nota("O Viriato não inventa: se ele não souber, vai dizer que não sabe e sugerir falar "
                   "com o Angelo."))
 
-story.append(Paragraph("10.3. O Viriato precisa de internet", H2))
+story.append(Paragraph("11.3. O Viriato precisa de internet", H2))
 story.append(Paragraph(
     "O resto do app (escala, eventos, checklist, mural) funciona offline. O Viriato precisa "
     "de internet porque conversa com um servidor de inteligência artificial na nuvem. Sem sinal, "
     "ele fica em silêncio até a conexão voltar — o restante do app continua normal.", P))
 
-story.append(Paragraph("10.4. Quero que o Viriato leia um documento meu", H2))
+story.append(Paragraph("11.4. Quero que o Viriato leia um documento meu", H2))
 story.append(Paragraph(
     "O chat do Viriato hoje não tem botão de anexar arquivo. O caminho correto é:", P))
-story.append(li("Abra o <b>Acervo</b> (item Acervo no menu da Porta 🚪)."))
+story.append(li("Abra o <b>Acervo</b> (item Acervo no menu)."))
 story.append(li("Toque em <b>📎 Anexar documento</b> e escolha o arquivo (PDF, DOCX, PPTX, TXT)."))
 story.append(li("Espere processar (alguns segundos). Pronto: o Viriato passa a poder consultar "
                 "esse conteúdo nas próximas perguntas."))
@@ -593,7 +683,7 @@ story.append(aviso("Imagens soltas (JPG/PNG) <b>não</b> são lidas. Se for uma 
                    "como PDF antes de subir — assim o OCR é acionado automaticamente. Detalhes na "
                    "tabela do capítulo 7.1."))
 
-story.append(Paragraph("10.5. Pedindo pro Viriato anotar na agenda", H2))
+story.append(Paragraph("11.5. Pedindo pro Viriato anotar na agenda", H2))
 story.append(Paragraph(
     "O Viriato sabe criar evento na agenda direto pela conversa. O critério é <b>literal</b> "
     "e foi pensado pra não gerar confusão entre lembrete pessoal e mural da turma:", P))
@@ -606,7 +696,7 @@ story.append(li("Se você falar de qualquer outra forma (sem dizer “pra mim”
 story.append(nota("O Viriato escolhe a cor sozinho com base no que você disse (consulta = "
                   "vermelho, viagem = azul, HE = amarelo, etc.) — você não precisa indicar."))
 
-story.append(Paragraph("10.6. Memória pessoal e fatos da turma", H2))
+story.append(Paragraph("11.6. Memória pessoal e fatos da turma", H2))
 story.append(Paragraph(
     "O Viriato tem dois tipos de memória que ele vai criando ao longo das conversas:", P))
 story.append(li("<b>Memória pessoal</b> — coisas que só dizem respeito a você (preferência, "
@@ -618,7 +708,7 @@ story.append(Paragraph(
     "de aprovação</b> que o admin libera — assim não polui o conhecimento da turma com "
     "dados errados. Quando é o admin que pede, vai direto.", P))
 
-story.append(Paragraph("10.7. Modo deliberativo (segurança e operação)", H2))
+story.append(Paragraph("11.7. Modo deliberativo (segurança e operação)", H2))
 story.append(Paragraph(
     "Quando você faz uma pergunta sobre <b>segurança</b>, <b>norma operacional</b>, <b>freios</b>, "
     "<b>pressões</b>, <b>L201/L030</b>, <b>manobra</b>, <b>AMV</b>, etc., o Viriato muda de modo "
@@ -630,7 +720,7 @@ story.append(nota("Cada pergunta crítica fica registrada num log auditável que
                   "Isso permite descobrir quais assuntos a turma mais consulta e quais regras "
                   "técnicas ainda faltam ser cadastradas."))
 
-story.append(Paragraph("10.8. Instalando o app na tela inicial do celular", H2))
+story.append(Paragraph("11.8. Instalando o app na tela inicial do celular", H2))
 story.append(Paragraph(
     "O app pode ser <b>instalado na tela inicial</b> (vira ícone igual a um aplicativo nativo, "
     "preto com a letra A amarela) e roda em <b>tela cheia</b>, sem a barra de endereço do "
@@ -642,13 +732,13 @@ story.append(li("<b>iPhone (Safari):</b> abra o app, toque no botão de comparti
 story.append(nota("Depois de instalado, o app abre como qualquer outro do celular — sem barra "
                   "de endereço, em tela inteira, com o ícone preto e amarelo da turma."))
 
-# 9. Painel admin
-story.append(Paragraph("11. Painel do administrador", H1))
+# 12. Painel admin
+story.append(Paragraph("12. Painel do administrador", H1))
 story.append(Paragraph(
     "Esta seção interessa <b>apenas às 4 pessoas habilitadas</b> da turma: o "
     "<b>administrador principal</b> (Angelo Silva) e até <b>3 aprovadores</b> indicados por "
     "ele. Somente estes 4 podem aprovar novos usuários — ninguém mais.", P))
-story.append(Paragraph("11.1. O que essas 4 pessoas podem fazer", H2))
+story.append(Paragraph("12.1. O que essas 4 pessoas podem fazer", H2))
 story.append(Paragraph(
     "O Painel administrativo abre em <b>seis abas</b>, cada uma cuidando de uma parte do app:", P))
 story.append(li("<b>⏳ Cadastros</b> — aprovar ou negar quem está pedindo acesso."))
@@ -667,7 +757,7 @@ story.append(li("<b>📋 Log Viriato</b> — auditoria das perguntas críticas (
                 "quando uma pergunta crítica é feita e <b>nenhuma regra técnica</b> está "
                 "cadastrada pra ela — sinal de que falta cadastro."))
 
-story.append(Paragraph("11.2. Aprovação de cadastros", H2))
+story.append(Paragraph("12.2. Aprovação de cadastros", H2))
 story.append(Paragraph(
     "Quando alguém se cadastra, aparece uma bolinha vermelha com o número de pendentes no botão "
     "👑. Toque, confira nome e matrícula com o crachá da pessoa, e clique em <b>Aprovar</b> ou "
@@ -675,7 +765,7 @@ story.append(Paragraph(
 story.append(aviso("Antes de aprovar, confirme pessoalmente que a matrícula bate com a pessoa. "
                    "Quem entra aqui tem acesso à escala e aos eventos da turma."))
 
-story.append(Paragraph("11.3. Cadastrando uma regra técnica", H2))
+story.append(Paragraph("12.3. Cadastrando uma regra técnica", H2))
 story.append(Paragraph(
     "Na aba <b>🧪 Regras técnicas</b> tem um pequeno formulário com cinco campos:", P))
 story.append(li("<b>Conceito</b> — nome curto da regra (ex.: <i>“Pressão de alívio L201”</i>)."))
@@ -692,8 +782,8 @@ story.append(nota("Sempre que o Viriato responder uma pergunta crítica, ele vai
                   "que estiver na regra técnica usada. Isso fecha o ciclo entre conhecimento e "
                   "responsabilidade."))
 
-# 10. Esqueci a senha
-story.append(Paragraph("12. Esqueci minha senha — e agora?", H1))
+# 13. Esqueci a senha
+story.append(Paragraph("13. Esqueci minha senha — e agora?", H1))
 story.append(Paragraph(
     "Calma, sem stress. Tem dois caminhos:", P))
 story.append(Paragraph("<b>Caminho 1 — Pelo Viriato (mais rápido):</b>", P))
@@ -708,8 +798,8 @@ story.append(li("Você entra com esse código e troca pela sua senha definitiva.
 story.append(aviso("Toda vez que sua senha for resetada ou trocada, todas as sessões antigas em "
                    "outros celulares são canceladas automaticamente. Quem estava logado é deslogado."))
 
-# 11. Trocar senha
-story.append(Paragraph("13. Trocar minha senha", H1))
+# 14. Trocar senha
+story.append(Paragraph("14. Trocar minha senha", H1))
 story.append(Paragraph(
     "A qualquer momento, dentro do app, toque no <b>🔑</b> no topo. O sistema vai pedir:", P))
 story.append(li("Sua <b>senha atual</b> (4 dígitos)"))
@@ -722,8 +812,8 @@ story.append(nota("Se aparecer um aviso laranja no topo dizendo <b>“Senha temp
                   "logo para uma senha sua de verdade."))
 story.append(PageBreak())
 
-# 12. FAQ
-story.append(Paragraph("14. Perguntas frequentes", H1))
+# 15. FAQ
+story.append(Paragraph("15. Perguntas frequentes", H1))
 faqs = [
     ("Funciona sem internet?",
      "Em parte. A escala, os eventos, os documentos e o checklist funcionam no celular mesmo sem sinal. "
@@ -733,6 +823,10 @@ faqs = [
     ("Posso instalar como aplicativo de verdade no celular?",
      "Pode. Abra no Chrome (Android) ou Safari (iPhone), toque no menu e escolha "
      "“Adicionar à tela inicial”. Vira ícone igual a qualquer app."),
+    ("Como eu apresento uma DSS pela turma?",
+     "Abra o banner <b>“Programa Mensal de Aderência ao DSS”</b> no Calendário, toque em "
+     "<b>SUA VEZ DE APRESENTAR</b>, escolha a data e o tema e monte seu card. Depois de "
+     "apresentar, toque em <b>✓ Já apresentei</b>. Passo a passo completo no capítulo 10."),
     ("Meus dados ficam onde?",
      "Os dados pessoais (cadastro, eventos seus) ficam no servidor da Turma A. "
      "Senhas são guardadas embaralhadas — nem o Angelo consegue ver a sua."),
@@ -740,10 +834,10 @@ faqs = [
      "A turma toda. As aprovações de novos cadastros ficam restritas a 4 pessoas habilitadas: "
      "o admin principal (Angelo) e até 3 aprovadores indicados por ele."),
     ("Esqueci a senha e o Angelo tá viajando, e agora?",
-     "Use o Viriato (capítulo 10, caminho 1). Ele gera uma senha temporária na hora, "
+     "Use o Viriato (capítulo 13, caminho 1). Ele gera uma senha temporária na hora, "
      "sem precisar do admin."),
     ("Posso usar o app no celular do colega?",
-     "Pode, mas lembre de sair (botão 🚪) ao terminar. Senão ele vai ver suas coisas."),
+     "Pode, mas lembre de sair (Configurações → Sair) ao terminar. Senão ele vai ver suas coisas."),
     ("Quanto custa?",
      "Nada para a turma. O Angelo banca o custo de servidor. Não tem propaganda nem cobrança."),
     ("E se eu mudar de celular?",
@@ -755,7 +849,7 @@ faqs = [
      "salve antes como <b>PDF</b> — qualquer app de scanner do celular faz isso. Aí o servidor "
      "roda OCR automático e o conteúdo passa a ser consultável. Detalhes na tabela do capítulo 7.1."),
     ("Onde encontro este manual depois?",
-     "No menu da <b>Porta 🚪</b>, item <b>📕 Manual</b>. Abre o PDF numa aba nova, dá pra ler ou imprimir."),
+     "No menu do app, item <b>📕 Manual</b>. Abre o PDF numa aba nova, dá pra ler ou imprimir."),
 ]
 for q, a in faqs:
     story.append(Paragraph("<b>" + q + "</b>", H3))
@@ -763,8 +857,8 @@ for q, a in faqs:
 
 story.append(PageBreak())
 
-# 13. Glossario
-story.append(Paragraph("15. Glossário ferroviário rápido", H1))
+# 16. Glossario
+story.append(Paragraph("16. Glossário ferroviário rápido", H1))
 gloss = [
     ["Termo", "Significado"],
     ["Bater asa", "Cometer erros bobos no dia a dia."],
@@ -777,9 +871,15 @@ gloss = [
     ["Função Administrativa", "Quem trabalha no escritório, coordenação ou suporte. Não faz Prontos."],
     ["Aprovador", "Colega indicado pelo admin para aprovar cadastros. São no máximo 3, totalizando 4 pessoas habilitadas com o admin."],
     ["Senha temporária", "Senha de 4 dígitos gerada pelo Viriato ou pelo admin, válida só até você trocar."],
+    ["DSS", "Diálogo de Segurança e Saúde. Programa mensal de apresentações da turma, em self-service: cada um se escala, monta o card e marca como realizado (capítulo 10)."],
+    ["Card de DSS", "O conteúdo do diálogo montado pela própria pessoa (título, tópicos, fala, pergunta e tom), pronto para exportar e mandar no WhatsApp."],
+    ["Extrato de DSS", "Arquivo SVG (só admin) com o ranking de engajamento e o detalhe das apresentações por mês."],
+    ["Notificações (push)", "Avisos do app direto no celular (lembrete de Prontos, novidades). Ligue ou desligue no item Notificações do menu."],
+    ["Diário", "Diário pessoal e privado por data, aberto ao tocar num dia do calendário (botão 📓 Diário)."],
+    ["Meus Eventos", "Eventos pessoais (só seus), criados ao tocar num dia do calendário (botão 🔒 Meus Eventos)."],
     ["TEMP (📌)", "Pasta separada da biblioteca para arquivos que mudam com frequência (boletins, escalas reajustadas, avisos). Marque com 📌 antes de anexar com 📎."],
     ["Viriato", "O trenzinho assistente que ajuda dentro do app."],
-    ["Porta (🚪)", "Ícone no topo da tela. Abre o menu com Calendário, Mural, Chat, Acervo, Configurações, Prontos e Manual."],
+    ["Menu do app", "Botão no topo da tela. Abre Calendário, Mural, Chat, Acervo, Configurações, Manual, Notificações e Prontos."],
     ["Banner do Viriato", "Faixa colorida que aparece no Calendário convidando a conversar com o Viriato. Volta toda vez que você abre essa aba."],
     ["FAB / Trenzinho 🚂", "Botão flutuante e arrastável do Viriato no canto inferior direito. Some quando o banner do Viriato está visível, pra não atrapalhar."],
     ["Reações (Mural)", "Os 8 emojis sob cada post do mural (👍 ❤️ 😂 😮 🎉 🙏 👏 🚂). Toque para reagir; toque de novo no mesmo emoji para retirar."],
@@ -803,8 +903,8 @@ story.append(tg)
 
 story.append(PageBreak())
 
-# 14. Creditos e agradecimentos
-story.append(Paragraph("16. Créditos e agradecimentos", H1))
+# 17. Creditos e agradecimentos
+story.append(Paragraph("17. Créditos e agradecimentos", H1))
 
 story.append(Paragraph("Idealização, projeto e desenvolvimento", H2))
 story.append(Paragraph(
@@ -865,7 +965,7 @@ story.append(Paragraph(
                    fontName="Helvetica-Bold", fontSize=14, spaceAfter=18)))
 
 story.append(Paragraph(
-    "<i>— Angelloti, com carinho, para toda nossa turma. Abril de 2026.</i>",
+    "<i>— Angelloti, com carinho, para toda nossa turma. Junho de 2026.</i>",
     ParagraphStyle("ASS", parent=P, alignment=TA_CENTER, textColor=CINZA,
                    fontName="Helvetica-Oblique", fontSize=11)))
 
