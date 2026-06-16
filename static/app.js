@@ -2970,27 +2970,18 @@ if("serviceWorker" in navigator){
   });
 }
 
-// ===== Leitor de Manual (PDF in-app com botao Sair) =====
+// ===== Abrir o Manual (PDF) =====
+// PDF embutido em <iframe> nao renderiza no celular / app instalado (PWA): o
+// navegador recusa ("conexao recusada"). Abrir como link real em nova aba
+// entrega o PDF ao visualizador do dispositivo e funciona em PC, celular e PWA.
 function abrirManualPDF(){
-  let v=document.getElementById("manualViewer");
-  if(v){v.remove();}
-  v=document.createElement("div");
-  v.id="manualViewer";
-  v.style.cssText="position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column";
-  v.innerHTML=`
-    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 4px 12px #0008">
-      <button id="mvSair" style="background:var(--neon);color:#000;border:0;border-radius:8px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px">
-        <span style="font-size:18px">←</span> Sair do manual
-      </button>
-      <div style="flex:1;color:var(--text);font-weight:600;font-size:14px;text-align:center">📖 Manual do App</div>
-      <a href="/manual_agenda_turma_a.pdf" download style="background:var(--card-2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;text-decoration:none">⬇️ Baixar</a>
-    </div>
-    <iframe src="/manual_agenda_turma_a.pdf" style="flex:1;width:100%;border:0;background:#fff" title="Manual"></iframe>`;
-  document.body.appendChild(v);
-  const sair=()=>{const x=document.getElementById("manualViewer");if(x)x.remove();document.removeEventListener("keydown",onEsc);};
-  const onEsc=(e)=>{if(e.key==="Escape")sair();};
-  document.getElementById("mvSair").onclick=sair;
-  document.addEventListener("keydown",onEsc);
+  const a=document.createElement("a");
+  a.href="/manual_agenda_turma_a.pdf";
+  a.target="_blank";
+  a.rel="noopener";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 // ===== Boot =====
