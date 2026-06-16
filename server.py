@@ -2053,6 +2053,14 @@ def index():
     resp.headers['Expires'] = '0'
     return resp
 
+@app.route('/manual_agenda_turma_a.pdf')
+def manual_pdf():
+    # Rota dedicada: o .pdf nao esta na allowlist de estaticos (seguranca),
+    # entao o manual e servido explicitamente aqui (so este arquivo).
+    resp = send_from_directory('.', 'manual_agenda_turma_a.pdf')
+    resp.headers['Content-Type'] = 'application/pdf'
+    return resp
+
 @app.route('/<path:path>')
 def static_files(path):
     # Bloqueia rotas API caindo aqui (404 explicito, evita servir HTML por engano)
