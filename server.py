@@ -1661,12 +1661,22 @@ def buscar_fatos(query: str, top_k: int = 8,
     scored.sort(key=lambda x: (-x[0], -x[1].get('id', 0)))
     return [s[1] for s in scored[:top_k]]
 
-_anthropic_client = Anthropic(
-    api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),
-    base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL"),
-    timeout=45.0,
-    max_retries=1
-)
+# Chave propria (Render/producao) tem prioridade; sem ela, cai no proxy
+# de IA da Replit (AI_INTEGRATIONS_*) pra transicao rodar nos dois lugares.
+_OWN_ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+if _OWN_ANTHROPIC_KEY:
+    _anthropic_client = Anthropic(
+        api_key=_OWN_ANTHROPIC_KEY,
+        timeout=45.0,
+        max_retries=1
+    )
+else:
+    _anthropic_client = Anthropic(
+        api_key=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_API_KEY", "dummy"),
+        base_url=os.environ.get("AI_INTEGRATIONS_ANTHROPIC_BASE_URL"),
+        timeout=45.0,
+        max_retries=1
+    )
 
 # === OCR VIA CLAUDE VISION (fallback para PDFs escaneados) ===
 def _ocr_imagens_via_vision(images: list, numeros_pagina: list = None) -> str:
@@ -4294,7 +4304,7 @@ def diag_health():
         pdf_ok = True
     except Exception:
         pdf_ok = False
-    claude_ok = bool(os.environ.get('AI_INTEGRATIONS_ANTHROPIC_API_KEY')) or bool(os.environ.get('AI_INTEGRATIONS_ANTHROPIC_BASE_URL'))
+    claude_ok = bool(os.environ.get('ANTHROPIC_API_KEY')) or bool(os.environ.get('AI_INTEGRATIONS_ANTHROPIC_API_KEY')) or bool(os.environ.get('AI_INTEGRATIONS_ANTHROPIC_BASE_URL'))
     return jsonify({
         'servidor': 'ok',
         'hora_servidor': datetime.today().strftime('%Y-%m-%d %H:%M:%S'),
