@@ -1,17 +1,17 @@
-"""Envio de notificacoes por e-mail via SendGrid (integracao Replit).
+"""Envio de notificacoes por e-mail via Resend (API HTTP direta).
 
-As credenciais sao buscadas do conector Replit a cada chamada (sem cache:
-o token de identidade pode rotacionar).
+Custo zero: plano free do Resend (3.000 e-mails/mes). Sem SDK — so requests.
+Env: RESEND_API_KEY, NOTIFY_FROM_EMAIL (remetente verificado no Resend).
 """
 import os
 import time
 import html
 import threading
 import requests
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 
 import auth as _auth
+
+_RESEND_URL = 'https://api.resend.com/emails'
 
 
 def _mask_email(e: str) -> str:
@@ -21,60 +21,28 @@ def _mask_email(e: str) -> str:
     return (user[:2] + '***@' + dom) if user else ('***@' + dom)
 
 
-def _get_replit_token():
-    if os.environ.get('REPL_IDENTITY'):
-        return 'repl ' + os.environ['REPL_IDENTITY']
-    if os.environ.get('WEB_REPL_RENEWAL'):
-        return 'depl ' + os.environ['WEB_REPL_RENEWAL']
-    return None
-
-
-def _get_sendgrid_credentials():
-    hostname = os.environ.get('REPLIT_CONNECTORS_HOSTNAME')
-    token = _get_replit_token()
-    if not hostname or not token:
-        return None
-    try:
-        r = requests.get(
-            f'https://{hostname}/api/v2/connection',
-            params={'include_secrets': 'true', 'connector_names': 'sendgrid'},
-            headers={'Accept': 'application/json', 'X-Replit-Token': token},
-            timeout=10,
-        )
-        r.raise_for_status()
-        items = (r.json() or {}).get('items') or []
-        if not items:
-            return None
-        s = items[0].get('settings') or {}
-        api_key = s.get('api_key')
-        from_email = s.get('from_email')
-        if not api_key or not from_email:
-            return None
-        return api_key, from_email
-    except Exception as e:
-        print(f'[notify] erro ao buscar credenciais SendGrid: {e}')
-        return None
-
-
 def _send_email(to_email: str, subject: str, html: str, text: str = '') -> bool:
-    creds = _get_sendgrid_credentials()
-    if not creds:
-        print('[notify] SendGrid nao configurado, e-mail ignorado')
+    api_key = os.environ.get('RESEND_API_KEY', '').strip()
+    from_email = os.environ.get('NOTIFY_FROM_EMAIL', '').strip()
+    if not api_key or not from_email:
+        print('[notify] Resend nao configurado (RESEND_API_KEY/NOTIFY_FROM_EMAIL), e-mail ignorado')
         return False
-    api_key, from_email = creds
     try:
-        msg = Mail(
-            from_email=from_email,
-            to_emails=to_email,
-            subject=subject,
-            plain_text_content=text or _strip_html(html),
-            html_content=html,
+        resp = requests.post(
+            _RESEND_URL,
+            headers={'Authorization': f'Bearer {api_key}'},
+            json={
+                'from': f'Agenda Turma A <{from_email}>',
+                'to': [to_email],
+                'subject': subject,
+                'html': html,
+                'text': text or _strip_html(html),
+            },
+            timeout=15,
         )
-        sg = SendGridAPIClient(api_key)
-        resp = sg.send(msg)
         ok = 200 <= resp.status_code < 300
         if not ok:
-            print(f'[notify] SendGrid status {resp.status_code} ao enviar para {_mask_email(to_email)}')
+            print(f'[notify] Resend status {resp.status_code} ao enviar para {_mask_email(to_email)}')
         return ok
     except Exception as e:
         print(f'[notify] erro enviando para {_mask_email(to_email)}: {e}')
