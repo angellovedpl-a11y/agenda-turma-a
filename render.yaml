@@ -1,0 +1,45 @@
+# Blueprint do Render (free). Deploy: dashboard -> New -> Blueprint -> este repo.
+services:
+  - type: web
+    name: agenda-turma-a
+    runtime: python
+    plan: free
+    branch: feat/migracao-render
+    buildCommand: pip install -r requirements.txt
+    startCommand: >-
+      gunicorn -c gunicorn.conf.py --bind 0.0.0.0:$PORT
+      --workers 1 --worker-class gthread --threads 8
+      --timeout 600 --keep-alive 5 --preload server:app
+    healthCheckPath: /api/push/vapid-public-key
+    envVars:
+      - key: PYTHONUTF8
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      # As secrets abaixo entram pelo dashboard (sync: false soh declara)
+      - key: DATABASE_URL
+        sync: false
+      - key: LEGAL_AUDIT_SALT
+        sync: false
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: VOYAGE_API_KEY
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: NOTIFY_FROM_EMAIL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_BUCKET
+        value: anexos
