@@ -1,28 +1,40 @@
-"""Wrapper fino do Replit Object Storage para anexos do Diario de Bordo
+"""Wrapper fino do Supabase Storage para anexos do Diario de Bordo
 e outros binarios que nao devem inflar o Postgres.
 
 Convencao de chave: <prefixo>/<matricula>/<entry_id>/<idx>_<nome_seguro>
 A checagem de propriedade (so o dono acessa) eh feita no endpoint da API.
+
+Env: SUPABASE_URL, SUPABASE_SERVICE_KEY, SUPABASE_BUCKET (default 'anexos').
+Bucket deve ser PRIVADO — todo acesso passa por aqui com a service key.
 """
 import os
 import re
-import io
 import time
+import requests
 
-_BUCKET_ID = os.environ.get('DEFAULT_OBJECT_STORAGE_BUCKET_ID', '').strip() or None
-try:
-    from replit.object_storage import Client
-    _client = Client(bucket_id=_BUCKET_ID) if _BUCKET_ID else Client()
-    _enabled = True
-    print(f'[object_storage] cliente inicializado (bucket={_BUCKET_ID or "default"})')
-except Exception as _e:
-    print(f'[object_storage] indisponivel: {_e}')
-    _client = None
-    _enabled = False
+_SUPABASE_URL = os.environ.get('SUPABASE_URL', '').strip().rstrip('/')
+_SERVICE_KEY = os.environ.get('SUPABASE_SERVICE_KEY', '').strip()
+_BUCKET = os.environ.get('SUPABASE_BUCKET', 'anexos').strip() or 'anexos'
+_enabled = bool(_SUPABASE_URL and _SERVICE_KEY)
+if _enabled:
+    print(f'[object_storage] Supabase Storage ativo (bucket={_BUCKET})')
+else:
+    print('[object_storage] indisponivel: SUPABASE_URL/SUPABASE_SERVICE_KEY ausentes')
 
 
 def is_enabled() -> bool:
     return _enabled
+
+
+def _object_url(key: str) -> str:
+    return f'{_SUPABASE_URL}/storage/v1/object/{_BUCKET}/{key}'
+
+
+def _headers(extra: dict = None) -> dict:
+    h = {'Authorization': f'Bearer {_SERVICE_KEY}'}
+    if extra:
+        h.update(extra)
+    return h
 
 
 def _safe_name(nome: str, max_len: int = 60) -> str:
@@ -50,7 +62,15 @@ def upload_bytes(key: str, data: bytes, content_type: str = 'application/octet-s
     if not _enabled:
         return False
     try:
-        _client.upload_from_bytes(key, data)
+        r = requests.post(
+            _object_url(key),
+            headers=_headers({'Content-Type': content_type, 'x-upsert': 'true'}),
+            data=data,
+            timeout=30,
+        )
+        if r.status_code not in (200, 201):
+            print(f'[object_storage] erro upload {key}: status {r.status_code}')
+            return False
         return True
     except Exception as e:
         print(f'[object_storage] erro upload {key}: {e}')
@@ -60,15 +80,18 @@ def upload_bytes(key: str, data: bytes, content_type: str = 'application/octet-s
 def download_bytes(key: str) -> bytes:
     if not _enabled:
         raise RuntimeError('object storage indisponivel')
-    return _client.download_as_bytes(key)
+    r = requests.get(_object_url(key), headers=_headers(), timeout=30)
+    if r.status_code != 200:
+        raise RuntimeError(f'download {key}: status {r.status_code}')
+    return r.content
 
 
 def delete(key: str) -> bool:
     if not _enabled:
         return False
     try:
-        _client.delete(key)
-        return True
+        r = requests.delete(_object_url(key), headers=_headers(), timeout=15)
+        return r.status_code == 200
     except Exception as e:
         print(f'[object_storage] erro delete {key}: {e}')
         return False
@@ -78,8 +101,12 @@ def exists(key: str) -> bool:
     if not _enabled:
         return False
     try:
-        _client.exists(key)
-        return True
+        r = requests.get(
+            _object_url(key),
+            headers=_headers({'Range': 'bytes=0-0'}),
+            timeout=15,
+        )
+        return r.status_code in (200, 206)
     except Exception:
         return False
 
