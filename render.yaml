@@ -4,6 +4,7 @@ services:
     name: agenda-turma-a
     runtime: python
     plan: free
+    region: virginia  # mesmo lado do Neon novo (us-east-1)
     branch: feat/migracao-render
     buildCommand: pip install -r requirements.txt
     startCommand: >-
