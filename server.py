@@ -2115,6 +2115,11 @@ def api_legal_acceptance():
 def api_me():
     return auth.handle_me()
 
+@app.route('/api/auth/google/client-id', methods=['GET'])
+def api_google_client_id():
+    return jsonify({'clientId': auth.GOOGLE_CLIENT_ID,
+                    'enabled': auth.google_login_habilitado()})
+
 # === WEB PUSH endpoints ===
 @app.route('/api/push/vapid-public-key', methods=['GET'])
 def api_push_vapid():

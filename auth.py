@@ -15,6 +15,8 @@ try:
     _BCRYPT_AVAILABLE = True
 except ImportError:
     _BCRYPT_AVAILABLE = False
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
 
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
@@ -46,6 +48,39 @@ SESSIONS_PATH = os.path.join(DATA_DIR, 'sessions.json')
 
 SESSION_DAYS = 30
 MAX_APROVADORES = 3  # alem do admin
+
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '').strip()
+
+
+class GoogleAuthError(Exception):
+    """Falha ao validar o login com Google (token invalido ou nao configurado)."""
+
+
+def google_login_habilitado() -> bool:
+    return bool(GOOGLE_CLIENT_ID)
+
+
+def verificar_google_token(credential: str) -> dict:
+    """Valida o ID token do Google Identity Services.
+    Retorna {'sub', 'email', 'nome'} ou levanta GoogleAuthError."""
+    if not GOOGLE_CLIENT_ID:
+        raise GoogleAuthError('Login com Google nao esta configurado')
+    if not credential or not isinstance(credential, str):
+        raise GoogleAuthError('Token do Google ausente')
+    try:
+        info = google_id_token.verify_oauth2_token(
+            credential, google_requests.Request(), GOOGLE_CLIENT_ID)
+    except Exception:
+        raise GoogleAuthError('Token do Google invalido')
+    if info.get('iss') not in ('accounts.google.com', 'https://accounts.google.com'):
+        raise GoogleAuthError('Emissor do token invalido')
+    sub = info.get('sub')
+    if not sub:
+        raise GoogleAuthError('Token do Google sem identificador')
+    return {'sub': str(sub),
+            'email': (info.get('email') or '').strip().lower(),
+            'nome': (info.get('name') or '').strip()}
+
 
 MATRICULA_RE = re.compile(r'^\d{6,10}$')
 SENHA_RE = re.compile(r'^\d{4}$')
