@@ -37,11 +37,12 @@ def _security_headers(resp):
     resp.headers.setdefault('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
     resp.headers.setdefault('Content-Security-Policy',
                             "default-src 'self'; "
-                            "script-src 'self' 'unsafe-inline'; "
+                            "script-src 'self' 'unsafe-inline' https://accounts.google.com; "
                             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                             "font-src 'self' data: https://fonts.gstatic.com https://use.typekit.net; "
                             "img-src 'self' data: blob:; "
-                            "connect-src 'self' https://*.push.services.mozilla.com https://fcm.googleapis.com https://*.notify.windows.com; "
+                            "connect-src 'self' https://accounts.google.com https://*.push.services.mozilla.com https://fcm.googleapis.com https://*.notify.windows.com; "
+                            "frame-src https://accounts.google.com; "
                             "worker-src 'self'; "
                             "manifest-src 'self'; "
                             "media-src 'self'; "
