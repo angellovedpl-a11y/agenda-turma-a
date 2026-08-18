@@ -82,5 +82,71 @@ class VerificarGoogleTokenTests(unittest.TestCase):
             auth.verificar_google_token('tok')
 
 
+class GoogleLoginTests(unittest.TestCase):
+    def setUp(self):
+        auth.GOOGLE_CLIENT_ID = 'cid'
+        auth.google_id_token.verify_oauth2_token = lambda *a, **k: {
+            'iss': 'https://accounts.google.com', 'sub': 'g-1', 'email': 'a@b.com'}
+        self.store = {'users': {}, 'sessions': {}}
+        auth.kvstore.load = lambda key, raise_on_error=False, conn=None: self.store.get(key, {})
+        def _save(key, value, raise_on_error=False, conn=None):
+            self.store[key] = value; return True
+        auth.kvstore.save = _save
+
+    def _add_user(self, mat, **kw):
+        u = {'nome': 'X', 'role': 'user', 'status': 'aprovado', 'senha_hash': 'h'}
+        u.update(kw)
+        self.store['users'][mat] = u
+
+    def test_login_ok_usuario_aprovado_vinculado(self):
+        self._add_user('123456', google_sub='g-1')
+        resp = auth.handle_google_login({'credential': 'tok'})
+        payload = resp[0].get_json() if isinstance(resp, tuple) else resp.get_json()
+        self.assertTrue(payload.get('ok'))
+        self.assertIn('token', payload)
+
+    def test_login_google_nao_vinculado_404(self):
+        resp = auth.handle_google_login({'credential': 'tok'})
+        body, status = resp
+        self.assertEqual(status, 404)
+
+    def test_login_google_pendente_403(self):
+        self._add_user('123456', google_sub='g-1', status='pendente')
+        resp = auth.handle_google_login({'credential': 'tok'})
+        body, status = resp
+        self.assertEqual(status, 403)
+
+    def test_token_invalido_400(self):
+        auth.google_id_token.verify_oauth2_token = lambda *a, **k: (_ for _ in ()).throw(ValueError())
+        resp = auth.handle_google_login({'credential': 'x'})
+        body, status = resp
+        self.assertEqual(status, 400)
+
+
+class RegistrarComGoogleTests(unittest.TestCase):
+    def setUp(self):
+        auth.GOOGLE_CLIENT_ID = 'cid'
+        auth.google_id_token.verify_oauth2_token = lambda *a, **k: {
+            'iss': 'https://accounts.google.com', 'sub': 'g-9', 'email': 'n@v.com', 'name': 'Novo'}
+        self.store = {'users': {}, 'sessions': {}}
+        auth.kvstore.load = lambda key, raise_on_error=False, conn=None: self.store.get(key, {})
+        def _save(key, value, raise_on_error=False, conn=None):
+            self.store[key] = value; return True
+        auth.kvstore.save = _save
+
+    def test_registrar_com_credential_vincula_google(self):
+        body = {'nome': 'Novo', 'matricula': '654321', 'funcao': 'Função Operacional',
+                'senha': '1234', 'aceita_termos': True, 'credential': 'tok'}
+        auth.handle_registrar(body)
+        self.assertEqual(self.store['users']['654321'].get('google_sub'), 'g-9')
+
+    def test_registrar_sem_credential_nao_quebra(self):
+        body = {'nome': 'Novo', 'matricula': '654322', 'funcao': 'Função Operacional',
+                'senha': '1234', 'aceita_termos': True}
+        auth.handle_registrar(body)
+        self.assertIn('654322', self.store['users'])
+        self.assertNotIn('google_sub', self.store['users']['654322'])
+
+
 if __name__ == '__main__':
     unittest.main()

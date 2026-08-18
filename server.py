@@ -2120,6 +2120,12 @@ def api_google_client_id():
     return jsonify({'clientId': auth.GOOGLE_CLIENT_ID,
                     'enabled': auth.google_login_habilitado()})
 
+@app.route('/api/auth/google', methods=['POST'])
+@ratelimit.rate_limit_by_request(10, env_var='RATELIMIT_LOGIN_PER_MIN',
+                                  route_key='google_login', body_key=None)
+def api_google_login():
+    return auth.handle_google_login(request.json or {})
+
 # === WEB PUSH endpoints ===
 @app.route('/api/push/vapid-public-key', methods=['GET'])
 def api_push_vapid():

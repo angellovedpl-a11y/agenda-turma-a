@@ -60,6 +60,49 @@ def google_login_habilitado() -> bool:
     return bool(GOOGLE_CLIENT_ID)
 
 
+def build_user_payload(matricula: str, u: dict) -> dict:
+    payload = {
+        'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
+        'owner': bool(u.get('owner')), 'admin_level': admin_level(u),
+        'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
+        'obrigado_prontos': obrigado_prontos(u.get('funcao', '')),
+        'google_conectado': bool(u.get('google_sub')),
+        'google_email': u.get('google_email', ''),
+    }
+    payload.update(_legal_user_fields(u))
+    return payload
+
+
+def _find_user_by_google_sub(users: dict, sub: str):
+    for mat, u in users.items():
+        if u.get('google_sub') and u.get('google_sub') == sub:
+            return mat, u
+    return None, None
+
+
+def handle_google_login(data):
+    credential = (data or {}).get('credential') or ''
+    try:
+        info = verificar_google_token(credential)
+    except GoogleAuthError as e:
+        return jsonify({'error': str(e)}), 400
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError:
+        return jsonify({'error': 'Servidor temporariamente indisponivel, tente novamente em instantes'}), 503
+    matricula, u = _find_user_by_google_sub(users, info['sub'])
+    if not u:
+        return jsonify({'code': 'nao_vinculado',
+                        'email': info.get('email', ''), 'nome': info.get('nome', ''),
+                        'mensagem': 'Conta Google ainda sem cadastro. Vamos criar sua conta.'}), 404
+    if u.get('status') == 'pendente':
+        return jsonify({'error': 'Seu cadastro esta aguardando aprovacao de um supervisor.'}), 403
+    if u.get('status') == 'negado':
+        return jsonify({'error': 'Cadastro negado pelo administrador'}), 403
+    token = session_create(matricula)
+    return jsonify({'ok': True, 'token': token, 'user': build_user_payload(matricula, u)})
+
+
 def verificar_google_token(credential: str) -> dict:
     """Valida o ID token do Google Identity Services.
     Retorna {'sub', 'email', 'nome'} ou levanta GoogleAuthError."""
@@ -480,14 +523,7 @@ def handle_login(data):
     if u.get('status') == 'negado':
         return jsonify({'error': 'Cadastro negado pelo administrador'}), 403
     token = session_create(matricula)
-    user_payload = {
-        'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
-        'owner': bool(u.get('owner')), 'admin_level': admin_level(u),
-        'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
-        'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
-    }
-    user_payload.update(_legal_user_fields(u))
-    return jsonify({'ok': True, 'token': token, 'user': user_payload})
+    return jsonify({'ok': True, 'token': token, 'user': build_user_payload(matricula, u)})
 
 
 def handle_logout():
