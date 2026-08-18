@@ -598,7 +598,10 @@ def handle_google_connect(data, current_user):
 
 
 def handle_google_disconnect(current_user):
-    users = kvstore.load('users')
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError:
+        return jsonify({'error': 'Servidor temporariamente indisponivel'}), 503
     u = users.get(current_user['matricula'])
     if u:
         u.pop('google_sub', None)
