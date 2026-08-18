@@ -2558,6 +2558,18 @@ async function renderAcervoMinhas(el){
 }
 
 // ===== SETUP MODAL =====
+function _renderContaGoogleHtml(u){
+  const conectado=u&&u.google_conectado;
+  const email=(u&&u.google_email)||"";
+  return `<div style="margin-top:14px;padding:10px;background:var(--card-2);border:1px solid var(--border);border-radius:10px">
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px">Conta Google (opcional)</div>
+    ${conectado
+      ?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Conectado como <b>${escapeHtml(email)}</b>.</div>
+         <button class="btn-secondary" id="stGoogleDisc" style="width:100%">Desconectar Google</button>`
+      :`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Conecte pra poder entrar com um clique. Continua opcional.</div>
+         <div id="stGoogleConnBtn" style="display:flex;justify-content:center"></div>`}
+  </div>`;
+}
 async function openSetup(){
   if(!await requireAuth())return;
   const u=CURRENT_USER||{};
@@ -2576,6 +2588,7 @@ async function openSetup(){
       ${isAdm?'<button class="btn-secondary" id="stAdm">👑 Painel admin</button>':""}
       <button class="btn-danger" id="stSair" style="margin-top:6px">🚪 Sair</button>
     </div>
+    ${_renderContaGoogleHtml(u)}
   `,()=>{
     document.getElementById("stTema").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")||"dark";applyTheme(cur==="dark"?"light":"dark");};
     document.getElementById("stSenha").onclick=()=>openTrocarSenha();
@@ -2585,7 +2598,35 @@ async function openSetup(){
       try{await apiFetch("/api/auth/logout",{method:"POST"});}catch(e){}
       setToken("");CURRENT_USER=null;closeModal();showToast("Sessão encerrada");
     };
+    const discBtn=document.getElementById("stGoogleDisc");
+    if(discBtn){
+      discBtn.onclick=async()=>{
+        await apiFetch("/api/auth/google/disconnect",{method:"POST"});
+        await loadMe();
+        closeModal();
+        openSetup();
+      };
+    }
+    const connEl=document.getElementById("stGoogleConnBtn");
+    if(connEl){
+      montarBotaoGoogle(connEl,async(credential)=>{
+        const r=await apiFetch("/api/auth/google/connect",{method:"POST",body:JSON.stringify({credential})});
+        const j=await r.json().catch(()=>({}));
+        if(r.ok){alert("Conta Google conectada!");await loadMe();closeModal();openSetup();}
+        else{alert(j.error||"Nao foi possivel conectar.");}
+      });
+    }
   });
+}
+function avisoGoogleUmaVez(){
+  try{
+    if(localStorage.getItem("turmaA_googleAvisoVisto")==="1")return;
+    googleClientId().then(cid=>{
+      if(!cid)return;
+      localStorage.setItem("turmaA_googleAvisoVisto","1");
+      alert("Novidade: agora da pra entrar com sua conta Google. E opcional — se preferir, continue entrando com matricula e senha normalmente. Conecte em Configuracoes.");
+    });
+  }catch(_){}
 }
 function openTrocarSenha(){
   openModal("Trocar senha",`
@@ -3041,7 +3082,7 @@ loadMe().then(async()=>{
   // loadMe resolve assincrono e seta CURRENT_USER; o render() de baixo roda antes
   // disso (com user ainda null). Re-renderiza agora que o usuario eh conhecido,
   // senao a home (banner DSS, eventos) fica presa no estado pre-login ate navegar.
-  if(CURRENT_USER)render();
+  if(CURRENT_USER){render();avisoGoogleUmaVez();}
   await registerSW();
   atualizarBotaoNotif();
   // hook do botao do menu
