@@ -21,3 +21,4 @@ index_backup*.html
 .kvstore_pip.lock
 .voyage_pip.lock
 graphify-out/
+.superpowers/

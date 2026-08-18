@@ -37,11 +37,12 @@ def _security_headers(resp):
     resp.headers.setdefault('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
     resp.headers.setdefault('Content-Security-Policy',
                             "default-src 'self'; "
-                            "script-src 'self' 'unsafe-inline'; "
+                            "script-src 'self' 'unsafe-inline' https://accounts.google.com; "
                             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
                             "font-src 'self' data: https://fonts.gstatic.com https://use.typekit.net; "
                             "img-src 'self' data: blob:; "
-                            "connect-src 'self' https://*.push.services.mozilla.com https://fcm.googleapis.com https://*.notify.windows.com; "
+                            "connect-src 'self' https://accounts.google.com https://*.push.services.mozilla.com https://fcm.googleapis.com https://*.notify.windows.com; "
+                            "frame-src https://accounts.google.com; "
                             "worker-src 'self'; "
                             "manifest-src 'self'; "
                             "media-src 'self'; "
@@ -2114,6 +2115,27 @@ def api_legal_acceptance():
 @app.route('/api/auth/me', methods=['GET'])
 def api_me():
     return auth.handle_me()
+
+@app.route('/api/auth/google/client-id', methods=['GET'])
+def api_google_client_id():
+    return jsonify({'clientId': auth.GOOGLE_CLIENT_ID,
+                    'enabled': auth.google_login_habilitado()})
+
+@app.route('/api/auth/google', methods=['POST'])
+@ratelimit.rate_limit_by_request(10, env_var='RATELIMIT_LOGIN_PER_MIN',
+                                  route_key='google_login', body_key=None)
+def api_google_login():
+    return auth.handle_google_login(request.json or {})
+
+@app.route('/api/auth/google/connect', methods=['POST'])
+@auth.require_auth
+def api_google_connect():
+    return auth.handle_google_connect(request.json or {}, request.current_user)
+
+@app.route('/api/auth/google/disconnect', methods=['POST'])
+@auth.require_auth
+def api_google_disconnect():
+    return auth.handle_google_disconnect(request.current_user)
 
 # === WEB PUSH endpoints ===
 @app.route('/api/push/vapid-public-key', methods=['GET'])

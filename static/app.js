@@ -841,6 +841,46 @@ function showToast(msg,ms=3500){
 // ----- auth helpers -----
 function getToken(){return localStorage.getItem("turmaA_authToken")||"";}
 function setToken(t){if(t)localStorage.setItem("turmaA_authToken",t);else localStorage.removeItem("turmaA_authToken");}
+
+// ----- Google Identity Services helpers -----
+async function googleClientId(){
+  try{
+    const r=await fetch("/api/auth/google/client-id");
+    const j=await r.json();
+    return j.enabled ? j.clientId : "";
+  }catch(_){ return ""; }
+}
+
+async function montarBotaoGoogle(containerEl, onToken){
+  const cid=await googleClientId();
+  if(!cid || !window.google || !google.accounts){ return; } // degrada: some o botao
+  google.accounts.id.initialize({ client_id: cid, callback: (resp)=>onToken(resp.credential) });
+  google.accounts.id.renderButton(containerEl, { theme:"outline", size:"large", width:260, text:"signin_with", locale:"pt-BR" });
+}
+
+// Guia o usuario conforme a resposta — nunca trava em erro sem saida.
+async function loginComGoogle(credential){
+  const msg=document.getElementById("loginMsg");
+  if(msg){msg.style.color="var(--muted)";msg.textContent="Entrando com Google...";}
+  const r=await fetch("/api/auth/google",{method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({credential})});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok && j.token){
+    setToken(j.token); CURRENT_USER=j.user||null; closeModal(); render();
+    showToast("Bem-vindo, "+((CURRENT_USER&&CURRENT_USER.nome)||"colega"));
+    return;
+  }
+  if(r.status===404 && j.code==="nao_vinculado"){
+    // Sem cadastro ainda: abre o cadastro ja preenchido e carrega a credencial pra vincular.
+    closeModal();
+    openRegistro({nome:j.nome||"", email:j.email||"", credential});
+    return;
+  }
+  if(r.status===403 && msg){ msg.style.color="var(--muted)"; msg.textContent=j.error||"Aguardando aprovacao de um supervisor."; return; }
+  if(msg){ msg.style.color="#ff6b6b"; msg.textContent=j.error||"Nao foi possivel entrar com o Google."; }
+}
+
 let CURRENT_USER=null;
 const REACTION_EMOJIS=["👍","❤️","😂","😮","🎉","🙏","👏","🚂"];
 async function apiFetch(path,opts={}){
@@ -909,6 +949,8 @@ function openLogin(){
     <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
       Não tem conta? <a href="#" id="goReg" style="color:var(--neon)">Cadastrar-se</a>
     </div>
+    <div id="googleSep" style="text-align:center;color:var(--muted);font-size:11px;margin:12px 0 8px">ou</div>
+    <div id="googleBtn" style="display:flex;justify-content:center"></div>
   `,()=>{
     const go=async()=>{
       const m=document.getElementById("loginMat").value.trim();
@@ -931,14 +973,23 @@ function openLogin(){
     document.getElementById("loginSen").addEventListener("keydown",e=>{if(e.key==="Enter")go();});
     document.getElementById("loginMat").focus();
     document.getElementById("goReg").onclick=e=>{e.preventDefault();openRegistro();};
+    montarBotaoGoogle(document.getElementById("googleBtn"), loginComGoogle);
   });
 }
-function openRegistro(){
+function openRegistro(prefill){
+  const nomeVal=escapeHtml((prefill&&prefill.nome)||"");
+  const emailVal=escapeHtml((prefill&&prefill.email)||"");
+  const avisoGoogle=(prefill&&prefill.credential)
+    ?`<div style="background:rgba(66,133,244,.12);border:1px solid rgba(66,133,244,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:12px">
+        Conectando sua conta Google — complete o cadastro abaixo.
+      </div>`
+    :"";
   openModal("Criar conta",`
-    <div class="modal-fld"><label>Nome completo</label><input id="rgNome"/></div>
+    ${avisoGoogle}
+    <div class="modal-fld"><label>Nome completo</label><input id="rgNome" value="${nomeVal}"/></div>
     <div class="modal-fld"><label>Matrícula (6 a 10 dígitos)</label><input id="rgMat" inputmode="numeric" maxlength="10"/></div>
     <div class="modal-fld"><label>Função</label><select id="rgFun"><option value="">— selecione —</option><option value="Função Operacional">Função Operacional</option><option value="Função Administrativa">Função Administrativa</option></select></div>
-    <div class="modal-fld"><label>E-mail (opcional)</label><input id="rgEmail" type="email"/></div>
+    <div class="modal-fld"><label>E-mail (opcional)</label><input id="rgEmail" type="email" value="${emailVal}"/></div>
     <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="rgSen" type="password" inputmode="numeric" maxlength="4"/></div>
     <label style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);line-height:1.45;margin:-2px 0 12px">
       <input id="rgLegal" type="checkbox" style="margin-top:3px;accent-color:var(--neon)"/>
@@ -953,6 +1004,7 @@ function openRegistro(){
       const legal=document.getElementById("rgLegal").checked;
       if(!legal){msg.style.color="#ff8a8a";msg.textContent="Aceite os termos para continuar.";return;}
       const body={nome:document.getElementById("rgNome").value.trim(),matricula:document.getElementById("rgMat").value.trim(),funcao:document.getElementById("rgFun").value.trim(),email:document.getElementById("rgEmail").value.trim(),senha:document.getElementById("rgSen").value.trim(),aceita_termos:legal};
+      if(prefill&&prefill.credential){ body.credential=prefill.credential; }
       msg.style.color="var(--muted)";msg.textContent="Enviando...";
       try{
         const r=await fetch("/api/auth/registrar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
@@ -2506,6 +2558,18 @@ async function renderAcervoMinhas(el){
 }
 
 // ===== SETUP MODAL =====
+function _renderContaGoogleHtml(u){
+  const conectado=u&&u.google_conectado;
+  const email=(u&&u.google_email)||"";
+  return `<div style="margin-top:14px;padding:10px;background:var(--card-2);border:1px solid var(--border);border-radius:10px">
+    <div style="font-size:12px;font-weight:600;margin-bottom:6px">Conta Google (opcional)</div>
+    ${conectado
+      ?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Conectado como <b>${escapeHtml(email)}</b>.</div>
+         <button class="btn-secondary" id="stGoogleDisc" style="width:100%">Desconectar Google</button>`
+      :`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Conecte pra poder entrar com um clique. Continua opcional.</div>
+         <div id="stGoogleConnBtn" style="display:flex;justify-content:center"></div>`}
+  </div>`;
+}
 async function openSetup(){
   if(!await requireAuth())return;
   const u=CURRENT_USER||{};
@@ -2524,6 +2588,7 @@ async function openSetup(){
       ${isAdm?'<button class="btn-secondary" id="stAdm">👑 Painel admin</button>':""}
       <button class="btn-danger" id="stSair" style="margin-top:6px">🚪 Sair</button>
     </div>
+    ${_renderContaGoogleHtml(u)}
   `,()=>{
     document.getElementById("stTema").onclick=()=>{const cur=document.documentElement.getAttribute("data-theme")||"dark";applyTheme(cur==="dark"?"light":"dark");};
     document.getElementById("stSenha").onclick=()=>openTrocarSenha();
@@ -2533,7 +2598,35 @@ async function openSetup(){
       try{await apiFetch("/api/auth/logout",{method:"POST"});}catch(e){}
       setToken("");CURRENT_USER=null;closeModal();showToast("Sessão encerrada");
     };
+    const discBtn=document.getElementById("stGoogleDisc");
+    if(discBtn){
+      discBtn.onclick=async()=>{
+        await apiFetch("/api/auth/google/disconnect",{method:"POST"});
+        await loadMe();
+        closeModal();
+        openSetup();
+      };
+    }
+    const connEl=document.getElementById("stGoogleConnBtn");
+    if(connEl){
+      montarBotaoGoogle(connEl,async(credential)=>{
+        const r=await apiFetch("/api/auth/google/connect",{method:"POST",body:JSON.stringify({credential})});
+        const j=await r.json().catch(()=>({}));
+        if(r.ok){alert("Conta Google conectada!");await loadMe();closeModal();openSetup();}
+        else{alert(j.error||"Nao foi possivel conectar.");}
+      });
+    }
   });
+}
+function avisoGoogleUmaVez(){
+  try{
+    if(localStorage.getItem("turmaA_googleAvisoVisto")==="1")return;
+    googleClientId().then(cid=>{
+      if(!cid)return;
+      localStorage.setItem("turmaA_googleAvisoVisto","1");
+      alert("Novidade: agora da pra entrar com sua conta Google. E opcional — se preferir, continue entrando com matricula e senha normalmente. Conecte em Configuracoes.");
+    });
+  }catch(_){}
 }
 function openTrocarSenha(){
   openModal("Trocar senha",`
@@ -2989,7 +3082,7 @@ loadMe().then(async()=>{
   // loadMe resolve assincrono e seta CURRENT_USER; o render() de baixo roda antes
   // disso (com user ainda null). Re-renderiza agora que o usuario eh conhecido,
   // senao a home (banner DSS, eventos) fica presa no estado pre-login ate navegar.
-  if(CURRENT_USER)render();
+  if(CURRENT_USER){render();avisoGoogleUmaVez();}
   await registerSW();
   atualizarBotaoNotif();
   // hook do botao do menu

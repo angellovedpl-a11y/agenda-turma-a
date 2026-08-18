@@ -15,6 +15,8 @@ try:
     _BCRYPT_AVAILABLE = True
 except ImportError:
     _BCRYPT_AVAILABLE = False
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
 
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
@@ -46,6 +48,82 @@ SESSIONS_PATH = os.path.join(DATA_DIR, 'sessions.json')
 
 SESSION_DAYS = 30
 MAX_APROVADORES = 3  # alem do admin
+
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '').strip()
+
+
+class GoogleAuthError(Exception):
+    """Falha ao validar o login com Google (token invalido ou nao configurado)."""
+
+
+def google_login_habilitado() -> bool:
+    return bool(GOOGLE_CLIENT_ID)
+
+
+def build_user_payload(matricula: str, u: dict) -> dict:
+    payload = {
+        'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
+        'owner': bool(u.get('owner')), 'admin_level': admin_level(u),
+        'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
+        'obrigado_prontos': obrigado_prontos(u.get('funcao', '')),
+        'google_conectado': bool(u.get('google_sub')),
+        'google_email': u.get('google_email', ''),
+    }
+    payload.update(_legal_user_fields(u))
+    return payload
+
+
+def _find_user_by_google_sub(users: dict, sub: str):
+    for mat, u in users.items():
+        if u.get('google_sub') and u.get('google_sub') == sub:
+            return mat, u
+    return None, None
+
+
+def handle_google_login(data):
+    credential = (data or {}).get('credential') or ''
+    try:
+        info = verificar_google_token(credential)
+    except GoogleAuthError as e:
+        return jsonify({'error': str(e)}), 400
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError:
+        return jsonify({'error': 'Servidor temporariamente indisponivel, tente novamente em instantes'}), 503
+    matricula, u = _find_user_by_google_sub(users, info['sub'])
+    if not u:
+        return jsonify({'code': 'nao_vinculado',
+                        'email': info.get('email', ''), 'nome': info.get('nome', ''),
+                        'mensagem': 'Conta Google ainda sem cadastro. Vamos criar sua conta.'}), 404
+    if u.get('status') == 'pendente':
+        return jsonify({'error': 'Seu cadastro esta aguardando aprovacao de um supervisor.'}), 403
+    if u.get('status') == 'negado':
+        return jsonify({'error': 'Cadastro negado pelo administrador'}), 403
+    token = session_create(matricula)
+    return jsonify({'ok': True, 'token': token, 'user': build_user_payload(matricula, u)})
+
+
+def verificar_google_token(credential: str) -> dict:
+    """Valida o ID token do Google Identity Services.
+    Retorna {'sub', 'email', 'nome'} ou levanta GoogleAuthError."""
+    if not GOOGLE_CLIENT_ID:
+        raise GoogleAuthError('Login com Google nao esta configurado')
+    if not credential or not isinstance(credential, str):
+        raise GoogleAuthError('Token do Google ausente')
+    try:
+        info = google_id_token.verify_oauth2_token(
+            credential, google_requests.Request(), GOOGLE_CLIENT_ID)
+    except Exception:
+        raise GoogleAuthError('Token do Google invalido')
+    if info.get('iss') not in ('accounts.google.com', 'https://accounts.google.com'):
+        raise GoogleAuthError('Emissor do token invalido')
+    sub = info.get('sub')
+    if not sub:
+        raise GoogleAuthError('Token do Google sem identificador')
+    return {'sub': str(sub),
+            'email': (info.get('email') or '').strip().lower(),
+            'nome': (info.get('name') or '').strip()}
+
 
 MATRICULA_RE = re.compile(r'^\d{6,10}$')
 SENHA_RE = re.compile(r'^\d{4}$')
@@ -408,6 +486,17 @@ def handle_registrar(data):
             notify.notificar_novo_cadastro(matricula, nome)
         except Exception as e:
             print(f'[auth] falha ao notificar aprovadores: {e}')
+    credential = (data.get('credential') or '').strip()
+    if credential:
+        try:
+            ginfo = verificar_google_token(credential)
+            outra, _ = _find_user_by_google_sub(users, ginfo['sub'])
+            if not outra or outra == matricula:
+                users[matricula]['google_sub'] = ginfo['sub']
+                users[matricula]['google_email'] = ginfo['email']
+                users_save(users)
+        except GoogleAuthError:
+            pass  # credencial ruim nao impede o cadastro; so nao vincula
     if primeiro:
         token = session_create(matricula)
         user_payload = {'matricula': matricula, 'nome': nome, 'role': 'admin'}
@@ -445,14 +534,7 @@ def handle_login(data):
     if u.get('status') == 'negado':
         return jsonify({'error': 'Cadastro negado pelo administrador'}), 403
     token = session_create(matricula)
-    user_payload = {
-        'matricula': matricula, 'nome': u.get('nome'), 'role': u.get('role', 'user'),
-        'owner': bool(u.get('owner')), 'admin_level': admin_level(u),
-        'funcao': u.get('funcao', '') if u.get('funcao', '') in FUNCOES_VALIDAS else '',
-        'obrigado_prontos': obrigado_prontos(u.get('funcao', ''))
-    }
-    user_payload.update(_legal_user_fields(u))
-    return jsonify({'ok': True, 'token': token, 'user': user_payload})
+    return jsonify({'ok': True, 'token': token, 'user': build_user_payload(matricula, u)})
 
 
 def handle_logout():
@@ -486,8 +568,46 @@ def handle_me():
         'funcao': funcao,
         'obrigado_prontos': obrigado_prontos(funcao),
         'funcoes_disponiveis': FUNCOES_VALIDAS,
+        'google_conectado': bool(u.get('google_sub')),
+        'google_email': u.get('google_email', ''),
         **_legal_user_fields(u),
     })
+
+
+def handle_google_connect(data, current_user):
+    credential = (data or {}).get('credential') or ''
+    try:
+        info = verificar_google_token(credential)
+    except GoogleAuthError as e:
+        return jsonify({'error': str(e)}), 400
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError:
+        return jsonify({'error': 'Servidor temporariamente indisponivel'}), 503
+    matricula = current_user['matricula']
+    outra, _ = _find_user_by_google_sub(users, info['sub'])
+    if outra and outra != matricula:
+        return jsonify({'error': 'Essa conta Google ja esta vinculada a outro usuario'}), 409
+    u = users.get(matricula)
+    if not u:
+        return jsonify({'error': 'Usuario nao encontrado'}), 404
+    u['google_sub'] = info['sub']
+    u['google_email'] = info['email']
+    users_save(users)
+    return jsonify({'ok': True, 'google_email': info['email']})
+
+
+def handle_google_disconnect(current_user):
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError:
+        return jsonify({'error': 'Servidor temporariamente indisponivel'}), 503
+    u = users.get(current_user['matricula'])
+    if u:
+        u.pop('google_sub', None)
+        u.pop('google_email', None)
+        users_save(users)
+    return jsonify({'ok': True})
 
 
 def handle_legal_acceptance(data, user):

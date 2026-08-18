@@ -44,3 +44,5 @@ services:
         sync: false
       - key: SUPABASE_BUCKET
         value: anexos
+      - key: GOOGLE_CLIENT_ID
+        sync: false
