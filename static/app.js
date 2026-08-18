@@ -872,9 +872,10 @@ async function loginComGoogle(credential){
     return;
   }
   if(r.status===404 && j.code==="nao_vinculado"){
-    // Sem cadastro ainda: abre o cadastro ja preenchido e carrega a credencial pra vincular.
+    // Sem vinculo: pode ser quem JA tem conta (entra + conecta) ou alguem novo (cadastra).
+    // Abre o login em "modo conectar" — de la o novo usuario acessa o cadastro pre-preenchido.
     closeModal();
-    openRegistro({nome:j.nome||"", email:j.email||"", credential});
+    openLogin({credential, email:j.email||"", nome:j.nome||""});
     return;
   }
   if(r.status===403 && msg){ msg.style.color="var(--muted)"; msg.textContent=j.error||"Aguardando aprovacao de um supervisor."; return; }
@@ -936,11 +937,20 @@ function openModal(title,bodyHtml,onMount){
 function closeModal(){const m=document.getElementById("appModal");if(m)m.remove();}
 
 // ----- LOGIN -----
-function openLogin(){
-  openModal("Entrar",`
+function openLogin(googleInfo){
+  const connectMode=!!(googleInfo&&googleInfo.credential);
+  const gEmail=(googleInfo&&googleInfo.email)||"";
+  const banner=connectMode
+    ? `<div style="background:rgba(127,127,127,.12);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--muted);line-height:1.45">Entre com sua matrícula e senha <b>uma vez</b> para conectar sua conta Google${gEmail?` (<b>${escapeHtml(gEmail)}</b>)`:""}. Nas próximas vezes, é só o Google.</div>`
+    : "";
+  const googleBtnHtml=connectMode?"":`
+    <div id="googleSep" style="text-align:center;color:var(--muted);font-size:11px;margin:12px 0 8px">ou</div>
+    <div id="googleBtn" style="display:flex;justify-content:center"></div>`;
+  openModal(connectMode?"Conectar conta Google":"Entrar",`
+    ${banner}
     <div class="modal-fld"><label>Matrícula (6 a 10 dígitos)</label><input id="loginMat" inputmode="numeric" maxlength="10" autocomplete="username"/></div>
     <div class="modal-fld"><label>Senha (4 dígitos)</label><input id="loginSen" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password"/></div>
-    <button id="loginBtn" class="btn-primary" style="width:100%">ENTRAR</button>
+    <button id="loginBtn" class="btn-primary" style="width:100%">${connectMode?"ENTRAR E CONECTAR":"ENTRAR"}</button>
     <div id="loginMsg" style="color:#ff6b6b;font-size:12px;text-align:center;min-height:14px;margin-top:10px"></div>
     <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--muted);line-height:1.45">
       Ao entrar, você aceita os <a href="/termos-de-uso.html" style="color:var(--neon)">Termos de Uso</a>
@@ -949,31 +959,43 @@ function openLogin(){
     <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
       Não tem conta? <a href="#" id="goReg" style="color:var(--neon)">Cadastrar-se</a>
     </div>
-    <div id="googleSep" style="text-align:center;color:var(--muted);font-size:11px;margin:12px 0 8px">ou</div>
-    <div id="googleBtn" style="display:flex;justify-content:center"></div>
+    ${googleBtnHtml}
   `,()=>{
     const go=async()=>{
       const m=document.getElementById("loginMat").value.trim();
       const s=document.getElementById("loginSen").value.trim();
       const msg=document.getElementById("loginMsg");
-      msg.textContent="Entrando...";
+      msg.style.color="var(--muted)";msg.textContent="Entrando...";
       try{
         const r=await fetch("/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({matricula:m,senha:s})});
         const d=await r.json();
         if(r.ok && d.token){
-          setToken(d.token);CURRENT_USER=d.user||null;closeModal();
+          setToken(d.token);CURRENT_USER=d.user||null;
+          if(connectMode){
+            msg.textContent="Conectando Google...";
+            try{
+              const cr=await fetch("/api/auth/google/connect",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+getToken()},body:JSON.stringify({credential:googleInfo.credential})});
+              const cj=await cr.json().catch(()=>({}));
+              closeModal();render();
+              if(cr.ok)showToast("✅ Conta Google conectada!");
+              else showToast(cj.error||"Entrou, mas não consegui conectar o Google. Tente em Configurações.");
+            }catch(_){closeModal();render();showToast("Entrou. Conecte o Google em Configurações.");}
+            if(CURRENT_USER&&CURRENT_USER.legal_acceptance_required)openLegalAcceptanceModal(CURRENT_USER);
+            return;
+          }
+          closeModal();
           render();  // re-renderiza a home no estado logado (senao o banner/eventos ficam do estado pre-login)
           if(CURRENT_USER&&CURRENT_USER.legal_acceptance_required)openLegalAcceptanceModal(CURRENT_USER);
           else showToast("✅ Bem-vindo, "+(CURRENT_USER&&CURRENT_USER.nome||"colega"));
         }
-        else msg.textContent=d.error||"Falha no login";
-      }catch(e){msg.textContent="Erro: "+e.message;}
+        else {msg.style.color="#ff6b6b";msg.textContent=d.error||"Falha no login";}
+      }catch(e){msg.style.color="#ff6b6b";msg.textContent="Erro: "+e.message;}
     };
     document.getElementById("loginBtn").onclick=go;
     document.getElementById("loginSen").addEventListener("keydown",e=>{if(e.key==="Enter")go();});
     document.getElementById("loginMat").focus();
-    document.getElementById("goReg").onclick=e=>{e.preventDefault();openRegistro();};
-    montarBotaoGoogle(document.getElementById("googleBtn"), loginComGoogle);
+    document.getElementById("goReg").onclick=e=>{e.preventDefault();openRegistro(connectMode?{nome:googleInfo.nome||"",email:googleInfo.email||"",credential:googleInfo.credential}:undefined);};
+    if(!connectMode)montarBotaoGoogle(document.getElementById("googleBtn"), loginComGoogle);
   });
 }
 function openRegistro(prefill){
