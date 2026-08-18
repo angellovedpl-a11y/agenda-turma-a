@@ -148,5 +148,35 @@ class RegistrarComGoogleTests(unittest.TestCase):
         self.assertNotIn('google_sub', self.store['users']['654322'])
 
 
+class GoogleConnectTests(unittest.TestCase):
+    def setUp(self):
+        auth.GOOGLE_CLIENT_ID = 'cid'
+        auth.google_id_token.verify_oauth2_token = lambda *a, **k: {
+            'iss': 'https://accounts.google.com', 'sub': 'g-1', 'email': 'a@b.com'}
+        self.store = {'users': {'123456': {'nome': 'X', 'status': 'aprovado'}}}
+        auth.kvstore.load = lambda key, raise_on_error=False, conn=None: self.store.get(key, {})
+        def _save(key, value, raise_on_error=False, conn=None):
+            self.store[key] = value; return True
+        auth.kvstore.save = _save
+
+    def test_connect_grava_sub_email(self):
+        resp = auth.handle_google_connect({'credential': 'tok'}, {'matricula': '123456'})
+        payload = resp.get_json() if not isinstance(resp, tuple) else resp[0].get_json()
+        self.assertTrue(payload.get('ok'))
+        self.assertEqual(self.store['users']['123456']['google_sub'], 'g-1')
+
+    def test_connect_recusa_sub_de_outra_matricula_409(self):
+        self.store['users']['999999'] = {'google_sub': 'g-1'}
+        resp = auth.handle_google_connect({'credential': 'tok'}, {'matricula': '123456'})
+        body, status = resp
+        self.assertEqual(status, 409)
+
+    def test_disconnect_limpa_campos(self):
+        self.store['users']['123456']['google_sub'] = 'g-1'
+        self.store['users']['123456']['google_email'] = 'a@b.com'
+        resp = auth.handle_google_disconnect({'matricula': '123456'})
+        self.assertNotIn('google_sub', self.store['users']['123456'])
+
+
 if __name__ == '__main__':
     unittest.main()

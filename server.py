@@ -2126,6 +2126,16 @@ def api_google_client_id():
 def api_google_login():
     return auth.handle_google_login(request.json or {})
 
+@app.route('/api/auth/google/connect', methods=['POST'])
+@auth.require_auth
+def api_google_connect():
+    return auth.handle_google_connect(request.json or {}, request.current_user)
+
+@app.route('/api/auth/google/disconnect', methods=['POST'])
+@auth.require_auth
+def api_google_disconnect():
+    return auth.handle_google_disconnect(request.current_user)
+
 # === WEB PUSH endpoints ===
 @app.route('/api/push/vapid-public-key', methods=['GET'])
 def api_push_vapid():

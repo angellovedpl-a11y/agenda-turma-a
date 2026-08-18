@@ -568,8 +568,43 @@ def handle_me():
         'funcao': funcao,
         'obrigado_prontos': obrigado_prontos(funcao),
         'funcoes_disponiveis': FUNCOES_VALIDAS,
+        'google_conectado': bool(u.get('google_sub')),
+        'google_email': u.get('google_email', ''),
         **_legal_user_fields(u),
     })
+
+
+def handle_google_connect(data, current_user):
+    credential = (data or {}).get('credential') or ''
+    try:
+        info = verificar_google_token(credential)
+    except GoogleAuthError as e:
+        return jsonify({'error': str(e)}), 400
+    try:
+        users = kvstore.load('users', raise_on_error=True)
+    except kvstore.KVStoreError:
+        return jsonify({'error': 'Servidor temporariamente indisponivel'}), 503
+    matricula = current_user['matricula']
+    outra, _ = _find_user_by_google_sub(users, info['sub'])
+    if outra and outra != matricula:
+        return jsonify({'error': 'Essa conta Google ja esta vinculada a outro usuario'}), 409
+    u = users.get(matricula)
+    if not u:
+        return jsonify({'error': 'Usuario nao encontrado'}), 404
+    u['google_sub'] = info['sub']
+    u['google_email'] = info['email']
+    users_save(users)
+    return jsonify({'ok': True, 'google_email': info['email']})
+
+
+def handle_google_disconnect(current_user):
+    users = kvstore.load('users')
+    u = users.get(current_user['matricula'])
+    if u:
+        u.pop('google_sub', None)
+        u.pop('google_email', None)
+        users_save(users)
+    return jsonify({'ok': True})
 
 
 def handle_legal_acceptance(data, user):
