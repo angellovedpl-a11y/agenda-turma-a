@@ -36,6 +36,8 @@ No registro do usuário (`kvstore['users'][matricula]`), dois campos novos, opci
 - `google_sub` (str) — o ID único e estável da conta Google (claim `sub`). **Chave do vínculo.**
 - `google_email` (str) — e-mail do Google, só para exibição ("conectado como fulano@gmail.com").
 
+`verificar_google_token` devolve `{sub, email, nome}` (o `nome` vem do claim `name`, usado só para pré-preencher o cadastro).
+
 Ligação **1-para-1**: um `google_sub` só pode pertencer a uma matrícula. Ausência dos campos = não conectado.
 
 ## Fluxos
@@ -49,14 +51,17 @@ Ligação **1-para-1**: um `google_sub` só pode pertencer a uma matrícula. Aus
 6. Senão grava `google_sub`/`google_email` no usuário atual. Sucesso: "Conta Google conectada."
 7. Existe também **Desconectar** (`POST /api/auth/google/disconnect`, autenticado) que limpa os campos.
 
-### 2. Entrar com Google (tela de login)
-1. Botão "Entrar com Google" (GIS) na tela de login.
+### 2. Entrar com Google (modal de login)
+1. Botão "Entrar com Google" (GIS) no modal de login (`openLogin`).
 2. Front envia o ID token para `POST /api/auth/google` (não autenticado).
-3. Servidor valida o token, extrai `sub`, procura usuário com `google_sub == sub`:
+3. Servidor valida o token, extrai `sub`+`email`+`nome`, procura usuário com `google_sub == sub`. **A resposta sempre guia o próximo passo — nunca trava num erro sem saída:**
    - **Encontrado e `status == aprovado`** → `session_create` → devolve token → entra.
-   - **Encontrado mas pendente** → 403 amigável: "Seu cadastro está aguardando aprovação de um supervisor."
-   - **Nenhum usuário com esse `sub`** → 404 amigável: "Essa conta Google ainda não está vinculada. Entre com sua matrícula e senha e conecte o Google em Configurações."
+   - **Encontrado mas pendente** → aviso tranquilo: "Seu cadastro está aguardando aprovação de um supervisor." (Não há outra ação possível; é informativo, não um erro travado.)
+   - **Nenhum usuário com esse `sub`** → 404 com `code: 'nao_vinculado'` e o `email`/`nome` do Google. O front **abre o modal de criar conta já pré-preenchido** (nome + e-mail do Google) carregando a credencial; ao cadastrar, o servidor **liga o `google_sub` à nova conta automaticamente**. A conta entra **pendente** e segue o fluxo normal de aprovação. O objetivo é conduzir a pessoa à solução (criar conta), não mostrar um beco sem saída.
 4. Login matrícula + senha permanece intacto ao lado do botão.
+
+### 2b. Registro com auto-vínculo do Google
+- `POST /api/auth/registrar` aceita um campo **opcional** `credential` (ID token do Google). Se presente e válido, o servidor grava `google_sub`/`google_email` na nova conta (pendente). Credencial ausente ou inválida **não bloqueia** o cadastro — apenas não vincula. Assim, quando o admin aprovar, a pessoa já entra com 1 clique pelo Google.
 
 ### 3. Aviso amigável (uma vez)
 - Banner discreto para usuários existentes: "Novidade: agora dá pra entrar com sua conta Google.
@@ -103,6 +108,6 @@ Rate limit em `/api/auth/google` igual ao `/api/auth/login` (reuso do decorator 
 
 ## Fora de escopo
 
-- Cadastro/registro via Google.
+- **Google criar conta silenciosamente / pular aprovação.** Google login sem conta apenas *conduz* ao cadastro normal (matrícula + função + senha + aceite), que segue pendente até aprovação.
 - Mudança em quem aprova novos cadastros (mantido como está — opção A).
 - One Tap / login automático.

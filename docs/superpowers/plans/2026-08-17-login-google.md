@@ -54,12 +54,14 @@ class VerificarGoogleTokenTests(unittest.TestCase):
         auth.GOOGLE_CLIENT_ID = self._orig_cid
         auth.google_id_token.verify_oauth2_token = self._orig_verify
 
-    def test_token_valido_retorna_sub_email(self):
+    def test_token_valido_retorna_sub_email_nome(self):
         auth.google_id_token.verify_oauth2_token = lambda *a, **k: {
-            'iss': 'https://accounts.google.com', 'sub': '999', 'email': 'Fulano@Gmail.com'}
+            'iss': 'https://accounts.google.com', 'sub': '999',
+            'email': 'Fulano@Gmail.com', 'name': 'Fulano Silva'}
         info = auth.verificar_google_token('tok')
         self.assertEqual(info['sub'], '999')
         self.assertEqual(info['email'], 'fulano@gmail.com')  # normalizado minusculo
+        self.assertEqual(info['nome'], 'Fulano Silva')
 
     def test_emissor_invalido_levanta(self):
         auth.google_id_token.verify_oauth2_token = lambda *a, **k: {
@@ -125,7 +127,9 @@ def verificar_google_token(credential: str) -> dict:
     sub = info.get('sub')
     if not sub:
         raise GoogleAuthError('Token do Google sem identificador')
-    return {'sub': str(sub), 'email': (info.get('email') or '').strip().lower()}
+    return {'sub': str(sub),
+            'email': (info.get('email') or '').strip().lower(),
+            'nome': (info.get('name') or '').strip()}
 ```
 
 - [ ] **Step 4: Rodar e ver passar**
@@ -156,9 +160,9 @@ git commit -m "feat(auth): validacao do token Google + rota client-id"
 ### Task 2: Backend — login via Google
 
 **Files:**
-- Modify: `auth.py` (`build_user_payload`, `_find_user_by_google_sub`, `handle_google_login`; refatorar `handle_login` para usar `build_user_payload`)
+- Modify: `auth.py` (`build_user_payload`, `_find_user_by_google_sub`, `handle_google_login`; refatorar `handle_login` para usar `build_user_payload`; auto-vínculo opcional em `handle_registrar`)
 - Modify: `server.py` (rota `POST /api/auth/google`)
-- Test: `tests/test_google_auth.py` (adicionar classe)
+- Test: `tests/test_google_auth.py` (adicionar classes)
 
 **Interfaces:**
 - Consumes: `auth.verificar_google_token`, `auth.session_create`, `auth.admin_level`, `auth.kvstore`
@@ -255,8 +259,10 @@ def handle_google_login(data):
         return jsonify({'error': 'Servidor temporariamente indisponivel, tente novamente em instantes'}), 503
     matricula, u = _find_user_by_google_sub(users, info['sub'])
     if not u:
-        return jsonify({'error': 'Essa conta Google ainda nao esta vinculada. Entre com sua matricula e senha e conecte o Google em Configuracoes.',
-                        'code': 'nao_vinculado'}), 404
+        # Nao trava em erro: o front usa 'code' + email/nome pra abrir o cadastro ja preenchido.
+        return jsonify({'code': 'nao_vinculado',
+                        'email': info.get('email', ''), 'nome': info.get('nome', ''),
+                        'mensagem': 'Conta Google ainda sem cadastro. Vamos criar sua conta.'}), 404
     if u.get('status') == 'pendente':
         return jsonify({'error': 'Seu cadastro esta aguardando aprovacao de um supervisor.'}), 403
     if u.get('status') == 'negado':
@@ -296,6 +302,73 @@ def api_google_login():
 ```bash
 git add auth.py server.py tests/test_google_auth.py
 git commit -m "feat(auth): login via Google (sub -> matricula -> sessao)"
+```
+
+- [ ] **Step 7: Teste do auto-vínculo no cadastro (falha)**
+
+Adicionar em `tests/test_google_auth.py`:
+
+```python
+class RegistrarComGoogleTests(unittest.TestCase):
+    def setUp(self):
+        auth.GOOGLE_CLIENT_ID = 'cid'
+        auth.google_id_token.verify_oauth2_token = lambda *a, **k: {
+            'iss': 'https://accounts.google.com', 'sub': 'g-9', 'email': 'n@v.com', 'name': 'Novo'}
+        self.store = {'users': {}, 'sessions': {}}
+        auth.kvstore.load = lambda key, raise_on_error=False, conn=None: self.store.get(key, {})
+        def _save(key, value, raise_on_error=False, conn=None):
+            self.store[key] = value; return True
+        auth.kvstore.save = _save
+
+    def test_registrar_com_credential_vincula_google(self):
+        body = {'nome': 'Novo', 'matricula': '654321', 'funcao': 'Função Operacional',
+                'senha': '1234', 'aceita_termos': True, 'credential': 'tok'}
+        auth.handle_registrar(body)
+        self.assertEqual(self.store['users']['654321'].get('google_sub'), 'g-9')
+
+    def test_registrar_sem_credential_nao_quebra(self):
+        body = {'nome': 'Novo', 'matricula': '654322', 'funcao': 'Função Operacional',
+                'senha': '1234', 'aceita_termos': True}
+        auth.handle_registrar(body)
+        self.assertIn('654322', self.store['users'])
+        self.assertNotIn('google_sub', self.store['users']['654322'])
+```
+
+- [ ] **Step 8: Rodar e ver falhar**
+
+Run: `python -m unittest tests.test_google_auth -v`
+Expected: FAIL — `test_registrar_com_credential_vincula_google` (o cadastro ainda não grava `google_sub`).
+
+- [ ] **Step 9: Implementar o auto-vínculo em `handle_registrar` (`auth.py`)**
+
+No `handle_registrar`, **depois** de o novo usuário ser criado e salvo no dict `users` (logo antes do `return jsonify(...)` de sucesso), inserir — de forma tolerante a falha (credencial inválida nunca bloqueia o cadastro):
+
+```python
+    credential = (data.get('credential') or '').strip()
+    if credential:
+        try:
+            ginfo = verificar_google_token(credential)
+            outra, _ = _find_user_by_google_sub(users, ginfo['sub'])
+            if not outra or outra == matricula:
+                users[matricula]['google_sub'] = ginfo['sub']
+                users[matricula]['google_email'] = ginfo['email']
+                users_save(users)
+        except GoogleAuthError:
+            pass  # credencial ruim nao impede o cadastro; so nao vincula
+```
+
+(Ajustar o nome da variável do dict de usuários e da matrícula aos usados em `handle_registrar` — verificar no arquivo. Se `handle_registrar` salva via `users_save(users)` antes do return, este bloco reaproveita o mesmo dict.)
+
+- [ ] **Step 10: Rodar e ver passar**
+
+Run: `python -m unittest tests.test_google_auth -v`
+Expected: PASS. Rodar a suíte toda: `python -m unittest discover tests -v` → PASS.
+
+- [ ] **Step 11: Commit**
+
+```bash
+git add auth.py tests/test_google_auth.py
+git commit -m "feat(auth): cadastro vincula conta Google quando veio do login Google"
 ```
 
 ---
@@ -470,14 +543,14 @@ git commit -m "chore(auth): CSP libera Google Identity + GOOGLE_CLIENT_ID no ren
 
 ---
 
-### Task 5: Frontend — botão "Entrar com Google" na tela de login
+### Task 5: Frontend — botão "Entrar com Google" no modal de login
 
 **Files:**
 - Modify: `index.html` (carregar o script do GIS)
-- Modify: `static/app.js` (renderizar o botão na tela de login; callback que chama `/api/auth/google`)
+- Modify: `static/app.js` (botão no modal `openLogin` — app.js:899; callback que chama `/api/auth/google` e **roteia** conforme a resposta)
 
 **Interfaces:**
-- Consumes: `GET /api/auth/google/client-id`, `POST /api/auth/google`, `setToken()` (app.js:843)
+- Consumes: `GET /api/auth/google/client-id`, `POST /api/auth/google`, `setToken()` (app.js:843), `openRegistro(prefill)` (Task 6), `render()`, `CURRENT_USER`, `showToast()`
 
 - [ ] **Step 1: Carregar o script do GIS no `index.html`**
 
@@ -487,9 +560,9 @@ No `<head>` (após as fontes, antes do `</head>`):
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 ```
 
-- [ ] **Step 2: Adicionar o botão e o callback no `static/app.js`**
+- [ ] **Step 2: Adicionar as funções auxiliares no `static/app.js`**
 
-Na função que renderiza a tela de login (onde hoje há o `fetch("/api/auth/login", ...)`, por volta de `app.js:919`), depois do formulário de matrícula+senha, injetar um container e inicializar o GIS. Adicionar estas funções auxiliares (perto de `getToken`/`setToken`, app.js:842):
+Perto de `getToken`/`setToken` (app.js:842), adicionar:
 
 ```javascript
 async function googleClientId(){
@@ -507,40 +580,74 @@ async function montarBotaoGoogle(containerEl, onToken){
   google.accounts.id.renderButton(containerEl, { theme:"outline", size:"large", width:260, text:"signin_with", locale:"pt-BR" });
 }
 
+// Guia o usuario conforme a resposta — nunca trava em erro sem saida.
 async function loginComGoogle(credential){
+  const msg=document.getElementById("loginMsg");
+  if(msg){msg.style.color="var(--muted)";msg.textContent="Entrando com Google...";}
   const r=await fetch("/api/auth/google",{method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({credential})});
   const j=await r.json().catch(()=>({}));
-  if(r.ok && j.token){ setToken(j.token); location.reload(); return; }
-  alert(j.error || "Nao foi possivel entrar com o Google.");
+  if(r.ok && j.token){
+    setToken(j.token); CURRENT_USER=j.user||null; closeModal(); render();
+    showToast("✅ Bem-vindo, "+((CURRENT_USER&&CURRENT_USER.nome)||"colega"));
+    return;
+  }
+  if(r.status===404 && j.code==="nao_vinculado"){
+    // Sem cadastro ainda: abre o cadastro ja preenchido e carrega a credencial pra vincular.
+    closeModal();
+    openRegistro({nome:j.nome||"", email:j.email||"", credential});
+    return;
+  }
+  if(r.status===403 && msg){ msg.style.color="var(--muted)"; msg.textContent=j.error||"Aguardando aprovacao de um supervisor."; return; }
+  if(msg){ msg.style.color="#ff6b6b"; msg.textContent=j.error||"Nao foi possivel entrar com o Google."; }
 }
 ```
 
-No HTML da tela de login, adicionar um divisor + container logo abaixo do botão "Entrar":
+- [ ] **Step 3: Injetar o botão no modal `openLogin`**
+
+No corpo HTML de `openLogin` (app.js:900-911), logo abaixo do link "Cadastrar-se", adicionar:
 
 ```html
-<div class="login-google-sep">ou</div>
-<div id="googleBtn" class="login-google-btn"></div>
+    <div id="googleSep" style="text-align:center;color:var(--muted);font-size:11px;margin:12px 0 8px">ou</div>
+    <div id="googleBtn" style="display:flex;justify-content:center"></div>
 ```
 
-E, após renderizar a tela de login, chamar:
+E dentro do `onMount` de `openLogin` (junto dos outros bindings, após `document.getElementById("goReg").onclick=...`), adicionar:
 
 ```javascript
-montarBotaoGoogle(document.getElementById("googleBtn"), loginComGoogle);
+    montarBotaoGoogle(document.getElementById("googleBtn"), loginComGoogle);
 ```
 
-- [ ] **Step 3: Verificação manual ao vivo (após deploy + `GOOGLE_CLIENT_ID` no Render)**
+- [ ] **Step 4: `openRegistro` aceita pré-preenchimento + envia a credencial**
 
-1. Abrir a tela de login → o botão "Entrar com Google" aparece.
-2. Clicar com uma conta Google **não vinculada** → aparece o aviso de "não vinculada".
+Alterar a assinatura de `openRegistro` (app.js:936) para `function openRegistro(prefill){` e usar `prefill` (objeto opcional `{nome, email, credential}`):
+
+1. Nos inputs, pré-preencher com `value`:
+   - `rgNome`: `value="${escapeHtml((prefill&&prefill.nome)||"")}"`
+   - `rgEmail`: `value="${escapeHtml((prefill&&prefill.email)||"")}"`
+2. Se veio credencial, mostrar um aviso no topo do corpo do modal: "Conectando sua conta Google — complete o cadastro abaixo."
+3. No `body` do POST de registro (app.js:955), incluir a credencial quando existir:
+
+```javascript
+      const body={nome:document.getElementById("rgNome").value.trim(),matricula:document.getElementById("rgMat").value.trim(),funcao:document.getElementById("rgFun").value.trim(),email:document.getElementById("rgEmail").value.trim(),senha:document.getElementById("rgSen").value.trim(),aceita_termos:legal};
+      if(prefill&&prefill.credential){ body.credential=prefill.credential; }
+```
+
+(As outras chamadas a `openRegistro()` — ex.: o link "Cadastrar-se" — passam a chamar `openRegistro()` sem argumento; `prefill` fica `undefined` e tudo segue normal.)
+
+- [ ] **Step 5: Verificação manual ao vivo (após deploy + `GOOGLE_CLIENT_ID` no Render)**
+
+1. Abrir o modal de login → o botão "Entrar com Google" aparece.
+2. Clicar com uma conta Google **sem cadastro** → em vez de erro, **abre o modal de criar conta** já com nome/e-mail preenchidos; ao concluir, a conta fica pendente **e já com o Google vinculado**.
+3. Conta **aprovada e vinculada** → entra direto.
    (Sem `GOOGLE_CLIENT_ID` configurado, o botão simplesmente não aparece — login normal intacto.)
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add index.html static/app.js
-git commit -m "feat(ui): botao Entrar com Google na tela de login"
+git commit -m "feat(ui): botao Entrar com Google no modal de login + roteia pro cadastro"
 ```
 
 ---
@@ -646,6 +753,8 @@ Sem essa env var, o recurso fica invisível e o app segue 100% normal (login mat
 
 ## Self-Review (feito)
 
-- **Cobertura da spec:** validação de token (T1), login Google com estados aprovado/pendente/negado/não-vinculado (T2), connect/disconnect + 1:1 (T3), CSP+env (T4), botão login (T5), Configurações+aviso (T6). ✓
-- **Sem placeholders:** todo passo tem código/coman­do real. ✓
-- **Consistência de tipos:** `verificar_google_token`→`{sub,email}`; `build_user_payload`, `_find_user_by_google_sub`, `handle_google_*` batem entre tasks e rotas. ✓
+- **Cobertura da spec:** validação de token (T1); login Google com estados aprovado/pendente/negado e **não-vinculado que conduz ao cadastro com auto-vínculo** (T2); connect/disconnect + 1:1 (T3); CSP+env (T4); botão de login + roteamento pro cadastro + `openRegistro(prefill)` (T5); Configurações+aviso (T6). ✓
+- **Fluxo "solução, não erro":** login Google sem conta → abre `openRegistro` pré-preenchido + carrega credencial → `handle_registrar` vincula o `google_sub`; pendente → aviso tranquilo; token inválido → mensagem. ✓
+- **Sem placeholders:** todo passo tem código/comando real. ✓
+- **Consistência de tipos:** `verificar_google_token`→`{sub,email,nome}`; `build_user_payload`, `_find_user_by_google_sub`, `handle_google_*` e `openRegistro(prefill)` batem entre tasks, rotas e front. ✓
+- **Ordem de dependência:** `openRegistro(prefill)` é alterado no T5 (mesmo task que o consome via `loginComGoogle`), evitando dependência pra frente. ✓
