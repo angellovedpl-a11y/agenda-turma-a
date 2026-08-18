@@ -486,6 +486,17 @@ def handle_registrar(data):
             notify.notificar_novo_cadastro(matricula, nome)
         except Exception as e:
             print(f'[auth] falha ao notificar aprovadores: {e}')
+    credential = (data.get('credential') or '').strip()
+    if credential:
+        try:
+            ginfo = verificar_google_token(credential)
+            outra, _ = _find_user_by_google_sub(users, ginfo['sub'])
+            if not outra or outra == matricula:
+                users[matricula]['google_sub'] = ginfo['sub']
+                users[matricula]['google_email'] = ginfo['email']
+                users_save(users)
+        except GoogleAuthError:
+            pass  # credencial ruim nao impede o cadastro; so nao vincula
     if primeiro:
         token = session_create(matricula)
         user_payload = {'matricula': matricula, 'nome': nome, 'role': 'admin'}
